@@ -7,4 +7,4 @@ More info at: http://nutmegsnutquest.com/
 
 ## Where to Get It
 
-Nutmeg will be sold exclusively through Incube8 Games soon!
+Nutmeg will be sold exclusively through Incube8 Games soon! After it's released, I'll upload the code for the game here so anyone can learn from it.
