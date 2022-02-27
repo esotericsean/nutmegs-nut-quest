@@ -25,6 +25,15 @@ typedef enum { true, false } bool;
 typedef enum { grounded, inair } move_state;
 typedef enum { enabled, disabled } switcher;
 typedef enum { right, left } direction;
+typedef enum { full, low } amount;
+
+//powerups
+extern amount health;
+extern UINT8 bowanim;
+extern UINT8 acorncounter;
+extern switcher powerupleaf;
+extern switcher powerupstar;
+extern UINT8 nutmeglives;
 
 //first time visiting overworld1
 extern bool overworld1visited;

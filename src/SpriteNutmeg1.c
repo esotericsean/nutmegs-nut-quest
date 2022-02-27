@@ -7,7 +7,7 @@
 #include "SpriteManager.h"
 
 #include "../src/GlobalVars.h"
-
+#include "../res/src/nutmegbow.h"
 #include "../res/src/star.h"
 
 const UINT8 anim_nutmeg_idle_right[] = {4, 1, 2, 3, 4};
@@ -55,9 +55,25 @@ UINT8 groundCollision;
 //scoring
 UINT8 getAcorns = 0;
 
+//powerups
+amount health; //full or low
+UINT8 acorncounter; //100 resets to 0 and adds to nutmeglives
+switcher powerupleaf; //enabled or disabled
+switcher powerupstar; //enabled or disabled
+UINT8 nutmeglives; //start with 3
+
 // Declare a pointer to a sprite
 struct Sprite * spr_nutmeg2;
 struct Sprite * spr_camera;
+extern struct Sprite * spr_nutmegbow;
+
+// 0 = idle (5)
+// 1 = walking (15)
+// 2 = running (50)
+// 3 = static (0)
+extern UINT8 bowanim;
+INT8 bowoffsetX;
+INT8 bowoffsetY;
 
 //reset nutmeg's state back to default
 void ResetState() {
@@ -70,10 +86,15 @@ void ResetState() {
     runJump = 0;
     movestate = grounded;
 
+    nutmeg_direction = right;
+
     cutscenewalkleft = false;
     cutscenewalkright = false;
     cutscenejump = false;
     cutscenerun = false;
+
+    bowoffsetX = 0;
+    bowoffsetY = 0;
 }
 
 void Start_SpriteNutmeg1() {
@@ -83,6 +104,7 @@ void Start_SpriteNutmeg1() {
 	THIS->coll_h = 8;
 
     //movestate = inair;
+    //spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, THIS->x + 11, THIS->y);
 
     ResetState();
 
@@ -94,6 +116,34 @@ void Start_SpriteNutmeg1() {
 void Update_SpriteNutmeg1() {
     UINT8 i;
     struct Sprite* spr;
+    
+    /*
+    if (movestate == inair) {
+        bowoffsetX += accelX/100;
+        bowoffsetY += accelY/100;
+    }
+    */
+    /*
+    if (movestate == inair) {
+        //bowoffsetX += accelX/100;
+        bowoffsetY -= jumpPeak;
+    }
+    */
+    spr_nutmegbow->x = THIS->x + bowoffsetX;
+	spr_nutmegbow->y = THIS->y + bowoffsetY;
+
+    /*
+    if (nutmeg_direction == right) {
+        SPRITE_UNSET_VMIRROR(spr_nutmegbow);
+        spr_nutmegbow->x = THIS->x + bowoffsetX;
+	    spr_nutmegbow->y = THIS->y + bowoffsetY;
+    }
+    else if (nutmeg_direction == left) {
+        SPRITE_SET_VMIRROR(spr_nutmegbow);
+        spr_nutmegbow->x = THIS->x - bowoffsetX;
+	    spr_nutmegbow->y = THIS->y + bowoffsetY;
+    }
+    */
 
     if (cutscenemode == disabled) {
         /* * * * * * * * * * * * * * * * * * * */
@@ -160,10 +210,12 @@ void Update_SpriteNutmeg1() {
         if (keys == 0 && nutmeg_direction == right) {
             //SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
             SPRITE_UNSET_VMIRROR(THIS);
+            bowanim = 0;
         }
         if (keys == 0 && nutmeg_direction == left) {
             //SetSpriteAnim(THIS, anim_nutmeg_idle_left, 5);
             SPRITE_SET_VMIRROR(THIS);
+            bowanim = 0;
         }
 
         /* * * * * * * * * * * * * * * * * * * */
@@ -193,8 +245,12 @@ void Update_SpriteNutmeg1() {
                 */
 
                 //display a puff when jumping
-                if (nutmeg_direction == right) SpriteManagerAdd(SpritePuffLeft, THIS->x+8, THIS->y+7);
-                else SpriteManagerAdd(SpritePuffRight, THIS->x, THIS->y+7);
+                if (nutmeg_direction == right) {
+                    SpriteManagerAdd(SpritePuffLeft, THIS->x+8, THIS->y+7);
+                }
+                else {
+                    SpriteManagerAdd(SpritePuffRight, THIS->x, THIS->y+7);
+                }
             }
         }
         else if (movestate == inair) {
@@ -267,7 +323,6 @@ void Update_SpriteNutmeg1() {
             else {
                 if (movestate == inair) {
                     PlayFx(CHANNEL_4, 4, 0x32, 0x71, 0x73, 0x80);
-                    //stepSound = 6;
                     movestate = grounded;
                 }
                 accelY = 100;
@@ -284,26 +339,90 @@ void Update_SpriteNutmeg1() {
         //play correct animation based on current state & input
         if (movestate == grounded) {
             if (accelX < 100 && accelX > -100) {
-                if (nutmeg_direction == right) SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
-                if (nutmeg_direction == left) SetSpriteAnim(THIS, anim_nutmeg_idle_left, 5);
+                if (nutmeg_direction == right) {
+                    bowanim = 0;
+                    //spr_nutmegbow->x = THIS->x + 11;
+	                //spr_nutmegbow->y = THIS->y;
+                    bowoffsetX = 11;
+                    bowoffsetY = 0;
+                    SPRITE_UNSET_VMIRROR(spr_nutmegbow);
+                    SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
+                }
+                if (nutmeg_direction == left) {
+                    bowanim = 0;
+                    //spr_nutmegbow->x = THIS->x - 3;
+	                //spr_nutmegbow->y = THIS->y;
+                    bowoffsetX = -3;
+                    bowoffsetY = 0;
+                    SPRITE_SET_VMIRROR(spr_nutmegbow);
+                    SetSpriteAnim(THIS, anim_nutmeg_idle_left, 5);
+                }
             }
             else if (KEY_PRESSED(J_B)) {
-                if (nutmeg_direction == right) SetSpriteAnim(THIS, anim_nutmeg_walk_right, 50);
-                if (nutmeg_direction == left) SetSpriteAnim(THIS, anim_nutmeg_walk_left, 50);
+                if (nutmeg_direction == right) {
+                    bowanim = 2;
+                    bowoffsetX = 20;
+                    bowoffsetY = 1;
+                    SPRITE_UNSET_VMIRROR(spr_nutmegbow);
+                    SetSpriteAnim(THIS, anim_nutmeg_walk_right, 50);
+                }
+                if (nutmeg_direction == left) {
+                    bowanim = 2;
+                    bowoffsetX = -12;
+                    bowoffsetY = 1;
+                    SPRITE_SET_VMIRROR(spr_nutmegbow);
+                    SetSpriteAnim(THIS, anim_nutmeg_walk_left, 50);
+                }
             }
             else {
-                if (nutmeg_direction == right) SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
-                if (nutmeg_direction == left) SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
+                if (nutmeg_direction == right) {
+                    bowanim = 1;
+                    bowoffsetX = 18;
+                    bowoffsetY = 1;
+                    SPRITE_UNSET_VMIRROR(spr_nutmegbow);
+                    SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
+                }
+                if (nutmeg_direction == left) {
+                    bowanim = 1;
+                    bowoffsetX = -10;
+                    bowoffsetY = 1;
+                    SPRITE_SET_VMIRROR(spr_nutmegbow);
+                    SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
+                }
             }
         }
         else {
             if (accelY > 60) {
-                if (nutmeg_direction == right) SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
-                if (nutmeg_direction == left) SetSpriteAnim(THIS, anim_nutmeg_fall_left, 1);
+                if (nutmeg_direction == right) {
+                    bowanim = 3;
+                    bowoffsetX = 11;
+                    bowoffsetY = 0;
+                    SPRITE_UNSET_VMIRROR(spr_nutmegbow);
+                    SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
+                }
+                if (nutmeg_direction == left) {
+                    bowanim = 3;
+                    bowoffsetX = -3;
+                    bowoffsetY = 0;
+                    SPRITE_SET_VMIRROR(spr_nutmegbow);
+                    SetSpriteAnim(THIS, anim_nutmeg_fall_left, 1);
+                }
             }
             else if (accelY < -60) {
-                if (nutmeg_direction == right) SetSpriteAnim(THIS, anim_nutmeg_jump_right, 1);
-                if (nutmeg_direction == left) SetSpriteAnim(THIS, anim_nutmeg_jump_left, 1);
+                if (nutmeg_direction == right) {
+                    bowanim = 3;
+                    bowoffsetX = 11;
+                    bowoffsetY = 0;
+                    SPRITE_UNSET_VMIRROR(spr_nutmegbow);
+                    SetSpriteAnim(THIS, anim_nutmeg_jump_right, 1);
+                }
+                if (nutmeg_direction == left) {
+                    bowanim = 3;
+                    bowoffsetX = -3;
+                    bowoffsetY = 0;
+                    SPRITE_SET_VMIRROR(spr_nutmegbow);
+                    SetSpriteAnim(THIS, anim_nutmeg_jump_left, 1);
+                }
             }
         }
         
@@ -329,6 +448,9 @@ void Update_SpriteNutmeg1() {
         }
         //end
     }
+    /* * * * * * * * * * * * * * * * * * * */
+    /*           cutscenemode              */
+    /* * * * * * * * * * * * * * * * * * * */
     else if (cutscenemode == enabled) {
         if (cutscenewalkright == true) {
             if (nutmeg_direction == left) {
@@ -467,26 +589,56 @@ void Update_SpriteNutmeg1() {
 
         if (movestate == grounded) {
             if (accelX < 100 && accelX > -100) {
-                if (nutmeg_direction == right) SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
-                if (nutmeg_direction == left) SetSpriteAnim(THIS, anim_nutmeg_idle_left, 5);
+                if (nutmeg_direction == right) {
+                    bowanim = 0;
+                    SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
+                }
+                if (nutmeg_direction == left) {
+                    bowanim = 0;
+                    SetSpriteAnim(THIS, anim_nutmeg_idle_left, 5);
+                }
             }
             else if (KEY_PRESSED(J_B)) {
-                if (nutmeg_direction == right) SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15); //change to walk speed
-                if (nutmeg_direction == left) SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);   //run is speed 50
+                if (nutmeg_direction == right) {
+                    bowanim = 1;
+                    SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15); //change to walk speed
+                }
+                if (nutmeg_direction == left) {
+                    bowanim = 1;
+                    SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);   //run is speed 50
+                }
             }
             else {
-                if (nutmeg_direction == right) SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
-                if (nutmeg_direction == left) SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
+                if (nutmeg_direction == right) {
+                    bowanim = 1;
+                    SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
+                }
+                if (nutmeg_direction == left) {
+                    bowanim = 1;
+                    SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
+                }
             }
         }
         else {
             if (accelY > 60) {
-                if (nutmeg_direction == right) SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
-                if (nutmeg_direction == left) SetSpriteAnim(THIS, anim_nutmeg_fall_left, 1);
+                if (nutmeg_direction == right) {
+                    bowanim = 3;
+                    SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
+                }
+                if (nutmeg_direction == left) {
+                    bowanim = 3;
+                    SetSpriteAnim(THIS, anim_nutmeg_fall_left, 1);
+                }
             }
             else if (accelY < -60) {
-                if (nutmeg_direction == right) SetSpriteAnim(THIS, anim_nutmeg_jump_right, 1);
-                if (nutmeg_direction == left) SetSpriteAnim(THIS, anim_nutmeg_jump_left, 1);
+                if (nutmeg_direction == right) {
+                    bowanim = 3;
+                    SetSpriteAnim(THIS, anim_nutmeg_jump_right, 1);
+                }
+                if (nutmeg_direction == left) {
+                    bowanim = 3;
+                    SetSpriteAnim(THIS, anim_nutmeg_jump_left, 1);
+                }
             }
         }
         
@@ -510,6 +662,9 @@ void Update_SpriteNutmeg1() {
     }
     //end movement
 
+    /* * * * * * * * * * * * * * * * * * * */
+    /*         items and enemies           */
+    /* * * * * * * * * * * * * * * * * * * */
     SPRITEMANAGER_ITERATE(i, spr) {
         if (spr->type == SpriteAcorn) {
             if (CheckCollision(THIS, spr)) {

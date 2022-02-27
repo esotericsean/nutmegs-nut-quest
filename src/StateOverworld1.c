@@ -112,8 +112,8 @@ extern struct Sprite * spr_nutmegtiny;
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
-//extern struct Sprite * spr_nutmeg1;
-//extern struct Sprite * spr_nutmeg2;
+extern struct Sprite * spr_nutmeg1;
+extern struct Sprite * spr_nutmeg2;
 //extern struct Sprite * spr_camera;
 
 //List of tiles that will be animated
@@ -183,6 +183,7 @@ void Start_StateOverworld1() {
 
 	SHOW_SPRITES;
 	SHOW_BKG;
+	HIDE_WIN;
 }
 
 void Update_StateOverworld1() {
@@ -310,5 +311,6 @@ void Update_StateOverworld1() {
 	if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
 		if (W1LevelSelection == 0) SetState(StateTree);
         else if (W1LevelSelection == 1) SetState(StateLevel1);
+		else if (W1LevelSelection == 2) SetState(StateLevel2);
     }
 }

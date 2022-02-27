@@ -1,6 +1,6 @@
-#include "Banks/SetBank4.h"
+#include "Banks/SetBank6.h"
 #include "..\res\src\level1tiles.h"
-#include "..\res\src\level1map.h"
+#include "..\res\src\level2map.h"
 
 #include "ZGBMain.h"
 #include "Scroll.h"
@@ -215,15 +215,15 @@ const unsigned char  Letter9[] = { 0x5C };
 const unsigned char Letter10[] = { 0x5D };
 const unsigned char Letter11[] = { 0x5E };
 
-void Start_StateLevel1() {
+void Start_StateLevel2() {
 	level1counter = 0;
 	SPRITES_8x16;
 
 	PlayMusic(quickstart_mod_Data, 4, 1);
 	//PlayMusic(mushrooms_mod_Data, 3, 1);
 
-	SetPalette (BG_PALETTE, 0, 8, bg_palette_level1, bank_StateLevel1);
-	SetPalette (SPRITES_PALETTE, 0, 8, sprites_palette_level1, bank_StateLevel1);
+	SetPalette (BG_PALETTE, 0, 8, bg_palette_level1, bank_StateLevel2);
+	SetPalette (SPRITES_PALETTE, 0, 8, sprites_palette_level1, bank_StateLevel2);
 
 	//for(i = 0; i != N_SPRITE_TYPES; ++ i) { SpriteManagerLoad(i); }
 
@@ -242,7 +242,7 @@ void Start_StateLevel1() {
 	//SpriteManagerLoad(30); //power leaf
 
 	scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, 4, 49); //36
-	spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 16, 49);
+	spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49);
 	spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 4, 49); //36
 	spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 20, 49); //52
 	//SpriteManagerAdd(SpriteAcorn, 18*8, 9*8);
@@ -256,7 +256,7 @@ void Start_StateLevel1() {
 	//SpriteManagerAdd(EnemyFish, 22*8, 18*8);
 
 	InitScrollTiles(0, &level1tiles);
-	InitScroll(&level1map, collision_tiles_level1, 0);
+	InitScroll(&level2map, collision_tiles_level1, 0);
 
 	cutscenemode = enabled;
 	isAcornMoving = true; //yes, it is moving
@@ -269,7 +269,7 @@ void Start_StateLevel1() {
 	//SHOW_WIN;
 }
 
-void Update_StateLevel1() {
+void Update_StateLevel2() {
 	if (cutscenemode == enabled) {
 		//Level Start!
 		//Make Nutmeg Walk In
