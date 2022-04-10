@@ -24,16 +24,21 @@
 //												   //
 /////////////////////////////////////////////////////
 
-UINT8 f = 0;
+UINT8 f = 0; // water animation counter
 
 //copied from SpriteNutmegTiny
 	UINT8 e = 0;
 	UINT8 bossflash = 0;
-	UINT8 W1LevelSelection = 1; 	// nutmeg starts at level 1
+	UINT8 W1LevelSelection; 		// nutmeg starts at level 1
 									// level 0 is the tree
 									// mushroom is level 4
 	UINT8 direction = 0;
 	UINT8 distance  = 0;
+
+	bool inputenabled;
+	UINT8 treetolevel1move;
+	bool levelbeat;
+	UINT8 levelbeatcounter;
 //end copied from SpriteNutmegTiny
 
 //copied from SpriteNutmegTiny
@@ -95,7 +100,7 @@ UINT8 f = 0;
 };
 //end copied from SpriteNutmegTiny
 
-bool overworld1visited;
+bool overworld1visited = false;
 
 const UINT16 bg_palette_overworld1[] = {PALETTE_FROM_HEADER(overworld1)};
 
@@ -148,6 +153,8 @@ const unsigned char water_anim[] = {
 			if (e > dis) {
 				e = 0;
 				distance = 0;
+				levelbeat = false;
+				inputenabled = true;
 			}
 		}
 	}
@@ -156,13 +163,12 @@ const unsigned char water_anim[] = {
 //MoveSpriteNutmegTiny
 
 void Start_StateOverworld1() {
-	//UINT8 i;
 	SPRITES_8x16;
 
 	isAcornMoving = false;
-	overworld1visited = false;
 
 	f = 0;
+	levelbeatcounter = 0;
 
 	PlayMusic(acornkingdom_mod_Data, 4, 1);
 
@@ -173,7 +179,28 @@ void Start_StateOverworld1() {
 	SpriteManagerLoad(8); //nutmegtiny
 	SpriteManagerLoad(9); //nuthead
 
-	spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny, 47, 45);
+	if (overworld1visited == false) {
+		W1LevelSelection = 0;
+		treetolevel1move = 0;
+		inputenabled = false;
+	}
+
+	// add Tiny Nutmeg depending on where W1LevelSelection is
+	switch (W1LevelSelection) {
+		case  0: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  24, 45); break; // tree
+		case  1: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  47, 45); break; // 1
+		case  2: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  47, 60); break; // 2
+		case  3: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  47, 83); break; // 3
+		case  4: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  24, 83); break; // mushroom
+		case  5: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  70, 60); break; // 5
+		case  6: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  70, 75); break; // 6
+		case  7: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  83, 75); break; // 7
+		case  8: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  83, 45); break; // 8
+		case  9: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny, 106, 45); break; // 9
+		case 10: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny, 106, 68); break; // 10
+		case 11: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny, 106, 91); break; // boss
+	}
+
 	//SpriteManagerAdd(SpriteNutmegTiny, 47, 45);
 	SpriteManagerAdd(SpriteNutHead, 16, 7);
 	//SpriteManagerAdd(SpriteAcorn, 129, 5);
@@ -187,6 +214,16 @@ void Start_StateOverworld1() {
 }
 
 void Update_StateOverworld1() {
+	// if first time visiting Overworld 1, set to tree level
+	// and set overworld1visited to true so it can't do it again
+	if (overworld1visited == false) {
+		if 		(treetolevel1move < 50)  { direction = 1; W1LevelSelection = 0; inputenabled = false; levelbeat = false; }
+		else if (treetolevel1move == 50) { direction = 1; distance = 23; W1LevelSelection = 1; inputenabled = false; }
+		else if (treetolevel1move >= 65) { inputenabled = false; overworld1visited = true; levelbeat = false; }
+
+		treetolevel1move++;
+	}
+
 	//use this to modify background tiles in static scenes
 	//set_bkg_tiles (6, 8, 1, 1, overworld1_water1); //x, y, w, h, *tiles
 
@@ -209,6 +246,7 @@ void Update_StateOverworld1() {
 		f = 0;
 	}
 
+	/*
 	//copied from SpriteNutmegTiny
 	if (e == 0) {
 		// LEVEL 0 - THE TREEHOUSE
@@ -279,24 +317,81 @@ void Update_StateOverworld1() {
 		// LEVEL 11 - PICNIC TABLE (MINI BOSS)
 		else if (W1LevelSelection == 11) {
 			if 		(KEY_PRESSED(J_UP)) 	{ direction = 2; distance = 23; W1LevelSelection = 10; }
-			else if (KEY_PRESSED(J_RIGHT)) 	{ direction = 1; distance = 46; W1LevelSelection = 11; /*change world*/ }
+			else if (KEY_PRESSED(J_RIGHT)) 	{ direction = 1; distance = 46; W1LevelSelection = 11; } //change to overworld2
+		}
+	}
+	*/
+
+	//level selection
+	if (inputenabled == true) {
+		if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
+			//if (W1LevelSelection == 0) SetState(StateTree);
+			//distance = 0;
+			if (W1LevelSelection == 1) SetState(StateLevel1);
+			else if (W1LevelSelection == 2) SetState(StateLevel2);
 		}
 	}
 
-	if (distance > 0) Move (direction, distance);
+	if (e == 0 && levelbeat == true) {
+		// LEVEL 1
+		if (W1LevelSelection == 1 && levelbeat == true) {
+			direction = 3; distance = 15; W1LevelSelection = 2; levelbeatcounter = 0; inputenabled = false;
+		}
+		// LEVEL 2
+		else if (W1LevelSelection == 2 && levelbeat == true) {
+			direction = 1; distance = 23; W1LevelSelection = 5; levelbeatcounter = 0; inputenabled = false;
+		}
+		// LEVEL 5
+		else if (W1LevelSelection == 5 && levelbeat == true) {
+			direction = 3; distance = 15; W1LevelSelection = 6; levelbeatcounter = 0; inputenabled = false;
+		}
+		// LEVEL 6
+		else if (W1LevelSelection == 6 && levelbeat == true) {
+			direction = 1; distance = 23; W1LevelSelection = 7; levelbeatcounter = 0; inputenabled = false;
+		}
+		// LEVEL 7
+		else if (W1LevelSelection == 7 && levelbeat == true) {
+			direction = 2; distance = 31; W1LevelSelection = 8; levelbeatcounter = 0; inputenabled = false;
+		}
+		// LEVEL 8
+		else if (W1LevelSelection == 8 && levelbeat == true) {
+			direction = 1; distance = 23; W1LevelSelection = 9; levelbeatcounter = 0; inputenabled = false;
+		}
+		// LEVEL 9
+		else if (W1LevelSelection == 9 && levelbeat == true) {
+			direction = 3; distance = 23; W1LevelSelection = 10; levelbeatcounter = 0; inputenabled = false;
+		}
+		// LEVEL 10
+		else if (W1LevelSelection == 10 && levelbeat == true) {
+			direction = 3; distance = 23; W1LevelSelection = 11; levelbeatcounter = 0; inputenabled = false;
+		}
+
+		// LEVEL 11 - PICNIC TABLE (MINI BOSS)
+		else if (W1LevelSelection == 11 && levelbeat == true) {
+			direction = 1; distance = 46; W1LevelSelection = 11; levelbeatcounter = 0; inputenabled = false;
+		} //change to overworld2
+	}
+
+	/* * * * * * * * * * * * * * * * * * * * * */ // 1. Depending on which level player is standing on
+	/*     Send to Move Function (line 137)    */ //    define a DIRECTION and DISTANCE and update player
+	/*                                         */ //    to the level Nutmeg will be traveling to
+	if (distance > 0) Move (direction, distance); // 2. Send DIR and DIS to a function that moves the
+	/*                                         */ //    player, run the function until e = distance
+	/*                                         */ // 3. Reset e to 0, distance to 0
+	/* * * * * * * * * * * * * * * * * * * * * */ //
 
 	//level display
 	if (W1LevelSelection == 0) set_bkg_data (0x3F, 1, overworld1_tree);
 	else if (W1LevelSelection == 1) set_bkg_data (0x3F, 1, overworld1_num1);
 	else if (W1LevelSelection == 2) set_bkg_data (0x3F, 1, overworld1_num2);
-	else if (W1LevelSelection == 3) set_bkg_data (0x3F, 1, overworld1_num3);
-	else if (W1LevelSelection == 4) set_bkg_data (0x3F, 1, overworld1_mushroom);
-	else if (W1LevelSelection == 5) set_bkg_data (0x3F, 1, overworld1_num4);
-	else if (W1LevelSelection == 6) set_bkg_data (0x3F, 1, overworld1_num5);
-	else if (W1LevelSelection == 7) set_bkg_data (0x3F, 1, overworld1_num6);
-	else if (W1LevelSelection == 8) set_bkg_data (0x3F, 1, overworld1_num7);
-	else if (W1LevelSelection == 9) set_bkg_data (0x3F, 1, overworld1_num8);
-	else if (W1LevelSelection == 10) set_bkg_data (0x3F, 1, overworld1_num9);
+	//else if (W1LevelSelection == 3) set_bkg_data (0x3F, 1, overworld1_num3);
+	//else if (W1LevelSelection == 4) set_bkg_data (0x3F, 1, overworld1_mushroom);
+	else if (W1LevelSelection == 5) set_bkg_data (0x3F, 1, overworld1_num3);
+	else if (W1LevelSelection == 6) set_bkg_data (0x3F, 1, overworld1_num4);
+	else if (W1LevelSelection == 7) set_bkg_data (0x3F, 1, overworld1_num5);
+	else if (W1LevelSelection == 8) set_bkg_data (0x3F, 1, overworld1_num6);
+	else if (W1LevelSelection == 9) set_bkg_data (0x3F, 1, overworld1_num7);
+	else if (W1LevelSelection == 10) set_bkg_data (0x3F, 1, overworld1_num8);
 	else if (W1LevelSelection == 11) {
 		if 		(bossflash >= 0 && bossflash < 5)  set_bkg_data (0x3F, 1, overworld1_boss1);
 		else if (bossflash >= 5 && bossflash < 10) set_bkg_data (0x3F, 1, overworld1_boss2);
@@ -306,11 +401,4 @@ void Update_StateOverworld1() {
 		if (bossflash > 10) bossflash = 0;
 	}
 	set_bkg_tiles (7, 1, 1, 1, current_level);
-
-	//level selection
-	if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
-		if (W1LevelSelection == 0) SetState(StateTree);
-        else if (W1LevelSelection == 1) SetState(StateLevel1);
-		else if (W1LevelSelection == 2) SetState(StateLevel2);
-    }
 }

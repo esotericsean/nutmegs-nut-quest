@@ -14,8 +14,8 @@ void Start_SpriteAcorn() {
 	THIS->coll_w = 10;
 	THIS->coll_h = 10;
 
-	THIS->lim_x = 9999;
-	THIS->lim_y = 999;
+	THIS->lim_x = 2000;
+	THIS->lim_y = 144;
 }
 
 void Update_SpriteAcorn() {

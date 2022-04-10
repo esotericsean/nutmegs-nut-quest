@@ -9,6 +9,10 @@
 #include "SpriteManager.h"
 
 #include "../res/src/nutmeg1.h"
+#include "../res/src/nutmeg2.h"
+#include "../res/src/cinnamon.h"
+#include "../res/src/ruby.h"
+#include "../res/src/maple.h"
 #include "../res/src/puff.h"
 #include "Palette.h"
 
@@ -41,7 +45,12 @@ extern UINT8* oaktree_mod_Data[];
 
 extern struct Sprite * spr_nutmeg1;
 extern struct Sprite * spr_nutmeg2;
-extern struct Sprite * spr_camera;
+
+//struct Sprite * spr_cinnamon;
+//struct Sprite * spr_maple;
+//struct Sprite * spr_ruby;
+
+//extern struct Sprite * spr_camera;
 
 UINT16 treecounter = 0;
 
@@ -63,8 +72,12 @@ void Start_StateTree() {
 	SpriteManagerLoad(15); 	//maple
 	SpriteManagerLoad(28); 	//ruby
 
-	spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 36+48, 49);
-	spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 52+48, 49);
+	spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 36+48, 96);
+	spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 52+48, 96);
+
+	//spr_cinnamon = SpriteManagerAdd(SpriteCinnamon, 36, 96);
+	//spr_ruby = SpriteManagerAdd(SpriteRuby, 36+11, 96);
+	//spr_maple = SpriteManagerAdd(SpriteMaple, 36+20, 96);
 
 	SpriteManagerAdd(SpriteCinnamon, 36, 96);
 	SpriteManagerAdd(SpriteRuby, 36+11, 96);
@@ -80,31 +93,18 @@ void Start_StateTree() {
 }
 
 void Update_StateTree() {
-	/*
-	if (KEY_PRESSED(J_START)) {
-		//set variable for first time entering overworld1
-        SetState(StateOverworld1);
-    }
-	*/
-
 	//if Nutmeg touches the Oak Tree Door, then leave
 	if (spr_nutmeg1->x >= 110 && spr_nutmeg1->x < 118) SetState(StateOverworld1);
 
-	if (treecounter >= 0 && treecounter < 2) {
-		spr_nutmeg1->x = 36+48;
-		spr_nutmeg1->y = 49;
-		
-		spr_nutmeg2->x = 52+48;
-		spr_nutmeg2->y = 49;
-
+	if (treecounter == 0) {
 		cutscenewalkleft = true;
 		cutscenewalkright = false;
 		set_sprite_palette(3, 1, puffPalette);
 	}
 	else if (treecounter >= 2) {
+		cutscenemode = disabled;
 		cutscenewalkleft = false;
 		cutscenewalkright = false;
-		cutscenemode = disabled;
 	}
 
 	if (treecounter < 3) treecounter++;

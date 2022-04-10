@@ -12,8 +12,8 @@ void Start_EnemyButterfly() {
 	THIS->coll_w = 8;
 	THIS->coll_h = 6;
 
-	THIS->lim_x = 9999;
-	THIS->lim_y = 999;
+	THIS->lim_x = 2000;
+	THIS->lim_y = 144;
 
 	SetSpriteAnim(THIS, anim_butterfly_fly, 6);
 	SPRITE_SET_VMIRROR(THIS);

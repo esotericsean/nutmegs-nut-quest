@@ -93,9 +93,9 @@ void Update_SpriteNutmeg2() {
             }
             else if (KEY_PRESSED(J_B)) {
                 if (nutmeg_direction == right)
-                    SetSpriteAnim(THIS, anim_nutmeg_walk_right2, 50);
+                    SetSpriteAnim(THIS, anim_nutmeg_walk_right2, 15);
                 if (nutmeg_direction == left)
-                    SetSpriteAnim(THIS, anim_nutmeg_walk_left2, 50);
+                    SetSpriteAnim(THIS, anim_nutmeg_walk_left2, 15);
             }
             else {
                 if (nutmeg_direction == right)

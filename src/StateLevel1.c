@@ -16,7 +16,7 @@
 #include "../res/src/puff.h"
 #include "../res/src/fish.h"
 #include "../res/src/powerleaf.h"
-#include "../res/src/nutmegbow.h"
+//#include "../res/src/nutmegbow.h"
 #include "Palette.h"
 
 #include "../src/GlobalVars.h"
@@ -27,6 +27,7 @@ UINT8 anim_water_counter = 0;
 UINT8 anim_flag_counter = 0;
 UINT8 flagpole_activated = 0;
 UINT8 flagpole_stars = 0;
+UINT8 endlevel_counter = 0;
 //UINT8 starshooter = 0;
 
 //pink color palette
@@ -56,13 +57,14 @@ const UINT8 collision_tiles_level1[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
 
 extern UINT8* quickstart_mod_Data[];
 extern UINT8* mushrooms_mod_Data[];
+extern UINT8* flagpole_mod_Data[];
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
 extern struct Sprite * spr_nutmeg1;
 extern struct Sprite * spr_nutmeg2;
 extern struct Sprite * spr_camera;
-struct Sprite * spr_nutmegbow;
+//struct Sprite * spr_nutmegbow;
 
 //water tiles are stored in 1A, 1B, and 1C
 //in GBTD, water is 26, 27, 28
@@ -227,7 +229,7 @@ void Start_StateLevel1() {
 
 	//for(i = 0; i != N_SPRITE_TYPES; ++ i) { SpriteManagerLoad(i); }
 
-	SpriteManagerLoad(2);  //arorn
+	SpriteManagerLoad(2);  //acorn
 	SpriteManagerLoad(3);  //butterfly
 	SpriteManagerLoad(4);  //bunny
 	SpriteManagerLoad(5);  //camera
@@ -238,22 +240,31 @@ void Start_StateLevel1() {
 	SpriteManagerLoad(12); //puff
 	SpriteManagerLoad(13); //puff
 	SpriteManagerLoad(21); //fish
-	SpriteManagerLoad(32); //nutmegbow
+	//SpriteManagerLoad(32); //nutmegbow
 	//SpriteManagerLoad(30); //power leaf
 
 	scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, 4, 49); //36
-	spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 16, 49);
+	//spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 56, 68);
 	spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 4, 49); //36
 	spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 20, 49); //52
-	//SpriteManagerAdd(SpriteAcorn, 18*8, 9*8);
-	SpriteManagerAdd(SpriteAcorn, 34*8, 11*8);
-	SpriteManagerAdd(SpriteAcorn, 37*8, 5*8);
-	SpriteManagerAdd(SpriteAcorn, 69*8, 3*8);
-	//SpriteManagerAdd(SpritePowerLeaf, 79*8, 7*8);
-	SpriteManagerAdd(EnemyButterfly, 24*8, 7*8);
-	//SpriteManagerAdd(EnemyBunny, 35*8, 12*8);
-	SpriteManagerAdd(EnemyBunny, 130*8, 8*8);
-	//SpriteManagerAdd(EnemyFish, 22*8, 18*8);
+	SpriteManagerAdd(SpriteAcorn, 272, 88); //34*8, 11*8
+	SpriteManagerAdd(SpriteAcorn, 296, 40); //37*8, 5*8
+	SpriteManagerAdd(SpriteAcorn, 552, 24); //69*8, 3*8
+
+	SpriteManagerAdd(SpriteAcorn, 984, 40); //123, 5
+	SpriteManagerAdd(SpriteAcorn, 1296, 80); //162, 10
+	SpriteManagerAdd(SpriteAcorn, 1320, 64); //165, 8
+	SpriteManagerAdd(SpriteAcorn, 1424, 112); //178, 14
+	SpriteManagerAdd(SpriteAcorn, 712, 40); //89, 5
+
+	SpriteManagerAdd(SpriteAcorn, 1752, 48); //219*8, 6*8
+	SpriteManagerAdd(EnemyButterfly, 192, 56); //24*8, 7*8
+	SpriteManagerAdd(EnemyBunny, 1048, 64); //130*8, 8*8 -original was 1104
+
+	SpriteManagerAdd(EnemyButterfly, 59*8, 8*8);
+	SpriteManagerAdd(EnemyBunny, 72*8, 10*8);
+	SpriteManagerAdd(EnemyBunny, 89*8, 12*8);
+	SpriteManagerAdd(EnemyBunny, 205*8, 13*8);
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(&level1map, collision_tiles_level1, 0);
@@ -261,6 +272,7 @@ void Start_StateLevel1() {
 	cutscenemode = enabled;
 	isAcornMoving = true; //yes, it is moving
 	flagpole_activated = 0;
+	endlevel_counter = 0;
 
 	SHOW_SPRITES;
 	SHOW_BKG;
@@ -382,7 +394,9 @@ void Update_StateLevel1() {
 
 			cutscenemode = disabled;
 
-			PlayMusic(mushrooms_mod_Data, 3, 1);
+			if (flagpole_activated == 0) {
+				PlayMusic(mushrooms_mod_Data, 3, 1);
+			}
 		}
 
 		if (level1counter < 105) level1counter++;
@@ -434,7 +448,46 @@ void Update_StateLevel1() {
 	}
 	//animate pink flagpole
 	else if (flagpole_activated == 1) {
+		cutscenemode = enabled;
+		
+		if (spr_nutmeg1->x > 1956) {
+			cutscenewalkright = false;
+			cutscenewalkleft = true;
+		}
+		else if (spr_nutmeg1->x < 1956) {
+			cutscenewalkright = true;
+			cutscenewalkleft = false;
+		}
+		else if (spr_nutmeg1->x == 1956) {
+			cutscenewalkright = false;
+			cutscenewalkleft = false;
+		}
+
+		if (endlevel_counter == 10) {
+			SpriteManagerAdd(SpriteStarLeft, 1948, 96);
+			SpriteManagerAdd(SpriteStarRight, 1956, 96);
+		}
+		else if (endlevel_counter == 30) {
+			SpriteManagerAdd(SpriteStarLeft, 1948, 80);
+			SpriteManagerAdd(SpriteStarRight, 1956, 80);
+		}
+		else if (endlevel_counter == 60) {
+			SpriteManagerAdd(SpriteStarLeft, 1948, 64);
+			SpriteManagerAdd(SpriteStarRight, 1956, 64);
+		}
+		else if (endlevel_counter >= 100) {
+			//endlevel_counter = 0;
+			//cutscenewalkleft = false;
+			//cutscenewalkright = false;
+			//cutscenemode = disabled;
+
+			SetState(StateOverworld1);
+		}
+
+		if (endlevel_counter < 250) endlevel_counter++;
+
 		//spawn some stars
+		/*
 		if (flagpole_stars < 1) {
 			SpriteManagerAdd(SpriteStarLeft, spr_nutmeg1->x, spr_nutmeg1->y);
 			SpriteManagerAdd(SpriteStarRight, spr_nutmeg1->x, spr_nutmeg1->y);
@@ -442,7 +495,6 @@ void Update_StateLevel1() {
 			//SpriteManagerAdd(SpriteStarLeft, 244, 10);
 			//SpriteManagerAdd(SpriteStarRight, 244, 10);
 		}
-		/*
 		else if (flagpole_stars >= 5 && flagpole_stars < 10) {
 			SpriteManagerAdd(SpriteStarLeft, 244, 10);
 			SpriteManagerAdd(SpriteStarRight, 244, 10);
@@ -482,9 +534,15 @@ void Update_StateLevel1() {
 		if (flagpole_stars < 20) flagpole_stars++;
 	}
 
-	if (spr_nutmeg1->x >= 1936 && spr_nutmeg1->x < 1944) {
+	if (spr_nutmeg1->x >= 1936 && spr_nutmeg1->x < 1944 && flagpole_activated == 0) {
 		flagpole_activated = 1;
-		SetState(StateOverworld1);
+		levelbeat = true;
+		endlevel_counter = 0;
+		cutscenemode = enabled;
+		cutscenewalkright = true;
+		PlayMusic(flagpole_mod_Data, 7, 1);
+		//distance = 0;
+		//SetState(StateOverworld1);
 	}
 
 	/*
