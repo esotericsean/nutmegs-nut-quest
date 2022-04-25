@@ -86,6 +86,9 @@ extern UINT8 distance;
 extern UINT8 W1LevelSelection;
 extern UINT8 W2LevelSelection;
 
+//nutmeg sprite region
+extern UINT8 nut_region;
+
 //world 1 things
 extern const unsigned char level_water1[];
 extern const unsigned char level_water2[];

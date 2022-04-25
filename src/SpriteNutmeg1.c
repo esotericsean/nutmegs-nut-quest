@@ -676,6 +676,7 @@ void Update_SpriteNutmeg1() {
             }
         }
 
+        /*
         if (spr->type == SpritePowerLeaf) {
             if (CheckCollision(THIS, spr)) {
                 SpriteManagerRemove(i);
@@ -684,6 +685,7 @@ void Update_SpriteNutmeg1() {
                 PlayFx(CHANNEL_4, 4, 0x0C, 0x41, 0x30, 0xC0);
             }
         }
+        */
 
         //kill butterfly if jump on it
         if (spr->type == EnemyButterfly && movestate == inair && accelY > 0) {
@@ -691,7 +693,7 @@ void Update_SpriteNutmeg1() {
                 SpriteManagerRemove(i);
                 PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
                 isjumping = true;
-                accelY = -150;
+                accelY = -600;
                 jumpPeak = 0;
                 movestate = inair;
                 runJump = KEY_PRESSED(J_B) ? 1 : 0;
@@ -719,19 +721,19 @@ void Update_SpriteNutmeg1() {
                 SpriteManagerRemove(i);
                 PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
                 isjumping = true;
-                accelY = -150;
+                accelY = -600;
                 jumpPeak = 0;
                 movestate = inair;
                 runJump = KEY_PRESSED(J_B) ? 1 : 0;
 
-               if (nutmeg_direction == right) {
-                   SpriteManagerAdd(SpriteStarLeft, THIS->x+16, THIS->y+8);
-                   SpriteManagerAdd(SpriteStarRight, THIS->x+16, THIS->y+8);
-               }
-               else if (nutmeg_direction == left) {
-                   SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y+8);
-                   SpriteManagerAdd(SpriteStarRight, THIS->x-4, THIS->y+8);
-               }
+            if (nutmeg_direction == right) {
+                SpriteManagerAdd(SpriteStarLeft, THIS->x+16, THIS->y+8);
+                SpriteManagerAdd(SpriteStarRight, THIS->x+16, THIS->y+8);
+            }
+            else if (nutmeg_direction == left) {
+                SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y+8);
+                SpriteManagerAdd(SpriteStarRight, THIS->x-4, THIS->y+8);
+            }
             }
         }
         //die if touch bunny
@@ -741,6 +743,7 @@ void Update_SpriteNutmeg1() {
             }
         }
 
+        /*
         if (spr->type == EnemyFish && movestate == inair && accelY > 0) {
             if (CheckCollision(THIS, spr)) {
                 SpriteManagerRemove(i);
@@ -751,16 +754,17 @@ void Update_SpriteNutmeg1() {
                 movestate = inair;
                 runJump = KEY_PRESSED(J_B) ? 1 : 0;
 
-               if (nutmeg_direction == right) {
-                   SpriteManagerAdd(SpriteStarLeft, THIS->x+16, THIS->y+8);
-                   SpriteManagerAdd(SpriteStarRight, THIS->x+16, THIS->y+8);
-               }
-               else if (nutmeg_direction == left) {
-                   SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y+8);
-                   SpriteManagerAdd(SpriteStarRight, THIS->x-4, THIS->y+8);
-               }
+            if (nutmeg_direction == right) {
+                SpriteManagerAdd(SpriteStarLeft, THIS->x+16, THIS->y+8);
+                SpriteManagerAdd(SpriteStarRight, THIS->x+16, THIS->y+8);
+            }
+            else if (nutmeg_direction == left) {
+                SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y+8);
+                SpriteManagerAdd(SpriteStarRight, THIS->x-4, THIS->y+8);
+            }
             }
         }
+        */
     }
 }
 

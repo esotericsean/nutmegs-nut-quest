@@ -217,9 +217,14 @@ const unsigned char  Letter9[] = { 0x5C };
 const unsigned char Letter10[] = { 0x5D };
 const unsigned char Letter11[] = { 0x5E };
 
+//nutmeg sprite region
+UINT8 nut_region;
+
 void Start_StateLevel1() {
 	level1counter = 0;
 	SPRITES_8x16;
+
+	nut_region = 0;
 
 	PlayMusic(quickstart_mod_Data, 4, 1);
 	//PlayMusic(mushrooms_mod_Data, 3, 1);
@@ -247,6 +252,8 @@ void Start_StateLevel1() {
 	//spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 56, 68);
 	spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 4, 49); //36
 	spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 20, 49); //52
+	
+	/*
 	SpriteManagerAdd(SpriteAcorn, 272, 88); //34*8, 11*8
 	SpriteManagerAdd(SpriteAcorn, 296, 40); //37*8, 5*8
 	SpriteManagerAdd(SpriteAcorn, 552, 24); //69*8, 3*8
@@ -265,6 +272,7 @@ void Start_StateLevel1() {
 	SpriteManagerAdd(EnemyBunny, 72*8, 10*8);
 	SpriteManagerAdd(EnemyBunny, 89*8, 12*8);
 	SpriteManagerAdd(EnemyBunny, 205*8, 13*8);
+	*/
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(&level1map, collision_tiles_level1, 0);
@@ -557,11 +565,62 @@ void Update_StateLevel1() {
 	if (starshooter >= 5) starshooter = 0;
 	*/
 
-	if (spr_nutmeg1->y > 128 && spr_nutmeg1->y < 200) SetState(StateOverworld1);
+	if (spr_nutmeg1->y >= 126 && spr_nutmeg1->y <= 200) SetState(StateOverworld1);
 	
 	/*
 	if (KEY_PRESSED(J_START)) {
         SetState(StateOverworld1);
     }
 	*/
+
+	/*  REGIONS  */
+	// 0 = 0-250
+	// 1 = 251-500
+	// 2 = 501-750
+	// 3 = 751-1000
+	// 4 = 1001-1250
+	// 5 = 1251-1500
+	// 6 = 1501-1750
+	// 7 = 1751-2000
+
+	// Set Sprite Region
+	if (spr_nutmeg1->x > 0 && spr_nutmeg1->x <= 250 && nut_region <= 0) {
+		SpriteManagerAdd(SpriteAcorn, 272, 88);
+		SpriteManagerAdd(SpriteAcorn, 296, 40);
+		SpriteManagerAdd(EnemyButterfly, 192, 56);
+		SpriteManagerAdd(EnemyButterfly, 472, 64);
+		nut_region = 1;
+	}
+	else if (spr_nutmeg1->x > 250 && spr_nutmeg1->x <= 500 && nut_region <= 1) {
+		SpriteManagerAdd(SpriteAcorn, 552, 24);
+		SpriteManagerAdd(SpriteAcorn, 712, 40);
+		SpriteManagerAdd(EnemyBunny, 576, 80);
+		SpriteManagerAdd(EnemyBunny, 712, 96);
+    	nut_region = 2;
+	}
+	else if (spr_nutmeg1->x > 500 && spr_nutmeg1->x <= 750 && nut_region <= 2) {
+		SpriteManagerAdd(SpriteAcorn, 984, 40);
+	    nut_region = 3;
+	}
+	else if (spr_nutmeg1->x > 750 && spr_nutmeg1->x <= 1000 && nut_region <= 3) {
+		SpriteManagerAdd(EnemyBunny, 1048, 64);
+	    nut_region = 4;
+	}
+	else if (spr_nutmeg1->x > 1000 && spr_nutmeg1->x <= 1250 && nut_region <= 4) {
+		SpriteManagerAdd(SpriteAcorn, 1296, 80);
+		SpriteManagerAdd(SpriteAcorn, 1320, 64);
+		SpriteManagerAdd(SpriteAcorn, 1424, 112);
+	    nut_region = 5;
+	}
+	else if (spr_nutmeg1->x > 1250 && spr_nutmeg1->x <= 1500 && nut_region <= 5) {
+		SpriteManagerAdd(EnemyBunny, 1640, 104);
+	    nut_region = 6;
+	}
+	else if (spr_nutmeg1->x > 1500 && spr_nutmeg1->x <= 1750 && nut_region <= 6) {
+		SpriteManagerAdd(SpriteAcorn, 1752, 48);
+	    nut_region = 7;
+	}
+	else if (spr_nutmeg1->x > 1750 && spr_nutmeg1->x <= 2000 && nut_region <= 7) {
+	    nut_region = 8;
+	}
 }

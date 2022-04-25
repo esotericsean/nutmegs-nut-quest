@@ -13,7 +13,7 @@ void Start_EnemyBunny() {
 	THIS->coll_w = 9;
 	THIS->coll_h = 5;
 
-	THIS->lim_x = 2000;
+	THIS->lim_x = 500;
 	THIS->lim_y = 144;
 
 	SetSpriteAnim(THIS, anim_bunny_idle, 1);
