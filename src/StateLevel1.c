@@ -58,6 +58,7 @@ const UINT8 collision_tiles_level1[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
 extern UINT8* quickstart_mod_Data[];
 extern UINT8* mushrooms_mod_Data[];
 extern UINT8* flagpole_mod_Data[];
+extern UINT8* quickdeath_mod_Data[];
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -220,11 +221,15 @@ const unsigned char Letter11[] = { 0x5E };
 //nutmeg sprite region
 UINT8 nut_region;
 
+bool deathmusicplayed = false;
+
 void Start_StateLevel1() {
 	level1counter = 0;
 	SPRITES_8x16;
 
 	nut_region = 0;
+
+	deathmusicplayed = false;
 
 	PlayMusic(quickstart_mod_Data, 4, 1);
 	//PlayMusic(mushrooms_mod_Data, 3, 1);
@@ -290,6 +295,23 @@ void Start_StateLevel1() {
 }
 
 void Update_StateLevel1() {
+	/*
+	if (nutmeg_death == true && deathmusicplayed == false) {
+		PlayMusic(quickdeath_mod_Data, 7, 1);
+		deathmusicplayed = true;
+	}
+	*/
+
+	if (nutmeg_death == true) {
+		__critical { PlayMusic(quickdeath_mod_Data, 7, 1); }
+		deathmusicplayed = true;
+
+		if (nutmeg_pitdeath == true) {
+			if (nutmegdeathtimer >= 125) SetState(StateOverworld1);
+        	nutmegdeathtimer++;
+		}
+	}
+	
 	if (cutscenemode == enabled) {
 		//Level Start!
 		//Make Nutmeg Walk In
@@ -375,7 +397,7 @@ void Update_StateLevel1() {
 			set_bkg_tiles (11, 6, 1, 1, Letter10);
 			set_bkg_tiles (12, 6, 1, 1, Letter11);
 		}
-		else if (level1counter >= 100) {
+		else if (level1counter >= 100 && level1counter < 101) {
 			set_bkg_data (0x54, 1, BlankSky);
 			set_bkg_data (0x55, 1, BlankSky);
 			set_bkg_data (0x56, 1, BlankSky);
@@ -548,7 +570,7 @@ void Update_StateLevel1() {
 		endlevel_counter = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
-		PlayMusic(flagpole_mod_Data, 7, 1);
+		__critical { PlayMusic(flagpole_mod_Data, 7, 1); }
 		//distance = 0;
 		//SetState(StateOverworld1);
 	}
@@ -564,8 +586,6 @@ void Update_StateLevel1() {
 	if (starshooter > 0) starshooter++;
 	if (starshooter >= 5) starshooter = 0;
 	*/
-
-	if (spr_nutmeg1->y >= 126 && spr_nutmeg1->y <= 200) SetState(StateOverworld1);
 	
 	/*
 	if (KEY_PRESSED(J_START)) {
@@ -583,41 +603,71 @@ void Update_StateLevel1() {
 	// 6 = 1501-1750
 	// 7 = 1751-2000
 
-	// Set Sprite Region
+	// 0 = 0-32
+	// 1 = 32-63
+	// 2 = 63-94
+	// 3 = 94-125
+	// 4 = 125-156
+	// 5 = 156-188
+	// 6 = 188-219
+	// 7 = 219-250
+
+	// 0-63:
 	if (spr_nutmeg1->x > 0 && spr_nutmeg1->x <= 250 && nut_region <= 0) {
-		SpriteManagerAdd(SpriteAcorn, 272, 88);
-		SpriteManagerAdd(SpriteAcorn, 296, 40);
-		SpriteManagerAdd(EnemyButterfly, 192, 56);
-		SpriteManagerAdd(EnemyButterfly, 472, 64);
+		//SpriteManagerAdd(SpriteAcorn, 272, 88);
+		//SpriteManagerAdd(SpriteAcorn, 296, 40);
+		//SpriteManagerAdd(EnemyButterfly, 192, 56);
+		//SpriteManagerAdd(EnemyButterfly, 472, 64);
+		SpriteManagerAdd(EnemyButterfly, 12*8, 4*8);
+		SpriteManagerAdd(SpriteAcorn, 47*8, 2*8);
+		SpriteManagerAdd(SpriteAcorn, 54*8, 2*8);
+		SpriteManagerAdd(EnemyBunny, 59*8, 12*8); //Bunny always 1 higher in y value
 		nut_region = 1;
 	}
+	// Up to 94:
 	else if (spr_nutmeg1->x > 250 && spr_nutmeg1->x <= 500 && nut_region <= 1) {
-		SpriteManagerAdd(SpriteAcorn, 552, 24);
-		SpriteManagerAdd(SpriteAcorn, 712, 40);
-		SpriteManagerAdd(EnemyBunny, 576, 80);
-		SpriteManagerAdd(EnemyBunny, 712, 96);
+		//SpriteManagerAdd(SpriteAcorn, 552, 24);
+		//SpriteManagerAdd(SpriteAcorn, 712, 40);
+		//SpriteManagerAdd(EnemyBunny, 576, 80);
+		//SpriteManagerAdd(EnemyBunny, 712, 96);
+		SpriteManagerAdd(EnemyButterfly, 89*8, 9*8);
+		SpriteManagerAdd(SpriteAcorn, 85*8, 12*8);
+		SpriteManagerAdd(SpriteAcorn, 93*8, 12*8);
     	nut_region = 2;
 	}
+	// Up to 125:
 	else if (spr_nutmeg1->x > 500 && spr_nutmeg1->x <= 750 && nut_region <= 2) {
-		SpriteManagerAdd(SpriteAcorn, 984, 40);
+		//SpriteManagerAdd(SpriteAcorn, 984, 40);
+		SpriteManagerAdd(SpriteAcorn, 105*8, 5*8);
+		SpriteManagerAdd(SpriteAcorn, 123*8, 5*8);
 	    nut_region = 3;
 	}
+	// Up to 156:
 	else if (spr_nutmeg1->x > 750 && spr_nutmeg1->x <= 1000 && nut_region <= 3) {
-		SpriteManagerAdd(EnemyBunny, 1048, 64);
+		//SpriteManagerAdd(EnemyBunny, 1048, 64);
+		SpriteManagerAdd(EnemyBunny, 132*8, 8*8);
 	    nut_region = 4;
 	}
+	// Up to 188:
 	else if (spr_nutmeg1->x > 1000 && spr_nutmeg1->x <= 1250 && nut_region <= 4) {
-		SpriteManagerAdd(SpriteAcorn, 1296, 80);
-		SpriteManagerAdd(SpriteAcorn, 1320, 64);
-		SpriteManagerAdd(SpriteAcorn, 1424, 112);
+		//SpriteManagerAdd(SpriteAcorn, 1296, 80);
+		//SpriteManagerAdd(SpriteAcorn, 1320, 64);
+		//SpriteManagerAdd(SpriteAcorn, 1424, 112);
+		SpriteManagerAdd(SpriteAcorn, 163*8, 10*8);
+		SpriteManagerAdd(SpriteAcorn, 166*8, 8*8);
+		SpriteManagerAdd(SpriteAcorn, 178*8, 14*8);
 	    nut_region = 5;
 	}
+	// Up to 219:
 	else if (spr_nutmeg1->x > 1250 && spr_nutmeg1->x <= 1500 && nut_region <= 5) {
-		SpriteManagerAdd(EnemyBunny, 1640, 104);
+		//SpriteManagerAdd(EnemyBunny, 1640, 104);
+		SpriteManagerAdd(EnemyButterfly, 216*8, 11*8);
 	    nut_region = 6;
 	}
+	// Up to 250:
 	else if (spr_nutmeg1->x > 1500 && spr_nutmeg1->x <= 1750 && nut_region <= 6) {
-		SpriteManagerAdd(SpriteAcorn, 1752, 48);
+		//SpriteManagerAdd(SpriteAcorn, 1752, 48);
+		SpriteManagerAdd(EnemyButterfly, 228*8, 10*8);
 	    nut_region = 7;
 	}
 	else if (spr_nutmeg1->x > 1750 && spr_nutmeg1->x <= 2000 && nut_region <= 7) {

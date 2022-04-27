@@ -68,6 +68,9 @@ extern bool cutscenewalkleft;
 extern bool cutscenewalkright;
 extern bool cutscenerun;
 extern bool cutscenejump;
+extern bool nutmeg_death;
+extern bool nutmeg_pitdeath;
+extern UINT16 nutmegdeathtimer;
 
 /* * * * * * * * * * * * * * */
 /*      c u t s c e n e      */

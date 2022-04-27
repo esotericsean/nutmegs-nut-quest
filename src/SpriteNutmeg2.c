@@ -23,8 +23,8 @@ const UINT8 anim_nutmeg_fall_left2[]  = {1, 10};
 const UINT8 anim_nutmeg_land_right2[] = {1, 11};
 const UINT8 anim_nutmeg_land_left2[]  = {1, 11};
    
-const UINT8 anim_nutmeg_hurt_right2[] = {2, 12, 0}; //flashes blank frame
-const UINT8 anim_nutmeg_hurt_left2[]  = {2, 12, 0};
+const UINT8 anim_nutmeg_hurt_right2[] = {1, 12}; //flashes blank frame
+const UINT8 anim_nutmeg_hurt_left2[]  = {1, 12};
 
 // Declare a pointer to a sprite
 struct Sprite * spr_nutmeg1;
@@ -203,6 +203,11 @@ void Update_SpriteNutmeg2() {
         else if (nutmeg_direction == left) {
             THIS->x = spr_nutmeg1->x - 16;
             THIS->y = spr_nutmeg1->y;
+        }
+
+        if (nutmeg_death == true) {
+            if (nutmeg_direction == left) SetSpriteAnim(THIS, anim_nutmeg_hurt_left2, 1);
+            else if (nutmeg_direction == right) SetSpriteAnim(THIS, anim_nutmeg_hurt_right2, 1);
         }
     }
 }

@@ -25,11 +25,15 @@ const UINT8 anim_nutmeg_fall_left[]  = {1, 10};
 const UINT8 anim_nutmeg_land_right[] = {1, 11};
 const UINT8 anim_nutmeg_land_left[]  = {1, 11};
    
-const UINT8 anim_nutmeg_hurt_right[] = {2, 12, 0}; //flashes blank frame
-const UINT8 anim_nutmeg_hurt_left[]  = {2, 12, 0};
+const UINT8 anim_nutmeg_hurt_right[] = {1, 12}; //flashes blank frame
+const UINT8 anim_nutmeg_hurt_left[]  = {1, 12};
 
 direction nutmeg_direction;
 bool isjumping = true;
+
+bool nutmeg_death = false;
+bool nutmeg_pitdeath = false;
+UINT16 nutmegdeathtimer = 0;
 
 //cutscene mode!
 switcher cutscenemode;
@@ -95,6 +99,10 @@ void ResetState() {
 
     //bowoffsetX = 0;
     //bowoffsetY = 0;
+
+    nutmegdeathtimer = 0;
+    nutmeg_death = false;
+    nutmeg_pitdeath = false;
 }
 
 void Start_SpriteNutmeg1() {
@@ -337,7 +345,7 @@ void Update_SpriteNutmeg1() {
         /*             animation               */
         /* * * * * * * * * * * * * * * * * * * */
         //play correct animation based on current state & input
-        if (movestate == grounded) {
+        if (movestate == grounded && nutmeg_death == false) {
             if (accelX < 100 && accelX > -100) {
                 if (nutmeg_direction == right) {
                     //bowanim = 0;
@@ -391,7 +399,7 @@ void Update_SpriteNutmeg1() {
                 }
             }
         }
-        else {
+        else if (movestate == inair && nutmeg_death == false) {
             if (accelY > 60) {
                 if (nutmeg_direction == right) {
                     //bowanim = 3;
@@ -587,7 +595,7 @@ void Update_SpriteNutmeg1() {
             movestate = inair;
         }
 
-        if (movestate == grounded) {
+        if (movestate == grounded && nutmeg_death == false) {
             if (accelX < 100 && accelX > -100) {
                 if (nutmeg_direction == right) {
                     //bowanim = 0;
@@ -619,7 +627,7 @@ void Update_SpriteNutmeg1() {
                 }
             }
         }
-        else {
+        else if (movestate == inair && nutmeg_death == false) {
             if (accelY > 60) {
                 if (nutmeg_direction == right) {
                     //bowanim = 3;
@@ -688,7 +696,7 @@ void Update_SpriteNutmeg1() {
         */
 
         //kill butterfly if jump on it
-        if (spr->type == EnemyButterfly && movestate == inair && accelY > 0) {
+        if (spr->type == EnemyButterfly && movestate == inair && accelY > 0 && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
                 SpriteManagerRemove(i);
                 PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
@@ -709,14 +717,14 @@ void Update_SpriteNutmeg1() {
             }
         }
         //die if touch butterfly
-        else if (spr->type == EnemyButterfly && accelY < 0) {
+        else if (spr->type == EnemyButterfly && accelY < 0 && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                SetState(StateOverworld1);
+                nutmeg_death = true;
             }
         }
 
         //kill bunny if jump on it
-        if (spr->type == EnemyBunny && movestate == inair && accelY > 0) {
+        if (spr->type == EnemyBunny && movestate == inair && accelY > 0 && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
                 SpriteManagerRemove(i);
                 PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
@@ -737,9 +745,9 @@ void Update_SpriteNutmeg1() {
             }
         }
         //die if touch bunny
-        else if (spr->type == EnemyBunny && movestate == grounded) {
+        else if (spr->type == EnemyBunny && movestate == grounded && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                SetState(StateOverworld1);
+                nutmeg_death = true;
             }
         }
 
@@ -765,6 +773,35 @@ void Update_SpriteNutmeg1() {
             }
         }
         */
+
+        // death from enemy
+        if (nutmeg_death == true) {
+            if (nutmegdeathtimer == 0) {
+                if (nutmeg_direction == left) {
+                    SetSpriteAnim(THIS, anim_nutmeg_hurt_left, 1);
+                    accelX = 200;
+                }
+                else if (nutmeg_direction == right) {
+                    SetSpriteAnim(THIS, anim_nutmeg_hurt_right, 1);
+                    accelX = -200;
+                }
+                cutscenemode = true;
+            }
+            
+            if (nutmegdeathtimer >= 500) {
+                SetState(StateOverworld1);
+            }
+
+            nutmegdeathtimer++;
+        }
+
+        // death from falling into pit/water
+        if (THIS->y >= 126 && THIS->y <= 200 && nutmeg_death == false) {
+            nutmeg_death = true;
+            nutmeg_pitdeath = true;
+            SpriteManagerRemoveSprite(THIS);
+            SpriteManagerRemoveSprite(spr_nutmeg2);
+        }
     }
 }
 
