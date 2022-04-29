@@ -38,10 +38,13 @@ typedef enum { full, low } amount;
 //powerups
 extern amount health;
 extern UINT8 bowanim;
-extern UINT8 acorncounter;
 extern switcher powerupleaf;
 extern switcher powerupstar;
-extern UINT8 nutmeglives;
+
+//health system - reset to 0 in StateCutscene1
+//start with 0 acorns and 3 lives
+extern UINT8 acorncounter;
+extern INT8 nutmeglives;
 
 //first time visiting overworld1
 extern bool overworld1visited;

@@ -34,6 +34,7 @@ bool isjumping = true;
 bool nutmeg_death = false;
 bool nutmeg_pitdeath = false;
 UINT16 nutmegdeathtimer = 0;
+bool GameOver = false;
 
 //cutscene mode!
 switcher cutscenemode;
@@ -56,15 +57,10 @@ UINT8 collisionX;
 UINT8 collisionY;
 UINT8 groundCollision;
 
-//scoring
-UINT8 getAcorns = 0;
-
 //powerups
 amount health; //full or low
-UINT8 acorncounter; //100 resets to 0 and adds to nutmeglives
 switcher powerupleaf; //enabled or disabled
 switcher powerupstar; //enabled or disabled
-UINT8 nutmeglives; //start with 3
 
 // Declare a pointer to a sprite
 struct Sprite * spr_nutmeg2;
@@ -103,6 +99,7 @@ void ResetState() {
     nutmegdeathtimer = 0;
     nutmeg_death = false;
     nutmeg_pitdeath = false;
+    GameOver = false;
 }
 
 void Start_SpriteNutmeg1() {
@@ -677,7 +674,11 @@ void Update_SpriteNutmeg1() {
         if (spr->type == SpriteAcorn) {
             if (CheckCollision(THIS, spr)) {
                 SpriteManagerRemove(i);
-                getAcorns += 1;
+                
+                //health system
+                //add an acorn and check nutmeglives
+                acorncounter++;
+                
                 PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
                 //PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
                 //PlayFx(CHANNEL_4, 4, 0x0C, 0x41, 0x30, 0xC0);
@@ -786,10 +787,18 @@ void Update_SpriteNutmeg1() {
                     accelX = -200;
                 }
                 cutscenemode = true;
+                
+                if (nutmeglives <= 0) GameOver = true;
+                else nutmeglives--;
             }
             
             if (nutmegdeathtimer >= 500) {
-                SetState(StateOverworld1);
+                if (GameOver == true) {
+                    SetState(StateTitle);
+                }
+                else if (GameOver == false) {
+                    SetState(StateOverworld1);
+                }
             }
 
             nutmegdeathtimer++;
@@ -802,6 +811,14 @@ void Update_SpriteNutmeg1() {
             SpriteManagerRemoveSprite(THIS);
             SpriteManagerRemoveSprite(spr_nutmeg2);
         }
+    }
+
+    // extra life from 100 acorns
+    if (acorncounter == 100) {
+        nutmeglives++;
+        //PLAY FUN SOUND HERE!
+        acorncounter = 0;
+        if (nutmeglives > 99) nutmeglives = 99;
     }
 }
 

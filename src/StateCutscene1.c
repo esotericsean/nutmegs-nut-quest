@@ -19,6 +19,10 @@
 
 UINT16 cutscene1counter;
 
+//health system
+UINT8 acorncounter;
+INT8 nutmeglives;
+
 const UINT8 collision_tiles_cutscene1[] = {0};
 
 const UWORD pal_cut1[] = {
@@ -88,6 +92,10 @@ void Start_StateCutscene1() {
 	SHOW_BKG;
 
     cutscene1counter = 0;
+
+    //health system
+    acorncounter = 0;
+    nutmeglives = 3;
 }
 
 void Update_StateCutscene1() {

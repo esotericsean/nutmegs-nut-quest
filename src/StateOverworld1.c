@@ -58,6 +58,10 @@ UINT8 f = 0; // water animation counter
 		0x00,0x00,0x1c,0x1c,0x22,0x3e,0x4d,0x73,
 		0x5f,0x61,0x5f,0x61,0x2e,0x32,0x1c,0x1c
 	};
+	const unsigned char overworld1_num0[] = {
+		0x00,0x00,0x18,0x18,0x24,0x24,0x24,0x24,
+		0x24,0x24,0x24,0x24,0x18,0x18,0x00,0x00
+	};
 	const unsigned char overworld1_num1[] = {
 		0x00,0x00,0x18,0x18,0x08,0x08,0x08,0x08,
 		0x08,0x08,0x08,0x08,0x08,0x08,0x00,0x00
@@ -95,10 +99,14 @@ UINT8 f = 0; // water animation counter
 		0x1c,0x1c,0x04,0x04,0x18,0x18,0x00,0x00
 	};
 
-	const unsigned char current_level[] = {
-	0x3F
-};
+	const unsigned char current_level[] = { 0x3F };
 //end copied from SpriteNutmegTiny
+
+//health system
+const unsigned char current_health0[] = { 0x41 };
+const unsigned char current_health1[] = { 0x42 };
+const unsigned char current_acorn0[]  = { 0x43 };
+const unsigned char current_acorn1[]  = { 0x44 };
 
 bool overworld1visited = false;
 
@@ -203,7 +211,7 @@ void Start_StateOverworld1() {
 
 	//SpriteManagerAdd(SpriteNutmegTiny, 47, 45);
 	SpriteManagerAdd(SpriteNutHead, 16, 7);
-	//SpriteManagerAdd(SpriteAcorn, 129, 5);
+	SpriteManagerAdd(SpriteAcorn, 14*8, 7);
 
 	InitScrollTiles(0, &overworld1);
 	InitScroll(&overworld1map, collision_tiles_overworld1, 0);
@@ -400,5 +408,61 @@ void Update_StateOverworld1() {
 
 		if (bossflash > 10) bossflash = 0;
 	}
-	set_bkg_tiles (7, 1, 1, 1, current_level);
+	set_bkg_tiles (11, 1, 1, 1, current_level);
+
+	//health system DISPLAY
+		//health first number:
+		switch (nutmeglives - (nutmeglives % 10)) {
+			case 0: set_bkg_data (0x41, 1, overworld1_num0); break;
+			case 10: set_bkg_data (0x41, 1, overworld1_num1); break;
+			case 20: set_bkg_data (0x41, 1, overworld1_num2); break;
+			case 30: set_bkg_data (0x41, 1, overworld1_num3); break;
+			case 40: set_bkg_data (0x41, 1, overworld1_num4); break;
+			case 50: set_bkg_data (0x41, 1, overworld1_num5); break;
+			case 60: set_bkg_data (0x41, 1, overworld1_num6); break;
+			case 70: set_bkg_data (0x41, 1, overworld1_num7); break;
+			case 80: set_bkg_data (0x41, 1, overworld1_num8); break;
+			case 90: set_bkg_data (0x41, 1, overworld1_num9); break;
+		}
+		//health second number:
+		switch (nutmeglives % 10) {
+			case 0: set_bkg_data (0x42, 1, overworld1_num0); break;
+			case 1: set_bkg_data (0x42, 1, overworld1_num1); break;
+			case 2: set_bkg_data (0x42, 1, overworld1_num2); break;
+			case 3: set_bkg_data (0x42, 1, overworld1_num3); break;
+			case 4: set_bkg_data (0x42, 1, overworld1_num4); break;
+			case 5: set_bkg_data (0x42, 1, overworld1_num5); break;
+			case 6: set_bkg_data (0x42, 1, overworld1_num6); break;
+			case 7: set_bkg_data (0x42, 1, overworld1_num7); break;
+			case 8: set_bkg_data (0x42, 1, overworld1_num8); break;
+			case 9: set_bkg_data (0x42, 1, overworld1_num9); break;
+		}
+
+	//acorns:
+		//acorns first number:
+		switch (acorncounter - (acorncounter % 10)) {
+			case 0: set_bkg_data (0x43, 1, overworld1_num0); break;
+			case 10: set_bkg_data (0x43, 1, overworld1_num1); break;
+			case 20: set_bkg_data (0x43, 1, overworld1_num2); break;
+			case 30: set_bkg_data (0x43, 1, overworld1_num3); break;
+			case 40: set_bkg_data (0x43, 1, overworld1_num4); break;
+			case 50: set_bkg_data (0x43, 1, overworld1_num5); break;
+			case 60: set_bkg_data (0x43, 1, overworld1_num6); break;
+			case 70: set_bkg_data (0x43, 1, overworld1_num7); break;
+			case 80: set_bkg_data (0x43, 1, overworld1_num8); break;
+			case 90: set_bkg_data (0x43, 1, overworld1_num9); break;
+		}
+		//acorns second number:
+		switch (acorncounter % 10) {
+			case 0: set_bkg_data (0x44, 1, overworld1_num0); break;
+			case 1: set_bkg_data (0x44, 1, overworld1_num1); break;
+			case 2: set_bkg_data (0x44, 1, overworld1_num2); break;
+			case 3: set_bkg_data (0x44, 1, overworld1_num3); break;
+			case 4: set_bkg_data (0x44, 1, overworld1_num4); break;
+			case 5: set_bkg_data (0x44, 1, overworld1_num5); break;
+			case 6: set_bkg_data (0x44, 1, overworld1_num6); break;
+			case 7: set_bkg_data (0x44, 1, overworld1_num7); break;
+			case 8: set_bkg_data (0x44, 1, overworld1_num8); break;
+			case 9: set_bkg_data (0x44, 1, overworld1_num9); break;
+		}
 }
