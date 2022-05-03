@@ -149,8 +149,52 @@ void Update_SpriteNutmeg1() {
 	    spr_nutmegbow->y = THIS->y + bowoffsetY;
     }
     */
+    
+    // extra life from 100 acorns
+    if (acorncounter == 100) {
+        nutmeglives++;
+        //PLAY FUN SOUND HERE!
+        acorncounter = 0;
+        if (nutmeglives > 99) nutmeglives = 99;
+    }
 
+    // death
+    if (nutmeg_death == true) {
+        cutscenemode = true;
+
+        if (nutmeg_direction == left) {
+            SetSpriteAnim(THIS, anim_nutmeg_hurt_left, 1);
+            accelX = 100;
+        }
+        else if (nutmeg_direction == right) {
+            SetSpriteAnim(THIS, anim_nutmeg_hurt_right, 1);
+            accelX = -100;
+        }
+
+        if (nutmeg_pitdeath == true) {
+            SpriteManagerRemoveSprite(spr_nutmeg2);
+            SpriteManagerRemoveSprite(THIS);
+        }
+    }
+
+    /* * * * * * * * * * * * * * * * * * * */
+    /*           normal mode               */
+    /* * * * * * * * * * * * * * * * * * * */
     if (cutscenemode == disabled) {
+        // death from falling into pit/water
+        if (THIS->y >= 126 && THIS->y <= 200 && nutmeg_death == false) {
+            nutmeg_death = true;
+            nutmeg_pitdeath = true;
+            nutmegdeathtimer = 0;
+
+            if (nutmeglives <= 0) { GameOver = true; }
+            else { nutmeglives--; }
+
+            //nutmeglives--;
+
+            //SpriteManagerRemoveSprite(spr_nutmeg2);
+            //SpriteManagerRemoveSprite(THIS);
+        }
         /* * * * * * * * * * * * * * * * * * * */
         /* left and right directional movement */
         /* * * * * * * * * * * * * * * * * * * */
@@ -665,7 +709,6 @@ void Update_SpriteNutmeg1() {
             spr_camera->y = THIS->y;
         }
     }
-    //end movement
 
     /* * * * * * * * * * * * * * * * * * * */
     /*         items and enemies           */
@@ -721,6 +764,10 @@ void Update_SpriteNutmeg1() {
         else if (spr->type == EnemyButterfly && accelY < 0 && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
                 nutmeg_death = true;
+                nutmegdeathtimer = 0;
+
+                if (nutmeglives <= 0) { GameOver = true; }
+                else { nutmeglives--; }
             }
         }
 
@@ -749,6 +796,10 @@ void Update_SpriteNutmeg1() {
         else if (spr->type == EnemyBunny && movestate == grounded && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
                 nutmeg_death = true;
+                nutmegdeathtimer = 0;
+
+                if (nutmeglives <= 0) { GameOver = true; }
+                else { nutmeglives--; }
             }
         }
 
@@ -774,51 +825,6 @@ void Update_SpriteNutmeg1() {
             }
         }
         */
-
-        // death from enemy
-        if (nutmeg_death == true) {
-            if (nutmegdeathtimer == 0) {
-                if (nutmeg_direction == left) {
-                    SetSpriteAnim(THIS, anim_nutmeg_hurt_left, 1);
-                    accelX = 200;
-                }
-                else if (nutmeg_direction == right) {
-                    SetSpriteAnim(THIS, anim_nutmeg_hurt_right, 1);
-                    accelX = -200;
-                }
-                cutscenemode = true;
-                
-                if (nutmeglives <= 0) GameOver = true;
-                else nutmeglives--;
-            }
-            
-            if (nutmegdeathtimer >= 500) {
-                if (GameOver == true) {
-                    SetState(StateTitle);
-                }
-                else if (GameOver == false) {
-                    SetState(StateOverworld1);
-                }
-            }
-
-            nutmegdeathtimer++;
-        }
-
-        // death from falling into pit/water
-        if (THIS->y >= 126 && THIS->y <= 200 && nutmeg_death == false) {
-            nutmeg_death = true;
-            nutmeg_pitdeath = true;
-            SpriteManagerRemoveSprite(THIS);
-            SpriteManagerRemoveSprite(spr_nutmeg2);
-        }
-    }
-
-    // extra life from 100 acorns
-    if (acorncounter == 100) {
-        nutmeglives++;
-        //PLAY FUN SOUND HERE!
-        acorncounter = 0;
-        if (nutmeglives > 99) nutmeglives = 99;
     }
 }
 

@@ -45,6 +45,7 @@ extern switcher powerupstar;
 //start with 0 acorns and 3 lives
 extern UINT8 acorncounter;
 extern INT8 nutmeglives;
+extern bool GameOver;
 
 //first time visiting overworld1
 extern bool overworld1visited;

@@ -295,21 +295,22 @@ void Start_StateLevel1() {
 }
 
 void Update_StateLevel1() {
-	/*
-	if (nutmeg_death == true && deathmusicplayed == false) {
-		PlayMusic(quickdeath_mod_Data, 7, 1);
-		deathmusicplayed = true;
-	}
-	*/
-
 	if (nutmeg_death == true) {
-		__critical { PlayMusic(quickdeath_mod_Data, 7, 1); }
-		deathmusicplayed = true;
-
-		if (nutmeg_pitdeath == true) {
-			if (nutmegdeathtimer >= 125) SetState(StateOverworld1);
-        	nutmegdeathtimer++;
+		if (deathmusicplayed == false) {
+			__critical { PlayMusic(quickdeath_mod_Data, 7, 1); }
+			deathmusicplayed = true;
 		}
+
+		if (nutmegdeathtimer >= 125) {
+			if (GameOver == true) {
+				SetState(StateGameOver);
+			}
+			else if (GameOver == false) {
+				SetState(StateOverworld1); // change to correct world
+			}
+		}
+
+		nutmegdeathtimer++;
 	}
 	
 	if (cutscenemode == enabled) {
