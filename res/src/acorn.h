@@ -3,12 +3,12 @@
 #define acornCGBPal0c0 27071
 #define acornCGBPal0c1 18174
 #define acornCGBPal0c2 308
-#define acornCGBPal0c3 1093
+#define acornCGBPal0c3 1194
 
 #define acornCGBPal1c0 27071
 #define acornCGBPal1c1 18174
 #define acornCGBPal1c2 308
-#define acornCGBPal1c3 1093
+#define acornCGBPal1c3 1194
 
 #define acornCGBPal2c0 6076
 #define acornCGBPal2c1 8935
