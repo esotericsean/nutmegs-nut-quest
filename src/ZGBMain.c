@@ -2,7 +2,7 @@
 #include "Math.h"
 
 //which state the game starts with
-UINT8 next_state = StateIncube8;
+UINT8 next_state = StateOverworld1;
 
 UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
 	if(current_state == StateLevel1) {

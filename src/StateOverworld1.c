@@ -145,6 +145,8 @@ const unsigned char water_anim[] = {
 	0x3E
 };
 
+unsigned char mapdark[] = { 6 }; 
+
 //copied from SpriteNutmegTiny
 //Need to update THIS to spr_nutmegtiny
 	void Move (UINT8 dir, UINT8 dis) {
@@ -330,6 +332,51 @@ void Update_StateOverworld1() {
 	}
 	*/
 
+	//change level dots color palettes when beating levels
+	VBK_REG = 1;
+	switch (W1LevelSelection) {
+		case 1: break;
+		case 2:
+			set_bkg_tiles (6, 7, 1, 1, mapdark);
+			set_bkg_tiles (6, 8, 1, 1, mapdark);
+			break;
+		case 5:
+			set_bkg_tiles (7, 8, 1, 1, mapdark);
+			set_bkg_tiles (8, 8, 1, 1, mapdark);
+			set_bkg_tiles (9, 8, 1, 1, mapdark);
+			break;
+		case 6:
+			set_bkg_tiles (9, 9, 1, 1, mapdark);
+			set_bkg_tiles (9, 10, 1, 1, mapdark);
+			break;
+		case 7:
+			set_bkg_tiles (10, 10, 1, 1, mapdark);
+			set_bkg_tiles (11, 10, 1, 1, mapdark);
+			set_bkg_tiles (12, 10, 1, 1, mapdark);
+			break;
+		case 8:
+			set_bkg_tiles (12, 9, 1, 1, mapdark);
+			set_bkg_tiles (12, 8, 1, 1, mapdark);
+			set_bkg_tiles (12, 7, 1, 1, mapdark);
+			set_bkg_tiles (12, 6, 1, 1, mapdark);
+			break;
+		case 9:
+			set_bkg_tiles (13, 6, 1, 1, mapdark);
+			set_bkg_tiles (14, 6, 1, 1, mapdark);
+			set_bkg_tiles (15, 6, 1, 1, mapdark);
+			break;
+		case 10:
+			set_bkg_tiles (15, 7, 1, 1, mapdark);
+			set_bkg_tiles (15, 8, 1, 1, mapdark);
+			set_bkg_tiles (15, 9, 1, 1, mapdark);
+			break;
+		case 11:
+			set_bkg_tiles (15, 10, 1, 1, mapdark);
+			set_bkg_tiles (15, 11, 1, 1, mapdark);
+			break;
+	}
+	VBK_REG = 0;
+
 	//level selection
 	if (inputenabled == true) {
 		if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
@@ -337,6 +384,13 @@ void Update_StateOverworld1() {
 			//distance = 0;
 			if (W1LevelSelection == 1) SetState(StateLevel1);
 			else if (W1LevelSelection == 2) SetState(StateLevel2);
+			//else if (W1LevelSelection == 5) SetState(StateLevel5);
+			//else if (W1LevelSelection == 6) SetState(StateLevel6);
+			//else if (W1LevelSelection == 7) SetState(StateLevel7);
+			//else if (W1LevelSelection == 8) SetState(StateLevel8);
+			//else if (W1LevelSelection == 9) SetState(StateLevel9);
+			//else if (W1LevelSelection == 10) SetState(StateLevel10);
+			//else if (W1LevelSelection == 11) SetState(StateLevel11);
 		}
 	}
 
