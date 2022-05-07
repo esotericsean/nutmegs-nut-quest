@@ -12,7 +12,7 @@ void Start_EnemyButterfly() {
 	THIS->coll_w = 8;
 	THIS->coll_h = 8;
 
-	THIS->lim_x = 500;
+	THIS->lim_x = 400;
 	THIS->lim_y = 144;
 
 	SetSpriteAnim(THIS, anim_butterfly_fly, 6);

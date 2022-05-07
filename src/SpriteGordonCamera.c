@@ -11,6 +11,9 @@ void Start_SpriteGordonCamera() {
 	THIS->coll_y = 8;
 	THIS->coll_w = 0;
 	THIS->coll_h = 0;
+
+	THIS->lim_x = 500;
+	THIS->lim_y = 144;
 }
 
 void Update_SpriteGordonCamera() {

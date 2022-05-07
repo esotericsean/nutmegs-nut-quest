@@ -68,6 +68,9 @@ void Start_SpriteGordon1() {
 
     gordon_direction = left;
     Gisjumping = false;
+
+    THIS->lim_x = 500;
+	THIS->lim_y = 144;
 }
 
 void Update_SpriteGordon1() {

@@ -12,6 +12,8 @@
 #include "Palette.h"
 #include "Sound.h"
 
+#include "../src/GlobalVars.h"
+
 //UINT8 backgroundoffset;
 
 UINT8 title_counter;
@@ -143,6 +145,18 @@ void Start_StateTitle() {
     //set_interrupts (VBL_IFLAG | LCD_IFLAG);
 
     SHOW_BKG;
+
+    //RESET SO NUTMEG DOESN'T FLY OFF SCREEN
+    accelY = 0;
+    accelX = 0;
+    jumpPeak = 0;
+    runJump = 0;
+    nutmeg_direction = right;
+    movestate = grounded;
+    isjumping = false;
+
+    W1LevelSelection = 0;
+    overworld1visited = false;
 }
 
 void Update_StateTitle() {

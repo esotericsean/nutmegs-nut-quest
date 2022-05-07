@@ -189,6 +189,22 @@ void Start_StateOverworld1() {
 	SpriteManagerLoad(8); //nutmegtiny
 	SpriteManagerLoad(9); //nuthead
 
+	/* DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
+	/* DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
+	/* DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
+	/* * * * * * * * * * * * * * * * * * * */
+	//		TESTING AREA
+	//		DELETE THIS FOR FINAL CODE
+		overworld1visited = true;
+		W1LevelSelection = 2;
+		nutmeglives = 3;
+	//		DELETE THIS FOR FINAL CODE
+	//		TESTING AREA
+	/* * * * * * * * * * * * * * * * * * * */
+	/* DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
+	/* DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
+	/* DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
+
 	if (overworld1visited == false) {
 		W1LevelSelection = 0;
 		treetolevel1move = 0;
@@ -384,13 +400,13 @@ void Update_StateOverworld1() {
 			//distance = 0;
 			if (W1LevelSelection == 1) SetState(StateLevel1);
 			else if (W1LevelSelection == 2) SetState(StateLevel2);
-			//else if (W1LevelSelection == 5) SetState(StateLevel5);
-			//else if (W1LevelSelection == 6) SetState(StateLevel6);
-			//else if (W1LevelSelection == 7) SetState(StateLevel7);
-			//else if (W1LevelSelection == 8) SetState(StateLevel8);
-			//else if (W1LevelSelection == 9) SetState(StateLevel9);
-			//else if (W1LevelSelection == 10) SetState(StateLevel10);
-			//else if (W1LevelSelection == 11) SetState(StateLevel11);
+			else if (W1LevelSelection == 5) SetState(StateLevel3);
+			//else if (W1LevelSelection == 6) SetState(StateLevel4);
+			//else if (W1LevelSelection == 7) SetState(StateLevel5);
+			//else if (W1LevelSelection == 8) SetState(StateLevel6);
+			//else if (W1LevelSelection == 9) SetState(StateLevel7);
+			//else if (W1LevelSelection == 10) SetState(StateLevel8);
+			//else if (W1LevelSelection == 11) SetState(StateLevel9);
 		}
 	}
 

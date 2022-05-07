@@ -48,6 +48,9 @@ void Start_SpriteNutmeg2() {
 	THIS->coll_h = 8;
 
     ResetState();
+
+    THIS->lim_x = 500;
+	THIS->lim_y = 144;
 }
 
 void Update_SpriteNutmeg2() {

@@ -114,8 +114,6 @@ void Start_StateCutsceneGordon() {
     SpriteManagerLoad(2);   //acorn
     SpriteManagerLoad(29);  //gordon camera
 
-    scroll_target = spr_gordoncamera = SpriteManagerAdd(SpriteGordonCamera, 112, 10);
-
     spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 4, 96);
     spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 4+16, 96);
 
@@ -138,6 +136,10 @@ void Start_StateCutsceneGordon() {
 }
 
 void Update_StateCutsceneGordon() {
+    if (cutscenegordoncounter == 0) {
+        scroll_target = spr_gordoncamera = SpriteManagerAdd(SpriteGordonCamera, 112, 10); //112, 10
+    }
+
     if (cutscenegordoncounter >= 75 && cutscenegordoncounter < 77) {
         set_sprite_palette(1, 1, acornPalette); //start at BG1 and load 1 palette
     }

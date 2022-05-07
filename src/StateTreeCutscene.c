@@ -35,7 +35,7 @@ extern UINT8* oaktree_mod_Data[];
 // (or by adding it to a .h include file and including that)
 extern struct Sprite * spr_nutmeg1;
 extern struct Sprite * spr_nutmeg2;
-extern struct Sprite * spr_camera;
+//extern struct Sprite * spr_camera;
 
 UINT16 cutscenetimer = 0;
 
@@ -79,6 +79,7 @@ void Start_StateTreeCutscene() {
 
 	//for (i = 0; i != N_SPRITE_TYPES; ++ i) { SpriteManagerLoad(i); }
 	//SpriteManagerLoad(5);   //camera
+	SpriteManagerLoad(2);  	//acorn
 	SpriteManagerLoad(6);  	//nutmeg1
 	SpriteManagerLoad(7);  	//nutmeg2
 	//SpriteManagerLoad(12); 	//puff1
@@ -88,12 +89,12 @@ void Start_StateTreeCutscene() {
 	SpriteManagerLoad(28); 	//ruby
 
 	//scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera,  36, 49);
-	spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 36+48, 49);
-	spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 52+48, 49);
+	//spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 36+48, 49);
+	//spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 52+48, 49);
 
-	SpriteManagerAdd(SpriteCinnamon, 36, 96);
-	SpriteManagerAdd(SpriteRuby, 36+11, 96);
-	SpriteManagerAdd(SpriteMaple, 36+20, 96);
+	//SpriteManagerAdd(SpriteCinnamon, 36, 96);
+	//SpriteManagerAdd(SpriteRuby, 36+11, 96);
+	//SpriteManagerAdd(SpriteMaple, 36+20, 96);
 
 	InitScrollTiles(0, &treetiles);
 	InitScroll(&treemap, collision_tiles_tree, 0);
@@ -102,6 +103,15 @@ void Start_StateTreeCutscene() {
 	SHOW_BKG;
 
 	cutscenemode = enabled;
+
+	//RESET SO NUTMEG DOESN'T FLY OFF SCREEN
+    accelY = 0;
+    accelX = 0;
+    jumpPeak = 0;
+    runJump = 0;
+    nutmeg_direction = right;
+    movestate = grounded;
+    isjumping = false;
 }
 
 void Update_StateTreeCutscene() {
@@ -110,6 +120,17 @@ void Update_StateTreeCutscene() {
 		//set variable for first time entering overworld1
         SetState(StateCutscene1);
     }
+
+	if (cutscenetimer == 0) {
+		SpriteManagerAdd(SpriteNutmeg2, 52+48, 49);
+
+		SpriteManagerAdd(SpriteCinnamon, 36, 96);
+		SpriteManagerAdd(SpriteRuby, 36+11, 96);
+		SpriteManagerAdd(SpriteMaple, 36+20, 96);
+
+		spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 36+48, 49);
+		spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 52+48, 49);
+	}
 
 	if (cutscenetimer >= 0 && cutscenetimer < 2) {
 		cutscenewalkleft = true;

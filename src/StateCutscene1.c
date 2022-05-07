@@ -96,6 +96,15 @@ void Start_StateCutscene1() {
     //health system
     acorncounter = 0;
     nutmeglives = 3;
+
+    //RESET SO NUTMEG DOESN'T FLY OFF SCREEN
+    accelY = 0;
+    accelX = 0;
+    jumpPeak = 0;
+    runJump = 0;
+    nutmeg_direction = right;
+    movestate = grounded;
+    isjumping = false;
 }
 
 void Update_StateCutscene1() {

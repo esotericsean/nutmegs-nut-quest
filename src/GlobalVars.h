@@ -46,6 +46,8 @@ extern switcher powerupstar;
 extern UINT8 acorncounter;
 extern INT8 nutmeglives;
 extern bool GameOver;
+extern bool deathmusicplayed;
+extern bool pitdeathactive;
 
 //first time visiting overworld1
 extern bool overworld1visited;

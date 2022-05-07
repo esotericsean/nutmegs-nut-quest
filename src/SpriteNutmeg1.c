@@ -116,6 +116,9 @@ void Start_SpriteNutmeg1() {
     //NR52_REG = 0x80; //Enables sound, you should always setup this first
 	//NR51_REG = 0xFF; //Enables all channels (left and right)
 	//NR50_REG = 0x77; //Max volume
+
+    THIS->lim_x = 500;
+	THIS->lim_y = 144;
 }
 
 void Update_SpriteNutmeg1() {
@@ -182,7 +185,7 @@ void Update_SpriteNutmeg1() {
     /* * * * * * * * * * * * * * * * * * * */
     if (cutscenemode == disabled) {
         // death from falling into pit/water
-        if (THIS->y >= 126 && THIS->y <= 200 && nutmeg_death == false) {
+        if (THIS->y >= 126 && THIS->y <= 200 && nutmeg_death == false && pitdeathactive == true) {
             nutmeg_death = true;
             nutmeg_pitdeath = true;
             nutmegdeathtimer = 0;
@@ -195,6 +198,7 @@ void Update_SpriteNutmeg1() {
             //SpriteManagerRemoveSprite(spr_nutmeg2);
             //SpriteManagerRemoveSprite(THIS);
         }
+
         /* * * * * * * * * * * * * * * * * * * */
         /* left and right directional movement */
         /* * * * * * * * * * * * * * * * * * * */
@@ -800,6 +804,17 @@ void Update_SpriteNutmeg1() {
 
                 if (nutmeglives <= 0) { GameOver = true; }
                 else { nutmeglives--; }
+            }
+        }
+
+        //mushroom bounce
+        if (spr->type == SpriteMushroom) {
+            if (CheckCollision(THIS, spr)) {
+                PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+                isjumping = true;
+                accelY = -600;
+                jumpPeak = 0;
+                movestate = inair;
             }
         }
 

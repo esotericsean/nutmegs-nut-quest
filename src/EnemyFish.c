@@ -11,7 +11,7 @@ void Start_EnemyFish() {
 	THIS->coll_w = 13;
 	THIS->coll_h = 12;
 
-	THIS->lim_x = 2000;
+	THIS->lim_x = 500;
 	THIS->lim_y = 144;
 
 	SetSpriteAnim(THIS, anim_fish_idle, 1);

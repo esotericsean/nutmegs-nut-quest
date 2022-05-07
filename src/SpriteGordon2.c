@@ -24,6 +24,9 @@ void Start_SpriteGordon2() {
     gordon_direction2 = left;
 
     SetSpriteAnim(THIS, anim_gordon_walk_left2, 4);
+
+    THIS->lim_x = 500;
+	THIS->lim_y = 144;
 }
 
 void Update_SpriteGordon2() {
