@@ -1,5 +1,7 @@
 #include "Banks/SetAutoBank.h"
 
+#include <gbdk/platform.h>
+
 #include "..\res\src\gameovertiles.h"
 #include "..\res\src\gameovermap.h"
 
@@ -29,7 +31,6 @@ const UINT16 sprites_palette_gameover[] = {
 	PALETTE_INDEX (puff, 3)
 };
 
-/*
 const UWORD pal_white[] = {
 	RGB(31, 31, 31),
 	RGB(31, 31, 31),
@@ -39,11 +40,10 @@ const UWORD pal_white[] = {
 
 const UWORD pal_nutmegdark[] = {
 	RGB(0, 0, 0),
-	RGB(31, 27, 17),
-	RGB(31, 11, 6),
+	RGB(31, 27, 23),
+	RGB(31, 17, 6),
 	RGB(8, 8, 8)
 };
-*/
 
 const UINT8 collision_tiles_gameover[] = {10};
 
@@ -91,6 +91,7 @@ void Start_StateGameOver() {
 
 void Update_StateGameOver() {
 	//set_sprite_palette (0, 1, pal_nutmegdark);
+	SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmegdark, _current_bank);
 	//set_sprite_palette_entry (0, 3, RGB(8, 8, 8)); //nutmeg light outline
 	//set_sprite_palette_entry (1, 3, RGB(8, 8, 8)); //acorn light outline
 

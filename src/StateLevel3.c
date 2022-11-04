@@ -1,5 +1,7 @@
 #include "Banks/SetAutoBank.h"
 
+#include <gbdk/platform.h>
+
 #include "..\res\src\level1tiles.h"
 #include "..\res\src\level3map.h"
 
@@ -38,14 +40,12 @@ UINT8 endlevel_counter3 = 0;
 //UINT8 starshooter = 0;
 
 //pink color palette
-/*
 const UWORD pal_pink3[] = {
 	RGB(31, 31, 31),
 	RGB(19, 26, 30),
 	RGB(28, 19, 30),
 	RGB(0,  0,  0)
 };
-*/
 
 const UINT16 bg_palette_level3[] = {
 	PALETTE_FROM_HEADER(level1tiles)
@@ -546,6 +546,7 @@ void Update_StateLevel3() {
 
 		//change flagpole color palette to pink
 		//set_bkg_palette (1, 1, pal_pink3);
+		SetPalette(BG_PALETTE, 1, 1, pal_pink3, _current_bank);
 
 		if (anim_flag_counter3 >= 0 && anim_flag_counter3 < 5) {
 			set_bkg_data (0x21, 1, pink3_37);

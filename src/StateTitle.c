@@ -205,12 +205,22 @@ void Update_StateTitle() {
         SetPalette(BG_PALETTE, 3, 1, pal_titleacorn, _current_bank);
     }
 
-    /*
-    if (title_counter >= 191 && title_counter < 201) {} //set_bkg_palette (3, 1, pal_titleacornpale);
-    else if (title_counter >= 201 && title_counter < 211) {} //set_bkg_palette (3, 1, pal_titleacornpalest);
-    else if (title_counter >= 211 && title_counter < 225) {} //set_bkg_palette (3, 1, pal_titleacornpale);
-    else if (title_counter >= 225 && title_counter < 245) {} //set_bkg_palette (3, 1, pal_titleacorn);
-    */
+    if (title_counter >= 191 && title_counter < 201) {
+        //set_bkg_palette (3, 1, pal_titleacornpale);
+        SetPalette(BG_PALETTE, 3, 1, pal_titleacornpale, _current_bank);
+    }
+    else if (title_counter >= 201 && title_counter < 211) {
+        //set_bkg_palette (3, 1, pal_titleacornpalest);
+        SetPalette(BG_PALETTE, 3, 1, pal_titleacornpalest, _current_bank);
+    }
+    else if (title_counter >= 211 && title_counter < 225) {
+        //set_bkg_palette (3, 1, pal_titleacornpale);
+        SetPalette(BG_PALETTE, 3, 1, pal_titleacornpale, _current_bank);
+    }
+    else if (title_counter >= 225 && title_counter < 245) {
+        //set_bkg_palette (3, 1, pal_titleacorn);
+        SetPalette(BG_PALETTE, 3, 1, pal_titleacorn, _current_bank);
+    }
 
    if (acorn_position == 1 && KEY_PRESSED(J_DOWN)) acorn_position = 2;
    else if (acorn_position == 2 && KEY_PRESSED(J_UP)) acorn_position = 1;
