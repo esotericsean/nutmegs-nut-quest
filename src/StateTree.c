@@ -10,7 +10,7 @@
 #include "Keys.h"
 #include "SpriteManager.h"
 
-#include "../res/src/nutmeg1.h"
+#include "../res/src/nutmeg.h"
 #include "../res/src/nutmeg2.h"
 #include "../res/src/cinnamon.h"
 #include "../res/src/ruby.h"
@@ -28,7 +28,7 @@ const UINT16 bg_palette_tree2[] = {
 };
 
 const UINT16 sprites_palette_tree2[] = {
-	PALETTE_INDEX (nutmeg1, 0),
+	PALETTE_INDEX (nutmeg, 0),
 	PALETTE_INDEX (puff, 4)
 };
 
@@ -50,8 +50,8 @@ UINT8 collision_tiles_tree2[] = {2,3,4,5,7,8,9,10,12,49,50,51,52,53,54,55,56,57,
 //extern UINT8* oaktree_mod_Data[];
 DECLARE_MUSIC(oaktree);
 
-extern Sprite * spr_nutmeg1;
-extern Sprite * spr_nutmeg2;
+extern Sprite * spr_nutmeg;
+//extern Sprite * spr_nutmeg2;
 
 //struct Sprite * spr_cinnamon;
 //struct Sprite * spr_maple;
@@ -71,16 +71,16 @@ void Start_StateTree() {
 	//SetPalette (BG_PALETTE, 0, 8, bg_palette_tree2, bank_StateTree);
 	//SetPalette (SPRITES_PALETTE, 0, 8, sprites_palette_tree2, bank_StateTree);
 
-	SpriteManagerLoad(6);  	//nutmeg1
-	SpriteManagerLoad(7);  	//nutmeg2
+	SpriteManagerLoad(35);  	//nutmeg
+	//SpriteManagerLoad(7);  	//nutmeg2
 	SpriteManagerLoad(12); 	//puff1
 	SpriteManagerLoad(13); 	//puff2
 	SpriteManagerLoad(14); 	//cinnamon
 	SpriteManagerLoad(15); 	//maple
 	SpriteManagerLoad(28); 	//ruby
 
-	spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 36+48, 96);
-	spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 52+48, 96);
+	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 36+48, 96);
+	//spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 52+48, 96);
 
 	//spr_cinnamon = SpriteManagerAdd(SpriteCinnamon, 36, 96);
 	//spr_ruby = SpriteManagerAdd(SpriteRuby, 36+11, 96);
@@ -101,7 +101,7 @@ void Start_StateTree() {
 
 void Update_StateTree() {
 	//if Nutmeg touches the Oak Tree Door, then leave
-	if (spr_nutmeg1->x >= 110 && spr_nutmeg1->x < 118) SetState(StateOverworld1);
+	if (spr_nutmeg->x >= 110 && spr_nutmeg->x < 118) SetState(StateOverworld1);
 
 	if (treecounter == 0) {
 		cutscenewalkleft = true;

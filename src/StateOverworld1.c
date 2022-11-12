@@ -12,7 +12,7 @@
 #include "Keys.h"
 #include "SpriteManager.h"
 
-#include "..\res\src\nutmeg1.h"
+#include "..\res\src\nutmeg.h"
 #include "..\res\src\acorn.h"
 #include "..\res\src\nutmegtiny.h"
 #include "Palette.h"
@@ -117,7 +117,7 @@ bool overworld1visited = false;
 const UINT16 bg_palette_overworld1[] = {PALETTE_FROM_HEADER(overworld1)};
 
 const UINT16 sprites_palette_overworld1[] = {
-	PALETTE_INDEX (nutmeg1, 0),
+	PALETTE_INDEX (nutmeg, 0),
 	PALETTE_INDEX (acorn, 1)
 };
 
@@ -130,8 +130,8 @@ extern Sprite * spr_nutmegtiny;
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
-extern Sprite * spr_nutmeg1;
-extern Sprite * spr_nutmeg2;
+extern Sprite * spr_nutmeg;
+//extern Sprite * spr_nutmeg2;
 //extern struct Sprite * spr_camera;
 
 //List of tiles that will be animated
@@ -362,11 +362,20 @@ void Update_StateOverworld1() {
 			set_bkg_tiles (6, 8, 1, 1, mapdark);
 			break;
 		case 5:
+			set_bkg_tiles (6, 7, 1, 1, mapdark);
+			set_bkg_tiles (6, 8, 1, 1, mapdark);
+			//need to set case 2 true while case 5 is true, each section needs the tiles from the previous section
 			set_bkg_tiles (7, 8, 1, 1, mapdark);
 			set_bkg_tiles (8, 8, 1, 1, mapdark);
 			set_bkg_tiles (9, 8, 1, 1, mapdark);
 			break;
 		case 6:
+			set_bkg_tiles (6, 7, 1, 1, mapdark);
+			set_bkg_tiles (6, 8, 1, 1, mapdark);
+			set_bkg_tiles (7, 8, 1, 1, mapdark);
+			set_bkg_tiles (8, 8, 1, 1, mapdark);
+			set_bkg_tiles (9, 8, 1, 1, mapdark);
+			//
 			set_bkg_tiles (9, 9, 1, 1, mapdark);
 			set_bkg_tiles (9, 10, 1, 1, mapdark);
 			break;
@@ -406,8 +415,8 @@ void Update_StateOverworld1() {
 			if (W1LevelSelection == 1) SetState(StateLevel1);
 			else if (W1LevelSelection == 2) SetState(StateLevel2);
 			else if (W1LevelSelection == 5) SetState(StateLevel3);
-			//else if (W1LevelSelection == 6) SetState(StateLevel4);
-			//else if (W1LevelSelection == 7) SetState(StateLevel5);
+			else if (W1LevelSelection == 6) SetState(StateLevel4);
+			else if (W1LevelSelection == 7) SetState(StateLevel5);
 			//else if (W1LevelSelection == 8) SetState(StateLevel6);
 			//else if (W1LevelSelection == 9) SetState(StateLevel7);
 			//else if (W1LevelSelection == 10) SetState(StateLevel8);

@@ -1,6 +1,6 @@
 #include "Banks/SetAutoBank.h"
-
 #include "SpriteManager.h"
+#include "../src/GlobalVars.h"
 
 UINT16 c = 0; // counter
 
@@ -14,8 +14,14 @@ void Start_EnemyBunny() {
 	THIS->coll_w = 9;
 	THIS->coll_h = 5;*/
 
-	THIS->lim_x = 400;
-	THIS->lim_y = 144;
+	if (levelorientation == horizontal) {
+		THIS->lim_x = 500;
+		THIS->lim_y = 144;
+	}
+	else if (levelorientation == vertical) {
+		THIS->lim_x = 288;
+		THIS->lim_y = 250;
+	}
 
 	SetSpriteAnim(THIS, anim_bunny_idle, 1);
 	//SPRITE_SET_VMIRROR(THIS);

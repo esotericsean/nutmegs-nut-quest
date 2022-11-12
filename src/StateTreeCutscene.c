@@ -10,7 +10,7 @@
 #include "Keys.h"
 #include "SpriteManager.h"
 
-#include "../res/src/nutmeg1.h"
+#include "../res/src/nutmeg.h"
 #include "../res/src/puff.h"
 #include "Palette.h"
 
@@ -27,7 +27,7 @@ const UINT16 bg_palette_tree[] = {
 };
 
 const UINT16 sprites_palette_tree[] = {
-	PALETTE_INDEX (nutmeg1, 0),
+	PALETTE_INDEX (nutmeg, 0),
 	PALETTE_INDEX (puff, 4)
 };
 
@@ -38,8 +38,8 @@ DECLARE_MUSIC(oaktree);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
-extern Sprite * spr_nutmeg1;
-extern Sprite * spr_nutmeg2;
+extern Sprite * spr_nutmeg;
+//extern Sprite * spr_nutmeg2;
 //extern struct Sprite * spr_camera;
 
 UINT16 cutscenetimer = 0;
@@ -77,6 +77,7 @@ void Start_StateTreeCutscene() {
 
 	//nutmeg_direction = left;
 
+	stop_music_on_new_state = 0;
 	PlayMusic(oaktree, 1); //name, BANK, volume or speed?
 
 	//SetPalette (BG_PALETTE, 0, 8, bg_palette_tree, bank_StateTreeCutscene);
@@ -85,8 +86,8 @@ void Start_StateTreeCutscene() {
 	//for (i = 0; i != N_SPRITE_TYPES; ++ i) { SpriteManagerLoad(i); }
 	//SpriteManagerLoad(5);   //camera
 	SpriteManagerLoad(2);  	//acorn
-	SpriteManagerLoad(6);  	//nutmeg1
-	SpriteManagerLoad(7);  	//nutmeg2
+	SpriteManagerLoad(35);  	//nutmeg
+	//SpriteManagerLoad(7);  	//nutmeg2
 	//SpriteManagerLoad(12); 	//puff1
 	//SpriteManagerLoad(13); 	//puff2
 	SpriteManagerLoad(14); 	//cinnamon
@@ -127,14 +128,20 @@ void Update_StateTreeCutscene() {
     }
 
 	if (cutscenetimer == 0) {
-		SpriteManagerAdd(SpriteNutmeg2, 52+48, 49);
+		// TURN THIS ONE BACK ON IF NUTMEG FLIES OFF THE SCREEN AGAIN!!!!!!!!!!!
+		// TURN THIS ONE BACK ON IF NUTMEG FLIES OFF THE SCREEN AGAIN!!!!!!!!!!!
+		// TURN THIS ONE BACK ON IF NUTMEG FLIES OFF THE SCREEN AGAIN!!!!!!!!!!!
+		//SpriteManagerAdd(SpriteNutmeg, 52+48, 49);
+		// TURN THIS ONE BACK ON IF NUTMEG FLIES OFF THE SCREEN AGAIN!!!!!!!!!!!
+		// TURN THIS ONE BACK ON IF NUTMEG FLIES OFF THE SCREEN AGAIN!!!!!!!!!!!
+		// TURN THIS ONE BACK ON IF NUTMEG FLIES OFF THE SCREEN AGAIN!!!!!!!!!!!
 
 		SpriteManagerAdd(SpriteCinnamon, 36, 96);
 		SpriteManagerAdd(SpriteRuby, 36+11, 96);
 		SpriteManagerAdd(SpriteMaple, 36+20, 96);
 
-		spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 36+48, 49);
-		spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 52+48, 49);
+		spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 12*8, 49);
+		//spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 52+48, 49);
 	}
 
 	if (cutscenetimer >= 0 && cutscenetimer < 2) {

@@ -1,10 +1,25 @@
 #include "Banks/SetAutoBank.h"
 
+#include <gb/cgb.h>
+#include <gbdk/platform.h>
+#include "Palette.h"
+
+#include "ZGBMain.h"
+#include "Music.h"
+#include "Scroll.h"
+#include "Sound.h"
+#include "Keys.h"
+#include "SpriteManager.h"
+
 #include "SpriteManager.h"
 
 UINT8 fishcounter = 0; // counter
 
 const UINT8 anim_fish_idle[] = {1, 0};
+
+//fish color palettes
+const UWORD pal_fishgreen4[] = { RGB(31, 31, 31), RGB(5,  24, 14), RGB(5,  19, 12), RGB(0,  0,  0) };
+const UWORD pal_fishblue4[] =  { RGB(31, 31, 31), RGB(19, 22, 30), RGB(12, 13, 28), RGB(8,  8, 27) };
 
 void Start_EnemyFish() {
 	/*THIS->coll_x = 3;
@@ -29,9 +44,20 @@ void Update_EnemyFish() {
 	if (fishcounter >= 52 && fishcounter < 82) TranslateSprite(THIS, 0, 2);
 
 	if (fishcounter >=  0 && fishcounter < 20) THIS->mirror = V_MIRROR;
-	if (fishcounter >= 20 && fishcounter < 41) THIS->mirror = NO_MIRROR;
-	if (fishcounter >= 41 && fishcounter < 61) THIS->mirror = V_MIRROR;
-	if (fishcounter >= 61 && fishcounter < 81) THIS->mirror = NO_MIRROR;
+	if (fishcounter >= 20 && fishcounter < 40) THIS->mirror = NO_MIRROR;
+	if (fishcounter >= 40 && fishcounter < 60) THIS->mirror = V_MIRROR;
+	if (fishcounter >= 60 && fishcounter < 80) THIS->mirror = NO_MIRROR;
+	if (fishcounter >= 80 && fishcounter < 100) THIS->mirror = V_MIRROR;
+	if (fishcounter >= 100 && fishcounter < 120) THIS->mirror = NO_MIRROR;
+	if (fishcounter >= 120 && fishcounter < 140) THIS->mirror = V_MIRROR;
+	if (fishcounter >= 140 && fishcounter < 156) THIS->mirror = NO_MIRROR;
+
+	if (THIS->y > 112) {
+		SetPalette(SPRITES_PALETTE, 2, 1, pal_fishblue4, _current_bank);
+	}
+	else if (THIS->y <= 112) {
+		SetPalette(SPRITES_PALETTE, 2, 1, pal_fishgreen4, _current_bank);
+	}
 
 	fishcounter++;
 

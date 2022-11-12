@@ -1,6 +1,6 @@
 #include "Banks/SetAutoBank.h"
-
 #include "SpriteManager.h"
+#include "../src/GlobalVars.h"
 
 const UINT8 anim_topspike_idle[] = {1, 0};
 
@@ -10,8 +10,14 @@ void Start_EnemyTopSpike() {
 	THIS->coll_w = 8;
 	THIS->coll_h = 5;*/
 
-	THIS->lim_x = 400;
-	THIS->lim_y = 144;
+	if (levelorientation == horizontal) {
+		THIS->lim_x = 500;
+		THIS->lim_y = 144;
+	}
+	else if (levelorientation == vertical) {
+		THIS->lim_x = 288;
+		THIS->lim_y = 250;
+	}
 
 	SetSpriteAnim(THIS, anim_topspike_idle, 1);
 	//SPRITE_UNSET_VMIRROR(THIS);

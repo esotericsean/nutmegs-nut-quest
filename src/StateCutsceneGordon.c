@@ -4,7 +4,7 @@
 #include "..\res\src\cutscenegordonmap.h"
 
 #include "..\res\src\gordon1.h"
-#include "..\res\src\nutmeg1.h"
+#include "..\res\src\nutmeg.h"
 #include "..\res\src\acorn.h"
 
 #include "ZGBMain.h"
@@ -80,8 +80,8 @@ const UWORD acornPalette[] = {
 
 //extern struct Sprite * spr_nutmeg1;
 //extern struct Sprite * spr_nutmeg2;
-extern Sprite * spr_nutmeg1;
-extern Sprite * spr_nutmeg2;
+Sprite * spr_nutmeg;
+//extern Sprite * spr_nutmeg2;
 
 const UINT16 bg_palette_cutscenegordon[] = {
     PALETTE_FROM_HEADER (cutscenegordontiles)
@@ -89,7 +89,7 @@ const UINT16 bg_palette_cutscenegordon[] = {
 
 const UINT16 sprites_palette_cutscenegordon[] = {
     PALETTE_INDEX (gordon1, 0),
-    PALETTE_INDEX (nutmeg1, 0),
+    PALETTE_INDEX (nutmeg, 0),
 	PALETTE_INDEX (acorn, 1)
 };
 
@@ -115,15 +115,15 @@ void Start_StateCutsceneGordon() {
 
     //set_sprite_palette(1, 1, acornPalette); //start at BG1 and load 1 palette
 
-    SpriteManagerLoad(6);   //nutmeg1
-    SpriteManagerLoad(7);   //nutmeg2
+    SpriteManagerLoad(35);   //nutmeg
+    //SpriteManagerLoad(7);   //nutmeg2
     SpriteManagerLoad(24);  //gordon1
     SpriteManagerLoad(25);  //gordon2
     SpriteManagerLoad(2);   //acorn
     SpriteManagerLoad(29);  //gordon camera
 
-    spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 4, 96);
-    spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 4+16, 96);
+    spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 8, 96);
+    //spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 4+16, 96);
 
     spr_gordonposition =  SpriteManagerAdd(SpriteGordon1, 196, 96); //96, 96
     spr_gordon2position = SpriteManagerAdd(SpriteGordon2, 196+16, 96);
@@ -300,7 +300,11 @@ void Update_StateCutsceneGordon() {
     cutscenegordonspeed++;
     if (cutscenegordonspeed > cutscenegordonspeedlimit) cutscenegordonspeed = 0;
 
-    if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
+    /*if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
+        SetState(StateOverworld1);
+    }*/
+
+    if (KEY_PRESSED(J_START)) {
         SetState(StateOverworld1);
     }
 }

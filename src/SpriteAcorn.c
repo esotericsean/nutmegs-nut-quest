@@ -15,8 +15,14 @@ void Start_SpriteAcorn() {
 	THIS->coll_w = 10;
 	THIS->coll_h = 10;*/
 
-	THIS->lim_x = 500;
-	THIS->lim_y = 144;
+	if (levelorientation == horizontal) {
+		THIS->lim_x = 500;
+		THIS->lim_y = 144;
+	}
+	else if (levelorientation == vertical) {
+		THIS->lim_x = 288;
+		THIS->lim_y = 250;
+	}
 }
 
 void Update_SpriteAcorn() {

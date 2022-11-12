@@ -34,6 +34,7 @@ typedef enum { grounded, inair } move_state;
 typedef enum { enabled, disabled } switcher;
 typedef enum { right, left } direction;
 typedef enum { full, low } amount;
+typedef enum { vertical, horizontal } orientation;
 
 //powerups
 extern amount health;
@@ -149,5 +150,11 @@ extern const UINT8 collision_tiles_level1[];
 extern const UWORD pal_pink[];
 extern const UINT16 bg_palette_level1[];
 extern const UINT16 sprites_palette_level1[];
+
+//Enemy Rockith
+extern bool rockdamage;
+
+//Sprite Limits if Vertical or Horizontal Level
+extern orientation levelorientation;
 
 #endif

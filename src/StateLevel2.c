@@ -12,7 +12,7 @@
 #include "Keys.h"
 #include "SpriteManager.h"
 
-#include "../res/src/nutmeg1.h"
+#include "../res/src/nutmeg.h"
 #include "../res/src/acorn.h"
 #include "../res/src/butterfly.h"
 #include "../res/src/bunny.h"
@@ -50,7 +50,7 @@ const UINT16 bg_palette_level2[] = {
 };
 
 const UINT16 sprites_palette_level2[] = {
-	PALETTE_INDEX (nutmeg1, 0),
+	PALETTE_INDEX (nutmeg, 0),
 	PALETTE_INDEX (acorn, 1),
 	PALETTE_INDEX (butterfly, 2),
 	PALETTE_INDEX (bunny, 3),
@@ -59,7 +59,8 @@ const UINT16 sprites_palette_level2[] = {
 	PALETTE_INDEX (puff, 3),
 };
 
-const UINT8 collision_tiles_level2[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,29,30,31,32,95,96,97,98, 0};
+const UINT8 collision_tiles_level2[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
+const UINT8 collision_tiles_down_level2[] = {29,30,31,32};
 
 //extern UINT8* quickstart_mod_Data[];
 //extern UINT8* mushrooms_mod_Data[];
@@ -72,8 +73,8 @@ DECLARE_MUSIC(quickdeath);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
-extern Sprite * spr_nutmeg1;
-extern Sprite * spr_nutmeg2;
+extern Sprite * spr_nutmeg;
+//extern Sprite * spr_nutmeg2;
 extern Sprite * spr_camera;
 //struct Sprite * spr_nutmegbow;
 
@@ -239,6 +240,7 @@ const unsigned char Letter11_2[] = { 0x5E };
 
 void Start_StateLevel2() {
 	level2counter = 0;
+	levelorientation = horizontal;
 	SPRITES_8x16;
 
 	nut_region = 0;
@@ -258,8 +260,8 @@ void Start_StateLevel2() {
 	SpriteManagerLoad(3);  //butterfly
 	SpriteManagerLoad(4);  //bunny
 	SpriteManagerLoad(5);  //camera
-	SpriteManagerLoad(6);  //nutmeg1
-	SpriteManagerLoad(7);  //nutmeg2
+	SpriteManagerLoad(35);  //nutmeg
+	//SpriteManagerLoad(7);  //nutmeg2
 	SpriteManagerLoad(10); //star
 	SpriteManagerLoad(11); //star
 	SpriteManagerLoad(12); //puff
@@ -268,13 +270,13 @@ void Start_StateLevel2() {
 	//SpriteManagerLoad(32); //nutmegbow
 	//SpriteManagerLoad(30); //power leaf
 
-	scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, 4, 49); //36
+	//scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, 4, 49); //36
 	//spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 56, 68);
-	spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 4, 49); //36
-	spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 20, 49); //52
+	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49); //36
+	//spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 20, 49); //52
 
 	InitScrollTiles(0, &level1tiles);
-	InitScroll(BANK(level2map), &level2map, collision_tiles_level2, 0);
+	InitScroll(BANK(level2map), &level2map, collision_tiles_level2, collision_tiles_down_level2);
 
 	cutscenemode = enabled;
 	isAcornMoving = true; //yes, it is moving
@@ -474,17 +476,19 @@ void Update_StateLevel2() {
 	//animate pink flagpole
 	else if (flagpole_activated2 == 1) {
 		cutscenemode = enabled;
+		cutscenewalkright = true;
+		cutscenewalkleft = false;
 		
-		if (spr_nutmeg1->x > 1956) {
-			cutscenewalkright = false;
-			cutscenewalkleft = true;
-		}
-		else if (spr_nutmeg1->x < 1956) {
+		if (spr_nutmeg->x > 1956) {
 			cutscenewalkright = true;
 			cutscenewalkleft = false;
 		}
-		else if (spr_nutmeg1->x == 1956) {
-			cutscenewalkright = false;
+		else if (spr_nutmeg->x < 1956) {
+			cutscenewalkright = true;
+			cutscenewalkleft = false;
+		}
+		else if (spr_nutmeg->x == 1956) {
+			cutscenewalkright = true;
 			cutscenewalkleft = false;
 		}
 
@@ -496,7 +500,7 @@ void Update_StateLevel2() {
 			SpriteManagerAdd(SpriteStarLeft, 1948, 80);
 			SpriteManagerAdd(SpriteStarRight, 1956, 80);
 		}
-		else if (endlevel_counter2 == 60) {
+		else if (endlevel_counter2 == 50) {
 			SpriteManagerAdd(SpriteStarLeft, 1948, 64);
 			SpriteManagerAdd(SpriteStarRight, 1956, 64);
 		}
@@ -514,8 +518,8 @@ void Update_StateLevel2() {
 		//spawn some stars
 		/*
 		if (flagpole_stars2 < 1) {
-			SpriteManagerAdd(SpriteStarLeft, spr_nutmeg1->x, spr_nutmeg1->y);
-			SpriteManagerAdd(SpriteStarRight, spr_nutmeg1->x, spr_nutmeg1->y);
+			SpriteManagerAdd(SpriteStarLeft, spr_nutmeg->x, spr_nutmeg->y);
+			SpriteManagerAdd(SpriteStarRight, spr_nutmeg->x, spr_nutmeg->y);
 
 			//SpriteManagerAdd(SpriteStarLeft, 244, 10);
 			//SpriteManagerAdd(SpriteStarRight, 244, 10);
@@ -560,7 +564,7 @@ void Update_StateLevel2() {
 		if (flagpole_stars2 < 20) flagpole_stars2++;
 	}
 
-	if (spr_nutmeg1->x >= 1936 && spr_nutmeg1->x < 1944 && flagpole_activated2 == 0) {
+	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && flagpole_activated2 == 0) {
 		flagpole_activated2 = 1;
 		levelbeat = true;
 		endlevel_counter2 = 0;
@@ -575,7 +579,7 @@ void Update_StateLevel2() {
 	//starshooter
 	if (KEY_PRESSED(J_A)) {
 		if (starshooter == 0) {
-			SpriteManagerAdd(SpriteStarLeft, spr_nutmeg1->x, spr_nutmeg1->y);
+			SpriteManagerAdd(SpriteStarLeft, spr_nutmeg->x, spr_nutmeg->y);
 			starshooter = 1;
 		}
     }
@@ -609,36 +613,36 @@ void Update_StateLevel2() {
 	// 7 = 219-250
 
 	// 0-63:
-	if (spr_nutmeg1->x > 0 && spr_nutmeg1->x <= 250 && nut_region <= 0) {
+	if (spr_nutmeg->x > 0 && spr_nutmeg->x <= 250 && nut_region <= 0) {
 		SpriteManagerAdd(SpriteAcorn, 27*8, 12*8);
-		SpriteManagerAdd(EnemyBunny, 37*8, 13*8); //Bunny always 1 higher in y value
+		SpriteManagerAdd(EnemyBunny, 37*8, 14*8); //Bunny always 1 higher in y value
 		SpriteManagerAdd(SpriteAcorn, 43*8, 7*8);
 		SpriteManagerAdd(SpriteAcorn, 53*8, 4*8);
 		SpriteManagerAdd(EnemyButterfly, 57*8, 3*8);
 		nut_region = 1;
 	}
 	// Up to 94:
-	else if (spr_nutmeg1->x > 250 && spr_nutmeg1->x <= 500 && nut_region <= 1) {
+	else if (spr_nutmeg->x > 250 && spr_nutmeg->x <= 500 && nut_region <= 1) {
 		SpriteManagerAdd(SpriteAcorn, 68*8, 2*8);
 		SpriteManagerAdd(SpriteAcorn, 77*8, 8*8);
 		SpriteManagerAdd(SpriteAcorn, 91*8, 6*8);
     	nut_region = 2;
 	}
 	// Up to 125:
-	else if (spr_nutmeg1->x > 500 && spr_nutmeg1->x <= 750 && nut_region <= 2) {
+	else if (spr_nutmeg->x > 500 && spr_nutmeg->x <= 750 && nut_region <= 2) {
 		SpriteManagerAdd(EnemyButterfly, 99*8, 10*8);
 	    nut_region = 3;
 	}
 	// Up to 156:
-	else if (spr_nutmeg1->x > 750 && spr_nutmeg1->x <= 1000 && nut_region <= 3) {
+	else if (spr_nutmeg->x > 750 && spr_nutmeg->x <= 1000 && nut_region <= 3) {
 		SpriteManagerAdd(SpriteAcorn, 133*8, 9*8);
 		SpriteManagerAdd(SpriteAcorn, 136*8, 7*8);
 		SpriteManagerAdd(SpriteAcorn, 139*8, 9*8);
 	    nut_region = 4;
 	}
 	// Up to 188:
-	else if (spr_nutmeg1->x > 1000 && spr_nutmeg1->x <= 1250 && nut_region <= 4) {
-		SpriteManagerAdd(EnemyBunny, 160*8, 12*8); //Bunny always 1 higher in y value
+	else if (spr_nutmeg->x > 1000 && spr_nutmeg->x <= 1250 && nut_region <= 4) {
+		SpriteManagerAdd(EnemyBunny, 160*8, 13*8); //Bunny always 1 higher in y value
 		SpriteManagerAdd(SpriteMushroom, 167*8, 12*8);
 		SpriteManagerAdd(SpriteAcorn, 176*8, 5*8);
 		SpriteManagerAdd(SpriteAcorn, 179*8, 8*8);
@@ -646,18 +650,18 @@ void Update_StateLevel2() {
 	    nut_region = 5;
 	}
 	// Up to 219:
-	else if (spr_nutmeg1->x > 1250 && spr_nutmeg1->x <= 1500 && nut_region <= 5) {
+	else if (spr_nutmeg->x > 1250 && spr_nutmeg->x <= 1500 && nut_region <= 5) {
 		SpriteManagerAdd(EnemyButterfly, 198*8, 13*8);
 		SpriteManagerAdd(SpriteAcorn, 207*8, 7*8);
 		SpriteManagerAdd(EnemyButterfly, 216*8, 11*8);
 	    nut_region = 6;
 	}
 	// Up to 250:
-	else if (spr_nutmeg1->x > 1500 && spr_nutmeg1->x <= 1750 && nut_region <= 6) {
+	else if (spr_nutmeg->x > 1500 && spr_nutmeg->x <= 1750 && nut_region <= 6) {
 		//
 	    nut_region = 7;
 	}
-	else if (spr_nutmeg1->x > 1750 && spr_nutmeg1->x <= 2000 && nut_region <= 7) {
+	else if (spr_nutmeg->x > 1750 && spr_nutmeg->x <= 2000 && nut_region <= 7) {
 		//
 	    nut_region = 8;
 	}

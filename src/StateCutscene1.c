@@ -67,6 +67,67 @@ DECLARE_MUSIC(oaktree);
 //PALETTE_FROM_HEADER I don't think is it
 //void InitScrollTiles(UINT8 first_tile, UINT8 n_tiles, UINT8* tile_data, UINT8 tile_bank);
 
+const unsigned char font_upper_WW[] = {
+0x00,0x00,0x44,0x44,0x44,0x44,0x44,0x44,
+0x44,0x44,0x54,0x54,0x54,0x54,0x28,0x28
+};
+const unsigned char font_lower_ee[] = {
+0x00,0x00,0x00,0x00,0x18,0x18,0x24,0x24,
+0x24,0x24,0x38,0x38,0x20,0x20,0x1c,0x1c
+};
+const unsigned char font_apostrophee[] = {
+0x00,0x00,0x10,0x10,0x10,0x10,0x20,0x20,
+0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+};
+const unsigned char font_lower_rr[] = {
+0x00,0x00,0x00,0x00,0x18,0x18,0x24,0x24,
+0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20
+};
+const unsigned char font_lower_hh[] = {
+0x00,0x00,0x20,0x20,0x20,0x20,0x20,0x20,
+0x38,0x38,0x24,0x24,0x24,0x24,0x24,0x24
+};
+const unsigned char font_lower_uu[] = {
+0x00,0x00,0x00,0x00,0x00,0x00,0x44,0x44,
+0x44,0x44,0x44,0x44,0x44,0x44,0x38,0x38
+};
+const unsigned char font_lower_nn[] = {
+0x00,0x00,0x00,0x00,0x00,0x00,0x2c,0x2c,
+0x32,0x32,0x22,0x22,0x22,0x22,0x22,0x22
+};
+const unsigned char font_lower_gg[] = {
+0x00,0x00,0x00,0x00,0x18,0x18,0x24,0x24,
+0x24,0x24,0x1c,0x1c,0x04,0x04,0x38,0x38
+};
+const unsigned char font_lower_yy[] = {
+0x00,0x00,0x00,0x00,0x22,0x22,0x22,0x22,
+0x22,0x22,0x1a,0x1a,0x04,0x04,0x38,0x38
+};
+const unsigned char font_commaa[] = {
+0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+0x00,0x00,0x10,0x10,0x10,0x10,0x20,0x20
+};
+const unsigned char font_lower_mm[] = {
+0x00,0x00,0x00,0x00,0x00,0x00,0x28,0x28,
+0x54,0x54,0x54,0x54,0x44,0x44,0x44,0x44
+};
+const unsigned char font_lower_aa[] = {
+0x00,0x00,0x00,0x00,0x18,0x18,0x24,0x24,
+0x04,0x04,0x1c,0x1c,0x24,0x24,0x1a,0x1a
+};
+const unsigned char font_periodd[] = {
+0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x20
+};
+const unsigned char font_arroww[] = {
+0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+0x00,0x00,0x7c,0x7c,0x38,0x38,0x10,0x10
+};
+const unsigned char font_blankk[] = {
+0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+};
+
 void Start_StateCutscene1() {
     SPRITES_8x16;
 
@@ -127,33 +188,33 @@ void Update_StateCutscene1() {
     }
 
     //We're
-    if (cutscene1counter >= 35 && cutscene1counter < 40) set_bkg_data (0x02, 1, font_upper_W);
-    else if (cutscene1counter >= 40 && cutscene1counter < 45) set_bkg_data (0x03, 1, font_lower_e);
-    else if (cutscene1counter >= 45 && cutscene1counter < 50) set_bkg_data (0x04, 1, font_apostrophe);
-    else if (cutscene1counter >= 50 && cutscene1counter < 55) set_bkg_data (0x05, 1, font_lower_r);
-    else if (cutscene1counter >= 55 && cutscene1counter < 60) set_bkg_data (0x06, 1, font_lower_e);
+    if (cutscene1counter >= 35 && cutscene1counter < 40) set_bkg_data (0x02, 1, font_upper_WW);
+    else if (cutscene1counter >= 40 && cutscene1counter < 45) set_bkg_data (0x03, 1, font_lower_ee);
+    else if (cutscene1counter >= 45 && cutscene1counter < 50) set_bkg_data (0x04, 1, font_apostrophee);
+    else if (cutscene1counter >= 50 && cutscene1counter < 55) set_bkg_data (0x05, 1, font_lower_rr);
+    else if (cutscene1counter >= 55 && cutscene1counter < 60) set_bkg_data (0x06, 1, font_lower_ee);
 
     //hungry,
-    else if (cutscene1counter >= 60 && cutscene1counter < 65) set_bkg_data (0x08, 1, font_lower_h);
-    else if (cutscene1counter >= 65 && cutscene1counter < 70) set_bkg_data (0x09, 1, font_lower_u);
-    else if (cutscene1counter >= 70 && cutscene1counter < 75) set_bkg_data (0x0A, 1, font_lower_n);
-    else if (cutscene1counter >= 75 && cutscene1counter < 80) set_bkg_data (0x0B, 1, font_lower_g);
-    else if (cutscene1counter >= 80 && cutscene1counter < 85) set_bkg_data (0x0C, 1, font_lower_r);
-    else if (cutscene1counter >= 85 && cutscene1counter < 90) set_bkg_data (0x0D, 1, font_lower_y);
-    else if (cutscene1counter >= 90 && cutscene1counter < 95) set_bkg_data (0x0E, 1, font_comma);
+    else if (cutscene1counter >= 60 && cutscene1counter < 65) set_bkg_data (0x08, 1, font_lower_hh);
+    else if (cutscene1counter >= 65 && cutscene1counter < 70) set_bkg_data (0x09, 1, font_lower_uu);
+    else if (cutscene1counter >= 70 && cutscene1counter < 75) set_bkg_data (0x0A, 1, font_lower_nn);
+    else if (cutscene1counter >= 75 && cutscene1counter < 80) set_bkg_data (0x0B, 1, font_lower_gg);
+    else if (cutscene1counter >= 80 && cutscene1counter < 85) set_bkg_data (0x0C, 1, font_lower_rr);
+    else if (cutscene1counter >= 85 && cutscene1counter < 90) set_bkg_data (0x0D, 1, font_lower_yy);
+    else if (cutscene1counter >= 90 && cutscene1counter < 95) set_bkg_data (0x0E, 1, font_commaa);
 
     //mama...
-    else if (cutscene1counter >= 95 && cutscene1counter < 100) set_bkg_data (0x10, 1, font_lower_m);
-    else if (cutscene1counter >= 100 && cutscene1counter < 105) set_bkg_data (0x11, 1, font_lower_a);
-    else if (cutscene1counter >= 105 && cutscene1counter < 110) set_bkg_data (0x12, 1, font_lower_m);
-    else if (cutscene1counter >= 110 && cutscene1counter < 115) set_bkg_data (0x13, 1, font_lower_a);
-    else if (cutscene1counter >= 115 && cutscene1counter < 120) set_bkg_data (0x14, 1, font_period);
-    else if (cutscene1counter >= 120 && cutscene1counter < 125) set_bkg_data (0x15, 1, font_period);
-    else if (cutscene1counter >= 125 && cutscene1counter < 130) set_bkg_data (0x16, 1, font_period);
+    else if (cutscene1counter >= 95 && cutscene1counter < 100) set_bkg_data (0x10, 1, font_lower_mm);
+    else if (cutscene1counter >= 100 && cutscene1counter < 105) set_bkg_data (0x11, 1, font_lower_aa);
+    else if (cutscene1counter >= 105 && cutscene1counter < 110) set_bkg_data (0x12, 1, font_lower_mm);
+    else if (cutscene1counter >= 110 && cutscene1counter < 115) set_bkg_data (0x13, 1, font_lower_aa);
+    else if (cutscene1counter >= 115 && cutscene1counter < 120) set_bkg_data (0x14, 1, font_periodd);
+    else if (cutscene1counter >= 120 && cutscene1counter < 125) set_bkg_data (0x15, 1, font_periodd);
+    else if (cutscene1counter >= 125 && cutscene1counter < 130) set_bkg_data (0x16, 1, font_periodd);
 
     //▼
-    else if (cutscene1counter >= 135 && cutscene1counter < 155) set_bkg_data (0x6E, 1, font_arrow);
-    else if (cutscene1counter >= 155 && cutscene1counter < 175) set_bkg_data (0x6E, 1, font_blank);
+    else if (cutscene1counter >= 135 && cutscene1counter < 155) set_bkg_data (0x6E, 1, font_arroww);
+    else if (cutscene1counter >= 155 && cutscene1counter < 175) set_bkg_data (0x6E, 1, font_blankk);
 
     cutscene1counter++;
 

@@ -1,7 +1,7 @@
 #include "ZGBMain.h"
 #include "Math.h"
 
-UINT8 next_state = StateIncube8;
+UINT8 next_state = StateLevel5;
 
 UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
 	if(current_state == StateLevel1) {
