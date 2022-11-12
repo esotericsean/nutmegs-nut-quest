@@ -16,6 +16,8 @@ _STATE(StateTree)\
 _STATE(StateLevel2)\
 _STATE(StateGameOver)\
 _STATE(StateLevel3)\
+_STATE(StateLevel4)\
+_STATE(StateLevel5)\
 STATE_DEF_END
 
 #define SPRITES \
@@ -25,8 +27,6 @@ _SPRITE_DMG(SpriteAcorn, acorn)\
 _SPRITE_DMG(EnemyButterfly, butterfly)\
 _SPRITE_DMG(EnemyBunny, bunny)\
 _SPRITE_DMG(SpriteCamera, camera)\
-_SPRITE_DMG(SpriteNutmeg1, nutmeg1)\
-_SPRITE_DMG(SpriteNutmeg2, nutmeg2)\
 _SPRITE_DMG(SpriteNutmegTiny, nutmegtiny)\
 _SPRITE_DMG(SpriteNutHead, nuthead)\
 _SPRITE_DMG(SpriteStarLeft, star)\
@@ -54,6 +54,10 @@ _SPRITE_DMG(SpriteMushroom, mushroom)\
 _SPRITE_DMG(SpriteNutmegBow, nutmegbow)\
 _SPRITE_DMG(EnemyRockith, rockith)\
 _SPRITE_DMG(EnemyTopSpike, topspike)\
+_SPRITE_DMG(SpriteNutmeg, nutmeg)\
+_SPRITE_DMG(SpriteRock, rock)\
+_SPRITE_DMG(EnemyBatty, batty)\
+_SPRITE_DMG(EnemyLightning, lightning)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"
