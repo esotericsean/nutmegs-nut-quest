@@ -2,6 +2,7 @@
 #include <gbdk/platform.h>
 #include "ZGBMain.h"
 #include "SpriteManager.h"
+#include "Sound.h"
 #include "Palette.h"
 #include "../src/GlobalVars.h"
 
@@ -16,9 +17,17 @@ const UINT8 anim_lightning_empty[] = {1, 0};
 
 UINT8 lightningcounter;
 
-const UWORD pal_sky_original[] = { RGB(24,24,24), RGB(16,20,22), RGB(20,20,20), RGB(7, 7, 7) };
-const UWORD pal_sky_flash1[] =   { RGB(24,24,24), RGB(31,31,31), RGB(20,20,20), RGB(7, 7, 7) };
-const UWORD pal_sky_flash2[] =   { RGB(24,24,24), RGB(23,25,26), RGB(20,20,20), RGB(7, 7, 7) };
+const UWORD pal_sky_original[] = { RGB(11,11,11), RGB(7, 8, 9), RGB(20,20,20), RGB(7, 7, 7) };
+const UWORD pal_sky_flash1[] =   { RGB(11,11,11), RGB(31,31,31), RGB(20,20,20), RGB(7, 7, 7) };
+const UWORD pal_sky_flash2[] =   { RGB(11,11,11), RGB(23,25,26), RGB(20,20,20), RGB(7, 7, 7) };
+
+const UWORD pal_wood_original[] = { RGB(7, 8, 9),  RGB(21, 17, 14), RGB(17, 13, 12), RGB(7, 7, 7) };
+const UWORD pal_wood_flash1[] = { RGB(31, 31, 31), RGB(21, 17, 14), RGB(17, 13, 12), RGB(7, 7, 7) };
+const UWORD pal_wood_flash2[] = { RGB(23, 25, 26), RGB(21, 17, 14), RGB(17, 13, 12), RGB(7, 7, 7) };
+
+const UWORD pal_flag_original[] = { RGB(31, 31, 31), RGB(7,  8,  9),  RGB(14, 14, 14), RGB(7, 7, 7) };
+const UWORD pal_flag_flash1[] = {   RGB(31, 31, 31), RGB(31, 31, 31), RGB(14, 14, 14), RGB(7, 7, 7) };
+const UWORD pal_flag_flash2[] = {   RGB(31, 31, 31), RGB(23, 25, 26), RGB(14, 14, 14), RGB(7, 7, 7) };
 
 void Start_EnemyLightning() {
 	if (levelorientation == horizontal) {
@@ -46,14 +55,21 @@ void Update_EnemyLightning() {
 	}
 	else if (lightningcounter >= 15 && lightningcounter < 20) {
 		SetPalette(BG_PALETTE, 1, 1, pal_sky_flash1, _current_bank);
+		SetPalette(BG_PALETTE, 6, 1, pal_wood_flash1, _current_bank);
+		SetPalette(BG_PALETTE, 5, 1, pal_flag_flash1, _current_bank);
+		PlayFx(CHANNEL_4, 60, 0x3a, 0xf2, 0x62, 0x80);
 		SetSpriteAnim(THIS, anim_lightning_strike1, 1);
 	}
 	else if (lightningcounter >= 20 && lightningcounter < 25) {
 		SetPalette(BG_PALETTE, 1, 1, pal_sky_flash2, _current_bank);
+		SetPalette(BG_PALETTE, 6, 1, pal_wood_flash2, _current_bank);
+		SetPalette(BG_PALETTE, 5, 1, pal_flag_flash2, _current_bank);
 		SetSpriteAnim(THIS, anim_lightning_strike2, 1);
 	}
 	else if (lightningcounter >= 25 && lightningcounter < 30) {
 		SetPalette(BG_PALETTE, 1, 1, pal_sky_original, _current_bank);
+		SetPalette(BG_PALETTE, 6, 1, pal_wood_original, _current_bank);
+		SetPalette(BG_PALETTE, 5, 1, pal_flag_original, _current_bank);
 		SetSpriteAnim(THIS, anim_lightning_strike3, 1);
 	}
 

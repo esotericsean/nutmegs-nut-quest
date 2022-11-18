@@ -218,14 +218,14 @@ void Start_StateOverworld1() {
 
 	// add Tiny Nutmeg depending on where W1LevelSelection is
 	switch (W1LevelSelection) {
-		case  0: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  24, 45); break; // tree
-		case  1: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  47, 45); break; // 1
-		case  2: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  47, 60); break; // 2
-		case  3: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  47, 83); break; // 3
-		case  4: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  24, 83); break; // mushroom
-		case  5: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  70, 60); break; // 5
-		case  6: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  70, 75); break; // 6
-		case  7: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  83, 75); break; // 7
+		case  0: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  23, 45); break; // tree - look good
+		case  1: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  47, 45); break; // 1 - look good
+		case  2: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  47, 61); break; // 2 - look good
+		case  3: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  47, 83); break; // 3 - NOT IN USE
+		case  4: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  24, 83); break; // mushroom - NOT IN USE
+		case  5: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  71, 61); break; // 5 - look good
+		case  6: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  71, 77); break; // 6 - look good
+		case  7: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  95, 75); break; // 7
 		case  8: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  83, 45); break; // 8
 		case  9: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny, 106, 45); break; // 9
 		case 10: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny, 106, 68); break; // 10
@@ -380,27 +380,100 @@ void Update_StateOverworld1() {
 			set_bkg_tiles (9, 10, 1, 1, mapdark);
 			break;
 		case 7:
+			set_bkg_tiles (6, 7, 1, 1, mapdark);
+			set_bkg_tiles (6, 8, 1, 1, mapdark);
+			set_bkg_tiles (7, 8, 1, 1, mapdark);
+			set_bkg_tiles (8, 8, 1, 1, mapdark);
+			set_bkg_tiles (9, 8, 1, 1, mapdark);
+			set_bkg_tiles (9, 9, 1, 1, mapdark);
+			set_bkg_tiles (9, 10, 1, 1, mapdark);
+			//
 			set_bkg_tiles (10, 10, 1, 1, mapdark);
 			set_bkg_tiles (11, 10, 1, 1, mapdark);
 			set_bkg_tiles (12, 10, 1, 1, mapdark);
 			break;
 		case 8:
+			set_bkg_tiles (6, 7, 1, 1, mapdark);
+			set_bkg_tiles (6, 8, 1, 1, mapdark);
+			set_bkg_tiles (7, 8, 1, 1, mapdark);
+			set_bkg_tiles (8, 8, 1, 1, mapdark);
+			set_bkg_tiles (9, 8, 1, 1, mapdark);
+			set_bkg_tiles (9, 9, 1, 1, mapdark);
+			set_bkg_tiles (9, 10, 1, 1, mapdark);
+			set_bkg_tiles (10, 10, 1, 1, mapdark);
+			set_bkg_tiles (11, 10, 1, 1, mapdark);
+			set_bkg_tiles (12, 10, 1, 1, mapdark);
+			//
 			set_bkg_tiles (12, 9, 1, 1, mapdark);
 			set_bkg_tiles (12, 8, 1, 1, mapdark);
 			set_bkg_tiles (12, 7, 1, 1, mapdark);
 			set_bkg_tiles (12, 6, 1, 1, mapdark);
 			break;
 		case 9:
+			set_bkg_tiles (6, 7, 1, 1, mapdark);
+			set_bkg_tiles (6, 8, 1, 1, mapdark);
+			set_bkg_tiles (7, 8, 1, 1, mapdark);
+			set_bkg_tiles (8, 8, 1, 1, mapdark);
+			set_bkg_tiles (9, 8, 1, 1, mapdark);
+			set_bkg_tiles (9, 9, 1, 1, mapdark);
+			set_bkg_tiles (9, 10, 1, 1, mapdark);
+			set_bkg_tiles (10, 10, 1, 1, mapdark);
+			set_bkg_tiles (11, 10, 1, 1, mapdark);
+			set_bkg_tiles (12, 10, 1, 1, mapdark);
+			set_bkg_tiles (12, 9, 1, 1, mapdark);
+			set_bkg_tiles (12, 8, 1, 1, mapdark);
+			set_bkg_tiles (12, 7, 1, 1, mapdark);
+			set_bkg_tiles (12, 6, 1, 1, mapdark);
+			//
 			set_bkg_tiles (13, 6, 1, 1, mapdark);
 			set_bkg_tiles (14, 6, 1, 1, mapdark);
 			set_bkg_tiles (15, 6, 1, 1, mapdark);
 			break;
 		case 10:
+			set_bkg_tiles (6, 7, 1, 1, mapdark);
+			set_bkg_tiles (6, 8, 1, 1, mapdark);
+			set_bkg_tiles (7, 8, 1, 1, mapdark);
+			set_bkg_tiles (8, 8, 1, 1, mapdark);
+			set_bkg_tiles (9, 8, 1, 1, mapdark);
+			set_bkg_tiles (9, 9, 1, 1, mapdark);
+			set_bkg_tiles (9, 10, 1, 1, mapdark);
+			set_bkg_tiles (10, 10, 1, 1, mapdark);
+			set_bkg_tiles (11, 10, 1, 1, mapdark);
+			set_bkg_tiles (12, 10, 1, 1, mapdark);
+			set_bkg_tiles (12, 9, 1, 1, mapdark);
+			set_bkg_tiles (12, 8, 1, 1, mapdark);
+			set_bkg_tiles (12, 7, 1, 1, mapdark);
+			set_bkg_tiles (12, 6, 1, 1, mapdark);
+			set_bkg_tiles (13, 6, 1, 1, mapdark);
+			set_bkg_tiles (14, 6, 1, 1, mapdark);
+			set_bkg_tiles (15, 6, 1, 1, mapdark);
+			//
 			set_bkg_tiles (15, 7, 1, 1, mapdark);
 			set_bkg_tiles (15, 8, 1, 1, mapdark);
 			set_bkg_tiles (15, 9, 1, 1, mapdark);
 			break;
 		case 11:
+			set_bkg_tiles (6, 7, 1, 1, mapdark);
+			set_bkg_tiles (6, 8, 1, 1, mapdark);
+			set_bkg_tiles (7, 8, 1, 1, mapdark);
+			set_bkg_tiles (8, 8, 1, 1, mapdark);
+			set_bkg_tiles (9, 8, 1, 1, mapdark);
+			set_bkg_tiles (9, 9, 1, 1, mapdark);
+			set_bkg_tiles (9, 10, 1, 1, mapdark);
+			set_bkg_tiles (10, 10, 1, 1, mapdark);
+			set_bkg_tiles (11, 10, 1, 1, mapdark);
+			set_bkg_tiles (12, 10, 1, 1, mapdark);
+			set_bkg_tiles (12, 9, 1, 1, mapdark);
+			set_bkg_tiles (12, 8, 1, 1, mapdark);
+			set_bkg_tiles (12, 7, 1, 1, mapdark);
+			set_bkg_tiles (12, 6, 1, 1, mapdark);
+			set_bkg_tiles (13, 6, 1, 1, mapdark);
+			set_bkg_tiles (14, 6, 1, 1, mapdark);
+			set_bkg_tiles (15, 6, 1, 1, mapdark);
+			set_bkg_tiles (15, 7, 1, 1, mapdark);
+			set_bkg_tiles (15, 8, 1, 1, mapdark);
+			set_bkg_tiles (15, 9, 1, 1, mapdark);
+			//
 			set_bkg_tiles (15, 10, 1, 1, mapdark);
 			set_bkg_tiles (15, 11, 1, 1, mapdark);
 			break;
@@ -424,6 +497,11 @@ void Update_StateOverworld1() {
 		}
 	}
 
+	// dir 0 = left
+	// dir 1 = right
+	// dir 2 = up
+	// dir 3 = down
+
 	if (e == 0 && levelbeat == true) {
 		// LEVEL 1
 		if (W1LevelSelection == 1 && levelbeat == true) {
@@ -443,7 +521,7 @@ void Update_StateOverworld1() {
 		}
 		// LEVEL 7
 		else if (W1LevelSelection == 7 && levelbeat == true) {
-			direction = 2; distance = 31; W1LevelSelection = 8; levelbeatcounter = 0; inputenabled = false;
+			direction = 2; distance = 29; W1LevelSelection = 8; levelbeatcounter = 0; inputenabled = false;
 		}
 		// LEVEL 8
 		else if (W1LevelSelection == 8 && levelbeat == true) {
@@ -455,7 +533,7 @@ void Update_StateOverworld1() {
 		}
 		// LEVEL 10
 		else if (W1LevelSelection == 10 && levelbeat == true) {
-			direction = 3; distance = 23; W1LevelSelection = 11; levelbeatcounter = 0; inputenabled = false;
+			direction = 3; distance = 24; W1LevelSelection = 11; levelbeatcounter = 0; inputenabled = false;
 		}
 
 		// LEVEL 11 - PICNIC TABLE (MINI BOSS)

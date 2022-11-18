@@ -382,7 +382,7 @@ void Update_SpriteNutmeg() {
             }
             else {
                 if (movestate == inair) {
-                    PlayFx(CHANNEL_4, 4, 0x32, 0x71, 0x73, 0x80);
+                    //PlayFx(CHANNEL_4, 4, 0x32, 0x71, 0x73, 0x80);
                     movestate = grounded;
                 }
                 accelY = 100;
@@ -640,7 +640,7 @@ void Update_SpriteNutmeg() {
             }
             else {
                 if (movestate == inair) {
-                    PlayFx(CHANNEL_4, 4, 0x32, 0x71, 0x73, 0x80);
+                    //PlayFx(CHANNEL_4, 4, 0x32, 0x71, 0x73, 0x80);
                     movestate = grounded;
                 }
                 accelY = 100;
@@ -926,6 +926,48 @@ void Update_SpriteNutmeg() {
                 SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y+8);
                 SpriteManagerAdd(SpriteStarRight, THIS->x-4, THIS->y+8);
             }
+            }
+        }
+
+        if (spr->type == EnemyLightning && nutmeg_death == false) {
+            if (CheckCollision(THIS, spr)) {
+                nutmeg_death = true;
+                nutmegdeathtimer = 0;
+
+                if (nutmeglives <= 0) { GameOver = true; }
+                else { nutmeglives--; }
+            }
+        }
+
+        //kill earthy if jump on it
+        if (spr->type == EnemyEarthy && movestate == inair && accelY > 0 && nutmeg_death == false) {
+            if (CheckCollision(THIS, spr)) {
+                SpriteManagerRemove(i);
+                PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+                isjumping = true;
+                accelY = -600;
+                jumpPeak = 0;
+                movestate = inair;
+                runJump = KEY_PRESSED(J_B) ? 1 : 0;
+                
+                if (nutmeg_direction == right) {
+                    SpriteManagerAdd(SpriteStarLeft, THIS->x, THIS->y+1);
+                    SpriteManagerAdd(SpriteStarRight, THIS->x, THIS->y+1);
+                }
+                else if (nutmeg_direction == left) {
+                    SpriteManagerAdd(SpriteStarLeft, THIS->x-6, THIS->y+1);
+                    SpriteManagerAdd(SpriteStarRight, THIS->x-6, THIS->y+1);
+                }
+            }
+        }
+        //die if touch earthy
+        else if (spr->type == EnemyEarthy && movestate == grounded && nutmeg_death == false) {
+            if (CheckCollision(THIS, spr)) {
+                nutmeg_death = true;
+                nutmegdeathtimer = 0;
+
+                if (nutmeglives <= 0) { GameOver = true; }
+                else { nutmeglives--; }
             }
         }
     }

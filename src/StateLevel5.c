@@ -36,15 +36,20 @@ UINT8 anim_flag_counter5 = 0;
 UINT8 flagpole_activated5 = 0;
 UINT8 flagpole_stars5 = 0;
 UINT8 endlevel_counter5 = 0;
-UINT8 lightningstrikecounter = 0;
+UINT8 lightningstrikecounter1 = 0;
+UINT8 lightningstrikecounter2 = 0;
 //UINT8 starshooter = 0;
 
 //pink color palette
 const UWORD pal_pink5[] = {
 	RGB(31, 31, 31),
-	RGB(19, 26, 30),
+	RGB(7,  8,  9),
 	RGB(28, 19, 30),
-	RGB(0,  0,  0)
+	RGB(7,  7,  7)
+};
+
+//nutmeg rainy colors
+const UWORD pal_nut5[] = { RGB(31, 31, 31), RGB(25, 21, 19), RGB(23, 13, 4), RGB(2, 2, 2)
 };
 
 const UINT16 bg_palette_level5[] = {
@@ -78,7 +83,7 @@ DECLARE_MUSIC(quickdeath);
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
 //extern Sprite * spr_nutmeg2;
-extern Sprite * spr_camera;
+//extern Sprite * spr_camera;
 //struct Sprite * spr_nutmegbow;
 
 //water tiles are stored in 1A, 1B, and 1C
@@ -369,7 +374,7 @@ void Start_StateLevel5() {
 
 	//scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, 4, 49); //36
 	//spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 56, 68);
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49); //36
+	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 3*8, 11*8); //36
 	//spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 20, 49); //52
 
 	InitScrollTiles(0, &level5tiles);
@@ -380,6 +385,9 @@ void Start_StateLevel5() {
 	flagpole_activated5 = 0;
 	endlevel_counter5 = 0;
 
+	lightningstrikecounter1 = 0;
+	lightningstrikecounter2 = 0;
+
 	SHOW_SPRITES;
 	SHOW_BKG;
 
@@ -387,7 +395,7 @@ void Start_StateLevel5() {
 	//SHOW_WIN;
 }
 
-void Update_StateLevel5() {
+void Update_StateLevel5() {	
 	if (nutmeg_death == true) {
 		if (deathmusicplayed == false) {
 			__critical { PlayMusic(quickdeath, 1); }
@@ -405,117 +413,25 @@ void Update_StateLevel5() {
 
 		nutmegdeathtimer++;
 	}
+
+	if (lightningstrikecounter1 < 87)
+		lightningstrikecounter1++;
 	
-	if (cutscenemode == enabled) {
+	if (lightningstrikecounter1 == 36) {
+		SpriteManagerAdd(EnemyLightningSpot, 13*8, 10*8);
+	}
+	else if (lightningstrikecounter1 == 86) {
+		SpriteManagerAdd(EnemyLightning, 13*8, 0*8);
+	}
+	
+	if (cutscenemode == enabled) {	
 		//Level Start!
 		//Make Nutmeg Walk In
 		if (level5counter == 0) {
-			cutscenewalkright = true;
-		}
-		else if (level5counter >= 36) {
 			cutscenewalkright = false;
-			//but leave cutscene mode enabled still until Level Start! goes away
+			SetPalette (SPRITES_PALETTE, 0, 1, pal_nut5, _current_bank);
 		}
-		if (level5counter >= 10 && level5counter < 40) {
-			set_bkg_data (0x54, 1, UpperL5);
-			set_bkg_data (0x55, 1, LowerE5);
-			set_bkg_data (0x56, 1, LowerV5);
-			set_bkg_data (0x57, 1, LowerE5);
-			set_bkg_data (0x58, 1, LowerL5);
-			set_bkg_data (0x59, 1, UpperS5);
-			set_bkg_data (0x5A, 1, LowerT5);
-			set_bkg_data (0x5B, 1, LowerA5);
-			set_bkg_data (0x5C, 1, LowerR5);
-			set_bkg_data (0x5D, 1, LowerT5);
-			set_bkg_data (0x5E, 1, Exclam5);
-
-			set_bkg_tiles ( 7, 5, 1, 1, Letter1_5); //x, y, w, h, *tiles
-			set_bkg_tiles ( 8, 5, 1, 1, Letter2_5);
-			set_bkg_tiles ( 9, 5, 1, 1, Letter3_5);
-			set_bkg_tiles (10, 5, 1, 1, Letter4_5);
-			set_bkg_tiles (11, 5, 1, 1, Letter5_5);
-			set_bkg_tiles ( 7, 6, 1, 1, Letter6_5);
-			set_bkg_tiles ( 8, 6, 1, 1, Letter7_5);
-			set_bkg_tiles ( 9, 6, 1, 1, Letter8_5);
-			set_bkg_tiles (10, 6, 1, 1, Letter9_5);
-			set_bkg_tiles (11, 6, 1, 1, Letter10_5);
-			set_bkg_tiles (12, 6, 1, 1, Letter11_5);
-		}
-		else if (level5counter >= 40 && level5counter < 70) {
-			set_bkg_data (0x54, 1, BlankSky5);
-			set_bkg_data (0x55, 1, BlankSky5);
-			set_bkg_data (0x56, 1, BlankSky5);
-			set_bkg_data (0x57, 1, BlankSky5);
-			set_bkg_data (0x58, 1, BlankSky5);
-			set_bkg_data (0x59, 1, BlankSky5);
-			set_bkg_data (0x5A, 1, BlankSky5);
-			set_bkg_data (0x5B, 1, BlankSky5);
-			set_bkg_data (0x5C, 1, BlankSky5);
-			set_bkg_data (0x5D, 1, BlankSky5);
-			set_bkg_data (0x5E, 1, BlankSky5);
-
-			set_bkg_tiles ( 7, 5, 1, 1, Letter1_5); //x, y, w, h, *tiles
-			set_bkg_tiles ( 8, 5, 1, 1, Letter2_5);
-			set_bkg_tiles ( 9, 5, 1, 1, Letter3_5);
-			set_bkg_tiles (10, 5, 1, 1, Letter4_5);
-			set_bkg_tiles (11, 5, 1, 1, Letter5_5);
-			set_bkg_tiles ( 7, 6, 1, 1, Letter6_5);
-			set_bkg_tiles ( 8, 6, 1, 1, Letter7_5);
-			set_bkg_tiles ( 9, 6, 1, 1, Letter8_5);
-			set_bkg_tiles (10, 6, 1, 1, Letter9_5);
-			set_bkg_tiles (11, 6, 1, 1, Letter10_5);
-			set_bkg_tiles (12, 6, 1, 1, Letter11_5);
-		}
-		else if (level5counter >= 70 && level5counter < 100) {
-			set_bkg_data (0x54, 1, UpperL5);
-			set_bkg_data (0x55, 1, LowerE5);
-			set_bkg_data (0x56, 1, LowerV5);
-			set_bkg_data (0x57, 1, LowerE5);
-			set_bkg_data (0x58, 1, LowerL5);
-			set_bkg_data (0x59, 1, UpperS5);
-			set_bkg_data (0x5A, 1, LowerT5);
-			set_bkg_data (0x5B, 1, LowerA5);
-			set_bkg_data (0x5C, 1, LowerR5);
-			set_bkg_data (0x5D, 1, LowerT5);
-			set_bkg_data (0x5E, 1, Exclam5);
-
-			set_bkg_tiles ( 7, 5, 1, 1, Letter1_5); //x, y, w, h, *tiles
-			set_bkg_tiles ( 8, 5, 1, 1, Letter2_5);
-			set_bkg_tiles ( 9, 5, 1, 1, Letter3_5);
-			set_bkg_tiles (10, 5, 1, 1, Letter4_5);
-			set_bkg_tiles (11, 5, 1, 1, Letter5_5);
-			set_bkg_tiles ( 7, 6, 1, 1, Letter6_5);
-			set_bkg_tiles ( 8, 6, 1, 1, Letter7_5);
-			set_bkg_tiles ( 9, 6, 1, 1, Letter8_5);
-			set_bkg_tiles (10, 6, 1, 1, Letter9_5);
-			set_bkg_tiles (11, 6, 1, 1, Letter10_5);
-			set_bkg_tiles (12, 6, 1, 1, Letter11_5);
-		}
-		else if (level5counter >= 100 && level5counter < 101) {
-			set_bkg_data (0x54, 1, BlankSky5);
-			set_bkg_data (0x55, 1, BlankSky5);
-			set_bkg_data (0x56, 1, BlankSky5);
-			set_bkg_data (0x57, 1, BlankSky5);
-			set_bkg_data (0x58, 1, BlankSky5);
-			set_bkg_data (0x59, 1, BlankSky5);
-			set_bkg_data (0x5A, 1, BlankSky5);
-			set_bkg_data (0x5B, 1, BlankSky5);
-			set_bkg_data (0x5C, 1, BlankSky5);
-			set_bkg_data (0x5D, 1, BlankSky5);
-			set_bkg_data (0x5E, 1, BlankSky5);
-
-			set_bkg_tiles ( 7, 5, 1, 1, Letter1_5); //x, y, w, h, *tiles
-			set_bkg_tiles ( 8, 5, 1, 1, Letter2_5);
-			set_bkg_tiles ( 9, 5, 1, 1, Letter3_5);
-			set_bkg_tiles (10, 5, 1, 1, Letter4_5);
-			set_bkg_tiles (11, 5, 1, 1, Letter5_5);
-			set_bkg_tiles ( 7, 6, 1, 1, Letter6_5);
-			set_bkg_tiles ( 8, 6, 1, 1, Letter7_5);
-			set_bkg_tiles ( 9, 6, 1, 1, Letter8_5);
-			set_bkg_tiles (10, 6, 1, 1, Letter9_5);
-			set_bkg_tiles (11, 6, 1, 1, Letter10_5);
-			set_bkg_tiles (12, 6, 1, 1, Letter11_5);
-
+		else if (level5counter == 100) {
 			cutscenemode = disabled;
 
 			if (flagpole_activated5 == 0) {
@@ -524,6 +440,13 @@ void Update_StateLevel5() {
 		}
 
 		if (level5counter < 105) level5counter++;
+	}
+
+	if (spr_nutmeg->x < 1936) {
+		TranslateSprite (spr_nutmeg, -1, 0);
+	}
+	else if (spr_nutmeg->x >= 1936) {
+		TranslateSprite (spr_nutmeg, 0, 0);
 	}
 
 	//animate water
@@ -551,7 +474,6 @@ void Update_StateLevel5() {
 	// Splash 1 data: 0x6C, 0x6D, 0x6E
 	// Splash 2 data: 0x70, 0x71, 0x72
 	// Variables: rainset1_pt1, anim_rain_counter5, rainblankwhite
-
 	if (anim_rain_counter5 >= 0 && anim_rain_counter5 < 5) {
 		//frame 1
 		//Set 1:
@@ -738,7 +660,7 @@ void Update_StateLevel5() {
 
 		//change flagpole color palette to pink
 		//set_bkg_palette (1, 1, pal_pink5);
-		SetPalette(BG_PALETTE, 1, 1, pal_pink5, _current_bank);
+		SetPalette(BG_PALETTE, 5, 1, pal_pink5, _current_bank);
 
 		if (anim_flag_counter5 >= 0 && anim_flag_counter5 < 5) {
 			set_bkg_data (0x21, 1, pink5_37);
@@ -813,45 +735,117 @@ void Update_StateLevel5() {
 	// 5 = 156-188
 	// 6 = 188-219
 	// 7 = 219-250
-	
-	/*
-	if (lightningstrikecounter < 205) lightningstrikecounter++;
 
-	if (lightningstrikecounter == 200) {
-		SpriteManagerAdd(EnemyLightning, 13*8, 0*8);
+	//INFINITE SPAWNS WHILE IN REGIONS:
+	if (spr_nutmeg->x > 0 && spr_nutmeg->x <= 250) {
+		if (lightningstrikecounter2 == 100) {
+			SpriteManagerAdd(EnemyLightningSpot, 28*8, 10*8); //subtract 3 from the y
+		}
+		else if (lightningstrikecounter2 == 150) {
+			SpriteManagerAdd(EnemyLightning, 28*8, 0*8);
+		}
+
+		lightningstrikecounter2++;
+		if (lightningstrikecounter2 >= 155) lightningstrikecounter2 = 0;
 	}
-	*/
+	else if (spr_nutmeg->x > 250 && spr_nutmeg->x <= 400) {
+		if (lightningstrikecounter2 == 100) {
+			SpriteManagerAdd(EnemyLightningSpot, 45*8, 11*8); //subtract 3 from the y
+		}
+		else if (lightningstrikecounter2 == 150) {
+			SpriteManagerAdd(EnemyLightning, 45*8, 0*8);
+		}
 
+		lightningstrikecounter2++;
+		if (lightningstrikecounter2 >= 155) lightningstrikecounter2 = 0;
+	}
+	else if (spr_nutmeg->x > 400 && spr_nutmeg->x <= 750) {
+		if (lightningstrikecounter2 == 100) {
+			SpriteManagerAdd(EnemyLightningSpot, 75*8, 10*8); //subtract 3 from the y
+		}
+		else if (lightningstrikecounter2 == 150) {
+			SpriteManagerAdd(EnemyLightning, 75*8, 0*8);
+		}
+
+		lightningstrikecounter2++;
+		if (lightningstrikecounter2 >= 155) lightningstrikecounter2 = 0;
+	}
+	else if (spr_nutmeg->x > 750 && spr_nutmeg->x <= 1000) {
+		if (lightningstrikecounter2 == 100) {
+			SpriteManagerAdd(EnemyLightningSpot, 105*8, 10*8); //subtract 3 from the y
+		}
+		else if (lightningstrikecounter2 == 150) {
+			SpriteManagerAdd(EnemyLightning, 105*8, 0*8);
+		}
+
+		lightningstrikecounter2++;
+		if (lightningstrikecounter2 >= 155) lightningstrikecounter2 = 0;
+	}
+	else if (spr_nutmeg->x > 1000 && spr_nutmeg->x <= 1500) {
+		if (lightningstrikecounter2 == 100) {
+			SpriteManagerAdd(EnemyLightningSpot, 159*8, 6*8); //subtract 3 from the y
+		}
+		else if (lightningstrikecounter2 == 150) {
+			SpriteManagerAdd(EnemyLightning, 159*8, 0*8);
+		}
+
+		lightningstrikecounter2++;
+		if (lightningstrikecounter2 >= 155) lightningstrikecounter2 = 0;
+	}
+	else if (spr_nutmeg->x > 1500 && spr_nutmeg->x <= 2000) {
+		if (lightningstrikecounter2 == 100) {
+			SpriteManagerAdd(EnemyLightningSpot, 236*8, 6*8); //subtract 3 from the y
+		}
+		else if (lightningstrikecounter2 == 150) {
+			SpriteManagerAdd(EnemyLightning, 236*8, 0*8);
+		}
+
+		lightningstrikecounter2++;
+		if (lightningstrikecounter2 >= 155) lightningstrikecounter2 = 0;
+	}
+
+	//Only Spawn Once:
 	// 0-63:
 	if (spr_nutmeg->x > 0 && spr_nutmeg->x <= 250 && nut_region <= 0) {
-		//SpriteManagerAdd(EnemyLightning, 13*8, 0*8);
 		nut_region = 1;
 	}
 	// Up to 94:
 	else if (spr_nutmeg->x > 250 && spr_nutmeg->x <= 500 && nut_region <= 1) {
-    	nut_region = 2;
+		SpriteManagerAdd(EnemyEarthy, 63*8, 13*8); //subtract 0 from y
+		nut_region = 2;
 	}
 	// Up to 125:
 	else if (spr_nutmeg->x > 500 && spr_nutmeg->x <= 750 && nut_region <= 2) {
+		SpriteManagerAdd(SpriteAcorn, 72*8, 1*8);
+		SpriteManagerAdd(SpriteAcorn, 92*8, 13*8);
 	    nut_region = 3;
 	}
 	// Up to 156:
 	else if (spr_nutmeg->x > 750 && spr_nutmeg->x <= 1000 && nut_region <= 3) {
+		SpriteManagerAdd(EnemyEarthy, 136*8, 14*8);
 	    nut_region = 4;
 	}
 	// Up to 188:
 	else if (spr_nutmeg->x > 1000 && spr_nutmeg->x <= 1250 && nut_region <= 4) {
+		SpriteManagerAdd(SpriteAcorn, 139*8, 3*8);
+		SpriteManagerAdd(SpriteAcorn, 141*8, 3*8);
 	    nut_region = 5;
 	}
 	// Up to 219:
 	else if (spr_nutmeg->x > 1250 && spr_nutmeg->x <= 1500 && nut_region <= 5) {
+		SpriteManagerAdd(SpriteAcorn, 172*8, 5*8);
+		SpriteManagerAdd(SpriteAcorn, 179*8, 1*8);
 		nut_region = 6;
 	}
 	// Up to 250:
 	else if (spr_nutmeg->x > 1500 && spr_nutmeg->x <= 1750 && nut_region <= 6) {
+		SpriteManagerAdd(SpriteAcorn, 197*8, 7*8);
+		SpriteManagerAdd(SpriteAcorn, 198*8, 12*8);
+		SpriteManagerAdd(SpriteAcorn, 222*8, 6*8);
 	    nut_region = 7;
 	}
 	else if (spr_nutmeg->x > 1750 && spr_nutmeg->x <= 2000 && nut_region <= 7) {
+		SpriteManagerAdd(EnemyEarthy, 235*8, 13*8);
 	    nut_region = 8;
 	}
 }

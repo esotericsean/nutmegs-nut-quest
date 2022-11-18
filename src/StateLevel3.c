@@ -495,8 +495,7 @@ void Update_StateLevel3() {
 		cutscenemode = enabled;
 		
 		//change for this level because it's vertical not horizontal!!!
-		/*
-		if (spr_nutmeg->x > 1956) {
+		if (spr_nutmeg->x > 248) {
 			cutscenewalkright = true;
 			cutscenewalkleft = false;
 		}
@@ -508,7 +507,6 @@ void Update_StateLevel3() {
 			cutscenewalkright = true;
 			cutscenewalkleft = false;
 		}
-		*/
 
 		if (endlevel_counter3 == 10) {
 			SpriteManagerAdd(SpriteStarLeft, 248, 960);

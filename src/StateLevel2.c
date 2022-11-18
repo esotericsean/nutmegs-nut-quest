@@ -644,8 +644,8 @@ void Update_StateLevel2() {
 	else if (spr_nutmeg->x > 1000 && spr_nutmeg->x <= 1250 && nut_region <= 4) {
 		SpriteManagerAdd(EnemyBunny, 160*8, 13*8); //Bunny always 1 higher in y value
 		SpriteManagerAdd(SpriteMushroom, 167*8, 12*8);
-		SpriteManagerAdd(SpriteAcorn, 176*8, 5*8);
-		SpriteManagerAdd(SpriteAcorn, 179*8, 8*8);
+		SpriteManagerAdd(SpriteAcorn, 177*8, 5*8);
+		SpriteManagerAdd(SpriteAcorn, 180*8, 8*8);
 		SpriteManagerAdd(SpriteMushroom, 190*8, 13*8);
 	    nut_region = 5;
 	}
