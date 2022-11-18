@@ -58,6 +58,8 @@ _SPRITE_DMG(SpriteNutmeg, nutmeg)\
 _SPRITE_DMG(SpriteRock, rock)\
 _SPRITE_DMG(EnemyBatty, batty)\
 _SPRITE_DMG(EnemyLightning, lightning)\
+_SPRITE_DMG(EnemyLightningSpot, lightningspot)\
+_SPRITE_DMG(EnemyEarthy, earthy)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"
