@@ -5,6 +5,8 @@
 
 More info at: http://nutmegsnutquest.com/
 
+![](https://github.com/esotericsean/nutmegs-nut-quest/blob/main/title_v1.gif)
+
 As of November 4, 2022, Nutmeg has now been updated to [ZGB 2022.0](https://github.com/Zal0/ZGB) (and [GBDK 2020 v4.1.0](https://github.com/gbdk-2020/gbdk-2020))! Code is mainly uploaded here for backup and reference purposes, it's missing a few things so if you try to compile it, some things might be broken for now. But a demo is coming pretty soon. :)
 
 ## Where to Get It
