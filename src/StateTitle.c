@@ -51,13 +51,6 @@ DECLARE_MUSIC(chase);
 
 UWORD leafPalette[] = { 0, RGB(8, 23, 8), RGB(5, 19, 12), 0 };
 
-void performantdelay (UINT8 numloops) {
-    UINT8 ii;
-    for (ii = 0; ii < numloops; ii++) {
-        wait_vbl_done();
-    }     
-}
-
 UINT8 backgroundoffset1x;
 UINT8 backgroundoffset2x;
 UINT8 backgroundoffset3x;
