@@ -27,7 +27,8 @@ void Update_SpritePuffLeft() {
 	if (deathtimer3 >= 20) SpriteManagerRemoveSprite(THIS);
 	else deathtimer3++;
 
-	TranslateSprite(THIS, -1, 0);
+	//TranslateSprite(THIS, -1, 0);
+	THIS->x--;
 }
 
 void Destroy_SpritePuffLeft() {

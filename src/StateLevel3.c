@@ -1,36 +1,16 @@
 #include "Banks/SetAutoBank.h"
-
 #include <gbdk/platform.h>
-
-#include "..\res\src\level1tiles.h"
-#include "..\res\src\level3map.h"
-
 #include "ZGBMain.h"
 #include "Music.h"
 #include "Scroll.h"
 #include "Sound.h"
 #include "Keys.h"
 #include "SpriteManager.h"
-
-#include "../res/src/nutmeg.h"
-#include "../res/src/acorn.h"
-#include "../res/src/butterfly.h"
-#include "../res/src/bunny.h"
-#include "../res/src/star.h"
-#include "../res/src/puff.h"
-#include "../res/src/mushroom.h"
-#include "../res/src/rockith.h"
-//#include "../res/src/rock.h"
-#include "../res/src/topspike.h"
-//#include "../res/src/batty.h"
-//#include "../res/src/fish.h"
-//#include "../res/src/powerleaf.h"
-//#include "../res/src/nutmegbow.h"
 #include "Palette.h"
-
 #include "../src/GlobalVars.h"
 
 IMPORT_MAP (level3map);
+IMPORT_MAP (hud);
 
 UINT16 level3counter = 0;
 
@@ -39,40 +19,13 @@ UINT8 anim_flag_counter3 = 0;
 UINT8 flagpole_activated3 = 0;
 UINT8 flagpole_stars3 = 0;
 UINT8 endlevel_counter3 = 0;
-//UINT8 starshooter = 0;
 
 //pink color palette
-const UWORD pal_pink3[] = {
-	RGB(31, 31, 31),
-	RGB(19, 26, 30),
-	RGB(28, 19, 30),
-	RGB(0,  0,  0)
-};
-
-const UINT16 bg_palette_level3[] = {
-	PALETTE_FROM_HEADER(level1tiles)
-};
-
-/*
-const UINT16 sprites_palette_level3[] = {
-	PALETTE_INDEX (nutmeg, 0),
-	PALETTE_INDEX (acorn, 1),
-	PALETTE_INDEX (bunny, 3),
-	PALETTE_INDEX (star, 2),
-	PALETTE_INDEX (puff, 3),
-	PALETTE_INDEX (rockith, 5),
-	PALETTE_INDEX (topspike, 5),
-	PALETTE_INDEX (rock, 6)
-};
-*/
+const UWORD pal_pink3[] = { RGB(31, 31, 31), RGB(19, 26, 30), RGB(28, 19, 30), RGB(0,  0,  0) };
 
 const UINT8 collision_tiles_level3[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
 const UINT8 collision_tiles_down_level3[] = {29,30,31,32};
 
-//extern UINT8* quickstart_mod_Data[];
-//extern UINT8* mushrooms_mod_Data[];
-//extern UINT8* flagpole_mod_Data[];
-//extern UINT8* quickdeath_mod_Data[];
 DECLARE_MUSIC(quickstart);
 DECLARE_MUSIC(mushrooms);
 DECLARE_MUSIC(flagpole);
@@ -240,19 +193,140 @@ const unsigned char Letter9_3[]  = { 0x5C };
 const unsigned char Letter10_3[] = { 0x5D };
 const unsigned char Letter11_3[] = { 0x5E };
 
-//nutmeg sprite region
-//UINT8 nut_region;
+//timer counter
+UINT16 timerlevel3;
+UINT8 timerclock3;
 
-//deathmusicplayed = false;
+void UpdateHud3() {
+	//health system DISPLAY
+	//health first number:
+	switch (nutmeglives - (nutmeglives % 10)) {
+		case 0:  UPDATE_HUD_TILE (3, 0, 6);  break;
+		case 10: UPDATE_HUD_TILE (3, 0, 7);  break;
+		case 20: UPDATE_HUD_TILE (3, 0, 8);  break;
+		case 30: UPDATE_HUD_TILE (3, 0, 9);  break;
+		case 40: UPDATE_HUD_TILE (3, 0, 10); break;
+		case 50: UPDATE_HUD_TILE (3, 0, 11); break;
+		case 60: UPDATE_HUD_TILE (3, 0, 12); break;
+		case 70: UPDATE_HUD_TILE (3, 0, 13); break;
+		case 80: UPDATE_HUD_TILE (3, 0, 14); break;
+		case 90: UPDATE_HUD_TILE (3, 0, 15); break;
+	}
+	//health second number:
+	switch (nutmeglives % 10) {
+		case 0: UPDATE_HUD_TILE (4, 0, 6);  break;
+		case 1: UPDATE_HUD_TILE (4, 0, 7);  break;
+		case 2: UPDATE_HUD_TILE (4, 0, 8);  break;
+		case 3: UPDATE_HUD_TILE (4, 0, 9);  break;
+		case 4: UPDATE_HUD_TILE (4, 0, 10); break;
+		case 5: UPDATE_HUD_TILE (4, 0, 11); break;
+		case 6: UPDATE_HUD_TILE (4, 0, 12); break;
+		case 7: UPDATE_HUD_TILE (4, 0, 13); break;
+		case 8: UPDATE_HUD_TILE (4, 0, 14); break;
+		case 9: UPDATE_HUD_TILE (4, 0, 15); break;
+	}
 
-/*
-UWORD greyPalette[] = {
-  0, 0, 0, 0
-};
-*/
+	//acorns:
+	//acorns first number:
+	switch (acorncounter - (acorncounter % 10)) {
+		case 0:  UPDATE_HUD_TILE (17, 0, 6);  break;
+		case 10: UPDATE_HUD_TILE (17, 0, 7);  break;
+		case 20: UPDATE_HUD_TILE (17, 0, 8);  break;
+		case 30: UPDATE_HUD_TILE (17, 0, 9);  break;
+		case 40: UPDATE_HUD_TILE (17, 0, 10); break;
+		case 50: UPDATE_HUD_TILE (17, 0, 11); break;
+		case 60: UPDATE_HUD_TILE (17, 0, 12); break;
+		case 70: UPDATE_HUD_TILE (17, 0, 13); break;
+		case 80: UPDATE_HUD_TILE (17, 0, 14); break;
+		case 90: UPDATE_HUD_TILE (17, 0, 15); break;
+	}
+	//acorns second number:
+	switch (acorncounter % 10) {
+		case 0: UPDATE_HUD_TILE (18, 0, 6);  break;
+		case 1: UPDATE_HUD_TILE (18, 0, 7);  break;
+		case 2: UPDATE_HUD_TILE (18, 0, 8);  break;
+		case 3: UPDATE_HUD_TILE (18, 0, 9);  break;
+		case 4: UPDATE_HUD_TILE (18, 0, 10); break;
+		case 5: UPDATE_HUD_TILE (18, 0, 11); break;
+		case 6: UPDATE_HUD_TILE (18, 0, 12); break;
+		case 7: UPDATE_HUD_TILE (18, 0, 13); break;
+		case 8: UPDATE_HUD_TILE (18, 0, 14); break;
+		case 9: UPDATE_HUD_TILE (18, 0, 15); break;
+	}
+
+	if (timerclock3 <= 25 && cutscenemode == disabled) timerclock3 ++; //25 seems good
+
+	if (timerclock3 == 25) {
+		timerclock3 = 0;
+		timerlevel3--;
+	}
+
+	//timer:
+	//timer 100s digit:
+	if (timerlevel3 == 300) UPDATE_HUD_TILE (10, 0, 9);
+	if (timerlevel3 < 300 && timerlevel3 >= 200) UPDATE_HUD_TILE (10, 0, 8);
+	if (timerlevel3 < 200 && timerlevel3 >= 100) UPDATE_HUD_TILE (10, 0, 7);
+	if (timerlevel3 < 100) UPDATE_HUD_TILE (10, 0, 6);
+	//timer 10s digit:
+	if (timerlevel3 < 300 && timerlevel3 >= 200) {
+		switch (timerlevel3 - 200 - (timerlevel3 % 10)) {
+			case 0:  UPDATE_HUD_TILE (11, 0, 6);  break;
+			case 10: UPDATE_HUD_TILE (11, 0, 7);  break;
+			case 20: UPDATE_HUD_TILE (11, 0, 8);  break;
+			case 30: UPDATE_HUD_TILE (11, 0, 9);  break;
+			case 40: UPDATE_HUD_TILE (11, 0, 10); break;
+			case 50: UPDATE_HUD_TILE (11, 0, 11); break;
+			case 60: UPDATE_HUD_TILE (11, 0, 12); break;
+			case 70: UPDATE_HUD_TILE (11, 0, 13); break;
+			case 80: UPDATE_HUD_TILE (11, 0, 14); break;
+			case 90: UPDATE_HUD_TILE (11, 0, 15); break;
+		}
+	}
+	else if (timerlevel3 < 200 && timerlevel3 >= 100) {
+		switch (timerlevel3 - 100 - (timerlevel3 % 10)) {
+			case 0:  UPDATE_HUD_TILE (11, 0, 6);  break;
+			case 10: UPDATE_HUD_TILE (11, 0, 7);  break;
+			case 20: UPDATE_HUD_TILE (11, 0, 8);  break;
+			case 30: UPDATE_HUD_TILE (11, 0, 9);  break;
+			case 40: UPDATE_HUD_TILE (11, 0, 10); break;
+			case 50: UPDATE_HUD_TILE (11, 0, 11); break;
+			case 60: UPDATE_HUD_TILE (11, 0, 12); break;
+			case 70: UPDATE_HUD_TILE (11, 0, 13); break;
+			case 80: UPDATE_HUD_TILE (11, 0, 14); break;
+			case 90: UPDATE_HUD_TILE (11, 0, 15); break;
+		}
+	}
+	switch (timerlevel3 - (timerlevel3 % 10)) {
+		case 0:  UPDATE_HUD_TILE (11, 0, 6);  break;
+		case 10: UPDATE_HUD_TILE (11, 0, 7);  break;
+		case 20: UPDATE_HUD_TILE (11, 0, 8);  break;
+		case 30: UPDATE_HUD_TILE (11, 0, 9);  break;
+		case 40: UPDATE_HUD_TILE (11, 0, 10); break;
+		case 50: UPDATE_HUD_TILE (11, 0, 11); break;
+		case 60: UPDATE_HUD_TILE (11, 0, 12); break;
+		case 70: UPDATE_HUD_TILE (11, 0, 13); break;
+		case 80: UPDATE_HUD_TILE (11, 0, 14); break;
+		case 90: UPDATE_HUD_TILE (11, 0, 15); break;
+	}
+	//timer 1s digit:
+	switch (timerlevel3 % 10) {
+		case 0: UPDATE_HUD_TILE (12, 0, 6);  break;
+		case 1: UPDATE_HUD_TILE (12, 0, 7);  break;
+		case 2: UPDATE_HUD_TILE (12, 0, 8);  break;
+		case 3: UPDATE_HUD_TILE (12, 0, 9);  break;
+		case 4: UPDATE_HUD_TILE (12, 0, 10); break;
+		case 5: UPDATE_HUD_TILE (12, 0, 11); break;
+		case 6: UPDATE_HUD_TILE (12, 0, 12); break;
+		case 7: UPDATE_HUD_TILE (12, 0, 13); break;
+		case 8: UPDATE_HUD_TILE (12, 0, 14); break;
+		case 9: UPDATE_HUD_TILE (12, 0, 15); break;
+	}
+}
 
 void Start_StateLevel3() {
 	level3counter = 0;
+	timerlevel3 = 300;
+	timerclock3 = 0;
 	levelorientation = vertical;
 	SPRITES_8x16;
 
@@ -262,38 +336,12 @@ void Start_StateLevel3() {
 	deathmusicplayed = false;
 
 	PlayMusic(quickstart, 1);
-	//PlayMusic(mushrooms_mod_Data, 3, 1);
 
-	//SetPalette (BG_PALETTE, 0, 8, bg_palette_level3, bank_StateLevel3);
-	//SetPalette (SPRITES_PALETTE, 0, 8, sprites_palette_level3, bank_StateLevel3);
-
-	//for(i = 0; i != N_SPRITE_TYPES; ++ i) { SpriteManagerLoad(i); }
-
-	SpriteManagerLoad(2);  //acorn
-	SpriteManagerLoad(3);  //butterfly
-	SpriteManagerLoad(4);  //bunny
-	SpriteManagerLoad(5);  //camera
-	SpriteManagerLoad(35);  //nutmeg
-	//SpriteManagerLoad(7);  //nutmeg2
-	SpriteManagerLoad(10); //star
-	SpriteManagerLoad(11); //star
-	SpriteManagerLoad(12); //puff
-	SpriteManagerLoad(13); //puff
-	SpriteManagerLoad(33); //rockith
-	SpriteManagerLoad(34); //topspike
-	//SpriteManagerLoad(32); //nutmegbow
-	//SpriteManagerLoad(30); //power leaf
-	SpriteManagerLoad(36); //rock
-
-	//set_sprite_palette(10, 1, greyPalette);
-
-	//scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, 4, 49); //36
-	//spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 56, 68);
 	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49); //36
-	//spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 20, 49); //52
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level3map), &level3map, collision_tiles_level3, collision_tiles_down_level3);
+	INIT_HUD(hud);
 
 	cutscenemode = enabled;
 	isAcornMoving = true; //yes, it is moving
@@ -302,12 +350,13 @@ void Start_StateLevel3() {
 
 	SHOW_SPRITES;
 	SHOW_BKG;
-
-	//WY_REG = 136;
-	//SHOW_WIN;
 }
 
 void Update_StateLevel3() {
+	UpdateHud3();
+
+	if (timerlevel3 <= 0) nutmeg_death = true;
+
 	if (nutmeg_death == true) {
 		if (deathmusicplayed == false) {
 			__critical { PlayMusic(quickdeath, 1); }
@@ -580,7 +629,7 @@ void Update_StateLevel3() {
 		if (flagpole_stars3 < 20) flagpole_stars3++;
 	}
 
-	if (spr_nutmeg->x >= 256 && spr_nutmeg->x < 280 && spr_nutmeg->y > 904 && spr_nutmeg->y < 968 && flagpole_activated3 == 0) {
+	if (spr_nutmeg->x >= 256 && spr_nutmeg->x < 280 && spr_nutmeg->y > 904 && spr_nutmeg->y < 968 && flagpole_activated3 == 0 && nutmeg_death == false) {
 		flagpole_activated3 = 1;
 		levelbeat = true;
 		endlevel_counter3 = 0;

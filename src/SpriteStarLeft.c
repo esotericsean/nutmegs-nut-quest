@@ -24,7 +24,8 @@ void Update_SpriteStarLeft() {
 	if (deathtimer >= 30) SpriteManagerRemoveSprite(THIS);
 	else deathtimer++;
 
-	TranslateSprite(THIS, -1, 0);
+	//TranslateSprite(THIS, -1, 0);
+	THIS->x--;
 }
 
 void Destroy_SpriteStarLeft() {

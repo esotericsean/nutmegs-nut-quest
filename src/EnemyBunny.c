@@ -60,6 +60,8 @@ void Update_EnemyBunny() {
 
 	if (c >= 292)
 		c = 0;
+	
+	TranslateSprite (THIS, 0, 1);
 }
 
 void Destroy_EnemyBunny() {

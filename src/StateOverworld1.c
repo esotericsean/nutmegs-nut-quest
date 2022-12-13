@@ -190,9 +190,9 @@ void Start_StateOverworld1() {
 	//SetPalette (BG_PALETTE, 0, 8, bg_palette_overworld1, bank_StateOverworld1);
 	//SetPalette (SPRITES_PALETTE, 0, 8, sprites_palette_overworld1, bank_StateOverworld1);
 
-	SpriteManagerLoad(2); //acorn
-	SpriteManagerLoad(8); //nutmegtiny
-	SpriteManagerLoad(9); //nuthead
+	//SpriteManagerLoad(2); //acorn
+	//SpriteManagerLoad(8); //nutmegtiny
+	//SpriteManagerLoad(9); //nuthead
 
 	/* DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
 	/* DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
@@ -221,15 +221,15 @@ void Start_StateOverworld1() {
 		case  0: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  23, 45); break; // tree - look good
 		case  1: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  47, 45); break; // 1 - look good
 		case  2: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  47, 61); break; // 2 - look good
-		case  3: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  47, 83); break; // 3 - NOT IN USE
-		case  4: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  24, 83); break; // mushroom - NOT IN USE
-		case  5: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  71, 61); break; // 5 - look good
-		case  6: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  71, 77); break; // 6 - look good
-		case  7: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  95, 75); break; // 7
-		case  8: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  83, 45); break; // 8
-		case  9: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny, 106, 45); break; // 9
-		case 10: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny, 106, 68); break; // 10
-		case 11: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny, 106, 91); break; // boss
+		case  3: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,   47, 83); break; // 3 - NOT IN USE
+		case  4: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,   24, 83); break; // mushroom - NOT IN USE
+		case  5: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  71, 61); break; // 3 - look good
+		case  6: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  71, 77); break; // 4 - look good
+		case  7: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  95, 77); break; // 5
+		case  8: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny,  95, 45); break; // 6
+		case  9: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny, 119, 45); break; // 7
+		case 10: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny, 119, 69); break; // 8
+		case 11: spr_nutmegtiny = SpriteManagerAdd(SpriteNutmegTiny, 119, 93); break; // boss
 	}
 
 	//SpriteManagerAdd(SpriteNutmegTiny, 47, 45);
@@ -490,8 +490,8 @@ void Update_StateOverworld1() {
 			else if (W1LevelSelection == 5) SetState(StateLevel3);
 			else if (W1LevelSelection == 6) SetState(StateLevel4);
 			else if (W1LevelSelection == 7) SetState(StateLevel5);
-			//else if (W1LevelSelection == 8) SetState(StateLevel6);
-			//else if (W1LevelSelection == 9) SetState(StateLevel7);
+			else if (W1LevelSelection == 8) SetState(StateLevel6);
+			else if (W1LevelSelection == 9) SetState(StateLevel7);
 			//else if (W1LevelSelection == 10) SetState(StateLevel8);
 			//else if (W1LevelSelection == 11) SetState(StateLevel9);
 		}
@@ -521,7 +521,7 @@ void Update_StateOverworld1() {
 		}
 		// LEVEL 7
 		else if (W1LevelSelection == 7 && levelbeat == true) {
-			direction = 2; distance = 29; W1LevelSelection = 8; levelbeatcounter = 0; inputenabled = false;
+			direction = 2; distance = 31; W1LevelSelection = 8; levelbeatcounter = 0; inputenabled = false;
 		}
 		// LEVEL 8
 		else if (W1LevelSelection == 8 && levelbeat == true) {

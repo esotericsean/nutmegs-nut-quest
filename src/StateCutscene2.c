@@ -1,10 +1,5 @@
 #include "Banks/SetAutoBank.h"
 
-#include "..\res\src\cutscene2tiles.h"
-#include "..\res\src\cutscene2map.h"
-
-#include "..\res\src\incube8G.h"
-
 #include "ZGBMain.h"
 #include "Scroll.h"
 #include "SpriteManager.h"
@@ -36,14 +31,6 @@ const UWORD pal_cut4[] = {
 	RGB(0,  0,  0)
 };
 */
-
-const UINT16 bg_palette_cutscene2[] = {
-    PALETTE_FROM_HEADER (cutscene2tiles)
-};
-
-const UINT16 sprites_palette_cutscene2[] = {
-    PALETTE_INDEX (incube8G, 0)
-};
 
 //extern UINT8* oaktree_mod_Data[];
 

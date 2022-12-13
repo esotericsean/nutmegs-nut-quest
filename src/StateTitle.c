@@ -1,77 +1,39 @@
 #include "Banks/SetAutoBank.h"
-
 #include <gb/cgb.h>
 #include <gbdk/platform.h>
-
-#include "..\res\src\titletiles.h"
-#include "..\res\src\titlemap.h"
-#include "..\res\src\leaf.h"
-
 #include "ZGBMain.h"
 #include "Music.h"
 #include "Keys.h"
 #include "Scroll.h"
 #include "SpriteManager.h"
-
 #include "Palette.h"
 #include "Sound.h"
-
 #include "../src/GlobalVars.h"
 
 IMPORT_MAP (titlemap);
 
-//UINT8 backgroundoffset;
-
 UINT8 title_counter;
 UINT8 acorn_position;
-//UINT8 backgroundoffset1x;
-//UINT8 backgroundoffset2x;
-
-//UINT8 backgroundoffset4x;
 
 // BG1 //
-const UWORD pal_titleyellow[] = {
-RGB(31, 31, 31), RGB(9, 23, 27), RGB(28, 27, 9), RGB(22, 21, 5)
-};
-const UWORD pal_titleyellowpale[] = {
-    RGB(31, 31, 31), RGB(21, 29, 30), RGB(30, 30, 22), RGB(28, 27, 19)
-};
-const UWORD pal_titleyellowpalest[] = {
-    RGB(31, 31, 31), RGB(27, 30, 30), RGB(30, 30, 28), RGB(30, 29, 27)
-};
+const UWORD pal_titleyellow[] = { RGB(31, 31, 31), RGB(9, 23, 27), RGB(28, 27, 9), RGB(22, 21, 5) };
+const UWORD pal_titleyellowpale[] = { RGB(31, 31, 31), RGB(21, 29, 30), RGB(30, 30, 22), RGB(28, 27, 19) };
+const UWORD pal_titleyellowpalest[] = { RGB(31, 31, 31), RGB(27, 30, 30), RGB(30, 30, 28), RGB(30, 29, 27) };
 
 // BG 2 //
-const UWORD pal_titlelogo[] = {
-	RGB(9, 23, 27), RGB(23, 14, 11), RGB(17, 10, 7), RGB(13, 6, 5)
-};
-const UWORD pal_titlelogopale[] = {
-	RGB(21, 29, 30), RGB(29, 23, 20), RGB(26, 21, 19), RGB(23, 19, 18)
-};
-const UWORD pal_titlelogopalest[] = {
-	RGB(27, 30, 30), RGB(30, 27, 25), RGB(29, 26, 25), RGB(28, 25, 23)
-};
+const UWORD pal_titlelogo[] = { RGB(9, 23, 27), RGB(23, 14, 11), RGB(17, 10, 7), RGB(13, 6, 5) };
+const UWORD pal_titlelogopale[] = { RGB(21, 29, 30), RGB(29, 23, 20), RGB(26, 21, 19), RGB(23, 19, 18) };
+const UWORD pal_titlelogopalest[] = { RGB(27, 30, 30), RGB(30, 27, 25), RGB(29, 26, 25), RGB(28, 25, 23) };
 
 // BG 3 //
-const UWORD pal_titlefont[] = {
-    RGB(31, 31, 31), RGB(9, 23, 27), RGB(7, 7, 7), 0
-};
-const UWORD pal_titlefontpale[] = {
-    RGB(31, 31, 31), RGB(21, 29, 30), RGB(21, 21, 21), RGB(15, 15, 15)
-};
-const UWORD pal_titlefontpalest[] = {
-    RGB(31, 31, 31), RGB(27, 31, 31), RGB(27, 27, 27), RGB(24, 24, 24)
-};
+const UWORD pal_titlefont[] = { RGB(31, 31, 31), RGB(9, 23, 27), RGB(7, 7, 7), 0 };
+const UWORD pal_titlefontpale[] = { RGB(31, 31, 31), RGB(21, 29, 30), RGB(21, 21, 21), RGB(15, 15, 15) };
+const UWORD pal_titlefontpalest[] = { RGB(31, 31, 31), RGB(27, 31, 31), RGB(27, 27, 27), RGB(24, 24, 24) };
 
 // BG 4 //
-const UWORD pal_titleacorn[] = {
-	RGB(31, 31, 31), RGB(25, 19, 11), RGB(13, 6, 5), 0
-};
-const UWORD pal_titleacornpale[] = {
-	RGB(31, 31, 31), RGB(29, 26, 21), RGB(23, 19, 18), RGB(15, 15, 15)
-};
-const UWORD pal_titleacornpalest[] = {
-	RGB(31, 31, 31), RGB(30, 29, 27), RGB(29, 27, 26), RGB(24, 24, 24)
-};
+const UWORD pal_titleacorn[] = { RGB(31, 31, 31), RGB(25, 19, 11), RGB(13, 6, 5), 0 };
+const UWORD pal_titleacornpale[] = { RGB(31, 31, 31), RGB(29, 26, 21), RGB(23, 19, 18), RGB(15, 15, 15) };
+const UWORD pal_titleacornpalest[] = { RGB(31, 31, 31), RGB(30, 29, 27), RGB(29, 27, 26), RGB(24, 24, 24) };
 
 //List of tiles that will be animated
 const unsigned char whitespace[] = {
@@ -83,20 +45,11 @@ const unsigned char titleacorn[] = {
 	0x1d,0x17,0x1f,0x23,0x3c,0x26,0x10,0x38
 };
 
-const UINT16 bg_palette_title[] = {PALETTE_FROM_HEADER(titletiles)};
-
-const UINT16 sprites_palette_title[] = {
-    PALETTE_INDEX (leaf, 0)
-};
-
 UINT8 collision_tiles_title[] = {1, 0};
 
-//extern UINT8* chase_mod_Data[];
 DECLARE_MUSIC(chase);
 
-UWORD leafPalette[] = {
-	0, RGB(8, 23, 8), RGB(5, 19, 12), 0
-};
+UWORD leafPalette[] = { 0, RGB(8, 23, 8), RGB(5, 19, 12), 0 };
 
 void performantdelay (UINT8 numloops) {
     UINT8 ii;
@@ -105,55 +58,57 @@ void performantdelay (UINT8 numloops) {
     }     
 }
 
-/*
-void interruptLCD () {
-    switch (LYC_REG)
-    {
-    case 0x00:
-        //scroll bkg doesn't work, have to give it exact location
-        move_bkg(backgroundoffset1x, 0);
-        LYC_REG = 0x35;
-        break;
-    case 0x35:
-        move_bkg(backgroundoffset2x, 0);
-        LYC_REG = 0x00;
-        break;
+UINT8 backgroundoffset1x;
+UINT8 backgroundoffset2x;
+UINT8 backgroundoffset3x;
+
+void interruptLCD() {
+    switch (LYC_REG) {
+        case 0x00:
+            move_bkg (backgroundoffset1x, 0);
+            LYC_REG = 0x48; //pixel 72
+            break;
+        case 0x48:
+            move_bkg (backgroundoffset2x, 0);
+            LYC_REG = 0x60; //pixel 96
+            break;
+        case 0x60:
+            move_bkg (backgroundoffset3x, 0);
+            LYC_REG = 0x00;
+            break;
     }
 }
-*/
 
 void Start_StateTitle() {
+    backgroundoffset1x = 0;
+    backgroundoffset2x = 0;
+    backgroundoffset3x = 0;
+    
     SPRITES_8x8;
 
     title_counter = 0;
     acorn_position = 1;
 
-    //backgroundoffset1x = 0;
-    //backgroundoffset2x = 0;
-
     PlayMusic(chase, 1);
 
-    //SetPalette (BG_PALETTE, 0, 4, bg_palette_title, bank_StateTitle);
-	//SetPalette (SPRITES_PALETTE, 0, 2, sprites_palette_title, bank_StateTitle);
-
-    SpriteManagerLoad(1); //leaf
     SpriteManagerAdd (SpriteLeaf, 117, 0);
 
     SHOW_SPRITES;
 
-    InitScrollTiles (0, &titletiles);
-	InitScroll (BANK(titlemap), &titlemap, collision_tiles_title, 0);
+    STAT_REG = 0x45; //enables LYC=LY interrupt so we can set a line it will fire at
+    LYC_REG = 0x00;
 
-    //STAT_REG = 0x45;
-    //LYC_REG = 0x00;
+    disable_interrupts();
+    add_LCD(interruptLCD);
+    enable_interrupts();
 
-    //disable_interrupts();
-    //add_LCD (interruptLCD);
-    //enable_interrupts();
+    set_interrupts (VBL_IFLAG | LCD_IFLAG);
 
-    //set_interrupts (VBL_IFLAG | LCD_IFLAG);
+    //InitScrollTiles (0, &titletiles);
+	//InitScroll (BANK(titlemap), &titlemap, collision_tiles_title, 0);
 
     SHOW_BKG;
+    DISPLAY_ON;
 
     //RESET SO NUTMEG DOESN'T FLY OFF SCREEN
     accelY = 0;
@@ -169,56 +124,43 @@ void Start_StateTitle() {
 }
 
 void Update_StateTitle() {
+    backgroundoffset1x += 1;
+    backgroundoffset2x += 2;
+    backgroundoffset3x += 10;
+    
     if (title_counter >= 0 && title_counter < 1) {
-        //set_sprite_palette(1, 1, leafPalette);
         SetPalette(SPRITES_PALETTE, 0, 1, leafPalette, _current_bank);
     }
 
     if (title_counter > 170 && title_counter <= 180) {
-        //set_bkg_palette (0, 1, pal_titleyellowpalest);
         SetPalette(BG_PALETTE, 0, 1, pal_titleyellowpalest, _current_bank);
-        //set_bkg_palette (1, 1, pal_titlelogopalest);
         SetPalette(BG_PALETTE, 1, 1, pal_titlelogopalest, _current_bank);
-        //set_bkg_palette (2, 1, pal_titlefontpalest);
         SetPalette(BG_PALETTE, 2, 1, pal_titlefontpalest, _current_bank);
-        //set_bkg_palette (3, 1, pal_titleacornpalest);
         SetPalette(BG_PALETTE, 3, 1, pal_titleacornpalest, _current_bank);
     }
     else if (title_counter > 180 && title_counter <= 190) {
-        //set_bkg_palette (0, 1, pal_titleyellowpale);
         SetPalette(BG_PALETTE, 0, 1, pal_titleyellowpale, _current_bank);
-        //set_bkg_palette (1, 1, pal_titlelogopale);
         SetPalette(BG_PALETTE, 1, 1, pal_titlelogopale, _current_bank);
-        //set_bkg_palette (2, 1, pal_titlefontpale);
         SetPalette(BG_PALETTE, 2, 1, pal_titlefontpale, _current_bank);
-        //set_bkg_palette (3, 1, pal_titleacornpale);
         SetPalette(BG_PALETTE, 3, 1, pal_titleacornpale, _current_bank);
     }
     else if (title_counter > 190) {
-        //set_bkg_palette (0, 1, pal_titleyellow);
         SetPalette(BG_PALETTE, 0, 1, pal_titleyellow, _current_bank);
-        //set_bkg_palette (1, 1, pal_titlelogo);
         SetPalette(BG_PALETTE, 1, 1, pal_titlelogo, _current_bank);
-        //set_bkg_palette (2, 1, pal_titlefont);
         SetPalette(BG_PALETTE, 2, 1, pal_titlefont, _current_bank);
-        //set_bkg_palette (3, 1, pal_titleacorn);
         SetPalette(BG_PALETTE, 3, 1, pal_titleacorn, _current_bank);
     }
 
     if (title_counter >= 191 && title_counter < 201) {
-        //set_bkg_palette (3, 1, pal_titleacornpale);
         SetPalette(BG_PALETTE, 3, 1, pal_titleacornpale, _current_bank);
     }
     else if (title_counter >= 201 && title_counter < 211) {
-        //set_bkg_palette (3, 1, pal_titleacornpalest);
         SetPalette(BG_PALETTE, 3, 1, pal_titleacornpalest, _current_bank);
     }
     else if (title_counter >= 211 && title_counter < 225) {
-        //set_bkg_palette (3, 1, pal_titleacornpale);
         SetPalette(BG_PALETTE, 3, 1, pal_titleacornpale, _current_bank);
     }
     else if (title_counter >= 225 && title_counter < 245) {
-        //set_bkg_palette (3, 1, pal_titleacorn);
         SetPalette(BG_PALETTE, 3, 1, pal_titleacorn, _current_bank);
     }
 
@@ -239,20 +181,7 @@ void Update_StateTitle() {
     if (acorn_position == 1 && KEY_PRESSED(J_START)) SetState (StateTreeCutscene);
     else if (acorn_position == 2 && KEY_PRESSED(J_START)) SetState (StateTreeCutscene);
 
-    /*
-    backgroundoffset += 1;
-    if (backgroundoffset >= 320) backgroundoffset = 0;
-    */
-
-    //backgroundoffset1x = 0; //amount to scroll the top (none)
-    //backgroundoffset2x = 2; //amount to scroll the clouds
-
     title_counter++;
 
     if (title_counter >= 245) title_counter = 191;
-
-    //scroll_bkg (backgroundoffset, 0);
-
-    //performantdelay(1);
-    //wait_vbl_done();
 }

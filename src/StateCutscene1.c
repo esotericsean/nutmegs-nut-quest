@@ -1,11 +1,5 @@
 #include "Banks/SetAutoBank.h"
 
-#include "..\res\src\cutscene1tiles.h"
-#include "..\res\src\cutscene1map.h"
-
-#include "..\res\src\blink.h"
-#include "..\res\src\bow.h"
-
 #include "ZGBMain.h"
 #include "Music.h"
 #include "Scroll.h"
@@ -49,15 +43,6 @@ const UWORD bowPalette[] = {
     RGB(0, 0, 0)
 };
 */
-
-const UINT16 bg_palette_cutscene1[] = {
-    PALETTE_FROM_HEADER (cutscene1tiles)
-};
-
-const UINT16 sprites_palette_cutscene1[] = {
-    PALETTE_INDEX (blink, 0),
-    PALETTE_INDEX (bow, 1)
-};
 
 //extern UINT8* oaktree_mod_Data[];
 DECLARE_MUSIC(oaktree);
@@ -131,17 +116,8 @@ const unsigned char font_blankk[] = {
 void Start_StateCutscene1() {
     SPRITES_8x16;
 
-    //PlayMusic(oaktree_mod_Data, 4, 1);
     stop_music_on_new_state = 0;
 	PlayMusic(oaktree, 1);
-
-    //SetPalette (BG_PALETTE, 0, 2, bg_palette_cutscene1, bank_StateCutscene1);
-	//SetPalette (SPRITES_PALETTE, 0, 1, sprites_palette_cutscene1, bank_StateCutscene1);
-
-    SpriteManagerLoad(22); //Cinnamon
-    SpriteManagerLoad(23); //Maple
-    SpriteManagerLoad(26); //Ruby
-    SpriteManagerLoad(27); //Ruby's Bow
 
     SpriteManagerAdd(SpriteBlinkCinnamon, 24, 78);
     SpriteManagerAdd(SpriteBlinkCinnamon, 24+10, 78);
@@ -155,7 +131,6 @@ void Start_StateCutscene1() {
     SpriteManagerAdd(SpriteBow, 75, 66);
 
     InitScrollTiles(0, &cutscene1tiles);
-    //InitScroll(&cutscene1map, collision_tiles_cutscene1, 0);
     InitScroll(BANK(cutscene1map), &cutscene1map, collision_tiles_cutscene1, 0);
 
     SHOW_SPRITES;
@@ -165,7 +140,7 @@ void Start_StateCutscene1() {
 
     //health system
     acorncounter = 0;
-    nutmeglives = 99;
+    nutmeglives = 3;
 
     //RESET SO NUTMEG DOESN'T FLY OFF SCREEN
     accelY = 0;
@@ -179,9 +154,6 @@ void Start_StateCutscene1() {
 
 void Update_StateCutscene1() {
     if (KEY_PRESSED(J_START)) SetState(StateCutscene2);
-
-    //set_bkg_palette (0, 1, pal_cut1); //first pal, num of pals, pal name
-    //set_bkg_palette (1, 1, pal_cut2);
 
     if (cutscene1counter == 0) {
         //set_sprite_palette(1, 1, bowPalette); //worked

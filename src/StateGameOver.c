@@ -88,6 +88,7 @@ void Start_StateGameOver() {
 
 	SHOW_SPRITES;
 	SHOW_BKG;
+	HIDE_WIN;
 }
 
 void Update_StateGameOver() {
