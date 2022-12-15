@@ -64,10 +64,10 @@ extern void LCD_isr();
 void interruptLCD() {
     switch (next_interrupt_ly) {
         case 0x00:
-            LYC_REG = next_interrupt_ly = 0x48; //pixel 72 (0x48)
+            LYC_REG = next_interrupt_ly = 0x58; //pixel 72 (0x48)
             move_bkg (backgroundoffset1x, 0);
             break;
-        case 0x48:
+        case 0x58:
             LYC_REG = next_interrupt_ly = 0x60; //pixel 96 (0x60)
             move_bkg (backgroundoffset2x, 0);
             break;
@@ -76,12 +76,6 @@ void interruptLCD() {
             move_bkg (backgroundoffset3x, 0);
             break;
     }
-}
-
-void MusicUpdate() {
-    enable_interrupts();
-    gbt_update();
-    REFRESH_BANK;
 }
 
 void Start_StateTitle() {
@@ -102,18 +96,15 @@ void Start_StateTitle() {
 
     __critical {
         remove_LCD (LCD_isr);
-        disable_interrupts();
-        //add_TIM (MusicUpdate);
         add_LCD (interruptLCD);
-        set_interrupts (VBL_IFLAG | TIM_IFLAG | LCD_IFLAG);
-        enable_interrupts();
         STAT_REG |= 0x40;
         LYC_REG = 160u;
     }
     //set_interrupts (VBL_IFLAG | TIM_IFLAG | LCD_IFLAG);
+    set_interrupts (VBL_IFLAG | LCD_IFLAG);
 
     InitScrollTiles (0, &titletiles);
-	InitScroll (BANK(titlemap), &titlemap, collision_tiles_title, 0);
+    InitScroll (BANK(titlemap), &titlemap, collision_tiles_title, 0);
 
     SHOW_BKG;
 
@@ -131,9 +122,15 @@ void Start_StateTitle() {
 }
 
 void Update_StateTitle() {
-    backgroundoffset1x += 1;
-    backgroundoffset2x += 2;
-    backgroundoffset3x += 3;
+    if (title_counter > 190) {
+        backgroundoffset1x += 0;
+        backgroundoffset2x += 1;
+        backgroundoffset3x += 0;
+
+        interruptLCD();
+
+        wait_vbl_done();
+    }
     
     if (title_counter >= 0 && title_counter < 1) {
         SetPalette(SPRITES_PALETTE, 0, 1, leafPalette, _current_bank);
