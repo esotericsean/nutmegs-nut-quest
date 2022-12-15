@@ -10,6 +10,9 @@
 #include "Sound.h"
 #include "../src/GlobalVars.h"
 
+//#include "../src/titletiles.h"
+//#include "../src/titlemap.h"
+
 IMPORT_MAP (titlemap);
 
 UINT8 title_counter;
@@ -51,28 +54,39 @@ DECLARE_MUSIC(chase);
 
 UWORD leafPalette[] = { 0, RGB(8, 23, 8), RGB(5, 19, 12), 0 };
 
-UINT8 backgroundoffset1x;
-UINT8 backgroundoffset2x;
-UINT8 backgroundoffset3x;
+volatile UINT8 next_interrupt_ly;
+volatile UINT8 backgroundoffset1x;
+volatile UINT8 backgroundoffset2x;
+volatile UINT8 backgroundoffset3x;
+
+extern void LCD_isr();
 
 void interruptLCD() {
-    switch (LYC_REG) {
+    switch (next_interrupt_ly) {
         case 0x00:
+            LYC_REG = next_interrupt_ly = 0x48; //pixel 72 (0x48)
             move_bkg (backgroundoffset1x, 0);
-            LYC_REG = 0x48; //pixel 72
             break;
         case 0x48:
+            LYC_REG = next_interrupt_ly = 0x60; //pixel 96 (0x60)
             move_bkg (backgroundoffset2x, 0);
-            LYC_REG = 0x60; //pixel 96
             break;
         case 0x60:
+            LYC_REG = next_interrupt_ly = 0x00;
             move_bkg (backgroundoffset3x, 0);
-            LYC_REG = 0x00;
             break;
     }
 }
 
+void MusicUpdate() {
+    enable_interrupts();
+    gbt_update();
+    REFRESH_BANK;
+}
+
 void Start_StateTitle() {
+    PlayMusic(chase, 1);
+
     backgroundoffset1x = 0;
     backgroundoffset2x = 0;
     backgroundoffset3x = 0;
@@ -82,26 +96,26 @@ void Start_StateTitle() {
     title_counter = 0;
     acorn_position = 1;
 
-    PlayMusic(chase, 1);
-
     SpriteManagerAdd (SpriteLeaf, 117, 0);
 
     SHOW_SPRITES;
 
-    STAT_REG = 0x45; //enables LYC=LY interrupt so we can set a line it will fire at
-    LYC_REG = 0x00;
+    __critical {
+        remove_LCD (LCD_isr);
+        disable_interrupts();
+        //add_TIM (MusicUpdate);
+        add_LCD (interruptLCD);
+        set_interrupts (VBL_IFLAG | TIM_IFLAG | LCD_IFLAG);
+        enable_interrupts();
+        STAT_REG |= 0x40;
+        LYC_REG = 160u;
+    }
+    //set_interrupts (VBL_IFLAG | TIM_IFLAG | LCD_IFLAG);
 
-    disable_interrupts();
-    add_LCD(interruptLCD);
-    enable_interrupts();
-
-    set_interrupts (VBL_IFLAG | LCD_IFLAG);
-
-    //InitScrollTiles (0, &titletiles);
-	//InitScroll (BANK(titlemap), &titlemap, collision_tiles_title, 0);
+    InitScrollTiles (0, &titletiles);
+	InitScroll (BANK(titlemap), &titlemap, collision_tiles_title, 0);
 
     SHOW_BKG;
-    DISPLAY_ON;
 
     //RESET SO NUTMEG DOESN'T FLY OFF SCREEN
     accelY = 0;
@@ -119,7 +133,7 @@ void Start_StateTitle() {
 void Update_StateTitle() {
     backgroundoffset1x += 1;
     backgroundoffset2x += 2;
-    backgroundoffset3x += 10;
+    backgroundoffset3x += 3;
     
     if (title_counter >= 0 && title_counter < 1) {
         SetPalette(SPRITES_PALETTE, 0, 1, leafPalette, _current_bank);
@@ -171,8 +185,26 @@ void Update_StateTitle() {
         set_bkg_data (0x7E, 1, titleacorn);
     }
        
-    if (acorn_position == 1 && KEY_PRESSED(J_START)) SetState (StateTreeCutscene);
-    else if (acorn_position == 2 && KEY_PRESSED(J_START)) SetState (StateTreeCutscene);
+    if (acorn_position == 1 && KEY_PRESSED(J_START)) {
+        __critical {
+            remove_LCD (interruptLCD);
+            disable_interrupts();
+            add_LCD (LCD_isr);
+            enable_interrupts();
+        }
+
+        SetState (StateTreeCutscene);
+    }
+    else if (acorn_position == 2 && KEY_PRESSED(J_START)) {
+        __critical {
+            remove_LCD (interruptLCD);
+            disable_interrupts();
+            add_LCD (LCD_isr);
+            enable_interrupts();
+        }
+
+        SetState (StateTreeCutscene);
+    }
 
     title_counter++;
 
