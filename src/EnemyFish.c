@@ -11,7 +11,7 @@
 #include "Keys.h"
 #include "SpriteManager.h"
 
-#include "SpriteManager.h"
+#include "../src/GlobalVars.h"
 
 UINT8 fishcounter = 0; // counter
 
@@ -52,11 +52,21 @@ void Update_EnemyFish() {
 	if (fishcounter >= 120 && fishcounter < 140) THIS->mirror = V_MIRROR;
 	if (fishcounter >= 140 && fishcounter < 156) THIS->mirror = NO_MIRROR;
 
-	if (THIS->y > 112) {
-		SetPalette(SPRITES_PALETTE, 2, 1, pal_fishblue4, _current_bank);
+	if (fish_pal_loc == 4) {
+		if (THIS->y > 112) {
+			SetPalette(SPRITES_PALETTE, 2, 1, pal_fishblue4, _current_bank);
+		}
+		else if (THIS->y <= 112) {
+			SetPalette(SPRITES_PALETTE, 2, 1, pal_fishgreen4, _current_bank);
+		}
 	}
-	else if (THIS->y <= 112) {
-		SetPalette(SPRITES_PALETTE, 2, 1, pal_fishgreen4, _current_bank);
+	else if (fish_pal_loc == 7) {
+		if (THIS->y > 112) {
+			SetPalette(SPRITES_PALETTE, 4, 1, pal_fishblue4, _current_bank);
+		}
+		else if (THIS->y <= 112) {
+			SetPalette(SPRITES_PALETTE, 4, 1, pal_fishgreen4, _current_bank);
+		}
 	}
 
 	fishcounter++;

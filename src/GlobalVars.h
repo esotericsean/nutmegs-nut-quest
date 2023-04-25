@@ -42,6 +42,10 @@ extern UINT8 bowanim;
 extern switcher powerupleaf;
 extern switcher powerupstar;
 
+//balloon pop
+extern UINT8 balloonjump;
+extern bool balloonpop;
+
 //health system - reset to 0 in StateCutscene1
 //start with 0 acorns and 3 lives
 extern UINT8 acorncounter;
@@ -99,6 +103,9 @@ extern UINT8 W2LevelSelection;
 //nutmeg sprite region
 extern UINT8 nut_region;
 
+//fish color palette location based on level
+extern UINT8 fish_pal_loc;
+
 //world 1 things
 extern const unsigned char level_water1[];
 extern const unsigned char level_water2[];
@@ -151,10 +158,20 @@ extern const UWORD pal_pink[];
 extern const UINT16 bg_palette_level1[];
 extern const UINT16 sprites_palette_level1[];
 
+//Nutmeg Stop Moving After Dying
+extern UINT8 nutmegdeathmove;
+
 //Enemy Rockith
 extern bool rockdamage;
 
 //Sprite Limits if Vertical or Horizontal Level
 extern orientation levelorientation;
+
+//EnemyHand
+extern UINT8 handpos;
+extern UINT8 handphase;
+extern bool abletohurthand;
+extern UINT8 handhurt;
+extern UINT8 handhealth;
 
 #endif

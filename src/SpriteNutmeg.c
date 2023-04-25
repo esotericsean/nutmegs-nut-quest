@@ -25,8 +25,8 @@ const UINT8 anim_nutmeg_fall_left[]  = {1, 10};
 const UINT8 anim_nutmeg_land_right[] = {1, 11};
 const UINT8 anim_nutmeg_land_left[]  = {1, 11};
    
-const UINT8 anim_nutmeg_hurt_right[] = {1, 12};
-const UINT8 anim_nutmeg_hurt_left[]  = {1, 12};
+const UINT8 anim_nutmeg_hurt_right[] = {14, 12, 12, 12, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14};
+const UINT8 anim_nutmeg_hurt_left[]  = {14, 12, 12, 12, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14};
 
 direction nutmeg_direction;
 bool isjumping = true;
@@ -68,6 +68,7 @@ switcher powerupstar; //enabled or disabled
 //Sprite * spr_nutmeg2;
 Sprite * spr_camera;
 //extern struct Sprite * spr_nutmegbow;
+Sprite * nutmeg_sprite;
 
 // 0 = idle (5)
 // 1 = walking (15)
@@ -76,6 +77,8 @@ Sprite * spr_camera;
 //extern UINT8 bowanim;
 //INT8 bowoffsetX;
 //INT8 bowoffsetY;
+
+UINT8 nutmegdeathmove = 0;
 
 //reset nutmeg's state back to default
 void ResetState() {
@@ -102,6 +105,8 @@ void ResetState() {
     nutmeg_death = false;
     nutmeg_pitdeath = false;
     GameOver = false;
+
+    nutmegdeathmove = 0;
 }
 
 void Start_SpriteNutmeg() {
@@ -127,6 +132,7 @@ void Update_SpriteNutmeg() {
     UINT8 i;
     //struct Sprite* spr;
     Sprite * spr;
+    nutmeg_sprite = THIS;
     
     /*
     if (movestate == inair) {
@@ -168,13 +174,19 @@ void Update_SpriteNutmeg() {
     if (nutmeg_death == true) {
         cutscenemode = true;
 
+        nutmegdeathmove++;
+
         if (nutmeg_direction == left) {
-            SetSpriteAnim(THIS, anim_nutmeg_hurt_left, 1);
-            accelX = 100;
+            SetSpriteAnim(THIS, anim_nutmeg_hurt_left, 10);
+            
+            if (nutmegdeathmove < 10) accelX = 100;
+            else accelX = 0;
         }
         else if (nutmeg_direction == right) {
-            SetSpriteAnim(THIS, anim_nutmeg_hurt_right, 1);
-            accelX = -100;
+            SetSpriteAnim(THIS, anim_nutmeg_hurt_right, 10);
+
+            if (nutmegdeathmove < 10) accelX = -100;
+            else accelX = 0;
         }
 
         if (nutmeg_pitdeath == true) {
@@ -188,7 +200,8 @@ void Update_SpriteNutmeg() {
     /* * * * * * * * * * * * * * * * * * * */
     if (cutscenemode == disabled) {
         // death from falling into pit/water
-        if (THIS->y >= 126 && THIS->y <= 200 && nutmeg_death == false && pitdeathactive == true) {
+        // normally set to 126 and 200, testing 176 and 200
+        if (THIS->y >= 176 && THIS->y <= 200 && nutmeg_death == false && pitdeathactive == true) {
             nutmeg_death = true;
             nutmeg_pitdeath = true;
             nutmegdeathtimer = 0;
@@ -407,6 +420,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 0;
                     //SPRITE_UNSET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
+                    bowanim = 0;
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 0;
@@ -416,6 +430,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 0;
                     //SPRITE_SET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_idle_left, 5);
+                    bowanim = 1;
                 }
             }
             else if (KEY_PRESSED(J_B)) {
@@ -425,6 +440,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 1;
                     //SPRITE_UNSET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
+                    bowanim = 2;
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 2;
@@ -432,6 +448,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 1;
                     //SPRITE_SET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
+                    bowanim = 3;
                 }
             }
             else {
@@ -441,6 +458,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 1;
                     //SPRITE_UNSET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
+                    bowanim = 2;
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 1;
@@ -448,6 +466,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 1;
                     //SPRITE_SET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
+                    bowanim = 3;
                 }
             }
         }
@@ -459,6 +478,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 0;
                     //SPRITE_UNSET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
+                    bowanim = 6;
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 3;
@@ -466,6 +486,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 0;
                     //SPRITE_SET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_fall_left, 1);
+                    bowanim = 7;
                 }
             }
             else if (accelY < -60) {
@@ -475,6 +496,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 0;
                     //SPRITE_UNSET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_jump_right, 1);
+                    bowanim = 4;
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 3;
@@ -482,6 +504,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 0;
                     //SPRITE_SET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_jump_left, 1);
+                    bowanim = 5;
                 }
             }
         }
@@ -567,6 +590,7 @@ void Update_SpriteNutmeg() {
 
         if (cutscenewalkleft == false && cutscenewalkright == false && nutmeg_direction == right) {
             //SPRITE_UNSET_VMIRROR(THIS);
+            THIS->mirror = NO_MIRROR;
         }
         if (cutscenewalkleft == false && cutscenewalkright == false && nutmeg_direction == left) {
             //SPRITE_SET_VMIRROR(THIS);
@@ -656,30 +680,36 @@ void Update_SpriteNutmeg() {
                 if (nutmeg_direction == right) {
                     //bowanim = 0;
                     SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
+                    bowanim = 0;
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 0;
                     SetSpriteAnim(THIS, anim_nutmeg_idle_left, 5);
+                    bowanim = 1;
                 }
             }
             else if (KEY_PRESSED(J_B)) {
                 if (nutmeg_direction == right) {
                     //bowanim = 1;
                     SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15); //change to walk speed
+                    bowanim = 2;
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 1;
                     SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);   //run is speed 50
+                    bowanim = 3;
                 }
             }
             else {
                 if (nutmeg_direction == right) {
                     //bowanim = 1;
                     SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
+                    bowanim = 2;
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 1;
                     SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
+                    bowanim = 3;
                 }
             }
         }
@@ -688,20 +718,24 @@ void Update_SpriteNutmeg() {
                 if (nutmeg_direction == right) {
                     //bowanim = 3;
                     SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
+                    bowanim = 6;
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 3;
                     SetSpriteAnim(THIS, anim_nutmeg_fall_left, 1);
+                    bowanim = 7;
                 }
             }
             else if (accelY < -60) {
                 if (nutmeg_direction == right) {
                     //bowanim = 3;
                     SetSpriteAnim(THIS, anim_nutmeg_jump_right, 1);
+                    bowanim = 4;
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 3;
                     SetSpriteAnim(THIS, anim_nutmeg_jump_left, 1);
+                    bowanim = 5;
                 }
             }
         }
@@ -1005,6 +1039,69 @@ void Update_SpriteNutmeg() {
         }
         //die if touch earthy
         else if (spr->type == EnemyEarthy && movestate == grounded && nutmeg_death == false) {
+            if (CheckCollision(THIS, spr)) {
+                nutmeg_death = true;
+                nutmegdeathtimer = 0;
+
+                if (nutmeglives <= 0) { GameOver = true; }
+                else { nutmeglives--; }
+            }
+        }
+
+        //hurt hand if jump on it
+        if (spr->type == EnemyHand && movestate == inair && accelY > 0 && nutmeg_death == false) {
+            if (CheckCollision(THIS, spr)) {
+                PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+                isjumping = true;
+                accelY = -400;
+                jumpPeak = 0;
+                movestate = inair;
+                runJump = KEY_PRESSED(J_B) ? 1 : 0;
+
+                if (abletohurthand == true) {
+                    handhealth = handhealth + 1;
+                    abletohurthand = false;
+                }
+                
+                if (handphase == 0) handpos = 4; //hand on the right side, facing left
+                else if (handphase == 1) handpos = 9; //hand on left side, facing right
+            }
+        }
+        //die if touch hand
+        else if (spr->type == EnemyHand && accelY < 0 && nutmeg_death == false) {
+            if (CheckCollision(THIS, spr)) {
+                nutmeg_death = true;
+                nutmegdeathtimer = 0;
+
+                if (nutmeglives <= 0) { GameOver = true; }
+                else { nutmeglives--; }
+            }
+        }
+
+        //die if touch spatula
+        else if (spr->type == EnemySpatula && nutmeg_death == false) {
+            if (CheckCollision(THIS, spr)) {
+                nutmeg_death = true;
+                nutmegdeathtimer = 0;
+
+                if (nutmeglives <= 0) { GameOver = true; }
+                else { nutmeglives--; }
+            }
+        }
+
+        //die if touch spatula
+        else if (spr->type == EnemyPopsicle && nutmeg_death == false) {
+            if (CheckCollision(THIS, spr)) {
+                nutmeg_death = true;
+                nutmegdeathtimer = 0;
+
+                if (nutmeglives <= 0) { GameOver = true; }
+                else { nutmeglives--; }
+            }
+        }
+
+        //die if touch cola
+        else if (spr->type == EnemyCola && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
                 nutmeg_death = true;
                 nutmegdeathtimer = 0;

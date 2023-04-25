@@ -16,7 +16,7 @@ void Start_SpriteAcorn() {
 	THIS->coll_h = 10;*/
 
 	if (levelorientation == horizontal) {
-		THIS->lim_x = 500;
+		THIS->lim_x = 350;
 		THIS->lim_y = 144;
 	}
 	else if (levelorientation == vertical) {

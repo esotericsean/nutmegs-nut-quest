@@ -23,6 +23,10 @@ UINT8 endlevel_counter7 = 0;
 //pink color palette
 const UWORD pal_pink7[] = { RGB(31, 31, 31), RGB(19, 26, 30), RGB(28, 19, 30), RGB(0,  0,  0) };
 
+//nutmeg color palettes
+const UWORD pal_nutmegnormal7[] = { RGB(31, 31, 31), RGB(5,  24, 14), RGB(5,  19, 12), RGB(0,  0,  0) };
+const UWORD pal_nutmegblue7[] 	= { RGB(31, 31, 31), RGB(19, 22, 30), RGB(12, 13, 28), RGB(8,  8, 27) };
+
 const UINT8 collision_tiles_level7[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
 const UINT8 collision_tiles_down_level7[] = {29,30,31,32};
 
@@ -184,30 +188,32 @@ UINT8 timerclock7;
 void UpdateHud7() {
 	//health system DISPLAY
 	//health first number:
-	switch (nutmeglives - (nutmeglives % 10)) {
-		case 0:  UPDATE_HUD_TILE (3, 0, 6);  break;
-		case 10: UPDATE_HUD_TILE (3, 0, 7);  break;
-		case 20: UPDATE_HUD_TILE (3, 0, 8);  break;
-		case 30: UPDATE_HUD_TILE (3, 0, 9);  break;
-		case 40: UPDATE_HUD_TILE (3, 0, 10); break;
-		case 50: UPDATE_HUD_TILE (3, 0, 11); break;
-		case 60: UPDATE_HUD_TILE (3, 0, 12); break;
-		case 70: UPDATE_HUD_TILE (3, 0, 13); break;
-		case 80: UPDATE_HUD_TILE (3, 0, 14); break;
-		case 90: UPDATE_HUD_TILE (3, 0, 15); break;
-	}
-	//health second number:
-	switch (nutmeglives % 10) {
-		case 0: UPDATE_HUD_TILE (4, 0, 6);  break;
-		case 1: UPDATE_HUD_TILE (4, 0, 7);  break;
-		case 2: UPDATE_HUD_TILE (4, 0, 8);  break;
-		case 3: UPDATE_HUD_TILE (4, 0, 9);  break;
-		case 4: UPDATE_HUD_TILE (4, 0, 10); break;
-		case 5: UPDATE_HUD_TILE (4, 0, 11); break;
-		case 6: UPDATE_HUD_TILE (4, 0, 12); break;
-		case 7: UPDATE_HUD_TILE (4, 0, 13); break;
-		case 8: UPDATE_HUD_TILE (4, 0, 14); break;
-		case 9: UPDATE_HUD_TILE (4, 0, 15); break;
+	if (nutmeg_death == false) {
+		switch (nutmeglives - (nutmeglives % 10)) {
+			case 0:  UPDATE_HUD_TILE (3, 0, 6);  break;
+			case 10: UPDATE_HUD_TILE (3, 0, 7);  break;
+			case 20: UPDATE_HUD_TILE (3, 0, 8);  break;
+			case 30: UPDATE_HUD_TILE (3, 0, 9);  break;
+			case 40: UPDATE_HUD_TILE (3, 0, 10); break;
+			case 50: UPDATE_HUD_TILE (3, 0, 11); break;
+			case 60: UPDATE_HUD_TILE (3, 0, 12); break;
+			case 70: UPDATE_HUD_TILE (3, 0, 13); break;
+			case 80: UPDATE_HUD_TILE (3, 0, 14); break;
+			case 90: UPDATE_HUD_TILE (3, 0, 15); break;
+		}
+		//health second number:
+		switch (nutmeglives % 10) {
+			case 0: UPDATE_HUD_TILE (4, 0, 6);  break;
+			case 1: UPDATE_HUD_TILE (4, 0, 7);  break;
+			case 2: UPDATE_HUD_TILE (4, 0, 8);  break;
+			case 3: UPDATE_HUD_TILE (4, 0, 9);  break;
+			case 4: UPDATE_HUD_TILE (4, 0, 10); break;
+			case 5: UPDATE_HUD_TILE (4, 0, 11); break;
+			case 6: UPDATE_HUD_TILE (4, 0, 12); break;
+			case 7: UPDATE_HUD_TILE (4, 0, 13); break;
+			case 8: UPDATE_HUD_TILE (4, 0, 14); break;
+			case 9: UPDATE_HUD_TILE (4, 0, 15); break;
+		}
 	}
 
 	//acorns:
@@ -313,6 +319,8 @@ void Start_StateLevel7() {
 	timerclock7 = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
+
+	fish_pal_loc = 7;
 
 	nut_region = 0;
 	pitdeathactive = true;
@@ -623,33 +631,65 @@ void Update_StateLevel7() {
 		__critical { PlayMusic(flagpole, 1); }
 	}
 
-	// 0-63:
+	// 0-31:
 	if (spr_nutmeg->x > 0 && spr_nutmeg->x <= 250 && nut_region <= 0) {
-		SpriteManagerAdd(SpriteAcorn, 27*8, 12*8);
+		//generate puff to add its color palette before others
+		SpriteManagerAdd(SpritePuffLeft, 0, 0);
+		//generate star to add its color palette before others
+		SpriteManagerAdd(SpriteStarLeft, 0, 0);
+
+		SpriteManagerAdd(SpriteAcorn, 25*8, 9*8);
+		SpriteManagerAdd(SpriteAcorn, 27*8, 7*8);
+		SpriteManagerAdd(SpriteAcorn, 30*8, 7*8);
+		SpriteManagerAdd(SpriteAcorn, 32*8, 9*8);
 		nut_region = 1;
 	}
-	// Up to 94:
+	// Up to 62:
 	else if (spr_nutmeg->x > 250 && spr_nutmeg->x <= 500 && nut_region <= 1) {
+		SpriteManagerAdd(SpriteAcorn, 71*8, 9*8);
     	nut_region = 2;
 	}
-	// Up to 125:
+	// Up to 94:
 	else if (spr_nutmeg->x > 500 && spr_nutmeg->x <= 750 && nut_region <= 2) {
+		
+		SpriteManagerAdd(EnemyFish, 96*8, 15*8);
+
+		SpriteManagerAdd(SpriteAcorn, 107*8, 4*8);
+		SpriteManagerAdd(SpriteAcorn, 109*8, 6*8);
 	    nut_region = 3;
 	}
-	// Up to 156:
+	// Up to 125:
 	else if (spr_nutmeg->x > 750 && spr_nutmeg->x <= 1000 && nut_region <= 3) {
+		SpriteManagerAdd(SpriteAcorn, 123*8+4, 3*8);
+		SpriteManagerAdd(SpriteAcorn, 130*8+4, 14*8);
+		SpriteManagerAdd(EnemyBatty, 131*8, 8*8);
 	    nut_region = 4;
 	}
-	// Up to 188:
+	// Up to 156:
 	else if (spr_nutmeg->x > 1000 && spr_nutmeg->x <= 1250 && nut_region <= 4) {
+		SpriteManagerAdd(SpriteAcorn, 149*8-2, 12*8-2);
+		SpriteManagerAdd(SpriteAcorn, 150*8+2, 12*8-2);
+		SpriteManagerAdd(SpriteAcorn, 149*8-2, 13*8+2);
+		SpriteManagerAdd(SpriteAcorn, 150*8+2, 13*8+2);
+
+		SpriteManagerAdd(SpriteAcorn, 158*8+4, 14*8+4);
+		SpriteManagerAdd(SpriteAcorn, 164*8+4, 2*8+4);
 	    nut_region = 5;
 	}
-	// Up to 219:
+	// Up to 188:
 	else if (spr_nutmeg->x > 1250 && spr_nutmeg->x <= 1500 && nut_region <= 5) {
+		SpriteManagerAdd(SpriteAcorn, 168*8+4, 2*8+4);
+		SpriteManagerAdd(EnemyBatty, 183*8, 4*8);
 	    nut_region = 6;
 	}
-	// Up to 250:
+	// Up to 219:
 	else if (spr_nutmeg->x > 1500 && spr_nutmeg->x <= 1750 && nut_region <= 6) {
+		SpriteManagerAdd(SpriteAcorn, 211*8, 9*8);
+		SpriteManagerAdd(SpriteAcorn, 213*8, 7*8);
+		SpriteManagerAdd(SpriteAcorn, 216*8, 7*8);
+		SpriteManagerAdd(SpriteAcorn, 218*8, 9*8);
+		SpriteManagerAdd(EnemyButterfly, 198*8, 12*8);
+		SpriteManagerAdd(EnemyBunny, 221*8, 13*8);
 	    nut_region = 7;
 	}
 	else if (spr_nutmeg->x > 1750 && spr_nutmeg->x <= 2000 && nut_region <= 7) {

@@ -492,8 +492,8 @@ void Update_StateOverworld1() {
 			else if (W1LevelSelection == 7) SetState(StateLevel5);
 			else if (W1LevelSelection == 8) SetState(StateLevel6);
 			else if (W1LevelSelection == 9) SetState(StateLevel7);
-			//else if (W1LevelSelection == 10) SetState(StateLevel8);
-			//else if (W1LevelSelection == 11) SetState(StateLevel9);
+			else if (W1LevelSelection == 10) SetState(StateLevel8);
+			else if (W1LevelSelection == 11) SetState(StateW1Boss);
 		}
 	}
 

@@ -20,6 +20,8 @@ UINT8 flagpole_activated4 = 0;
 UINT8 flagpole_stars4 = 0;
 UINT8 endlevel_counter4 = 0;
 
+UINT8 fish_pal_loc;
+
 //pink color palette
 const UWORD pal_pink4[] = { RGB(31, 31, 31), RGB(19, 26, 30), RGB(28, 19, 30), RGB(0,  0,  0) };
 
@@ -200,30 +202,32 @@ UINT8 timerclock4;
 void UpdateHud4() {
 	//health system DISPLAY
 	//health first number:
-	switch (nutmeglives - (nutmeglives % 10)) {
-		case 0:  UPDATE_HUD_TILE (3, 0, 6);  break;
-		case 10: UPDATE_HUD_TILE (3, 0, 7);  break;
-		case 20: UPDATE_HUD_TILE (3, 0, 8);  break;
-		case 30: UPDATE_HUD_TILE (3, 0, 9);  break;
-		case 40: UPDATE_HUD_TILE (3, 0, 10); break;
-		case 50: UPDATE_HUD_TILE (3, 0, 11); break;
-		case 60: UPDATE_HUD_TILE (3, 0, 12); break;
-		case 70: UPDATE_HUD_TILE (3, 0, 13); break;
-		case 80: UPDATE_HUD_TILE (3, 0, 14); break;
-		case 90: UPDATE_HUD_TILE (3, 0, 15); break;
-	}
-	//health second number:
-	switch (nutmeglives % 10) {
-		case 0: UPDATE_HUD_TILE (4, 0, 6);  break;
-		case 1: UPDATE_HUD_TILE (4, 0, 7);  break;
-		case 2: UPDATE_HUD_TILE (4, 0, 8);  break;
-		case 3: UPDATE_HUD_TILE (4, 0, 9);  break;
-		case 4: UPDATE_HUD_TILE (4, 0, 10); break;
-		case 5: UPDATE_HUD_TILE (4, 0, 11); break;
-		case 6: UPDATE_HUD_TILE (4, 0, 12); break;
-		case 7: UPDATE_HUD_TILE (4, 0, 13); break;
-		case 8: UPDATE_HUD_TILE (4, 0, 14); break;
-		case 9: UPDATE_HUD_TILE (4, 0, 15); break;
+	if (nutmeg_death == false) {
+		switch (nutmeglives - (nutmeglives % 10)) {
+			case 0:  UPDATE_HUD_TILE (3, 0, 6);  break;
+			case 10: UPDATE_HUD_TILE (3, 0, 7);  break;
+			case 20: UPDATE_HUD_TILE (3, 0, 8);  break;
+			case 30: UPDATE_HUD_TILE (3, 0, 9);  break;
+			case 40: UPDATE_HUD_TILE (3, 0, 10); break;
+			case 50: UPDATE_HUD_TILE (3, 0, 11); break;
+			case 60: UPDATE_HUD_TILE (3, 0, 12); break;
+			case 70: UPDATE_HUD_TILE (3, 0, 13); break;
+			case 80: UPDATE_HUD_TILE (3, 0, 14); break;
+			case 90: UPDATE_HUD_TILE (3, 0, 15); break;
+		}
+		//health second number:
+		switch (nutmeglives % 10) {
+			case 0: UPDATE_HUD_TILE (4, 0, 6);  break;
+			case 1: UPDATE_HUD_TILE (4, 0, 7);  break;
+			case 2: UPDATE_HUD_TILE (4, 0, 8);  break;
+			case 3: UPDATE_HUD_TILE (4, 0, 9);  break;
+			case 4: UPDATE_HUD_TILE (4, 0, 10); break;
+			case 5: UPDATE_HUD_TILE (4, 0, 11); break;
+			case 6: UPDATE_HUD_TILE (4, 0, 12); break;
+			case 7: UPDATE_HUD_TILE (4, 0, 13); break;
+			case 8: UPDATE_HUD_TILE (4, 0, 14); break;
+			case 9: UPDATE_HUD_TILE (4, 0, 15); break;
+		}
 	}
 
 	//acorns:
@@ -329,6 +333,8 @@ void Start_StateLevel4() {
 	timerclock4 = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
+
+	fish_pal_loc = 4;
 
 	nut_region = 0;
 	pitdeathactive = true;
@@ -682,15 +688,15 @@ void Update_StateLevel4() {
 	if (spr_nutmeg->x > 0 && spr_nutmeg->x <= 250 && nut_region <= 0) {
 		SpriteManagerAdd(SpriteMushroom, 31*8, 12*8);
 		SpriteManagerAdd(EnemyFish, 16*8, 16*8);
-		SpriteManagerAdd(SpriteAcorn, 36*8, 5*8);
+		SpriteManagerAdd(SpriteAcorn, 36*8+4, 5*8);
 		nut_region = 1;
 	}
 	// Up to 94:
 	else if (spr_nutmeg->x > 250 && spr_nutmeg->x <= 500 && nut_region <= 1) {
-		SpriteManagerAdd(SpriteAcorn, 43*8, 3*8);
-		SpriteManagerAdd(SpriteAcorn, 50*8, 4*8);
-		SpriteManagerAdd(SpriteAcorn, 57*8, 3*8);
-		SpriteManagerAdd(SpriteAcorn, 64*8, 4*8);
+		SpriteManagerAdd(SpriteAcorn, 43*8+4, 3*8);
+		SpriteManagerAdd(SpriteAcorn, 50*8+4, 4*8);
+		SpriteManagerAdd(SpriteAcorn, 57*8+4, 3*8);
+		SpriteManagerAdd(SpriteAcorn, 64*8+4, 4*8);
 		SpriteManagerAdd(EnemyButterfly, 74*8, 11*8);
     	nut_region = 2;
 	}
