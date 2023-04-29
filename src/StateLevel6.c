@@ -93,7 +93,7 @@ const UWORD pal_yellow_lightest6[]    = { RGB(31, 31, 31), RGB(30, 29, 24), RGB(
 const UWORD pal_puff_fixed6[]	      = { RGB(20, 20, 20), RGB(20, 20, 20), RGB(20, 20, 20), RGB(20, 20, 20) };
 
 const UINT8 collision_tiles_level6[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
-const UINT8 collision_tiles_down_level6[] = {29,30,31,32};
+const UINT8 collision_tiles_down_level6[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(quickstart);
 DECLARE_MUSIC(ruffles);
@@ -405,7 +405,13 @@ void Start_StateLevel6() {
 	deathmusicplayed = false;
 
 	PlayMusic(quickstart, 1);
+
+	//testing:
+	health = full;
+	lostbow = false;
 	
+	//if health is full, add the bow
+	if (health == full) { SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
 	scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, 80, 12); //49
 	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49);
 
@@ -699,7 +705,8 @@ void Update_StateLevel6() {
 	if (spr_camera->x > 72*8 && spr_camera->x < 73*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_lighter6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lighter6, _current_bank);
+		if (health == low) { SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lighter6, _current_bank); }
+		else if (health == full) { SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_lighter6, _current_bank); }
 		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_lighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 4, 1, pal_acorn_lighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 5, 1, pal_birdy_lighter6, _current_bank);
@@ -708,7 +715,8 @@ void Update_StateLevel6() {
 	else if (spr_camera->x > 74*8 && spr_camera->x < 75*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_evenlighter6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_evenlighter6, _current_bank);
+		if (health == low) { SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_evenlighter6, _current_bank); }
+		else if (health == full) { SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_evenlighter6, _current_bank); }
 		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_evenlighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 4, 1, pal_acorn_evenlighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 5, 1, pal_birdy_evenlighter6, _current_bank);
@@ -717,7 +725,8 @@ void Update_StateLevel6() {
 	else if (spr_camera->x > 76*8 && spr_camera->x < 77*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_lightest6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_lightest6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lightest6, _current_bank);
+		if (health == low) { SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lightest6, _current_bank); }
+		else if (health == full) { SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_lightest6, _current_bank); }
 		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_lightest6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 4, 1, pal_acorn_lightest6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 5, 1, pal_birdy_lightest6, _current_bank);
@@ -726,7 +735,8 @@ void Update_StateLevel6() {
 	else if (spr_camera->x > 210*8 && spr_camera->x < 211*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_evenlighter6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_evenlighter6, _current_bank);
+		if (health == low) { SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_evenlighter6, _current_bank); }
+		else if (health == full) { SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_evenlighter6, _current_bank); }
 		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_evenlighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 4, 1, pal_acorn_evenlighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 5, 1, pal_birdy_evenlighter6, _current_bank);
@@ -735,7 +745,8 @@ void Update_StateLevel6() {
 	else if (spr_camera->x > 212*8 && spr_camera->x < 213*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_lighter6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lighter6, _current_bank);
+		if (health == low) { SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lighter6, _current_bank); }
+		else if (health == full) { SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_lighter6, _current_bank); }
 		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_lighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 4, 1, pal_acorn_lighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 5, 1, pal_birdy_lighter6, _current_bank);
@@ -744,7 +755,8 @@ void Update_StateLevel6() {
 	else if (spr_camera->x > 214*8 && spr_camera->x < 215*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_original6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_original6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_original6, _current_bank);
+		if (health == low) { SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_original6, _current_bank); }
+		else if (health == full) { SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_original6, _current_bank); }
 		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_original6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 4, 1, pal_acorn_original6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 5, 1, pal_birdy_original6, _current_bank);

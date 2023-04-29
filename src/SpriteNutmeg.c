@@ -1,14 +1,10 @@
 #include "Banks/SetAutoBank.h"
-
 #include "ZGBMain.h"
 #include "Scroll.h"
 #include "Keys.h"
 #include "Sound.h"
 #include "SpriteManager.h"
-
 #include "../src/GlobalVars.h"
-//#include "../res/src/nutmegbow.h"
-#include "../res/src/star.h"
 
 const UINT8 anim_nutmeg_idle_right[] = {4, 1, 2, 3, 4};
 const UINT8 anim_nutmeg_idle_left[]  = {4, 1, 2, 3, 4};
@@ -28,12 +24,14 @@ const UINT8 anim_nutmeg_land_left[]  = {1, 11};
 const UINT8 anim_nutmeg_hurt_right[] = {14, 12, 12, 12, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14};
 const UINT8 anim_nutmeg_hurt_left[]  = {14, 12, 12, 12, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14};
 
+const UINT8 anim_nutmeg_lostbow[] = {2, 11, 0};
+
 direction nutmeg_direction;
 bool isjumping = true;
 
 bool nutmeg_death = false;
 bool nutmeg_pitdeath = false;
-UINT16 nutmegdeathtimer = 0;
+UINT8 nutmegdeathtimer = 0;
 bool GameOver = false;
 
 //cutscene mode!
@@ -67,7 +65,6 @@ switcher powerupstar; //enabled or disabled
 //struct Sprite * spr_camera;
 //Sprite * spr_nutmeg2;
 Sprite * spr_camera;
-//extern struct Sprite * spr_nutmegbow;
 Sprite * nutmeg_sprite;
 
 // 0 = idle (5)
@@ -79,6 +76,9 @@ Sprite * nutmeg_sprite;
 //INT8 bowoffsetY;
 
 UINT8 nutmegdeathmove = 0;
+
+//if nutmeg loses her bow, add some kickback
+UINT8 kickbackcounter;
 
 //reset nutmeg's state back to default
 void ResetState() {
@@ -107,6 +107,8 @@ void ResetState() {
     GameOver = false;
 
     nutmegdeathmove = 0;
+
+    kickbackcounter = 0;
 }
 
 void Start_SpriteNutmeg() {
@@ -130,7 +132,6 @@ void Start_SpriteNutmeg() {
 
 void Update_SpriteNutmeg() {
     UINT8 i;
-    //struct Sprite* spr;
     Sprite * spr;
     nutmeg_sprite = THIS;
     
@@ -190,7 +191,14 @@ void Update_SpriteNutmeg() {
         }
 
         if (nutmeg_pitdeath == true) {
-            //SpriteManagerRemoveSprite(spr_nutmeg2);
+            //remove bow if have it
+            if (health == full) {
+                lostbow = true;
+                bow_counter = 0;
+                if (nutmeg_direction == right) { bowanim = 8; }
+                else if (nutmeg_direction == left) { bowanim = 9; }
+            }
+
             SpriteManagerRemoveSprite(THIS);
         }
     }
@@ -420,7 +428,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 0;
                     //SPRITE_UNSET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
-                    bowanim = 0;
+                    if (lostbow == false) { bowanim = 0; }
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 0;
@@ -430,7 +438,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 0;
                     //SPRITE_SET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_idle_left, 5);
-                    bowanim = 1;
+                    if (lostbow == false) { bowanim = 1; }
                 }
             }
             else if (KEY_PRESSED(J_B)) {
@@ -440,7 +448,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 1;
                     //SPRITE_UNSET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
-                    bowanim = 2;
+                    if (lostbow == false) { bowanim = 2; }
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 2;
@@ -448,7 +456,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 1;
                     //SPRITE_SET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
-                    bowanim = 3;
+                    if (lostbow == false) { bowanim = 3; }
                 }
             }
             else {
@@ -458,7 +466,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 1;
                     //SPRITE_UNSET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
-                    bowanim = 2;
+                    if (lostbow == false) { bowanim = 2; }
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 1;
@@ -466,7 +474,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 1;
                     //SPRITE_SET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
-                    bowanim = 3;
+                    if (lostbow == false) { bowanim = 3; }
                 }
             }
         }
@@ -478,7 +486,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 0;
                     //SPRITE_UNSET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
-                    bowanim = 6;
+                    if (lostbow == false) { bowanim = 6; }
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 3;
@@ -486,7 +494,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 0;
                     //SPRITE_SET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_fall_left, 1);
-                    bowanim = 7;
+                    if (lostbow == false) { bowanim = 7; }
                 }
             }
             else if (accelY < -60) {
@@ -496,7 +504,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 0;
                     //SPRITE_UNSET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_jump_right, 1);
-                    bowanim = 4;
+                    if (lostbow == false) { bowanim = 4; }
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 3;
@@ -504,7 +512,7 @@ void Update_SpriteNutmeg() {
                     //bowoffsetY = 0;
                     //SPRITE_SET_VMIRROR(spr_nutmegbow);
                     SetSpriteAnim(THIS, anim_nutmeg_jump_left, 1);
-                    bowanim = 5;
+                    if (lostbow == false) { bowanim = 5; }
                 }
             }
         }
@@ -531,6 +539,24 @@ void Update_SpriteNutmeg() {
             spr_camera->y = THIS->y;
         }*/
         //end
+
+        /* * * * * * * * * * * * * * * * * * * */
+        /*      kickback from losing bow       */
+        /* * * * * * * * * * * * * * * * * * * */
+        if (health == full && lostbow == true) {
+            if (kickbackcounter < 25) {
+                SetSpriteAnim(THIS, anim_nutmeg_lostbow, 30);
+
+                if (nutmeg_direction == left) {
+                    TranslateSprite (THIS, 1, 0);
+                }
+                else if (nutmeg_direction == right) {
+                    TranslateSprite (THIS, -1, 0);
+                }
+
+                kickbackcounter++;
+            }
+        }
     }
     /* * * * * * * * * * * * * * * * * * * */
     /*           cutscenemode              */
@@ -680,36 +706,36 @@ void Update_SpriteNutmeg() {
                 if (nutmeg_direction == right) {
                     //bowanim = 0;
                     SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
-                    bowanim = 0;
+                    if (lostbow == false) { bowanim = 0; }
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 0;
                     SetSpriteAnim(THIS, anim_nutmeg_idle_left, 5);
-                    bowanim = 1;
+                    if (lostbow == false) { bowanim = 1; }
                 }
             }
             else if (KEY_PRESSED(J_B)) {
                 if (nutmeg_direction == right) {
                     //bowanim = 1;
                     SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15); //change to walk speed
-                    bowanim = 2;
+                    if (lostbow == false) { bowanim = 2; }
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 1;
                     SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);   //run is speed 50
-                    bowanim = 3;
+                    if (lostbow == false) { bowanim = 3; }
                 }
             }
             else {
                 if (nutmeg_direction == right) {
                     //bowanim = 1;
                     SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
-                    bowanim = 2;
+                    if (lostbow == false) { bowanim = 2; }
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 1;
                     SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
-                    bowanim = 3;
+                    if (lostbow == false) { bowanim = 3; }
                 }
             }
         }
@@ -718,24 +744,24 @@ void Update_SpriteNutmeg() {
                 if (nutmeg_direction == right) {
                     //bowanim = 3;
                     SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
-                    bowanim = 6;
+                    if (lostbow == false) { bowanim = 6; }
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 3;
                     SetSpriteAnim(THIS, anim_nutmeg_fall_left, 1);
-                    bowanim = 7;
+                    if (lostbow == false) { bowanim = 7; }
                 }
             }
             else if (accelY < -60) {
                 if (nutmeg_direction == right) {
                     //bowanim = 3;
                     SetSpriteAnim(THIS, anim_nutmeg_jump_right, 1);
-                    bowanim = 4;
+                    if (lostbow == false) { bowanim = 4; }
                 }
                 if (nutmeg_direction == left) {
                     //bowanim = 3;
                     SetSpriteAnim(THIS, anim_nutmeg_jump_left, 1);
-                    bowanim = 5;
+                    if (lostbow == false) { bowanim = 5; }
                 }
             }
         }
@@ -816,11 +842,19 @@ void Update_SpriteNutmeg() {
         //die if touch butterfly
         else if (spr->type == EnemyButterfly && accelY < 0 && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                nutmeg_death = true;
-                nutmegdeathtimer = 0;
-
-                if (nutmeglives <= 0) { GameOver = true; }
-                else { nutmeglives--; }
+                if (health == full) {
+                    lostbow = true;
+                    bow_counter = 0;
+                    if (nutmeg_direction == right) { bowanim = 8; }
+                    else if (nutmeg_direction == left) { bowanim = 9; }
+                }
+                else if (health == low) {
+                    nutmeg_death = true;
+                    nutmegdeathtimer = 0;
+                    
+                    if (nutmeglives <= 0) { GameOver = true; }
+                    else { nutmeglives--; }
+                }
             }
         }
 
@@ -848,11 +882,19 @@ void Update_SpriteNutmeg() {
         //die if touch bunny
         else if (spr->type == EnemyBunny && movestate == grounded && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                nutmeg_death = true;
-                nutmegdeathtimer = 0;
-
-                if (nutmeglives <= 0) { GameOver = true; }
-                else { nutmeglives--; }
+                if (health == full) {
+                    lostbow = true;
+                    bow_counter = 0;
+                    if (nutmeg_direction == right) { bowanim = 8; }
+                    else if (nutmeg_direction == left) { bowanim = 9; }
+                }
+                else if (health == low) {
+                    nutmeg_death = true;
+                    nutmegdeathtimer = 0;
+                    
+                    if (nutmeglives <= 0) { GameOver = true; }
+                    else { nutmeglives--; }
+                }
             }
         }
 
@@ -880,11 +922,19 @@ void Update_SpriteNutmeg() {
         //die if touch rockith
         else if (spr->type == EnemyRockith && rockdamage == true && movestate == grounded && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                nutmeg_death = true;
-                nutmegdeathtimer = 0;
-
-                if (nutmeglives <= 0) { GameOver = true; }
-                else { nutmeglives--; }
+                if (health == full) {
+                    lostbow = true;
+                    bow_counter = 0;
+                    if (nutmeg_direction == right) { bowanim = 8; }
+                    else if (nutmeg_direction == left) { bowanim = 9; }
+                }
+                else if (health == low) {
+                    nutmeg_death = true;
+                    nutmegdeathtimer = 0;
+                    
+                    if (nutmeglives <= 0) { GameOver = true; }
+                    else { nutmeglives--; }
+                }
             }
         }
 
@@ -912,11 +962,19 @@ void Update_SpriteNutmeg() {
         //die if touch batty
         else if (spr->type == EnemyBatty && accelY < 0 && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                nutmeg_death = true;
-                nutmegdeathtimer = 0;
-
-                if (nutmeglives <= 0) { GameOver = true; }
-                else { nutmeglives--; }
+                if (health == full) {
+                    lostbow = true;
+                    bow_counter = 0;
+                    if (nutmeg_direction == right) { bowanim = 8; }
+                    else if (nutmeg_direction == left) { bowanim = 9; }
+                }
+                else if (health == low) {
+                    nutmeg_death = true;
+                    nutmegdeathtimer = 0;
+                    
+                    if (nutmeglives <= 0) { GameOver = true; }
+                    else { nutmeglives--; }
+                }
             }
         }
 
@@ -944,22 +1002,38 @@ void Update_SpriteNutmeg() {
         //die if touch batty
         else if (spr->type == EnemyBirdy && accelY < 0 && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                nutmeg_death = true;
-                nutmegdeathtimer = 0;
-
-                if (nutmeglives <= 0) { GameOver = true; }
-                else { nutmeglives--; }
+                if (health == full) {
+                    lostbow = true;
+                    bow_counter = 0;
+                    if (nutmeg_direction == right) { bowanim = 8; }
+                    else if (nutmeg_direction == left) { bowanim = 9; }
+                }
+                else if (health == low) {
+                    nutmeg_death = true;
+                    nutmegdeathtimer = 0;
+                    
+                    if (nutmeglives <= 0) { GameOver = true; }
+                    else { nutmeglives--; }
+                }
             }
         }
 
         //die if touch topspike
         if (spr->type == EnemyTopSpike && accelY < 0 && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                nutmeg_death = true;
-                nutmegdeathtimer = 0;
-
-                if (nutmeglives <= 0) { GameOver = true; }
-                else { nutmeglives--; }
+                if (health == full) {
+                    lostbow = true;
+                    bow_counter = 0;
+                    if (nutmeg_direction == right) { bowanim = 8; }
+                    else if (nutmeg_direction == left) { bowanim = 9; }
+                }
+                else if (health == low) {
+                    nutmeg_death = true;
+                    nutmegdeathtimer = 0;
+                    
+                    if (nutmeglives <= 0) { GameOver = true; }
+                    else { nutmeglives--; }
+                }
             }
         }
 
@@ -1006,13 +1080,22 @@ void Update_SpriteNutmeg() {
             }
         }
 
+        //die if get struck by lightning
         if (spr->type == EnemyLightning && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                nutmeg_death = true;
-                nutmegdeathtimer = 0;
-
-                if (nutmeglives <= 0) { GameOver = true; }
-                else { nutmeglives--; }
+                if (health == full) {
+                    lostbow = true;
+                    bow_counter = 0;
+                    if (nutmeg_direction == right) { bowanim = 8; }
+                    else if (nutmeg_direction == left) { bowanim = 9; }
+                }
+                else if (health == low) {
+                    nutmeg_death = true;
+                    nutmegdeathtimer = 0;
+                    
+                    if (nutmeglives <= 0) { GameOver = true; }
+                    else { nutmeglives--; }
+                }
             }
         }
 
@@ -1040,11 +1123,19 @@ void Update_SpriteNutmeg() {
         //die if touch earthy
         else if (spr->type == EnemyEarthy && movestate == grounded && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                nutmeg_death = true;
-                nutmegdeathtimer = 0;
-
-                if (nutmeglives <= 0) { GameOver = true; }
-                else { nutmeglives--; }
+                if (health == full) {
+                    lostbow = true;
+                    bow_counter = 0;
+                    if (nutmeg_direction == right) { bowanim = 8; }
+                    else if (nutmeg_direction == left) { bowanim = 9; }
+                }
+                else if (health == low) {
+                    nutmeg_death = true;
+                    nutmegdeathtimer = 0;
+                    
+                    if (nutmeglives <= 0) { GameOver = true; }
+                    else { nutmeglives--; }
+                }
             }
         }
 
@@ -1070,44 +1161,76 @@ void Update_SpriteNutmeg() {
         //die if touch hand
         else if (spr->type == EnemyHand && accelY < 0 && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                nutmeg_death = true;
-                nutmegdeathtimer = 0;
-
-                if (nutmeglives <= 0) { GameOver = true; }
-                else { nutmeglives--; }
+                if (health == full) {
+                    lostbow = true;
+                    bow_counter = 0;
+                    if (nutmeg_direction == right) { bowanim = 8; }
+                    else if (nutmeg_direction == left) { bowanim = 9; }
+                }
+                else if (health == low) {
+                    nutmeg_death = true;
+                    nutmegdeathtimer = 0;
+                    
+                    if (nutmeglives <= 0) { GameOver = true; }
+                    else { nutmeglives--; }
+                }
             }
         }
 
         //die if touch spatula
         else if (spr->type == EnemySpatula && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                nutmeg_death = true;
-                nutmegdeathtimer = 0;
-
-                if (nutmeglives <= 0) { GameOver = true; }
-                else { nutmeglives--; }
+                if (health == full) {
+                    lostbow = true;
+                    bow_counter = 0;
+                    if (nutmeg_direction == right) { bowanim = 8; }
+                    else if (nutmeg_direction == left) { bowanim = 9; }
+                }
+                else if (health == low) {
+                    nutmeg_death = true;
+                    nutmegdeathtimer = 0;
+                    
+                    if (nutmeglives <= 0) { GameOver = true; }
+                    else { nutmeglives--; }
+                }
             }
         }
 
-        //die if touch spatula
+        //die if touch popsicle
         else if (spr->type == EnemyPopsicle && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                nutmeg_death = true;
-                nutmegdeathtimer = 0;
-
-                if (nutmeglives <= 0) { GameOver = true; }
-                else { nutmeglives--; }
+                if (health == full) {
+                    lostbow = true;
+                    bow_counter = 0;
+                    if (nutmeg_direction == right) { bowanim = 8; }
+                    else if (nutmeg_direction == left) { bowanim = 9; }
+                }
+                else if (health == low) {
+                    nutmeg_death = true;
+                    nutmegdeathtimer = 0;
+                    
+                    if (nutmeglives <= 0) { GameOver = true; }
+                    else { nutmeglives--; }
+                }
             }
         }
 
         //die if touch cola
         else if (spr->type == EnemyCola && nutmeg_death == false) {
             if (CheckCollision(THIS, spr)) {
-                nutmeg_death = true;
-                nutmegdeathtimer = 0;
-
-                if (nutmeglives <= 0) { GameOver = true; }
-                else { nutmeglives--; }
+                if (health == full) {
+                    lostbow = true;
+                    bow_counter = 0;
+                    if (nutmeg_direction == right) { bowanim = 8; }
+                    else if (nutmeg_direction == left) { bowanim = 9; }
+                }
+                else if (health == low) {
+                    nutmeg_death = true;
+                    nutmegdeathtimer = 0;
+                    
+                    if (nutmeglives <= 0) { GameOver = true; }
+                    else { nutmeglives--; }
+                }
             }
         }
     }

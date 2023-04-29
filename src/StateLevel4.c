@@ -26,7 +26,7 @@ UINT8 fish_pal_loc;
 const UWORD pal_pink4[] = { RGB(31, 31, 31), RGB(19, 26, 30), RGB(28, 19, 30), RGB(0,  0,  0) };
 
 const UINT8 collision_tiles_level4[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
-const UINT8 collision_tiles_down_level4[] = {29,30,31,32};
+const UINT8 collision_tiles_down_level4[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(quickstart);
 DECLARE_MUSIC(mushrooms);
@@ -334,7 +334,7 @@ void Start_StateLevel4() {
 	levelorientation = horizontal;
 	SPRITES_8x16;
 
-	fish_pal_loc = 4;
+	fish_pal_loc = 3;
 
 	nut_region = 0;
 	pitdeathactive = true;
@@ -343,6 +343,12 @@ void Start_StateLevel4() {
 
 	PlayMusic(quickstart, 1);
 
+	//testing:
+	//health = full;
+	//lostbow = false;
+
+	//if health is full, add the bow
+	if (health == full) { SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
 	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49); //36
 
 	InitScrollTiles(0, &level1tiles);

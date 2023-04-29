@@ -30,7 +30,7 @@ const UWORD pal_pink5[] = { RGB(31, 31, 31), RGB(7,  8,  9), RGB(28, 19, 30), RG
 const UWORD pal_nut5[] = { RGB(31, 31, 31), RGB(25, 21, 19), RGB(23, 13, 4), RGB(2, 2, 2) };
 
 const UINT8 collision_tiles_level5[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
-const UINT8 collision_tiles_down_level5[] = {29,30,31,32};
+const UINT8 collision_tiles_down_level5[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(raindrops);
 DECLARE_MUSIC(flagpole);
@@ -299,30 +299,32 @@ UINT8 timerclock5;
 void UpdateHud5() {
 	//health system DISPLAY
 	//health first number:
-	switch (nutmeglives - (nutmeglives % 10)) {
-		case 0:  UPDATE_HUD_TILE (3, 0, 6);  break;
-		case 10: UPDATE_HUD_TILE (3, 0, 7);  break;
-		case 20: UPDATE_HUD_TILE (3, 0, 8);  break;
-		case 30: UPDATE_HUD_TILE (3, 0, 9);  break;
-		case 40: UPDATE_HUD_TILE (3, 0, 10); break;
-		case 50: UPDATE_HUD_TILE (3, 0, 11); break;
-		case 60: UPDATE_HUD_TILE (3, 0, 12); break;
-		case 70: UPDATE_HUD_TILE (3, 0, 13); break;
-		case 80: UPDATE_HUD_TILE (3, 0, 14); break;
-		case 90: UPDATE_HUD_TILE (3, 0, 15); break;
-	}
-	//health second number:
-	switch (nutmeglives % 10) {
-		case 0: UPDATE_HUD_TILE (4, 0, 6);  break;
-		case 1: UPDATE_HUD_TILE (4, 0, 7);  break;
-		case 2: UPDATE_HUD_TILE (4, 0, 8);  break;
-		case 3: UPDATE_HUD_TILE (4, 0, 9);  break;
-		case 4: UPDATE_HUD_TILE (4, 0, 10); break;
-		case 5: UPDATE_HUD_TILE (4, 0, 11); break;
-		case 6: UPDATE_HUD_TILE (4, 0, 12); break;
-		case 7: UPDATE_HUD_TILE (4, 0, 13); break;
-		case 8: UPDATE_HUD_TILE (4, 0, 14); break;
-		case 9: UPDATE_HUD_TILE (4, 0, 15); break;
+	if (nutmeg_death == false) {
+		switch (nutmeglives - (nutmeglives % 10)) {
+			case 0:  UPDATE_HUD_TILE (3, 0, 6);  break;
+			case 10: UPDATE_HUD_TILE (3, 0, 7);  break;
+			case 20: UPDATE_HUD_TILE (3, 0, 8);  break;
+			case 30: UPDATE_HUD_TILE (3, 0, 9);  break;
+			case 40: UPDATE_HUD_TILE (3, 0, 10); break;
+			case 50: UPDATE_HUD_TILE (3, 0, 11); break;
+			case 60: UPDATE_HUD_TILE (3, 0, 12); break;
+			case 70: UPDATE_HUD_TILE (3, 0, 13); break;
+			case 80: UPDATE_HUD_TILE (3, 0, 14); break;
+			case 90: UPDATE_HUD_TILE (3, 0, 15); break;
+		}
+		//health second number:
+		switch (nutmeglives % 10) {
+			case 0: UPDATE_HUD_TILE (4, 0, 6);  break;
+			case 1: UPDATE_HUD_TILE (4, 0, 7);  break;
+			case 2: UPDATE_HUD_TILE (4, 0, 8);  break;
+			case 3: UPDATE_HUD_TILE (4, 0, 9);  break;
+			case 4: UPDATE_HUD_TILE (4, 0, 10); break;
+			case 5: UPDATE_HUD_TILE (4, 0, 11); break;
+			case 6: UPDATE_HUD_TILE (4, 0, 12); break;
+			case 7: UPDATE_HUD_TILE (4, 0, 13); break;
+			case 8: UPDATE_HUD_TILE (4, 0, 14); break;
+			case 9: UPDATE_HUD_TILE (4, 0, 15); break;
+		}
 	}
 
 	//acorns:
@@ -436,6 +438,8 @@ void Start_StateLevel5() {
 
 	PlayMusic(raindrops, 1);
 
+	//if health is full, add the bow
+	if (health == full) { SpriteManagerAdd(SpriteNutmegBow, 3*8, 11*8); }
 	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 3*8, 11*8); //36
 
 	InitScrollTiles(0, &level5tiles);

@@ -28,7 +28,7 @@ orientation levelorientation;
 const UWORD pal_pink[] = { RGB(31, 31, 31), RGB(19, 26, 30), RGB(28, 19, 30), RGB(0,  0,  0) };
 
 const UINT8 collision_tiles_level1[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
-const UINT8 collision_tiles_down_level1[] = {29,30,31,32};
+const UINT8 collision_tiles_down_level1[] = {29,30,31,32,0};
 
 DECLARE_MUSIC (quickstart);
 DECLARE_MUSIC (mushrooms);
@@ -38,9 +38,7 @@ DECLARE_MUSIC (quickdeath);
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
-//extern Sprite * spr_nutmeg2;
 extern Sprite * spr_camera;
-//struct Sprite * spr_nutmegbow;
 
 //water tiles are stored in 1A, 1B, and 1C
 //in GBTD, water is 26, 27, 28
@@ -196,6 +194,9 @@ const unsigned char Letter11[] = { 0x5E };
 //nutmeg sprite region
 UINT8 nut_region;
 
+//first time playing level 1
+bool firstplay = true;
+
 bool deathmusicplayed = false;
 
 //timer counter
@@ -205,30 +206,32 @@ UINT8 timerclock1;
 void UpdateHud1() {
 	//health system DISPLAY
 	//health first number:
-	switch (nutmeglives - (nutmeglives % 10)) {
-		case 0:  UPDATE_HUD_TILE (3, 0, 6);  break;
-		case 10: UPDATE_HUD_TILE (3, 0, 7);  break;
-		case 20: UPDATE_HUD_TILE (3, 0, 8);  break;
-		case 30: UPDATE_HUD_TILE (3, 0, 9);  break;
-		case 40: UPDATE_HUD_TILE (3, 0, 10); break;
-		case 50: UPDATE_HUD_TILE (3, 0, 11); break;
-		case 60: UPDATE_HUD_TILE (3, 0, 12); break;
-		case 70: UPDATE_HUD_TILE (3, 0, 13); break;
-		case 80: UPDATE_HUD_TILE (3, 0, 14); break;
-		case 90: UPDATE_HUD_TILE (3, 0, 15); break;
-	}
-	//health second number:
-	switch (nutmeglives % 10) {
-		case 0: UPDATE_HUD_TILE (4, 0, 6);  break;
-		case 1: UPDATE_HUD_TILE (4, 0, 7);  break;
-		case 2: UPDATE_HUD_TILE (4, 0, 8);  break;
-		case 3: UPDATE_HUD_TILE (4, 0, 9);  break;
-		case 4: UPDATE_HUD_TILE (4, 0, 10); break;
-		case 5: UPDATE_HUD_TILE (4, 0, 11); break;
-		case 6: UPDATE_HUD_TILE (4, 0, 12); break;
-		case 7: UPDATE_HUD_TILE (4, 0, 13); break;
-		case 8: UPDATE_HUD_TILE (4, 0, 14); break;
-		case 9: UPDATE_HUD_TILE (4, 0, 15); break;
+	if (nutmeg_death == false) {
+		switch (nutmeglives - (nutmeglives % 10)) {
+			case 0:  UPDATE_HUD_TILE (3, 0, 6);  break;
+			case 10: UPDATE_HUD_TILE (3, 0, 7);  break;
+			case 20: UPDATE_HUD_TILE (3, 0, 8);  break;
+			case 30: UPDATE_HUD_TILE (3, 0, 9);  break;
+			case 40: UPDATE_HUD_TILE (3, 0, 10); break;
+			case 50: UPDATE_HUD_TILE (3, 0, 11); break;
+			case 60: UPDATE_HUD_TILE (3, 0, 12); break;
+			case 70: UPDATE_HUD_TILE (3, 0, 13); break;
+			case 80: UPDATE_HUD_TILE (3, 0, 14); break;
+			case 90: UPDATE_HUD_TILE (3, 0, 15); break;
+		}
+		//health second number:
+		switch (nutmeglives % 10) {
+			case 0: UPDATE_HUD_TILE (4, 0, 6);  break;
+			case 1: UPDATE_HUD_TILE (4, 0, 7);  break;
+			case 2: UPDATE_HUD_TILE (4, 0, 8);  break;
+			case 3: UPDATE_HUD_TILE (4, 0, 9);  break;
+			case 4: UPDATE_HUD_TILE (4, 0, 10); break;
+			case 5: UPDATE_HUD_TILE (4, 0, 11); break;
+			case 6: UPDATE_HUD_TILE (4, 0, 12); break;
+			case 7: UPDATE_HUD_TILE (4, 0, 13); break;
+			case 8: UPDATE_HUD_TILE (4, 0, 14); break;
+			case 9: UPDATE_HUD_TILE (4, 0, 15); break;
+		}
 	}
 
 	//acorns:
@@ -343,7 +346,14 @@ void Start_StateLevel1() {
 
 	PlayMusic(quickstart, 1);
 
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49); //36
+	//start the game off with a bow (full health)
+	if (firstplay == true) {
+		SpriteManagerAdd(SpriteNutmegBow, 4, 49);
+		health = full;
+		lostbow = false;
+		firstplay = false;
+	}
+	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49);
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level1map), &level1map, collision_tiles_level1, collision_tiles_down_level1);
@@ -361,7 +371,16 @@ void Start_StateLevel1() {
 void Update_StateLevel1() {
 	UpdateHud1();
 
-	if (timerlevel1 <= 0) nutmeg_death = true;
+	if (timerlevel1 <= 0) {
+		nutmeg_death = true;
+
+		if (health == full) {
+			lostbow = true;
+			bow_counter = 0;
+			if (nutmeg_direction == right) { bowanim = 8; }
+			else if (nutmeg_direction == left) { bowanim = 9; }
+		}
+	}
 
 	if (nutmeg_death == true) {
 		if (deathmusicplayed == false) {

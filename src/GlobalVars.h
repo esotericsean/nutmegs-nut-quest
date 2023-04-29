@@ -39,8 +39,12 @@ typedef enum { vertical, horizontal } orientation;
 //powerups
 extern amount health;
 extern UINT8 bowanim;
+extern bool lostbow;
+extern UINT8 bow_counter;
 extern switcher powerupleaf;
 extern switcher powerupstar;
+
+extern bool firstplay;
 
 //balloon pop
 extern UINT8 balloonjump;
@@ -81,7 +85,7 @@ extern bool cutscenerun;
 extern bool cutscenejump;
 extern bool nutmeg_death;
 extern bool nutmeg_pitdeath;
-extern UINT16 nutmegdeathtimer;
+extern UINT8 nutmegdeathtimer;
 
 /* * * * * * * * * * * * * * */
 /*      c u t s c e n e      */

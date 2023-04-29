@@ -136,11 +136,13 @@ void Update_StateTreeCutscene() {
 		// TURN THIS ONE BACK ON IF NUTMEG FLIES OFF THE SCREEN AGAIN!!!!!!!!!!!
 		// TURN THIS ONE BACK ON IF NUTMEG FLIES OFF THE SCREEN AGAIN!!!!!!!!!!!
 
+		spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 12*8, 49);
+		
 		SpriteManagerAdd(SpriteCinnamon, 36, 96);
 		SpriteManagerAdd(SpriteRuby, 36+11, 96);
 		SpriteManagerAdd(SpriteMaple, 36+20, 96);
 
-		spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 12*8, 49);
+		//spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 12*8, 49);
 		//spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 52+48, 49);
 	}
 
