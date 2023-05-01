@@ -18,6 +18,11 @@ _STATE(StateGameOver)\
 _STATE(StateLevel3)\
 _STATE(StateLevel4)\
 _STATE(StateLevel5)\
+_STATE(StateLevel6)\
+_STATE(StateLevel7)\
+_STATE(StateScroll)\
+_STATE(StateLevel8)\
+_STATE(StateW1Boss)\
 STATE_DEF_END
 
 #define SPRITES \
@@ -60,6 +65,12 @@ _SPRITE_DMG(EnemyBatty, batty)\
 _SPRITE_DMG(EnemyLightning, lightning)\
 _SPRITE_DMG(EnemyLightningSpot, lightningspot)\
 _SPRITE_DMG(EnemyEarthy, earthy)\
+_SPRITE_DMG(EnemyBirdy, birdy)\
+_SPRITE_DMG(SpriteBalloon, balloon)\
+_SPRITE_DMG(EnemyHand, hand)\
+_SPRITE_DMG(EnemySpatula, spatula)\
+_SPRITE_DMG(EnemyPopsicle, popsicle)\
+_SPRITE_DMG(EnemyCola, cola)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"
