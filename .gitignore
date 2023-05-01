@@ -52,3 +52,8 @@ WORK/
 *.asm
 *.d
 *.sym
+src/ARCHIVE/
+src/TEMP MOVE/
+res/ARCHIVE/
+res/src/
+res/sprites/ARCHIVE/

@@ -54,36 +54,8 @@ DECLARE_MUSIC(chase);
 
 UWORD leafPalette[] = { 0, RGB(8, 23, 8), RGB(5, 19, 12), 0 };
 
-volatile UINT8 next_interrupt_ly;
-volatile UINT8 backgroundoffset1x;
-volatile UINT8 backgroundoffset2x;
-volatile UINT8 backgroundoffset3x;
-
-extern void LCD_isr();
-
-void interruptLCD() {
-    switch (next_interrupt_ly) {
-        case 0x00:
-            LYC_REG = next_interrupt_ly = 0x58; //pixel 72 (0x48)
-            move_bkg (backgroundoffset1x, 0);
-            break;
-        case 0x58:
-            LYC_REG = next_interrupt_ly = 0x60; //pixel 96 (0x60)
-            move_bkg (backgroundoffset2x, 0);
-            break;
-        case 0x60:
-            LYC_REG = next_interrupt_ly = 0x00;
-            move_bkg (backgroundoffset3x, 0);
-            break;
-    }
-}
-
 void Start_StateTitle() {
     PlayMusic(chase, 1);
-
-    backgroundoffset1x = 0;
-    backgroundoffset2x = 0;
-    backgroundoffset3x = 0;
     
     SPRITES_8x8;
 
@@ -94,17 +66,13 @@ void Start_StateTitle() {
 
     SHOW_SPRITES;
 
-    __critical {
-        remove_LCD (LCD_isr);
-        add_LCD (interruptLCD);
-        STAT_REG |= 0x40;
-        LYC_REG = 160u;
-    }
-    //set_interrupts (VBL_IFLAG | TIM_IFLAG | LCD_IFLAG);
-    set_interrupts (VBL_IFLAG | LCD_IFLAG);
-
     InitScrollTiles (0, &titletiles);
     InitScroll (BANK(titlemap), &titlemap, collision_tiles_title, 0);
+
+    UINT8 i;
+    for (i = 21; i < 32; ++i) {
+		ScrollUpdateColumn (i, 0);
+	}
 
     SHOW_BKG;
 
@@ -122,16 +90,6 @@ void Start_StateTitle() {
 }
 
 void Update_StateTitle() {
-    if (title_counter > 190) {
-        backgroundoffset1x += 0;
-        backgroundoffset2x += 1;
-        backgroundoffset3x += 0;
-
-        interruptLCD();
-
-        wait_vbl_done();
-    }
-    
     if (title_counter >= 0 && title_counter < 1) {
         SetPalette(SPRITES_PALETTE, 0, 1, leafPalette, _current_bank);
     }
@@ -183,22 +141,26 @@ void Update_StateTitle() {
     }
        
     if (acorn_position == 1 && KEY_PRESSED(J_START)) {
+        /*
         __critical {
             remove_LCD (interruptLCD);
             disable_interrupts();
             add_LCD (LCD_isr);
             enable_interrupts();
         }
+        */
 
         SetState (StateTreeCutscene);
     }
     else if (acorn_position == 2 && KEY_PRESSED(J_START)) {
+        /*
         __critical {
             remove_LCD (interruptLCD);
             disable_interrupts();
             add_LCD (LCD_isr);
             enable_interrupts();
         }
+        */
 
         SetState (StateTreeCutscene);
     }
