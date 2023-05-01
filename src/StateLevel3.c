@@ -707,11 +707,11 @@ void Update_StateLevel3() {
 	// Up to 125:
 	else if (spr_nutmeg->y > 250 && spr_nutmeg->y <= 375 && nut_region <= 2) {
 		SpriteManagerAdd(EnemyRockith, 20*8, 33*8);
-		SpriteManagerAdd(SpriteRock, 20*8, 32*8);
-		SpriteManagerAdd(SpriteRock, 26*8, 32*8);
+		//SpriteManagerAdd(SpriteRock, 20*8, 32*8);
+		//SpriteManagerAdd(SpriteRock, 26*8, 32*8);
 		SpriteManagerAdd(EnemyTopSpike, 12*8, 38*8);
 		SpriteManagerAdd(EnemyBatty, 26*8, 40*8);
-		SpriteManagerAdd(SpriteRock, 10*8, 41*8);
+		//SpriteManagerAdd(SpriteRock, 10*8, 41*8);
 	    nut_region = 3;
 	}
 	// Up to 156:
@@ -730,9 +730,9 @@ void Update_StateLevel3() {
 	}
 	// Up to 219:
 	else if (spr_nutmeg->y > 625 && spr_nutmeg->y <= 750 && nut_region <= 5) {
-		SpriteManagerAdd(SpriteRock, 22*8, 82*8);
+		//SpriteManagerAdd(SpriteRock, 22*8, 82*8);
 		SpriteManagerAdd(EnemyRockith, 20*8, 92*8);
-		SpriteManagerAdd(SpriteRock, 26*8, 91*8);
+		//SpriteManagerAdd(SpriteRock, 26*8, 91*8);
 		//SpriteManagerAdd(SpriteRock, 10*8, 91*8);
 		SpriteManagerAdd(SpriteAcorn, 4*8, 79*8);
 		SpriteManagerAdd(SpriteAcorn, 4*8, 83*8);
