@@ -36,6 +36,19 @@
 ehthumbs.db
 Thumbs.db
 
-# Folders to ignore #
-#####################
+# Things to ignore #
+####################
 .vscode/
+bin/
+Debug/
+Release/
+ReleaseColor/
+WORK/
+*.bat
+*.sln
+*.vcxproj
+*.filters
+*.o
+*.asm
+*.d
+*.sym
