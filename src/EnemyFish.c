@@ -52,6 +52,7 @@ void Update_EnemyFish() {
 	if (fishcounter >= 120 && fishcounter < 140) THIS->mirror = V_MIRROR;
 	if (fishcounter >= 140 && fishcounter < 156) THIS->mirror = NO_MIRROR;
 
+	/*
 	if (fish_pal_loc == 3) {
 		if (THIS->y > 112) {
 			SetPalette(SPRITES_PALETTE, 3, 1, pal_fishblue4, _current_bank);
@@ -75,6 +76,14 @@ void Update_EnemyFish() {
 		else if (THIS->y <= 112) {
 			SetPalette(SPRITES_PALETTE, 4, 1, pal_fishgreen4, _current_bank);
 		}
+	}
+	*/
+
+	if (THIS->y > 112) {
+			SetPalette(SPRITES_PALETTE, fish_pal_loc, 1, pal_fishblue4, _current_bank);
+	}
+	else if (THIS->y <= 112) {
+		SetPalette(SPRITES_PALETTE, fish_pal_loc, 1, pal_fishgreen4, _current_bank);
 	}
 
 	fishcounter++;
