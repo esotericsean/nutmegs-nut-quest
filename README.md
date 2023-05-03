@@ -12,5 +12,3 @@ As of November 4, 2022, Nutmeg has now been updated to [ZGB 2022.0](https://gith
 ## Where to Get It
 
 Nutmeg will be sold exclusively through Incube8 Games! Release date TBA. Hoping to release on a physical cartridge.
-
-[https://twitter.com/esotericsean](https://img.shields.io/twitter/follow/esotericsean)
