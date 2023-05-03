@@ -25,6 +25,8 @@ UINT8 endlevel_counter6 = 0;
 //pink color palette
 const UWORD pal_pink6[] = { RGB(31, 31, 31), RGB(19, 26, 30), RGB(28, 19, 30), RGB(0,  0,  0) };
 
+// BACKGROUND TILE COLOR PALETTES
+
 //grass color palette - ORIGINAL
 const UWORD pal_grass_original6[]    = { RGB(14, 30, 14), RGB( 1, 26,  0), RGB(19, 14, 0), RGB(0, 0, 0) };
 //grass color palette - LIGHTER
@@ -42,6 +44,8 @@ const UWORD pal_wood_lighter6[]     = { RGB(31, 31, 31), RGB(30, 26, 20), RGB(22
 const UWORD pal_wood_evenlighter6[] = { RGB(31, 31, 31), RGB(30, 27, 24), RGB(28, 23, 0), RGB(12, 12, 12) };
 //wood color palette - LIGHTEST!!!
 const UWORD pal_wood_lightest6[]    = { RGB(31, 31, 31), RGB(30, 29, 28), RGB(30, 29, 26), RGB(24, 24, 24) };
+
+// SPRITE COLOR PALETTES
 
 //nutmeg color palette - ORIGINAL
 const UWORD pal_nutmeg_original6[]    = { RGB(31, 31, 31), RGB(31, 27, 23), RGB(31, 17, 6), RGB(0, 0, 0) };

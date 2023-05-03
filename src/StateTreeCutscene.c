@@ -22,6 +22,7 @@ IMPORT_MAP (treemap);
 //direction nutmeg_direction;
 //switcher cutscenemode;
 
+/*
 const UINT16 bg_palette_tree[] = {
 	PALETTE_FROM_HEADER(treetiles)
 };
@@ -30,6 +31,7 @@ const UINT16 sprites_palette_tree[] = {
 	PALETTE_INDEX (nutmeg, 0),
 	PALETTE_INDEX (puff, 4)
 };
+*/
 
 UINT8 collision_tiles_tree[] = {2,3,4,5,7,8,9,10,12,49,50,51,52,53,54,55,56,57,58, 0};
 
@@ -42,7 +44,7 @@ extern Sprite * spr_nutmeg;
 //extern Sprite * spr_nutmeg2;
 //extern struct Sprite * spr_camera;
 
-UINT16 cutscenetimer = 0;
+UINT8 cutscenetimer = 0;
 
 const unsigned char font_blank2[] = {
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -85,14 +87,14 @@ void Start_StateTreeCutscene() {
 
 	//for (i = 0; i != N_SPRITE_TYPES; ++ i) { SpriteManagerLoad(i); }
 	//SpriteManagerLoad(5);   //camera
-	SpriteManagerLoad(2);  	//acorn
-	SpriteManagerLoad(35);  	//nutmeg
+	//SpriteManagerLoad(2);  	//acorn
+	//SpriteManagerLoad(35);  	//nutmeg
 	//SpriteManagerLoad(7);  	//nutmeg2
 	//SpriteManagerLoad(12); 	//puff1
 	//SpriteManagerLoad(13); 	//puff2
-	SpriteManagerLoad(14); 	//cinnamon
-	SpriteManagerLoad(15); 	//maple
-	SpriteManagerLoad(28); 	//ruby
+	//SpriteManagerLoad(14); 	//cinnamon
+	//SpriteManagerLoad(15); 	//maple
+	//SpriteManagerLoad(28); 	//ruby
 
 	//scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera,  36, 49);
 	//spr_nutmeg1 = SpriteManagerAdd(SpriteNutmeg1, 36+48, 49);

@@ -24,7 +24,7 @@ UINT16 cutscenegordoncounter;
 UINT8 cutscenegordonspeed;
 UINT8 cutscenegordonspeedlimit;
 
-const UINT8 collision_tiles_cutscenegordon[] = {3,4};
+const UINT8 collision_tiles_cutscenegordon[] = {3,4,0};
 
 /*
 const UWORD pal_cut13[] = {
@@ -83,6 +83,7 @@ const UWORD acornPalette[] = {
 Sprite * spr_nutmeg;
 //extern Sprite * spr_nutmeg2;
 
+/*
 const UINT16 bg_palette_cutscenegordon[] = {
     PALETTE_FROM_HEADER (cutscenegordontiles)
 };
@@ -92,6 +93,7 @@ const UINT16 sprites_palette_cutscenegordon[] = {
     PALETTE_INDEX (nutmeg, 0),
 	PALETTE_INDEX (acorn, 1)
 };
+*/
 
 //extern UINT8* oaktree_mod_Data[];
 
@@ -115,12 +117,12 @@ void Start_StateCutsceneGordon() {
 
     //set_sprite_palette(1, 1, acornPalette); //start at BG1 and load 1 palette
 
-    SpriteManagerLoad(35);   //nutmeg
+    //SpriteManagerLoad(35);   //nutmeg
     //SpriteManagerLoad(7);   //nutmeg2
-    SpriteManagerLoad(24);  //gordon1
-    SpriteManagerLoad(25);  //gordon2
-    SpriteManagerLoad(2);   //acorn
-    SpriteManagerLoad(29);  //gordon camera
+    //SpriteManagerLoad(24);  //gordon1
+    //SpriteManagerLoad(25);  //gordon2
+    //SpriteManagerLoad(2);   //acorn
+    //SpriteManagerLoad(29);  //gordon camera
 
     spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 8, 96);
     //spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 4+16, 96);
