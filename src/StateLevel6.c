@@ -700,71 +700,73 @@ void Update_StateLevel6() {
 		//SetState(StateOverworld1);
 	}
 
-	if (spr_nutmeg->x > 13*8) {
+	//switched puff to Nutmeg's palette, so leave it alone for this level
+	/*if (spr_nutmeg->x > 13*8) {
 		SetPalette(SPRITES_PALETTE, 3, 1, pal_puff_fixed6, _current_bank);
-	}
+	}*/
+
+	// Sprites:
+	// 0 = yellow (bow, butterfly, star)
+	// 1 = orange (nutmeg, puff)
+	// 2 = red (balloon)
+	// 3 = brown (acorn)
+	// 4 = blue (bird)
 
 	// set palettes while going through cloud
 	// grass is 0, wood is 5, nutmeg is sprite 0
 	if (spr_camera->x > 72*8 && spr_camera->x < 73*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_lighter6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_lighter6, _current_bank);
-		if (health == low) { SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lighter6, _current_bank); }
-		else if (health == full) { SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_lighter6, _current_bank); }
+		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 4, 1, pal_acorn_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 5, 1, pal_birdy_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 6, 1, pal_yellow_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 3, 1, pal_acorn_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 4, 1, pal_birdy_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 0, 1, pal_yellow_lighter6, _current_bank);
 	}
 	else if (spr_camera->x > 74*8 && spr_camera->x < 75*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_evenlighter6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_evenlighter6, _current_bank);
-		if (health == low) { SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_evenlighter6, _current_bank); }
-		else if (health == full) { SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_evenlighter6, _current_bank); }
+		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_evenlighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 4, 1, pal_acorn_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 5, 1, pal_birdy_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 6, 1, pal_yellow_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 3, 1, pal_acorn_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 4, 1, pal_birdy_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 0, 1, pal_yellow_evenlighter6, _current_bank);
 	}
 	else if (spr_camera->x > 76*8 && spr_camera->x < 77*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_lightest6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_lightest6, _current_bank);
-		if (health == low) { SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lightest6, _current_bank); }
-		else if (health == full) { SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_lightest6, _current_bank); }
+		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lightest6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_lightest6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 4, 1, pal_acorn_lightest6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 5, 1, pal_birdy_lightest6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 6, 1, pal_yellow_lightest6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 3, 1, pal_acorn_lightest6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 4, 1, pal_birdy_lightest6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 0, 1, pal_yellow_lightest6, _current_bank);
 	}
 	else if (spr_camera->x > 210*8 && spr_camera->x < 211*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_evenlighter6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_evenlighter6, _current_bank);
-		if (health == low) { SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_evenlighter6, _current_bank); }
-		else if (health == full) { SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_evenlighter6, _current_bank); }
+		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_evenlighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 4, 1, pal_acorn_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 5, 1, pal_birdy_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 6, 1, pal_yellow_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 3, 1, pal_acorn_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 4, 1, pal_birdy_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 0, 1, pal_yellow_evenlighter6, _current_bank);
 	}
 	else if (spr_camera->x > 212*8 && spr_camera->x < 213*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_lighter6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_lighter6, _current_bank);
-		if (health == low) { SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lighter6, _current_bank); }
-		else if (health == full) { SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_lighter6, _current_bank); }
+		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 4, 1, pal_acorn_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 5, 1, pal_birdy_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 6, 1, pal_yellow_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 3, 1, pal_acorn_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 4, 1, pal_birdy_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 0, 1, pal_yellow_lighter6, _current_bank);
 	}
 	else if (spr_camera->x > 214*8 && spr_camera->x < 215*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_original6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_original6, _current_bank);
-		if (health == low) { SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_original6, _current_bank); }
-		else if (health == full) { SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_original6, _current_bank); }
+		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_original6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_original6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 4, 1, pal_acorn_original6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 5, 1, pal_birdy_original6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 6, 1, pal_yellow_original6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 3, 1, pal_acorn_original6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 4, 1, pal_birdy_original6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 0, 1, pal_yellow_original6, _current_bank);
 	}
 
 	// 0-63:

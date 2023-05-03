@@ -16,7 +16,7 @@ UINT8 balloonpopcount;
 
 void Start_SpriteBalloon() {
 	if (levelorientation == horizontal) {
-		THIS->lim_x = 350;
+		THIS->lim_x = 160; //350
 		THIS->lim_y = 144;
 	}
 	else if (levelorientation == vertical) {
