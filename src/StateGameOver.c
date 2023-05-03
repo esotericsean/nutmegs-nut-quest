@@ -47,7 +47,7 @@ const UWORD pal_nutmegdark[] = {
 	RGB(8, 8, 8)
 };
 
-const UINT8 collision_tiles_gameover[] = {10};
+const UINT8 collision_tiles_gameover[] = {10,0};
 
 //extern UINT8* gameover_mod_Data[];
 DECLARE_MUSIC(gameover);
@@ -67,13 +67,13 @@ void Start_StateGameOver() {
 	//SetPalette (BG_PALETTE, 0, 8, bg_palette_gameover, bank_StateGameOver);
 	//SetPalette (SPRITES_PALETTE, 0, 8, sprites_palette_gameover, bank_StateGameOver);
 
-	SpriteManagerLoad(2);  //acorn
-	SpriteManagerLoad(5);  //camera
-	SpriteManagerLoad(35); //nutmeg
-	SpriteManagerLoad(12); //puff
-	SpriteManagerLoad(13); //puff
+	//SpriteManagerLoad(2);  //acorn
+	//SpriteManagerLoad(5);  //camera
+	//SpriteManagerLoad(35); //nutmeg
+	//SpriteManagerLoad(12); //puff
+	//SpriteManagerLoad(13); //puff
 
-	scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, 4, 49);
+	//scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, 4, 49);
 	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 16, 49);
 	//spr_nutmeg2 = SpriteManagerAdd(SpriteNutmeg2, 20, 49);
 	
@@ -93,8 +93,8 @@ void Start_StateGameOver() {
 
 void Update_StateGameOver() {
 	//set_sprite_palette (0, 1, pal_nutmegdark);
-	SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmegdark, _current_bank);
-	SetPalette(SPRITES_PALETTE, 3, 1, pal_nutmegdark, _current_bank);
+	SetPalette(SPRITES_PALETTE, 0, 1, pal_nutmegdark, _current_bank);
+	//SetPalette(SPRITES_PALETTE, 3, 1, pal_nutmegdark, _current_bank);
 	//set_sprite_palette_entry (0, 3, RGB(8, 8, 8)); //nutmeg light outline
 	//set_sprite_palette_entry (1, 3, RGB(8, 8, 8)); //acorn light outline
 

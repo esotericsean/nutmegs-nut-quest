@@ -583,7 +583,7 @@ void Update_StateLevel6() {
 
 		if (level6cameracount == 2) {
 			//TranslateSprite (spr_camera, 1, 0);
-			spr_camera->x++;
+			if (spr_camera->x < 237*8) { spr_camera->x++; } //stop moving at end
 		}
 	}
 
@@ -771,7 +771,7 @@ void Update_StateLevel6() {
 
 	// 0-63:
 	if (spr_camera->x > 0 && spr_camera->x <= 250 && nut_region <= 0) {
-		SpriteManagerAdd(SpriteBalloon, 7*8, 7*8);
+		//SpriteManagerAdd(SpriteBalloon, 7*8, 7*8);
 		SpriteManagerAdd(SpriteBalloon, 13*8-2, 15*8);
 		SpriteManagerAdd(SpritePuffLeft, 0*8, 13*8);
 		SpriteManagerAdd(SpriteAcorn, 34*8, 12*8);
@@ -807,12 +807,13 @@ void Update_StateLevel6() {
 		SpriteManagerAdd(SpriteAcorn, 140*8, 7*8);
 		SpriteManagerAdd(SpriteAcorn, 142*8, 7*8);
 		SpriteManagerAdd(SpriteBalloon, 146*8, 9*8);
+		SpriteManagerAdd(EnemyBirdy, 152*8, 5*8);
 	    nut_region = 4;
 	}
 	// Up to 188:
 	else if (spr_camera->x > 1000 && spr_camera->x <= 1250 && nut_region <= 4) {
-		SpriteManagerAdd(SpriteBalloon, 163*8, 13*8);
-		SpriteManagerAdd(EnemyButterfly, 172*8, 8*8);
+		SpriteManagerAdd(SpriteBalloon, 163*8, 17*8);
+		SpriteManagerAdd(EnemyButterfly, 184*8, 8*8);
 		SpriteManagerAdd(SpriteAcorn, 185*8, 7*8);
 		SpriteManagerAdd(SpriteAcorn, 185*8, 9*8);
 	    nut_region = 5;
@@ -821,11 +822,12 @@ void Update_StateLevel6() {
 	else if (spr_camera->x > 1250 && spr_camera->x <= 1500 && nut_region <= 5) {
 		SpriteManagerAdd(SpriteAcorn, 205*8, 12*8);
 		SpriteManagerAdd(EnemyBirdy, 218*8, 10*8);
+		SpriteManagerAdd(SpriteAcorn, 224*8, 7*8);
 		nut_region = 6;
 	}
 	// Up to 250:
 	else if (spr_camera->x > 1500 && spr_camera->x <= 1750 && nut_region <= 6) {
-		SpriteManagerAdd(EnemyBirdy, 231*8, 11*8);
+		SpriteManagerAdd(SpriteBalloon, 228*8, 16*8);
 	    nut_region = 7;
 	}
 	else if (spr_camera->x > 1750 && spr_camera->x <= 2000 && nut_region <= 7) {

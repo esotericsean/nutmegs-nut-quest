@@ -320,7 +320,7 @@ void Start_StateLevel7() {
 	levelorientation = horizontal;
 	SPRITES_8x16;
 
-	fish_pal_loc = 7;
+	fish_pal_loc = 3;
 
 	nut_region = 0;
 	pitdeathactive = true;
