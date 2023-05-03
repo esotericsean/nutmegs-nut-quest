@@ -496,7 +496,7 @@ void Update_StateLevel5() {
 		//Make Nutmeg Walk In
 		if (level5counter == 0) {
 			cutscenewalkright = false;
-			SetPalette (SPRITES_PALETTE, 0, 1, pal_nut5, _current_bank);
+			//SetPalette (SPRITES_PALETTE, 0, 1, pal_nut5, _current_bank);
 		}
 		else if (level5counter == 100) {
 			cutscenemode = disabled;

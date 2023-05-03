@@ -334,7 +334,8 @@ void Start_StateLevel4() {
 	levelorientation = horizontal;
 	SPRITES_8x16;
 
-	fish_pal_loc = 3;
+	if (health == full) fish_pal_loc = 3;
+	else fish_pal_loc = 2;
 
 	nut_region = 0;
 	pitdeathactive = true;
