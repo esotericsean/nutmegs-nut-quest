@@ -1,6 +1,8 @@
 #ifndef ZGBMAIN_H
 #define ZGBMAIN_H
 
+//test
+
 #define STATES \
 _STATE(StateIncube8)\
 _STATE(StateLogo)\
