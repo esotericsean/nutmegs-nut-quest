@@ -632,6 +632,9 @@ void Update_StateLevel8() {
 		SpriteManagerAdd(SpriteAcorn, 11*8+4, 0*8+4);
 		SpriteManagerAdd(SpriteAcorn, 37*8, 13*8);
 		SpriteManagerAdd(SpriteMushroom, 53*8, 18*8);
+		SpriteManagerAdd(EnemyBirdy, 80*8, 19*8);
+		SpriteManagerAdd(SpriteAcorn, 80*8, 11*8);
+		SpriteManagerAdd(EnemyBirdy, 89*8, 19*8);
 		nut_region = 1;
 	}
 	// Up to 94:
@@ -641,23 +644,41 @@ void Update_StateLevel8() {
 	}
 	// Up to 125:
 	else if (spr_nutmeg->x > 500 && spr_nutmeg->x <= 750 && nut_region <= 2) {
+		SpriteManagerAdd(SpriteAcorn, 100*8+4, 11*8);
 		SpriteManagerAdd(SpriteAcorn, 102*8+4, 15*8+4);
+		SpriteManagerAdd(EnemyBunny, 110*8, 14*8);
 	    nut_region = 3;
 	}
 	// Up to 156:
 	else if (spr_nutmeg->x > 750 && spr_nutmeg->x <= 1000 && nut_region <= 3) {
+		SpriteManagerAdd(SpriteAcorn, 125*8, 17*8);
+		SpriteManagerAdd(SpriteAcorn, 155*8, 1*8);
 	    nut_region = 4;
 	}
 	// Up to 188:
 	else if (spr_nutmeg->x > 1000 && spr_nutmeg->x <= 1250 && nut_region <= 4) {
+		SpriteManagerAdd(SpriteAcorn, 157*8, 1*8);
+		SpriteManagerAdd(SpriteAcorn, 159*8, 2*8);
+		SpriteManagerAdd(EnemyBirdy, 159*8+4, 18*8);
+		SpriteManagerAdd(SpriteAcorn, 161*8, 4*8);
+		SpriteManagerAdd(EnemyButterfly, 177*8, 11*8);
+		SpriteManagerAdd(EnemyBunny, 185*8, 18*8);
 	    nut_region = 5;
 	}
 	// Up to 219:
 	else if (spr_nutmeg->x > 1250 && spr_nutmeg->x <= 1500 && nut_region <= 5) {
+		SpriteManagerAdd(SpriteAcorn, 190*8, 8*8);
+		SpriteManagerAdd(SpriteAcorn, 192*8, 15*8);
+		SpriteManagerAdd(SpriteAcorn, 198*8, 16*8);
+		SpriteManagerAdd(SpriteAcorn, 200*8, 6*8);
+		SpriteManagerAdd(EnemyButterfly, 212*8, 13*8);
+		SpriteManagerAdd(EnemyBunny, 220*8, 18*8);
 	    nut_region = 6;
 	}
 	// Up to 250:
 	else if (spr_nutmeg->x > 1500 && spr_nutmeg->x <= 1750 && nut_region <= 6) {
+		SpriteManagerAdd(SpriteAcorn, 211*8, 4*8);
+		SpriteManagerAdd(EnemyBirdy, 235*8, 14*8);
 	    nut_region = 7;
 	}
 	else if (spr_nutmeg->x > 1750 && spr_nutmeg->x <= 2000 && nut_region <= 7) {
