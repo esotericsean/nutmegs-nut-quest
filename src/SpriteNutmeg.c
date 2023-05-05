@@ -792,6 +792,7 @@ void Update_SpriteNutmeg() {
     /* * * * * * * * * * * * * * * * * * * */
     /*         items and enemies           */
     /* * * * * * * * * * * * * * * * * * * */
+
     SPRITEMANAGER_ITERATE(i, spr) {
         if (spr->type == SpriteAcorn) {
             if (CheckCollision(THIS, spr)) {
@@ -806,17 +807,6 @@ void Update_SpriteNutmeg() {
                 //PlayFx(CHANNEL_4, 4, 0x0C, 0x41, 0x30, 0xC0);
             }
         }
-
-        /*
-        if (spr->type == SpritePowerLeaf) {
-            if (CheckCollision(THIS, spr)) {
-                SpriteManagerRemove(i);
-                //getAcorns += 1;
-                PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
-                PlayFx(CHANNEL_4, 4, 0x0C, 0x41, 0x30, 0xC0);
-            }
-        }
-        */
 
         //kill butterfly if jump on it
         if (spr->type == EnemyButterfly && movestate == inair && accelY > 0 && nutmeg_death == false) {
