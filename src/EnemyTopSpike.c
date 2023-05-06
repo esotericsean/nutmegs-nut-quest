@@ -1,15 +1,14 @@
 #include "Banks/SetAutoBank.h"
+#include "ZGBMain.h"
+#include "Scroll.h"
 #include "SpriteManager.h"
 #include "../src/GlobalVars.h"
+
+extern Sprite * nutmeg_sprite;
 
 const UINT8 anim_topspike_idle[] = {1, 0};
 
 void Start_EnemyTopSpike() {
-	/*THIS->coll_x = 0;
-	THIS->coll_y = 3;
-	THIS->coll_w = 8;
-	THIS->coll_h = 5;*/
-
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
@@ -20,11 +19,26 @@ void Start_EnemyTopSpike() {
 	}
 
 	SetSpriteAnim(THIS, anim_topspike_idle, 1);
-	//SPRITE_UNSET_VMIRROR(THIS);
 	THIS->mirror = NO_MIRROR;
 }
 
 void Update_EnemyTopSpike() {
+	//die if touch topspike
+	if (CheckCollision(THIS, nutmeg_sprite) && accelY < 0 && nutmeg_death == false) {
+		if (health == full) {
+			lostbow = true;
+			bow_counter = 0;
+			if (nutmeg_direction == right) { bowanim = 8; }
+			else if (nutmeg_direction == left) { bowanim = 9; }
+		}
+		else if (health == low) {
+			nutmeg_death = true;
+			nutmegdeathtimer = 0;
+			
+			if (nutmeglives <= 0) { GameOver = true; }
+			else { nutmeglives--; }
+		}
+	}
 }
 
 void Destroy_EnemyTopSpike() {

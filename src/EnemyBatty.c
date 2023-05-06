@@ -1,6 +1,11 @@
 #include "Banks/SetAutoBank.h"
+#include "ZGBMain.h"
+#include "Scroll.h"
 #include "SpriteManager.h"
+#include "Sound.h"
 #include "../src/GlobalVars.h"
+
+extern Sprite * nutmeg_sprite;
 
 const UINT8 anim_batty_fly[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
 
@@ -25,19 +30,55 @@ void Update_EnemyBatty() {
 	if (battycounter >= 0 && battycounter < 30) {
 		TranslateSprite(THIS, 0, 1);
 	}
-	else if (battycounter >= 30 && battycounter < 90) {
+	//else if (battycounter >= 30 && battycounter < 90) {
 		//stay still
-	}
+	//}
 	else if (battycounter >= 90 && battycounter < 120) {
 		TranslateSprite(THIS, 0, -1);
 	}
-	else if (battycounter >= 120 && battycounter < 180) {
+	//else if (battycounter >= 120 && battycounter < 180) {
 		//stay still
-	}
+	//}
 
 	battycounter++;
 
 	if (battycounter >= 180) battycounter = 0;
+
+	//kill batty if jump on it
+	if (CheckCollision(THIS, nutmeg_sprite) && movestate == inair && accelY > 0 && nutmeg_death == false) {
+		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+		isjumping = true;
+		accelY = -600;
+		jumpPeak = 0;
+		movestate = inair;
+		
+		if (nutmeg_direction == right) {
+			SpriteManagerAdd(SpriteStarLeft, THIS->x, THIS->y+1);
+			SpriteManagerAdd(SpriteStarRight, THIS->x, THIS->y+1);
+		}
+		else if (nutmeg_direction == left) {
+			SpriteManagerAdd(SpriteStarLeft, THIS->x-6, THIS->y+1);
+			SpriteManagerAdd(SpriteStarRight, THIS->x-6, THIS->y+1);
+		}
+
+		SpriteManagerRemoveSprite (THIS);
+	}
+	//die if touch batty
+	else if (CheckCollision(THIS, nutmeg_sprite) && accelY < 0 && nutmeg_death == false) {
+		if (health == full) {
+			lostbow = true;
+			bow_counter = 0;
+			if (nutmeg_direction == right) { bowanim = 8; }
+			else if (nutmeg_direction == left) { bowanim = 9; }
+		}
+		else if (health == low) {
+			nutmeg_death = true;
+			nutmegdeathtimer = 0;
+			
+			if (nutmeglives <= 0) { GameOver = true; }
+			else { nutmeglives--; }
+		}
+	}
 }
 
 void Destroy_EnemyBatty() {

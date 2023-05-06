@@ -1,7 +1,11 @@
 #include "Banks/SetAutoBank.h"
+#include "ZGBMain.h"
+#include "Scroll.h"
 #include "SpriteManager.h"
-#include "GlobalVars.h"
+#include "Sound.h"
+#include "../src/GlobalVars.h"
 
+extern Sprite * nutmeg_sprite;
 Sprite * spr_cola;
 
 const UINT8 anim_cola[]  = {1, 0};
@@ -77,6 +81,23 @@ void UPDATE() {
 	}
 	else if (cola_blink_counter == 130) {
 		SpriteManagerRemoveSprite(THIS);
+	}
+
+	//die if touch cola
+	if (CheckCollision(THIS, nutmeg_sprite) && nutmeg_death == false) {
+		if (health == full) {
+			lostbow = true;
+			bow_counter = 0;
+			if (nutmeg_direction == right) { bowanim = 8; }
+			else if (nutmeg_direction == left) { bowanim = 9; }
+		}
+		else if (health == low) {
+			nutmeg_death = true;
+			nutmegdeathtimer = 0;
+			
+			if (nutmeglives <= 0) { GameOver = true; }
+			else { nutmeglives--; }
+		}
 	}
 }
 

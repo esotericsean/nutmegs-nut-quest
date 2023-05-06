@@ -1,17 +1,13 @@
 #include "Banks/SetAutoBank.h"
-
 #include <gb/cgb.h>
-#include <gbdk/platform.h>
-#include "Palette.h"
-
 #include "ZGBMain.h"
-#include "Music.h"
 #include "Scroll.h"
-#include "Sound.h"
-#include "Keys.h"
 #include "SpriteManager.h"
-
+#include "Sound.h"
+#include "Palette.h"
 #include "../src/GlobalVars.h"
+
+extern Sprite * nutmeg_sprite;
 
 UINT8 fishcounter = 0; // counter
 
@@ -22,16 +18,10 @@ const UWORD pal_fishgreen4[] = { RGB(31, 31, 31), RGB(5,  24, 14), RGB(5,  19, 1
 const UWORD pal_fishblue4[] =  { RGB(31, 31, 31), RGB(19, 22, 30), RGB(12, 13, 28), RGB(8,  8, 27) };
 
 void Start_EnemyFish() {
-	/*THIS->coll_x = 3;
-	THIS->coll_y = 3;
-	THIS->coll_w = 13;
-	THIS->coll_h = 12;*/
-
 	THIS->lim_x = 500;
 	THIS->lim_y = 144;
 
 	SetSpriteAnim(THIS, anim_fish_idle, 1);
-	//SPRITE_SET_VMIRROR(THIS);
 	THIS->mirror = V_MIRROR;
 
 	fishcounter = 0;
@@ -52,33 +42,6 @@ void Update_EnemyFish() {
 	if (fishcounter >= 120 && fishcounter < 140) THIS->mirror = V_MIRROR;
 	if (fishcounter >= 140 && fishcounter < 156) THIS->mirror = NO_MIRROR;
 
-	/*
-	if (fish_pal_loc == 3) {
-		if (THIS->y > 112) {
-			SetPalette(SPRITES_PALETTE, 3, 1, pal_fishblue4, _current_bank);
-		}
-		else if (THIS->y <= 112) {
-			SetPalette(SPRITES_PALETTE, 3, 1, pal_fishgreen4, _current_bank);
-		}
-	}
-	else if (fish_pal_loc == 4) {
-		if (THIS->y > 112) {
-			SetPalette(SPRITES_PALETTE, 2, 1, pal_fishblue4, _current_bank);
-		}
-		else if (THIS->y <= 112) {
-			SetPalette(SPRITES_PALETTE, 2, 1, pal_fishgreen4, _current_bank);
-		}
-	}
-	else if (fish_pal_loc == 7) {
-		if (THIS->y > 112) {
-			SetPalette(SPRITES_PALETTE, 4, 1, pal_fishblue4, _current_bank);
-		}
-		else if (THIS->y <= 112) {
-			SetPalette(SPRITES_PALETTE, 4, 1, pal_fishgreen4, _current_bank);
-		}
-	}
-	*/
-
 	if (THIS->y > 112) {
 			SetPalette(SPRITES_PALETTE, fish_pal_loc, 1, pal_fishblue4, _current_bank);
 	}
@@ -89,6 +52,25 @@ void Update_EnemyFish() {
 	fishcounter++;
 
 	if (fishcounter >= 156) fishcounter = 0;
+
+	if (CheckCollision(THIS, nutmeg_sprite) && movestate == inair && accelY > 0) {
+		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+		isjumping = true;
+		accelY = -600;
+		jumpPeak = 0;
+		movestate = inair;
+
+		if (nutmeg_direction == right) {
+			SpriteManagerAdd(SpriteStarLeft, THIS->x+16, THIS->y+8);
+			SpriteManagerAdd(SpriteStarRight, THIS->x+16, THIS->y+8);
+		}
+		else if (nutmeg_direction == left) {
+			SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y+8);
+			SpriteManagerAdd(SpriteStarRight, THIS->x-4, THIS->y+8);
+		}
+
+		SpriteManagerRemoveSprite (THIS);
+	}
 }
 
 void Destroy_EnemyFish() {

@@ -112,8 +112,8 @@ void Start_StateW1Boss() {
 	PlayMusic(thehands2, 1);
 
 	//testing:
-	health = full;
-	lostbow = false;
+	//health = full;
+	//lostbow = false;
 	
 	//if health is full, add the bow
 	if (health == full) { SpriteManagerAdd(SpriteNutmegBow, 5*8, 1*8); }

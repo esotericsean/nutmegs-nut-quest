@@ -1,20 +1,15 @@
 #include "Banks/SetAutoBank.h"
-
+#include "Sound.h"
 #include "SpriteManager.h"
-
 #include "GlobalVars.h"
 
 bool isAcornMoving;
+extern Sprite * nutmeg_sprite;
 
 const UINT8 anim_acorn_moving[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
 const UINT8 anim_acorn_static[] = {1, 0};
 
 void Start_SpriteAcorn() {
-	/*THIS->coll_x = -1;
-	THIS->coll_y = -1;
-	THIS->coll_w = 10;
-	THIS->coll_h = 10;*/
-
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 350;
 		THIS->lim_y = 144;
@@ -28,6 +23,14 @@ void Start_SpriteAcorn() {
 void Update_SpriteAcorn() {
 	if (isAcornMoving == true) SetSpriteAnim(THIS, anim_acorn_moving, 10);
 	else if (isAcornMoving == false) SetSpriteAnim(THIS, anim_acorn_static, 1);
+
+	if (CheckCollision(THIS, nutmeg_sprite)) {
+		PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
+
+		acorncounter++;
+
+		SpriteManagerRemoveSprite (THIS);
+	}
 }
 
 void Destroy_SpriteAcorn() {

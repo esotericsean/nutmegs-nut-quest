@@ -1,6 +1,11 @@
 #include "Banks/SetAutoBank.h"
+#include "ZGBMain.h"
+#include "Scroll.h"
 #include "SpriteManager.h"
-#include "GlobalVars.h"
+#include "Sound.h"
+#include "../src/GlobalVars.h"
+
+extern Sprite * nutmeg_sprite;
 
 UINT8 balloonjump;
 bool balloonpop;
@@ -70,6 +75,15 @@ void Update_SpriteBalloon() {
 			SetSpriteAnim(THIS, anim_balloon_empty, 1);
 			SpriteManagerRemoveSprite (THIS);
 		}
+	}
+
+	if (CheckCollision(THIS, nutmeg_sprite)) {
+		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+		isjumping = true;
+		if (balloonjump == 0) { accelY = -300; balloonjump = 1; }
+		else if (balloonjump == 1) { accelY = -600; balloonjump = 2; }
+		jumpPeak = 0;
+		movestate = inair;
 	}
 }
 

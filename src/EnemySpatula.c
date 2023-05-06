@@ -1,7 +1,11 @@
 #include "Banks/SetAutoBank.h"
+#include "ZGBMain.h"
+#include "Scroll.h"
 #include "SpriteManager.h"
-#include "GlobalVars.h"
+#include "Sound.h"
+#include "../src/GlobalVars.h"
 
+extern Sprite * nutmeg_sprite;
 Sprite * spr_spatula;
 
 const UINT8 anim_spatula_spin[]  = {14, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
@@ -18,19 +22,24 @@ void START() {
 }
 
 void UPDATE() {
-	//move every other frame
-	/*
-	if (spatula_counter == 0 || spatula_counter == 2) {
-		//TranslateSprite (THIS, -1, 0); //checks for collisions
-		THIS->x = THIS->x-1; //doesn't check for collisions
+	THIS->x = THIS->x - 1;
+
+	//die if touch spatula
+	if (CheckCollision(THIS, nutmeg_sprite) && nutmeg_death == false) {
+		if (health == full) {
+			lostbow = true;
+			bow_counter = 0;
+			if (nutmeg_direction == right) { bowanim = 8; }
+			else if (nutmeg_direction == left) { bowanim = 9; }
+		}
+		else if (health == low) {
+			nutmeg_death = true;
+			nutmegdeathtimer = 0;
+			
+			if (nutmeglives <= 0) { GameOver = true; }
+			else { nutmeglives--; }
+		}
 	}
-
-	spatula_counter++;
-	if (spatula_counter > 3) spatula_counter = 0;
-	*/
-
-	//move every frame
-	THIS->x = THIS->x-1;
 }
 
 void DESTROY() {

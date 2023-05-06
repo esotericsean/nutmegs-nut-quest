@@ -1,23 +1,30 @@
 #include "Banks/SetAutoBank.h"
-
+#include "ZGBMain.h"
+#include "Scroll.h"
 #include "SpriteManager.h"
+#include "Sound.h"
+#include "../src/GlobalVars.h"
 
-//#include "GlobalVars.h"
+extern Sprite * nutmeg_sprite;
 
 const UINT8 anim_mushroom_moving[] = {4, 0, 0, 1, 1};
 
 void Start_SpriteMushroom() {
-	/*THIS->coll_x = 0;
-	THIS->coll_y = 4;
-	THIS->coll_w = 8;
-	THIS->coll_h = 4;*/
-
 	THIS->lim_x = 500;
 	THIS->lim_y = 144;
+
+	SetSpriteAnim(THIS, anim_mushroom_moving, 10);
 }
 
 void Update_SpriteMushroom() {
-	SetSpriteAnim(THIS, anim_mushroom_moving, 10);
+	//mushroom bounce
+	if (CheckCollision(THIS, nutmeg_sprite)) {
+		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+		isjumping = true;
+		accelY = -600;
+		jumpPeak = 0;
+		movestate = inair;
+	}
 }
 
 void Destroy_SpriteMushroom() {

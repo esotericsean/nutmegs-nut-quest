@@ -1,6 +1,11 @@
 #include "Banks/SetAutoBank.h"
+#include "ZGBMain.h"
+#include "Scroll.h"
 #include "SpriteManager.h"
+#include "Sound.h"
 #include "../src/GlobalVars.h"
+
+extern Sprite * nutmeg_sprite;
 
 const UINT8 anim_hand_idle[]  = {1, 0};
 const UINT8 anim_hand_open[]  = {28, 0,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3};
@@ -84,6 +89,39 @@ void UPDATE() {
 	else if (handpos == 9) {
 		THIS->mirror = V_MIRROR;
 		SetSpriteAnim(THIS, anim_hand_hurt, 1); //hurt
+	}
+
+	//hurt hand if jump on it
+	if (CheckCollision(THIS, nutmeg_sprite) && movestate == inair && accelY > 0 && nutmeg_death == false) {
+		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+		isjumping = true;
+		accelY = -400;
+		jumpPeak = 0;
+		movestate = inair;
+
+		if (abletohurthand == true) {
+			handhealth = handhealth + 1;
+			abletohurthand = false;
+		}
+		
+		if (handphase == 0) handpos = 4; //hand on the right side, facing left
+		else if (handphase == 1) handpos = 9; //hand on left side, facing right
+	}
+	//die if touch hand
+	else if (CheckCollision(THIS, nutmeg_sprite) && accelY < 0 && nutmeg_death == false) {
+		if (health == full) {
+			lostbow = true;
+			bow_counter = 0;
+			if (nutmeg_direction == right) { bowanim = 8; }
+			else if (nutmeg_direction == left) { bowanim = 9; }
+		}
+		else if (health == low) {
+			nutmeg_death = true;
+			nutmegdeathtimer = 0;
+			
+			if (nutmeglives <= 0) { GameOver = true; }
+			else { nutmeglives--; }
+		}
 	}
 }
 
