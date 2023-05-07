@@ -411,8 +411,8 @@ void Start_StateLevel6() {
 	PlayMusic(quickstart, 1);
 
 	//testing:
-	health = full;
-	lostbow = false;
+	//health = full;
+	//lostbow = false;
 	
 	//if health is full, add the bow
 	if (health == full) { SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
