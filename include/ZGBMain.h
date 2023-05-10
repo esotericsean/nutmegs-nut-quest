@@ -71,6 +71,9 @@ _SPRITE_DMG(EnemyHand, hand)\
 _SPRITE_DMG(EnemySpatula, spatula)\
 _SPRITE_DMG(EnemyPopsicle, popsicle)\
 _SPRITE_DMG(EnemyCola, cola)\
+_SPRITE_DMG(SpriteShockline1, shockline1)\
+_SPRITE_DMG(SpriteShockline2, shockline2)\
+_SPRITE_DMG(SpriteShockline3, shockline3)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"
