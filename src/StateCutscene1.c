@@ -140,7 +140,7 @@ void Start_StateCutscene1() {
 
     //health system
     acorncounter = 0;
-    nutmeglives = 99;
+    nutmeglives = 3; //3
     health = full;
     lostbow = false;
     firstplay = true;
