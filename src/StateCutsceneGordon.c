@@ -8,6 +8,7 @@
 #include "..\res\src\acorn.h"
 
 #include "ZGBMain.h"
+#include "Music.h"s
 #include "Scroll.h"
 #include "SpriteManager.h"
 
@@ -19,6 +20,9 @@
 #include "../src/Font.h"
 
 IMPORT_MAP (cutscenegordonmap);
+
+DECLARE_MUSIC (gordoncutscene);
+DECLARE_MUSIC (nutmeghey);
 
 UINT16 cutscenegordoncounter;
 UINT8 cutscenegordonspeed;
@@ -54,13 +58,11 @@ void Start_StateCutsceneGordon() {
     cutscenegordoncounter = 1;
     cutscenegordonspeed = 0;
     cutscenegordonspeedlimit = 3;
+
+    PlayMusic(gordoncutscene, 0);
 }
 
 void Update_StateCutsceneGordon() {
-    if (cutscenegordoncounter == 0) {
-        scroll_target = spr_gordoncamera = SpriteManagerAdd(SpriteGordonCamera, 112, 10); //112, 10
-    }
-    
     //acorn shake
     switch (cutscenegordoncounter) {
         case 25: spr_acorn->x = spr_acorn->x - 2; spr_acorn->y = spr_acorn->y + 1; break;
@@ -171,6 +173,8 @@ void Update_StateCutsceneGordon() {
 
     //gordon turns around
     if (cutscenegordoncounter == 672) {
+        PlayMusic(nutmeghey, 0);
+
         gordonwalkleft = true;
         gordonwalkright = false;
         spr_acorn->mirror = NO_MIRROR;
