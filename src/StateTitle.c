@@ -141,28 +141,10 @@ void Update_StateTitle() {
     }
        
     if (acorn_position == 1 && KEY_PRESSED(J_START)) {
-        /*
-        __critical {
-            remove_LCD (interruptLCD);
-            disable_interrupts();
-            add_LCD (LCD_isr);
-            enable_interrupts();
-        }
-        */
-
         SetState (StateTreeCutscene);
     }
     else if (acorn_position == 2 && KEY_PRESSED(J_START)) {
-        /*
-        __critical {
-            remove_LCD (interruptLCD);
-            disable_interrupts();
-            add_LCD (LCD_isr);
-            enable_interrupts();
-        }
-        */
-
-        SetState (StateTreeCutscene);
+        SetState (StateCredits);
     }
 
     title_counter++;
