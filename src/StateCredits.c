@@ -10,6 +10,7 @@
 #include "../src/GlobalVars.h"
 
 IMPORT_MAP (creditsmap);
+DECLARE_MUSIC (credits);
 
 UINT8 anim_water_counterc = 0;
 
@@ -45,35 +46,20 @@ void START() {
 	
 	scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, 1, 100);
 
-	InitScrollTiles(0, &creditstiles);
-	InitScroll(BANK(creditsmap), &creditsmap, collision_tiles_levelc, collision_tiles_down_levelc);
+	InitScrollTiles (0, &creditstiles);
+	InitScroll (BANK(creditsmap), &creditsmap, collision_tiles_levelc, collision_tiles_down_levelc);
 
 	isAcornMoving = true;
+	SpriteManagerAdd (SpriteAcorn, 5*8, 6*8);
+
+	PlayMusic(credits, 1);
 }
 
 void UPDATE() {
-	/*
-	if (cutscenemode == disabled) {
-		level6cameracount++;
-		if (level6cameracount > 2) level6cameracount = 0;
+	if (KEY_PRESSED (J_DOWN) && spr_camera->y < 800) { TranslateSprite (spr_camera, 0, 1); }
+	else if (KEY_PRESSED (J_UP) && spr_camera->y > 0) { TranslateSprite (spr_camera, 0, -1); }
 
-		if (level6cameracount == 2) {
-			//TranslateSprite (spr_camera, 1, 0);
-			if (spr_camera->x < 237*8) { spr_camera->x++; } //stop moving at end
-		}
-	}
-	*/
-
-	if (KEY_PRESSED (J_DOWN)) {
-		TranslateSprite (spr_camera, 0, 1);
-	}
-	else if (KEY_PRESSED (J_UP)) {
-		TranslateSprite (spr_camera, 0, -1);
-	}
-
-	if (KEY_PRESSED (J_START)) {
-		SetState (StateTitle);
-	}
+	if (KEY_PRESSED (J_START)) { SetState (StateTitle); }
 
 	//animate water
 	if (anim_water_counterc >= 0 && anim_water_counterc < 10) {
