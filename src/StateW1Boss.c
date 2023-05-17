@@ -223,9 +223,6 @@ void Update_StateW1Boss() {
 			}
 		// End Phase 1a
 
-		//really make sure hand is in pos 5:
-		//else if (w1bosscounter > 500 && w1bosscounter < 600) handpos = 5;
-
 		// Phase 1b - Hand enters from left and throws object (part 2 of phase 1)
 			// reset to start position (left side):
 			else if (w1bosscounter == 310) {
@@ -255,8 +252,6 @@ void Update_StateW1Boss() {
 				spr_hand->x--;
 			}
 		// End Phase 1b
-		
-		//End Phase 1
 	}
 
 	/* * * * * * * * * * * * * */
@@ -267,19 +262,27 @@ void Update_StateW1Boss() {
 	// check position of hand and wait a certain amount of time to make sure thrown items are gone
 
 	else if (handphase == 2) {
-		SpriteManagerAdd(EnemyCola, 9*8+4, 0);
-		handphase = 3;
+		// Phase 2a - Cola cans fall from sky
+			if (w1bosscounter == 100) { SpriteManagerAdd(EnemyCola, 9*8+4, 0); }
+			else if (w1bosscounter == 125) { SpriteManagerAdd(EnemyCola, 5*8, 0); }
+			else if (w1bosscounter == 150) { SpriteManagerAdd(EnemyCola, 13*8, 0); }
+		// End Phase 2a
+		
+		//handphase = 3;
 	}
 
-	w1bosscounter++;
+	/* * * * * * * * * * * * * * * * * * * * */
+	/*      C O U N T E R    R E S E T       */
+	/* * * * * * * * * * * * * * * * * * * * */
+
+	w1bosscounter++; //65000
 
 	// if you hurt the hand 3 times in phase 1, advance to phase 2
-	//if (handhealth >= 3 && (handphase == 0 || handphase == 1)) { handphase = 2; }
 	if (handhealth >= 3 && handphase == 0) {
-		if (w1bosscounter >= 210) handphase = 2;
+		if (w1bosscounter >= 210) { handphase = 2; w1bosscounter = 0; abletohurthand = true; }
 	}
 	else if (handhealth >= 3 && handphase == 1) {
-		if (w1bosscounter >= 420) handphase = 2;
+		if (w1bosscounter >= 420) { handphase = 2; w1bosscounter = 0; abletohurthand = true; }
 	}
 
 	// if you're in phase 1 and you haven't hurt the hand, reset counter and start phase 1 again
@@ -288,5 +291,9 @@ void Update_StateW1Boss() {
 		abletohurthand = true;
 	}
 
-	//if (w1bosscounter < 65000) w1bosscounter++;
+	// if you're in phase 2 and you haven't hurt the hand, reset counter and start phase 2 again
+	if (w1bosscounter >= 420 && (handhealth >= 3 && handhealth < 6)) {
+		w1bosscounter = 0;
+		abletohurthand = true;
+	}
 }

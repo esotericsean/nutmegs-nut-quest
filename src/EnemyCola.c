@@ -10,10 +10,10 @@ Sprite * spr_cola;
 
 const UINT8 anim_cola[]  = {1, 0};
 
-UINT8 cola_counter;
-UINT8 cola_faster;
-UINT8 cola_bounce;
-UINT8 cola_blink_counter;
+//UINT8 THIS->custom_data[0];
+//UINT8 THIS->custom_data[1];
+//UINT8 THIS->custom_data[2];
+//UINT8 THIS->custom_data[3];
 
 void START() {
 	THIS->lim_x = 350;
@@ -21,65 +21,69 @@ void START() {
 
 	SetSpriteAnim(THIS, anim_cola, 1);
 
-	cola_counter = 0;
-	cola_faster = 0;
-	cola_bounce = 0;
+	//THIS->custom_data[0] = 0;
+	//THIS->custom_data[1] = 0;
+	//THIS->custom_data[2] = 0;
+	//THIS->custom_data[3] = 0;
 
-	cola_blink_counter = 0;
+	THIS->custom_data[0] = 0; //cola counter
+	THIS->custom_data[1] = 0; //cola faster
+	THIS->custom_data[2] = 0; //cola bounce
+	THIS->custom_data[3] = 0; //cola blink counter
 }
 
 void UPDATE() {
-	if (cola_counter == 0 || cola_counter == 2) {
-		if (THIS->y < 86 && cola_bounce == 0) {
-			TranslateSprite (THIS, 0, 1 + cola_faster); //checks for collisions
+	if (THIS->custom_data[0] == 0 || THIS->custom_data[0] == 2) {
+		if (THIS->y < 86 && THIS->custom_data[2] == 0) {
+			TranslateSprite (THIS, 0, 1 + THIS->custom_data[1]); //checks for collisions
 		}
 		else if (THIS->y >= 86) {
-			cola_bounce = 1;
+			THIS->custom_data[2] = 1;
 		}
 
-		if (cola_bounce == 1) {
-			TranslateSprite (THIS, 0, -cola_faster);
-			if (cola_faster > 0) cola_faster = cola_faster - 1;
+		if (THIS->custom_data[2] == 1) {
+			TranslateSprite (THIS, 0, -THIS->custom_data[1]);
+			if (THIS->custom_data[1] > 0) THIS->custom_data[1] = THIS->custom_data[1] - 1;
 
-			if (cola_faster < 2) {
-				cola_bounce = 2;
+			if (THIS->custom_data[1] < 2) {
+				THIS->custom_data[2] = 2;
 			}
 		}
 
-		if (THIS->y < 86 && cola_bounce == 2) {
-			TranslateSprite (THIS, 0, 1 + cola_faster); //checks for collisions
+		if (THIS->y < 86 && THIS->custom_data[2] == 2) {
+			TranslateSprite (THIS, 0, 1 + THIS->custom_data[1]); //checks for collisions
 		}
-		else if (THIS->y >= 86 && cola_bounce == 2) {
-			cola_bounce = 3;
+		else if (THIS->y >= 86 && THIS->custom_data[2] == 2) {
+			THIS->custom_data[2] = 3;
 		}
 	}
 
-	cola_counter++;
-	if (cola_counter > 3) {
-		cola_counter = 0;
-		if (cola_bounce == 0 || cola_bounce == 2) cola_faster++;
+	THIS->custom_data[0]++;
+	if (THIS->custom_data[0] > 3) {
+		THIS->custom_data[0] = 0;
+		if (THIS->custom_data[2] == 0 || THIS->custom_data[2] == 2) THIS->custom_data[1]++;
 	}
 
-	cola_blink_counter++;
-	if (cola_blink_counter == 100) {
+	THIS->custom_data[3]++;
+	if (THIS->custom_data[3] == 100) {
 		THIS->x = THIS->x + 100; // move the can offscreen and back several times to simulate blinking before destroying it
 	}
-	else if (cola_blink_counter == 105) {
+	else if (THIS->custom_data[3] == 105) {
 		THIS->x = THIS->x - 100;
 	}
-	else if (cola_blink_counter == 110) {
+	else if (THIS->custom_data[3] == 110) {
 		THIS->x = THIS->x + 100;
 	}
-	else if (cola_blink_counter == 115) {
+	else if (THIS->custom_data[3] == 115) {
 		THIS->x = THIS->x - 100;
 	}
-	else if (cola_blink_counter == 120) {
+	else if (THIS->custom_data[3] == 120) {
 		THIS->x = THIS->x + 100;
 	}
-	else if (cola_blink_counter == 125) {
+	else if (THIS->custom_data[3] == 125) {
 		THIS->x = THIS->x - 100;
 	}
-	else if (cola_blink_counter == 130) {
+	else if (THIS->custom_data[3] == 130) {
 		SpriteManagerRemoveSprite(THIS);
 	}
 
