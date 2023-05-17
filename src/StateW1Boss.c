@@ -31,6 +31,7 @@ const UINT8 collision_tiles_down_levelw1b[] = {0};
 
 DECLARE_MUSIC(thehands2);
 DECLARE_MUSIC(quickdeath);
+DECLARE_MUSIC(boss1win);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -261,14 +262,95 @@ void Update_StateW1Boss() {
 	// only enter phase 2 if hand is offscreen and spatula/popsicle are offscreen
 	// check position of hand and wait a certain amount of time to make sure thrown items are gone
 
-	else if (handphase == 2) {
+	else if (handphase == 2 || handphase == 3) {
 		// Phase 2a - Cola cans fall from sky
 			if (w1bosscounter == 100) { SpriteManagerAdd(EnemyCola, 9*8+4, 0); }
 			else if (w1bosscounter == 125) { SpriteManagerAdd(EnemyCola, 5*8, 0); }
 			else if (w1bosscounter == 150) { SpriteManagerAdd(EnemyCola, 13*8, 0); }
 		// End Phase 2a
 		
-		//handphase = 3;
+		// Phase 2b - Hand does karate chop downwards on right side
+			// reset to start position
+			if (w1bosscounter == 175) {
+				spr_hand->x = 17*8+32;
+				spr_hand->y = 1*8+6;
+				handpos = 2; //karate chop
+				handhurt = 0;
+				abletohurthand = true;
+				handphase = 2;
+			}
+			// move in
+			else if (w1bosscounter > 175 && w1bosscounter < 205) {
+				spr_hand->x--;
+			}
+			// karate chop down
+			else if (w1bosscounter >= 205 && w1bosscounter < 240) {
+				spr_hand->y = spr_hand->y + 2;
+			}
+			// move out
+			else if (w1bosscounter > 270 && w1bosscounter < 305) {
+				spr_hand->x++;
+			}
+		// End Phase 2b
+
+		// Phase 2c
+			//reset to start position
+			if (w1bosscounter == 405) {
+				spr_hand->x = 1*8-40;
+				spr_hand->y = 1*8+6;
+				handpos = 7;
+				handhurt = 0;
+				abletohurthand = true;
+				handphase = 3;
+			}
+			// move in
+			else if (w1bosscounter > 405 && w1bosscounter < 435) {
+				spr_hand->x++;
+			}
+			// karate chop down
+			else if (w1bosscounter >= 435 && w1bosscounter < 470) {
+				spr_hand->y = spr_hand->y + 2;
+			}
+			// move out
+			else if (w1bosscounter > 500 && w1bosscounter < 535) {
+				spr_hand->x--;
+			}
+
+		// End Phase 2c
+	}
+
+	/* * * * * * * * * * * * * * * */
+	/*      Y O U   W I N !        */
+	/* * * * * * * * * * * * * * * */
+
+	else if (handphase == 4) {
+		if (w1bosscounter == 5) {
+			cutscenemode = true;
+			PlayMusic(boss1win, 0);
+		}
+
+		if (w1bosscounter == 15) {
+			SpriteManagerAdd (SpriteStarLeft, 9*8+4, 8*8);
+			SpriteManagerAdd (SpriteStarRight, 9*8+4, 8*8);
+		}
+
+		if (w1bosscounter == 45) {
+			SpriteManagerAdd (SpriteStarLeft, 9*8+4, 6*8);
+			SpriteManagerAdd (SpriteStarRight, 9*8+4, 6*8);
+		}
+
+		if (w1bosscounter == 75) {
+			SpriteManagerAdd (SpriteStarLeft, 9*8+4, 4*8);
+			SpriteManagerAdd (SpriteStarRight, 9*8+4, 4*8);
+		}
+
+		if (w1bosscounter == 100) {
+			cutscenemode = false;
+		}
+
+		if (w1bosscounter == 200) {
+			SetState (StateOverworld1);
+		}
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * */
@@ -291,9 +373,13 @@ void Update_StateW1Boss() {
 		abletohurthand = true;
 	}
 
-	// if you're in phase 2 and you haven't hurt the hand, reset counter and start phase 2 again
-	if (w1bosscounter >= 420 && (handhealth >= 3 && handhealth < 6)) {
+	// if you're in phase 2 and you haven't hurt the hand, reset counter and start phase 1 again
+	if (w1bosscounter >= 635 && (handhealth >= 3 && handhealth < 6)) {
 		w1bosscounter = 0;
 		abletohurthand = true;
+		handhurt = false;
+		handphase = 0;
 	}
+
+	if (w1bosscounter >= 635 && handhealth >= 6) { w1bosscounter = 0; handphase = 4; }
 }

@@ -9,7 +9,7 @@ extern Sprite * nutmeg_sprite;
 
 const UINT8 anim_hand_idle[]  = {1, 0};
 const UINT8 anim_hand_open[]  = {28, 0,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3};
-const UINT8 anim_hand_karate[] ={1, 3};
+const UINT8 anim_hand_karate[] = {1, 3};
 const UINT8 anim_hand_close[] = {28, 3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 const UINT8 anim_hand_hurt[]  = {1, 4};
 
@@ -104,8 +104,8 @@ void UPDATE() {
 			abletohurthand = false;
 		}
 		
-		if (handphase == 0) handpos = 4; //hand on the right side, facing left
-		else if (handphase == 1) handpos = 9; //hand on left side, facing right
+		if (handphase == 0 || handphase == 2) handpos = 4; //hand on the right side, facing left
+		else if (handphase == 1 || handphase == 3) handpos = 9; //hand on left side, facing right
 	}
 	//die if touch hand
 	else if (CheckCollision(THIS, nutmeg_sprite) && accelY < 0 && nutmeg_death == false) {

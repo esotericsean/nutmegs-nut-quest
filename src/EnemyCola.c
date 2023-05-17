@@ -8,23 +8,14 @@
 extern Sprite * nutmeg_sprite;
 Sprite * spr_cola;
 
-const UINT8 anim_cola[]  = {1, 0};
-
-//UINT8 THIS->custom_data[0];
-//UINT8 THIS->custom_data[1];
-//UINT8 THIS->custom_data[2];
-//UINT8 THIS->custom_data[3];
+const UINT8 anim_cola[]  = {1, 1};
+const UINT8 anim_cola_flash[]  = {2, 0, 1};
 
 void START() {
 	THIS->lim_x = 350;
 	THIS->lim_y = 144;
 
 	SetSpriteAnim(THIS, anim_cola, 1);
-
-	//THIS->custom_data[0] = 0;
-	//THIS->custom_data[1] = 0;
-	//THIS->custom_data[2] = 0;
-	//THIS->custom_data[3] = 0;
 
 	THIS->custom_data[0] = 0; //cola counter
 	THIS->custom_data[1] = 0; //cola faster
@@ -65,6 +56,7 @@ void UPDATE() {
 	}
 
 	THIS->custom_data[3]++;
+	/*
 	if (THIS->custom_data[3] == 100) {
 		THIS->x = THIS->x + 100; // move the can offscreen and back several times to simulate blinking before destroying it
 	}
@@ -82,6 +74,10 @@ void UPDATE() {
 	}
 	else if (THIS->custom_data[3] == 125) {
 		THIS->x = THIS->x - 100;
+	}
+	*/
+	if (THIS->custom_data[3] >= 100 && THIS->custom_data[3] <= 125) {
+		SetSpriteAnim(THIS, anim_cola_flash, 25);
 	}
 	else if (THIS->custom_data[3] == 130) {
 		SpriteManagerRemoveSprite(THIS);
