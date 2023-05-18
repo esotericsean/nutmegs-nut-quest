@@ -23,7 +23,6 @@ void Start_EnemyButterfly() {
 	}
 
 	SetSpriteAnim(THIS, anim_butterfly_fly, 6);
-	//SPRITE_SET_VMIRROR(THIS);
 	THIS->mirror = V_MIRROR;
 }
 
