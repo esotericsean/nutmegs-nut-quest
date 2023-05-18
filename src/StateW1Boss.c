@@ -325,7 +325,7 @@ void Update_StateW1Boss() {
 
 	else if (handphase == 4) {
 		if (w1bosscounter == 5) {
-			cutscenemode = true;
+			cutscenemode = enabled;
 			PlayMusic(boss1win, 0);
 		}
 
@@ -350,6 +350,11 @@ void Update_StateW1Boss() {
 
 		if (w1bosscounter == 200) {
 			SetState (StateOverworld1);
+
+			//flagpole_activated = 1;
+			levelbeat = true;
+			//endlevel_counter = 0;
+			cutscenemode = enabled;
 		}
 	}
 

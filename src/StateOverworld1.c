@@ -277,82 +277,6 @@ void Update_StateOverworld1() {
 		f = 0;
 	}
 
-	/*
-	//copied from SpriteNutmegTiny
-	if (e == 0) {
-		// LEVEL 0 - THE TREEHOUSE
-		if (W1LevelSelection == 0) {
-			if 		(KEY_PRESSED(J_RIGHT)) { direction = 1; distance = 23; W1LevelSelection = 1; }
-		}
-
-		// LEVEL 1
-		else if (W1LevelSelection == 1) {
-			if 		(KEY_PRESSED(J_LEFT))  { direction = 0; distance = 23; W1LevelSelection = 0; }
-			else if (KEY_PRESSED(J_DOWN))  { direction = 3; distance = 15; W1LevelSelection = 2; }
-		}
-
-		// LEVEL 2
-		else if (W1LevelSelection == 2) {
-			if 		(KEY_PRESSED(J_UP))    { direction = 2; distance = 15; W1LevelSelection = 1; }
-			else if (KEY_PRESSED(J_DOWN))  { direction = 3; distance = 23; W1LevelSelection = 3; }
-			else if (KEY_PRESSED(J_RIGHT)) { direction = 1; distance = 23; W1LevelSelection = 5; }
-		}
-
-		// LEVEL 3
-		else if (W1LevelSelection == 3) {
-			if 		(KEY_PRESSED(J_UP))    { direction = 2; distance = 23; W1LevelSelection = 2; }
-			else if (KEY_PRESSED(J_LEFT))  { direction = 0; distance = 23; W1LevelSelection = 4; }
-		}
-
-		// LEVEL 4 - MUSHROOM HOUSE
-		else if (W1LevelSelection == 4) {
-			if 		(KEY_PRESSED(J_RIGHT)) { direction = 1; distance = 23; W1LevelSelection = 3; }
-		}
-
-		// LEVEL 5
-		else if (W1LevelSelection == 5) {
-			if 		(KEY_PRESSED(J_LEFT))   { direction = 0; distance = 23; W1LevelSelection = 2; }
-			else if (KEY_PRESSED(J_DOWN))   { direction = 3; distance = 15; W1LevelSelection = 6; }
-		}
-
-		// LEVEL 6
-		else if (W1LevelSelection == 6) {
-			if 		(KEY_PRESSED(J_UP))  	{ direction = 2; distance = 15; W1LevelSelection = 5; }
-			else if (KEY_PRESSED(J_RIGHT))  { direction = 1; distance = 23; W1LevelSelection = 7; }
-		}
-
-		// LEVEL 7
-		else if (W1LevelSelection == 7) {
-			if 		(KEY_PRESSED(J_LEFT))  	{ direction = 0; distance = 23; W1LevelSelection = 6; }
-			else if (KEY_PRESSED(J_UP))  	{ direction = 2; distance = 31; W1LevelSelection = 8; }
-		}
-
-		// LEVEL 8
-		else if (W1LevelSelection == 8) {
-			if 		(KEY_PRESSED(J_RIGHT))  { direction = 1; distance = 23; W1LevelSelection = 9; }
-			else if (KEY_PRESSED(J_DOWN))  	{ direction = 3; distance = 31; W1LevelSelection = 7; }
-		}
-
-		// LEVEL 9
-		else if (W1LevelSelection == 9) {
-			if 		(KEY_PRESSED(J_LEFT))   { direction = 0; distance = 23; W1LevelSelection = 8;  }
-			else if (KEY_PRESSED(J_DOWN))   { direction = 3; distance = 23; W1LevelSelection = 10; }
-		}
-
-		// LEVEL 10
-		else if (W1LevelSelection == 10) {
-			if 		(KEY_PRESSED(J_UP))     { direction = 2; distance = 23; W1LevelSelection = 9;  }
-			else if (KEY_PRESSED(J_DOWN))   { direction = 3; distance = 23; W1LevelSelection = 11; }
-		}
-
-		// LEVEL 11 - PICNIC TABLE (MINI BOSS)
-		else if (W1LevelSelection == 11) {
-			if 		(KEY_PRESSED(J_UP)) 	{ direction = 2; distance = 23; W1LevelSelection = 10; }
-			else if (KEY_PRESSED(J_RIGHT)) 	{ direction = 1; distance = 46; W1LevelSelection = 11; } //change to overworld2
-		}
-	}
-	*/
-
 	//change level dots color palettes when beating levels
 	VBK_REG = 1;
 	switch (W1LevelSelection) {
@@ -535,10 +459,9 @@ void Update_StateOverworld1() {
 		else if (W1LevelSelection == 10 && levelbeat == true) {
 			direction = 3; distance = 24; W1LevelSelection = 11; levelbeatcounter = 0; inputenabled = false;
 		}
-
 		// LEVEL 11 - PICNIC TABLE (MINI BOSS)
 		else if (W1LevelSelection == 11 && levelbeat == true) {
-			direction = 1; distance = 46; W1LevelSelection = 11; levelbeatcounter = 0; inputenabled = false;
+			direction = 1; distance = 46; W1LevelSelection = 12; levelbeatcounter = 0; inputenabled = false;
 		} //change to overworld2
 	}
 
