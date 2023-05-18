@@ -1,30 +1,24 @@
 #include "Banks/SetAutoBank.h"
-
 #include "SpriteManager.h"
 
-const UINT8 anim_star_1[] = {6, 0, 1, 2, 2, 2, 2};
+const UINT8 anim_star_1[] = {6, 2, 2, 1, 0, 0, 0};
 
-UINT8 deathtimer = 0;
+//UINT8 deathtimer = 0;
+//THIS->custom_data[0] = 0;
 
 void Start_SpriteStarLeft() {
-	/*THIS->coll_x = 4;
-	THIS->coll_y = 4;
-	THIS->coll_w = 0;
-	THIS->coll_h = 0;*/
-
-	THIS->lim_x = 2000;
+	THIS->lim_x = 200;
 	THIS->lim_y = 144;
 
 	SetSpriteAnim(THIS, anim_star_1, 12);
 
-	deathtimer = 0;
+	THIS->custom_data[0] = 0;
 }
 
 void Update_SpriteStarLeft() {
-	if (deathtimer >= 30) SpriteManagerRemoveSprite(THIS);
-	else deathtimer++;
+	if (THIS->custom_data[0] >= 35) SpriteManagerRemoveSprite(THIS);
+	else THIS->custom_data[0]++;
 
-	//TranslateSprite(THIS, -1, 0);
 	THIS->x--;
 }
 
