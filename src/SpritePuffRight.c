@@ -4,30 +4,25 @@
 
 const UINT8 anim_puff_2[] = {7, 0, 1, 2, 3, 4, 5, 6};
 
-UINT8 deathtimer4 = 0;
+//UINT8 deathtimer4 = 0;
 
 void Start_SpritePuffRight() {
-	/*THIS->coll_x = 4;
-	THIS->coll_y = 4;
-	THIS->coll_w = 0;
-	THIS->coll_h = 0;*/
+	THIS->lim_x = 200;
+	THIS->lim_y = 144;
 
-	THIS->lim_x = 9999;
-	THIS->lim_y = 999;
-
-	//SPRITE_SET_VMIRROR(THIS);
 	THIS->mirror = V_MIRROR;
 
 	SetSpriteAnim(THIS, anim_puff_2, 32);
 
-	deathtimer4 = 0;
+	//deathtimer4 = 0;
+
+	THIS->custom_data[0] = 0; //deathtimer4
 }
 
 void Update_SpritePuffRight() {
-	if (deathtimer4 >= 20) SpriteManagerRemoveSprite(THIS);
-	else deathtimer4++;
+	if (THIS->custom_data[0] >= 20) SpriteManagerRemoveSprite(THIS);
+	else THIS->custom_data[0]++;
 
-	//TranslateSprite(THIS, 1, 0);
 	THIS->x++;
 }
 
