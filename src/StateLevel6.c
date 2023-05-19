@@ -413,9 +413,14 @@ void Start_StateLevel6() {
 	//testing:
 	//health = full;
 	//lostbow = false;
+
+	//add butterfly so yellow palette is loaded first if bow isn't present
+	SpriteManagerAdd(EnemyButterfly, 3*8, 4*8);
 	
 	//if health is full, add the bow
 	if (health == full) { SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
+	//else if (health == low) {SpriteManagerAdd(SpriteNutmegBow, -10, -10); lostbow = false; } //add bow to set color palettes
+
 	scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, 80, 12); //49
 	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49);
 

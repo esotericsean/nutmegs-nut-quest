@@ -113,11 +113,18 @@ void Start_StateW1Boss() {
 	PlayMusic(thehands2, 1);
 
 	//testing:
-	//health = full;
+	//health = low;
 	//lostbow = false;
 	
 	//if health is full, add the bow
-	if (health == full) { SpriteManagerAdd(SpriteNutmegBow, 5*8, 1*8); }
+	//if (health == full) lostbow = false;
+	//else if (health == low) lostbow = true;
+
+	//if (lostbow == true) health = low;
+	//else if (lostbow == false) health = full;
+
+	if (health == full) { SpriteManagerAdd(SpriteNutmegBow, 5*8, 1*8); lostbow = false; }
+	
 	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 5*8, 1*8);
 	spr_hand = SpriteManagerAdd(EnemyHand, 17*8+32, 11*8+6); //start on right side
 

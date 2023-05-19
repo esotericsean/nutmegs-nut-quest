@@ -68,7 +68,7 @@ void Start_SpriteNutmegBow() {
 
 void Update_SpriteNutmegBow() {
 	if (lostbow == false) {
-		lostbow = false;
+		//lostbow = false;
 
 		THIS->y = nutmeg_sprite->y-24;
 
@@ -116,7 +116,7 @@ void Update_SpriteNutmegBow() {
 		}
 	}
 	else if (health == full && lostbow == true) {
-		lostbow = true;
+		//lostbow = true;
 		
 		SetSpriteAnim(THIS, anim_nutmegbow_static, 1);
 		
