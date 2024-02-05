@@ -12,9 +12,9 @@
 #include "Keys.h"
 #include "SpriteManager.h"
 
-#include "..\res\src\nutmeg.h"
-#include "..\res\src\acorn.h"
-#include "..\res\src\nutmegtiny.h"
+//#include "..\res\src\nutmeg.h"
+//#include "..\res\src\acorn.h"
+//#include "..\res\src\nutmegtiny.h"
 #include "Palette.h"
 
 #include "../src/GlobalVars.h"
