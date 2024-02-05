@@ -23,6 +23,7 @@
 
 IMPORT_MAP (treemap2);
 
+/*
 const UINT16 bg_palette_tree2[] = {
 	PALETTE_FROM_HEADER(treetiles)
 };
@@ -31,6 +32,7 @@ const UINT16 sprites_palette_tree2[] = {
 	PALETTE_INDEX (nutmeg, 0),
 	PALETTE_INDEX (puff, 4)
 };
+*/
 
 /*
 UWORD puffPalette[] = {

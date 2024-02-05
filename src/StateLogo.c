@@ -17,11 +17,13 @@ IMPORT_MAP (esologomap);
 
 UINT8 counter;
 
-const UINT16 bg_palette_logo[] = {PALETTE_FROM_HEADER(esologotiles)};
+//const UINT16 bg_palette_logo[] = {PALETTE_FROM_HEADER(esologotiles)};
 
+/*
 const UINT16 sprites_palette_logo[] = {
 	PALETTE_INDEX (esofire, 0)
 };
+*/
 
 UINT8 collision_tiles_logo[] = {1, 0};
 

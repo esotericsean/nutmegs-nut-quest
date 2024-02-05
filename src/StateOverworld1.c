@@ -114,12 +114,14 @@ const unsigned char current_acorn1[]  = { 0x44 };
 
 bool overworld1visited = false;
 
+/*
 const UINT16 bg_palette_overworld1[] = {PALETTE_FROM_HEADER(overworld1)};
 
 const UINT16 sprites_palette_overworld1[] = {
 	PALETTE_INDEX (nutmeg, 0),
 	PALETTE_INDEX (acorn, 1)
 };
+*/
 
 UINT8 collision_tiles_overworld1[] = {0};
 

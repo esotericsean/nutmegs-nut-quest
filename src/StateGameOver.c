@@ -21,9 +21,11 @@
 
 IMPORT_MAP (gameovermap);
 
+/*
 const UINT16 bg_palette_gameover[] = {
 	PALETTE_FROM_HEADER(gameovertiles)
 };
+*/
 
 /*
 const UINT16 sprites_palette_gameover[] = {
