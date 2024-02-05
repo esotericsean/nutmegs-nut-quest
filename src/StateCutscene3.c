@@ -73,6 +73,7 @@ const UWORD pal_cut12[] = {
 };
 */
 
+/*
 const UINT16 bg_palette_cutscene3[] = {
     PALETTE_FROM_HEADER (cutscene3tiles)
 };
@@ -80,6 +81,7 @@ const UINT16 bg_palette_cutscene3[] = {
 const UINT16 sprites_palette_cutscene3[] = {
     PALETTE_INDEX (incube8G, 0)
 };
+*/
 
 //extern UINT8* oaktree_mod_Data[];
 
