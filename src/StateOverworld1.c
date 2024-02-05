@@ -36,7 +36,7 @@ UINT8 f = 0; // water animation counter
 	UINT8 W1LevelSelection; 		// nutmeg starts at level 1
 									// level 0 is the tree
 									// mushroom is level 4
-	UINT8 direction = 0;
+	UINT8 overWorldDirection  = 0;
 	UINT8 distance  = 0;
 
 	bool inputenabled;
@@ -238,7 +238,7 @@ void Start_StateOverworld1() {
 	SpriteManagerAdd(SpriteNutHead, 16, 7);
 	SpriteManagerAdd(SpriteAcorn, 14*8, 7);
 
-	InitScrollTiles(0, &overworld1);
+	//InitScrollTiles(0, &overworld1);
 	InitScroll(BANK(overworld1map), &overworld1map, collision_tiles_overworld1, 0);
 
 	SHOW_SPRITES;
@@ -250,8 +250,8 @@ void Update_StateOverworld1() {
 	// if first time visiting Overworld 1, set to tree level
 	// and set overworld1visited to true so it can't do it again
 	if (overworld1visited == false) {
-		if 		(treetolevel1move < 50)  { direction = 1; W1LevelSelection = 0; inputenabled = false; levelbeat = false; }
-		else if (treetolevel1move == 50) { direction = 1; distance = 23; W1LevelSelection = 1; inputenabled = false; }
+		if 		(treetolevel1move < 50)  { overWorldDirection  = 1; W1LevelSelection = 0; inputenabled = false; levelbeat = false; }
+		else if (treetolevel1move == 50) { overWorldDirection  = 1; distance = 23; W1LevelSelection = 1; inputenabled = false; }
 		else if (treetolevel1move >= 65) { inputenabled = false; overworld1visited = true; levelbeat = false; }
 
 		treetolevel1move++;
@@ -431,46 +431,46 @@ void Update_StateOverworld1() {
 	if (e == 0 && levelbeat == true) {
 		// LEVEL 1
 		if (W1LevelSelection == 1 && levelbeat == true) {
-			direction = 3; distance = 15; W1LevelSelection = 2; levelbeatcounter = 0; inputenabled = false;
+			overWorldDirection  = 3; distance = 15; W1LevelSelection = 2; levelbeatcounter = 0; inputenabled = false;
 		}
 		// LEVEL 2
 		else if (W1LevelSelection == 2 && levelbeat == true) {
-			direction = 1; distance = 23; W1LevelSelection = 5; levelbeatcounter = 0; inputenabled = false;
+			overWorldDirection  = 1; distance = 23; W1LevelSelection = 5; levelbeatcounter = 0; inputenabled = false;
 		}
 		// LEVEL 5
 		else if (W1LevelSelection == 5 && levelbeat == true) {
-			direction = 3; distance = 15; W1LevelSelection = 6; levelbeatcounter = 0; inputenabled = false;
+			overWorldDirection  = 3; distance = 15; W1LevelSelection = 6; levelbeatcounter = 0; inputenabled = false;
 		}
 		// LEVEL 6
 		else if (W1LevelSelection == 6 && levelbeat == true) {
-			direction = 1; distance = 23; W1LevelSelection = 7; levelbeatcounter = 0; inputenabled = false;
+			overWorldDirection  = 1; distance = 23; W1LevelSelection = 7; levelbeatcounter = 0; inputenabled = false;
 		}
 		// LEVEL 7
 		else if (W1LevelSelection == 7 && levelbeat == true) {
-			direction = 2; distance = 31; W1LevelSelection = 8; levelbeatcounter = 0; inputenabled = false;
+			overWorldDirection  = 2; distance = 31; W1LevelSelection = 8; levelbeatcounter = 0; inputenabled = false;
 		}
 		// LEVEL 8
 		else if (W1LevelSelection == 8 && levelbeat == true) {
-			direction = 1; distance = 23; W1LevelSelection = 9; levelbeatcounter = 0; inputenabled = false;
+			overWorldDirection  = 1; distance = 23; W1LevelSelection = 9; levelbeatcounter = 0; inputenabled = false;
 		}
 		// LEVEL 9
 		else if (W1LevelSelection == 9 && levelbeat == true) {
-			direction = 3; distance = 23; W1LevelSelection = 10; levelbeatcounter = 0; inputenabled = false;
+			overWorldDirection  = 3; distance = 23; W1LevelSelection = 10; levelbeatcounter = 0; inputenabled = false;
 		}
 		// LEVEL 10
 		else if (W1LevelSelection == 10 && levelbeat == true) {
-			direction = 3; distance = 24; W1LevelSelection = 11; levelbeatcounter = 0; inputenabled = false;
+			overWorldDirection  = 3; distance = 24; W1LevelSelection = 11; levelbeatcounter = 0; inputenabled = false;
 		}
 		// LEVEL 11 - PICNIC TABLE (MINI BOSS)
 		else if (W1LevelSelection == 11 && levelbeat == true) {
-			direction = 1; distance = 46; W1LevelSelection = 12; levelbeatcounter = 0; inputenabled = false;
+			overWorldDirection  = 1; distance = 46; W1LevelSelection = 12; levelbeatcounter = 0; inputenabled = false;
 		} //change to overworld2
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * */ // 1. Depending on which level player is standing on
-	/*     Send to Move Function (line 137)    */ //    define a DIRECTION and DISTANCE and update player
+	/*     Send to Move Function (line 137)    */ //    define a overWorldDirection  and DISTANCE and update player
 	/*                                         */ //    to the level Nutmeg will be traveling to
-	if (distance > 0) Move (direction, distance); // 2. Send DIR and DIS to a function that moves the
+	if (distance > 0) Move (overWorldDirection , distance); // 2. Send DIR and DIS to a function that moves the
 	/*                                         */ //    player, run the function until e = distance
 	/*                                         */ // 3. Reset e to 0, distance to 0
 	/* * * * * * * * * * * * * * * * * * * * * */ //
