@@ -13,6 +13,10 @@
 #include "Palette.h"
 #include <gb/cgb.h>
 
+#include "ZGBMain.h"
+
+#include "GlobalVars.h"
+
 #ifdef USE_SAVEGAME
 	#include "savegame.h"
 #endif
@@ -158,6 +162,14 @@ void main() {
 	LCDC_REG |= LCDCF_OBJDEFAULT | LCDCF_OBJON | LCDCF_BGON;
 	WY_REG = 145;
 
+	// TESTING - Skip past the start stuff
+	// 6 = force scroll
+	//W1LevelSelection = 7;
+	//next_state = StateLevel7;
+	//levelbeat = false;
+	//nutmeglives = 99;
+	// END TESTING
+
 	while(1) {
 		DISPLAY_OFF
 
@@ -191,6 +203,10 @@ void main() {
 		scroll_y_vblank = scroll_y;
 
 		if(state_running) {
+			// FadeOut (from white to our real colors)
+			// This takes a second, so update the sprite manager one time,
+			// so our starting sprites are on the screne during the fade
+			SpriteManagerUpdate();
 			DISPLAY_ON;
 			FadeOut();
 		}
@@ -207,7 +223,9 @@ void main() {
 			}
 			
 			if(!vbl_count)
+			{
 				wait_vbl_done();
+			}
 			delta_time = vbl_count == 1u ? 0u : 1u;
 			vbl_count = 0;
 
