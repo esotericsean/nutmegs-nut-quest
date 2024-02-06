@@ -10,8 +10,11 @@
 
 DECLARE_MUSIC (flagpole);
 
-//pink color palette
+// pink color palette
 static const UWORD pal_pink[] = { RGB(31, 31, 31), RGB(19, 26, 30), RGB(28, 19, 30), RGB(0,  0,  0) };
+
+// special palette to use on stage 5
+static const UWORD pal_rainy_pink[] = { RGB(31, 31, 31), RGB(7,  8,  9), RGB(28, 19, 30), RGB(7,  7,  7) };
 
 //grey top
 static const unsigned char grey_33[] = {
@@ -124,8 +127,15 @@ void FlagPole_Activate(int x, int y) BANKED
     stars_y = y;
 
     //change flagpole color palette to pink
-	SetPalette(BG_PALETTE, 1, 1, pal_pink, _current_bank);
-	
+	if (W1LevelSelection == 5)
+	{
+		SetPalette(BG_PALETTE, 1, 1, pal_rainy_pink, _current_bank);
+	}
+	else
+	{
+		SetPalette(BG_PALETTE, 1, 1, pal_pink, _current_bank);
+		
+	}
     __critical { PlayMusic(flagpole, 1); }
 }
 
