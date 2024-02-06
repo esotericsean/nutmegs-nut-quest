@@ -10,7 +10,7 @@ extern Sprite * nutmeg_sprite;
 UINT8 a = 0; //up and down
 UINT8 b = 0; //left and right
 
-const UINT8 anim_butterfly_fly[] = {4, 1, 2, 3, 2};
+static const UINT8 anim_butterfly_fly[] = {4, 1, 2, 3, 2};
 
 void Start_EnemyButterfly() {
 	if (levelorientation == horizontal) {
@@ -60,12 +60,12 @@ void Update_EnemyButterfly() {
 		movestate = inair;
 		
 		if (nutmeg_direction == right) {
-			SpriteManagerAdd(SpriteStarLeft, THIS->x+16, THIS->y);
-			SpriteManagerAdd(SpriteStarRight, THIS->x+16, THIS->y);
+			SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y);
+			SpriteManagerAdd(SpriteStarRight, THIS->x+4, THIS->y);
 		}
 		else if (nutmeg_direction == left) {
 			SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y);
-			SpriteManagerAdd(SpriteStarRight, THIS->x-4, THIS->y);
+			SpriteManagerAdd(SpriteStarRight, THIS->x+4, THIS->y);
 		}
 
 		SpriteManagerRemoveSprite (THIS);
