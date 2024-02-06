@@ -8,29 +8,23 @@
 #include "SpriteManager.h"
 #include "Palette.h"
 #include "../src/GlobalVars.h"
-
+#include "FlagPole.h"
 IMPORT_MAP (level4map);
 IMPORT_MAP (hud);
 
 UINT16 level4counter = 0;
 
 UINT8 anim_water_counter4 = 0;
-UINT8 anim_flag_counter4 = 0;
-UINT8 flagpole_activated4 = 0;
-UINT8 flagpole_stars4 = 0;
 UINT8 endlevel_counter4 = 0;
 
 UINT8 fish_pal_loc;
 
-//pink color palette
-const UWORD pal_pink4[] = { RGB(31, 31, 31), RGB(19, 26, 30), RGB(28, 19, 30), RGB(0,  0,  0) };
 
 const UINT8 collision_tiles_level4[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
 const UINT8 collision_tiles_down_level4[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(quickstart);
 DECLARE_MUSIC(mushrooms);
-DECLARE_MUSIC(flagpole);
 DECLARE_MUSIC(quickdeath);
 
 // You can reference it from other files by including this
@@ -60,85 +54,6 @@ const unsigned char level4_water3[] = {
 const unsigned char level_water_anim1[] = { 0x1A };
 const unsigned char level_water_anim2[] = { 0x1B };
 const unsigned char level_water_anim3[] = { 0x1C };
-*/
-
-//grey top
-const unsigned char grey4_33[] = {
-	0xff,0x3c,0xc3,0x46,0x81,0x81,0x81,0x81,
-	0x81,0xe1,0x81,0xf9,0x81,0xff,0x81,0xff
-};
-const unsigned char grey4_34[] = {
-	0xff,0x3c,0xc3,0x7e,0x81,0x9f,0x81,0x87,
-	0x81,0x81,0x81,0x81,0x81,0xe1,0x81,0xf9
-};
-const unsigned char grey4_35[] = {
-	0xff,0x3c,0xc3,0x7a,0x81,0xff,0x81,0xff,
-	0x81,0x9f,0x81,0x87,0x81,0x81,0x81,0x81
-};
-const unsigned char grey4_36[] = {
-	0xff,0x3c,0xc3,0x42,0x81,0xe1,0x81,0xf9,
-	0x81,0xff,0x81,0xff,0x81,0x9f,0x81,0x87
-};
-
-//pink top
-const unsigned char pink4_37[] = {
-	0xff,0x3c,0xc3,0x42,0x81,0x87,0x81,0x9f,
-	0x81,0xff,0x81,0xff,0x81,0xf9,0x81,0xe1
-};
-const unsigned char pink4_38[] = {
-	0xff,0x3c,0xc3,0x5e,0x81,0xff,0x81,0xff,
-	0x81,0xf9,0x81,0xe1,0x81,0x81,0x81,0x81
-};
-const unsigned char pink4_39[] = {
-	0xff,0x3c,0xc3,0x7e,0x81,0xf9,0x81,0xe1,
-	0x81,0x81,0x81,0x81,0x81,0x87,0x81,0x9f
-};
-const unsigned char pink4_40[] = {
-	0xff,0x3c,0xc3,0x62,0x81,0x81,0x81,0x81,
-	0x81,0x87,0x81,0x9f,0x81,0xff,0x81,0xff
-};
-
-//grey mid/bottom
-const unsigned char grey4_41[] = {
-	0x81,0x9f,0x81,0x87,0x81,0x81,0x81,0x81,
-	0x81,0xe1,0x81,0xf9,0x81,0xff,0x81,0xff
-};
-const unsigned char grey4_42[] = {
-	0x81,0xff,0x81,0xff,0x81,0x9f,0x81,0x87,
-	0x81,0x81,0x81,0x81,0x81,0xe1,0x81,0xf9
-};
-const unsigned char grey4_43[] = {
-	0x81,0xe1,0x81,0xf9,0x81,0xff,0x81,0xff,
-	0x81,0x9f,0x81,0x87,0x81,0x81,0x81,0x81
-};
-const unsigned char grey4_44[] = {
-	0x81,0x81,0x81,0x81,0x81,0xe1,0x81,0xf9,
-	0x81,0xff,0x81,0xff,0x81,0x9f,0x81,0x87
-};
-
-//pink mid/bottom
-const unsigned char pink4_45[] = {
-	0x81,0x81,0x81,0x81,0x81,0x87,0x81,0x9f,
-	0x81,0xff,0x81,0xff,0x81,0xf9,0x81,0xe1
-};
-const unsigned char pink4_46[] = {
-	0x81,0x87,0x81,0x9f,0x81,0xff,0x81,0xff,
-	0x81,0xf9,0x81,0xe1,0x81,0x81,0x81,0x81
-};
-const unsigned char pink4_47[] = {
-	0x81,0xff,0x81,0xff,0x81,0xf9,0x81,0xe1,
-	0x81,0x81,0x81,0x81,0x81,0x87,0x81,0x9f
-};
-const unsigned char pink4_48[] = {
-	0x81,0xf9,0x81,0xe1,0x81,0x81,0x81,0x81,
-	0x81,0x87,0x81,0x9f,0x81,0xff,0x81,0xff
-};
-
-/*
-//flagpole data locations
-const unsigned char flagpole1[] = { 0x21 };
-const unsigned char flagpole2[] = { 0x29 };
-const unsigned char flagpole3[] = { 0x2A };
 */
 
 //Level Start! Text
@@ -358,7 +273,7 @@ void Start_StateLevel4() {
 
 	cutscenemode = enabled;
 	isAcornMoving = true; //yes, it is moving
-	flagpole_activated4 = 0;
+	FlagPole_Init();
 	endlevel_counter4 = 0;
 
 	SHOW_SPRITES;
@@ -500,7 +415,7 @@ void Update_StateLevel4() {
 
 			cutscenemode = disabled;
 
-			if (flagpole_activated4 == 0) {
+			if (levelbeat == false) {
 				PlayMusic(mushrooms, 1);
 			}
 		}
@@ -527,33 +442,9 @@ void Update_StateLevel4() {
 	anim_water_counter4++;
 	if (anim_water_counter4 >= 30) anim_water_counter4 = 0;
 
-	//animate grey flagpole
-	if (flagpole_activated4 == 0) {
-		if (anim_flag_counter4 >= 0 && anim_flag_counter4 < 12) {
-			set_bkg_data (0x21, 1, grey4_33);
-			set_bkg_data (0x29, 1, grey4_41);
-			set_bkg_data (0x2A, 1, grey4_41);
-		}
-		else if (anim_flag_counter4 >= 12 && anim_flag_counter4 < 24) {
-			set_bkg_data (0x21, 1, grey4_34);
-			set_bkg_data (0x29, 1, grey4_42);
-			set_bkg_data (0x2A, 1, grey4_42);
-		}
-		else if (anim_flag_counter4 >= 24 && anim_flag_counter4 < 36) {
-			set_bkg_data (0x21, 1, grey4_35);
-			set_bkg_data (0x29, 1, grey4_43);
-			set_bkg_data (0x2A, 1, grey4_43);
-		}
-		else if (anim_flag_counter4 >= 36 && anim_flag_counter4 < 48) {
-			set_bkg_data (0x21, 1, grey4_36);
-			set_bkg_data (0x29, 1, grey4_44);
-			set_bkg_data (0x2A, 1, grey4_44);
-		}
-		anim_flag_counter4++;
-		if (anim_flag_counter4 >= 48) anim_flag_counter4 = 0;
-	}
-	//animate pink flagpole
-	else if (flagpole_activated4 == 1) {
+	FlagPole_Animate();
+
+	if (levelbeat == true) {
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 		cutscenewalkleft = false;
@@ -571,19 +462,7 @@ void Update_StateLevel4() {
 			cutscenewalkleft = false;
 		}
 
-		if (endlevel_counter4 == 10) {
-			SpriteManagerAdd(SpriteStarLeft, 1948, 96);
-			SpriteManagerAdd(SpriteStarRight, 1956, 96);
-		}
-		else if (endlevel_counter4 == 30) {
-			SpriteManagerAdd(SpriteStarLeft, 1948, 80);
-			SpriteManagerAdd(SpriteStarRight, 1956, 80);
-		}
-		else if (endlevel_counter4 == 50) {
-			SpriteManagerAdd(SpriteStarLeft, 1948, 64);
-			SpriteManagerAdd(SpriteStarRight, 1956, 64);
-		}
-		else if (endlevel_counter4 >= 100) {
+		if (endlevel_counter4 >= 100) {
 			//endlevel_counter4 = 0;
 			//cutscenewalkleft = false;
 			//cutscenewalkright = false;
@@ -593,63 +472,14 @@ void Update_StateLevel4() {
 		}
 
 		if (endlevel_counter4 < 250) endlevel_counter4++;
-
-		//spawn some stars
-		/*
-		if (flagpole_stars4 < 1) {
-			SpriteManagerAdd(SpriteStarLeft, spr_nutmeg->x, spr_nutmeg->y);
-			SpriteManagerAdd(SpriteStarRight, spr_nutmeg->x, spr_nutmeg->y);
-
-			//SpriteManagerAdd(SpriteStarLeft, 244, 10);
-			//SpriteManagerAdd(SpriteStarRight, 244, 10);
-		}
-		else if (flagpole_stars4 >= 5 && flagpole_stars4 < 10) {
-			SpriteManagerAdd(SpriteStarLeft, 244, 10);
-			SpriteManagerAdd(SpriteStarRight, 244, 10);
-		}
-		else if (flagpole_stars4 >= 10 && flagpole_stars4 < 20) {
-			SpriteManagerAdd(SpriteStarLeft, 244, 7);
-			SpriteManagerAdd(SpriteStarRight, 244, 7);
-		}
-		*/
-
-		//change flagpole color palette to pink
-		//set_bkg_palette (1, 1, pal_pink4);
-		SetPalette(BG_PALETTE, 1, 1, pal_pink4, _current_bank);
-
-		if (anim_flag_counter4 >= 0 && anim_flag_counter4 < 5) {
-			set_bkg_data (0x21, 1, pink4_37);
-			set_bkg_data (0x29, 1, pink4_45);
-			set_bkg_data (0x2A, 1, pink4_45);
-		}
-		else if (anim_flag_counter4 >= 5 && anim_flag_counter4 < 10) {
-			set_bkg_data (0x21, 1, pink4_38);
-			set_bkg_data (0x29, 1, pink4_46);
-			set_bkg_data (0x2A, 1, pink4_46);
-		}
-		else if (anim_flag_counter4 >= 10 && anim_flag_counter4 < 15) {
-			set_bkg_data (0x21, 1, pink4_39);
-			set_bkg_data (0x29, 1, pink4_47);
-			set_bkg_data (0x2A, 1, pink4_47);
-		}
-		else if (anim_flag_counter4 >= 15 && anim_flag_counter4 < 20) {
-			set_bkg_data (0x21, 1, pink4_40);
-			set_bkg_data (0x29, 1, pink4_48);
-			set_bkg_data (0x2A, 1, pink4_48);
-		}
-		anim_flag_counter4++;
-		if (anim_flag_counter4 >= 20) anim_flag_counter4 = 0;
-
-		if (flagpole_stars4 < 20) flagpole_stars4++;
 	}
 
-	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && flagpole_activated4 == 0 && nutmeg_death == false) {
-		flagpole_activated4 = 1;
+	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg_death == false) {
+		FlagPole_Activate(1948, 96);
 		levelbeat = true;
 		endlevel_counter4 = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
-		__critical { PlayMusic(flagpole, 1); }
 		//distance = 0;
 		//SetState(StateOverworld1);
 	}
