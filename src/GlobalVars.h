@@ -114,22 +114,7 @@ extern UINT8 nut_region;
 extern UINT8 fish_pal_loc;
 
 //world 1 things
-extern const unsigned char level_water1[];
-extern const unsigned char level_water2[];
-extern const unsigned char level_water3[];
-extern const unsigned char level_water_anim1[];
-extern const unsigned char level_water_anim2[];
-extern const unsigned char level_water_anim3[];
-extern const unsigned char UpperL[];
-extern const unsigned char LowerE[];
-extern const unsigned char LowerV[];
-extern const unsigned char LowerL[];
-extern const unsigned char UpperS[];
-extern const unsigned char LowerT[];
-extern const unsigned char LowerA[];
-extern const unsigned char LowerR[];
-extern const unsigned char Exclam[];
-extern const unsigned char BlankSky[];
+
 extern const unsigned char Letter1[];
 extern const unsigned char Letter2[];
 extern const unsigned char Letter3[];

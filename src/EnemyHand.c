@@ -7,11 +7,11 @@
 
 extern Sprite * nutmeg_sprite;
 
-const UINT8 anim_hand_idle[]  = {1, 0};
-const UINT8 anim_hand_open[]  = {28, 0,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3};
-const UINT8 anim_hand_karate[] = {1, 3};
-const UINT8 anim_hand_close[] = {28, 3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-const UINT8 anim_hand_hurt[]  = {1, 4};
+static const UINT8 anim_hand_idle[]  = {1, 0};
+static const UINT8 anim_hand_open[]  = {28, 0,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3};
+static const UINT8 anim_hand_karate[] = {1, 3};
+static const UINT8 anim_hand_close[] = {28, 3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+static const UINT8 anim_hand_hurt[]  = {1, 4};
 
 Sprite * spr_hand;
 

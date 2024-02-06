@@ -12,6 +12,7 @@
 #include "FlagPole.h"
 #include "Water.h"
 #include "Hud.h"
+#include "LevelStart.h"
 
 IMPORT_MAP (level1map);
 
@@ -33,60 +34,6 @@ DECLARE_MUSIC (quickdeath);
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
 extern Sprite * spr_camera;
-
-//Level Start! Text
-const unsigned char UpperL[] = {
-	0xff,0x00,0xff,0x20,0xff,0x20,0xff,0x20,
-	0xff,0x20,0xff,0x20,0xff,0x20,0xff,0x1c
-};
-const unsigned char LowerE[] = {
-	0xff,0x00,0xff,0x00,0xff,0x18,0xff,0x24,
-	0xff,0x24,0xff,0x38,0xff,0x20,0xff,0x1c
-};
-const unsigned char LowerV[] = {
-	0xff,0x00,0xff,0x00,0xff,0x00,0xff,0x44,
-	0xff,0x44,0xff,0x28,0xff,0x28,0xff,0x10
-};
-const unsigned char LowerL[] = {
-	0xff,0x00,0xff,0x00,0xff,0x20,0xff,0x20,
-	0xff,0x20,0xff,0x20,0xff,0x20,0xff,0x38
-};
-const unsigned char UpperS[] = {
-	0xff,0x00,0xff,0x18,0xff,0x24,0xff,0x20,
-	0xff,0x18,0xff,0x04,0xff,0x24,0xff,0x18
-};
-const unsigned char LowerT[] = {
-	0xff,0x00,0xff,0x00,0xff,0x20,0xff,0x20,
-	0xff,0x78,0xff,0x20,0xff,0x20,0xff,0x1c
-};
-const unsigned char LowerA[] = {
-	0xff,0x00,0xff,0x00,0xff,0x18,0xff,0x24,
-	0xff,0x04,0xff,0x1c,0xff,0x24,0xff,0x1a
-};
-const unsigned char LowerR[] = {
-	0xff,0x00,0xff,0x00,0xff,0x18,0xff,0x24,
-	0xff,0x20,0xff,0x20,0xff,0x20,0xff,0x20
-};
-const unsigned char Exclam[] = {
-	0xff,0x00,0xff,0x10,0xff,0x10,0xff,0x10,
-	0xff,0x10,0xff,0x10,0xff,0x00,0xff,0x10
-};
-const unsigned char BlankSky[] = {
-	0xff,0x00,0xff,0x00,0xff,0x00,0xff,0x00,
-	0xff,0x00,0xff,0x00,0xff,0x00,0xff,0x00
-};
-
-const unsigned char  Letter1[] = { 0x54 }; //54-5E
-const unsigned char  Letter2[] = { 0x55 };
-const unsigned char  Letter3[] = { 0x56 };
-const unsigned char  Letter4[] = { 0x57 };
-const unsigned char  Letter5[] = { 0x58 };
-const unsigned char  Letter6[] = { 0x59 };
-const unsigned char  Letter7[] = { 0x5A };
-const unsigned char  Letter8[] = { 0x5B };
-const unsigned char  Letter9[] = { 0x5C };
-const unsigned char Letter10[] = { 0x5D };
-const unsigned char Letter11[] = { 0x5E };
 
 //nutmeg sprite region
 UINT8 nut_region;
@@ -126,6 +73,7 @@ void Start_StateLevel1() {
 	isAcornMoving = true; //yes, it is moving
 	FlagPole_Init();
 	endlevel_counter = 0;
+	LevelStart_Init(7,5);
 
 	SHOW_SPRITES;
 	SHOW_BKG;
@@ -169,110 +117,11 @@ void Update_StateLevel1() {
 		if (level1counter == 0) {
 			cutscenewalkright = true;
 		}
-		else if (level1counter >= 36) {
+		else if (level1counter == 36) {
 			cutscenewalkright = false;
 			//but leave cutscene mode enabled still until Level Start! goes away
 		}
-		if (level1counter >= 10 && level1counter < 40) {
-			set_bkg_data (0x54, 1, UpperL);
-			set_bkg_data (0x55, 1, LowerE);
-			set_bkg_data (0x56, 1, LowerV);
-			set_bkg_data (0x57, 1, LowerE);
-			set_bkg_data (0x58, 1, LowerL);
-			set_bkg_data (0x59, 1, UpperS);
-			set_bkg_data (0x5A, 1, LowerT);
-			set_bkg_data (0x5B, 1, LowerA);
-			set_bkg_data (0x5C, 1, LowerR);
-			set_bkg_data (0x5D, 1, LowerT);
-			set_bkg_data (0x5E, 1, Exclam);
-
-			set_bkg_tiles ( 7, 5, 1, 1, Letter1); //x, y, w, h, *tiles
-			set_bkg_tiles ( 8, 5, 1, 1, Letter2);
-			set_bkg_tiles ( 9, 5, 1, 1, Letter3);
-			set_bkg_tiles (10, 5, 1, 1, Letter4);
-			set_bkg_tiles (11, 5, 1, 1, Letter5);
-			set_bkg_tiles ( 7, 6, 1, 1, Letter6);
-			set_bkg_tiles ( 8, 6, 1, 1, Letter7);
-			set_bkg_tiles ( 9, 6, 1, 1, Letter8);
-			set_bkg_tiles (10, 6, 1, 1, Letter9);
-			set_bkg_tiles (11, 6, 1, 1, Letter10);
-			set_bkg_tiles (12, 6, 1, 1, Letter11);
-		}
-		else if (level1counter >= 40 && level1counter < 70) {
-			set_bkg_data (0x54, 1, BlankSky);
-			set_bkg_data (0x55, 1, BlankSky);
-			set_bkg_data (0x56, 1, BlankSky);
-			set_bkg_data (0x57, 1, BlankSky);
-			set_bkg_data (0x58, 1, BlankSky);
-			set_bkg_data (0x59, 1, BlankSky);
-			set_bkg_data (0x5A, 1, BlankSky);
-			set_bkg_data (0x5B, 1, BlankSky);
-			set_bkg_data (0x5C, 1, BlankSky);
-			set_bkg_data (0x5D, 1, BlankSky);
-			set_bkg_data (0x5E, 1, BlankSky);
-
-			set_bkg_tiles ( 7, 5, 1, 1, Letter1); //x, y, w, h, *tiles
-			set_bkg_tiles ( 8, 5, 1, 1, Letter2);
-			set_bkg_tiles ( 9, 5, 1, 1, Letter3);
-			set_bkg_tiles (10, 5, 1, 1, Letter4);
-			set_bkg_tiles (11, 5, 1, 1, Letter5);
-			set_bkg_tiles ( 7, 6, 1, 1, Letter6);
-			set_bkg_tiles ( 8, 6, 1, 1, Letter7);
-			set_bkg_tiles ( 9, 6, 1, 1, Letter8);
-			set_bkg_tiles (10, 6, 1, 1, Letter9);
-			set_bkg_tiles (11, 6, 1, 1, Letter10);
-			set_bkg_tiles (12, 6, 1, 1, Letter11);
-		}
-		else if (level1counter >= 70 && level1counter < 100) {
-			set_bkg_data (0x54, 1, UpperL);
-			set_bkg_data (0x55, 1, LowerE);
-			set_bkg_data (0x56, 1, LowerV);
-			set_bkg_data (0x57, 1, LowerE);
-			set_bkg_data (0x58, 1, LowerL);
-			set_bkg_data (0x59, 1, UpperS);
-			set_bkg_data (0x5A, 1, LowerT);
-			set_bkg_data (0x5B, 1, LowerA);
-			set_bkg_data (0x5C, 1, LowerR);
-			set_bkg_data (0x5D, 1, LowerT);
-			set_bkg_data (0x5E, 1, Exclam);
-
-			set_bkg_tiles ( 7, 5, 1, 1, Letter1); //x, y, w, h, *tiles
-			set_bkg_tiles ( 8, 5, 1, 1, Letter2);
-			set_bkg_tiles ( 9, 5, 1, 1, Letter3);
-			set_bkg_tiles (10, 5, 1, 1, Letter4);
-			set_bkg_tiles (11, 5, 1, 1, Letter5);
-			set_bkg_tiles ( 7, 6, 1, 1, Letter6);
-			set_bkg_tiles ( 8, 6, 1, 1, Letter7);
-			set_bkg_tiles ( 9, 6, 1, 1, Letter8);
-			set_bkg_tiles (10, 6, 1, 1, Letter9);
-			set_bkg_tiles (11, 6, 1, 1, Letter10);
-			set_bkg_tiles (12, 6, 1, 1, Letter11);
-		}
-		else if (level1counter >= 100 && level1counter < 101) {
-			set_bkg_data (0x54, 1, BlankSky);
-			set_bkg_data (0x55, 1, BlankSky);
-			set_bkg_data (0x56, 1, BlankSky);
-			set_bkg_data (0x57, 1, BlankSky);
-			set_bkg_data (0x58, 1, BlankSky);
-			set_bkg_data (0x59, 1, BlankSky);
-			set_bkg_data (0x5A, 1, BlankSky);
-			set_bkg_data (0x5B, 1, BlankSky);
-			set_bkg_data (0x5C, 1, BlankSky);
-			set_bkg_data (0x5D, 1, BlankSky);
-			set_bkg_data (0x5E, 1, BlankSky);
-
-			set_bkg_tiles ( 7, 5, 1, 1, Letter1); //x, y, w, h, *tiles
-			set_bkg_tiles ( 8, 5, 1, 1, Letter2);
-			set_bkg_tiles ( 9, 5, 1, 1, Letter3);
-			set_bkg_tiles (10, 5, 1, 1, Letter4);
-			set_bkg_tiles (11, 5, 1, 1, Letter5);
-			set_bkg_tiles ( 7, 6, 1, 1, Letter6);
-			set_bkg_tiles ( 8, 6, 1, 1, Letter7);
-			set_bkg_tiles ( 9, 6, 1, 1, Letter8);
-			set_bkg_tiles (10, 6, 1, 1, Letter9);
-			set_bkg_tiles (11, 6, 1, 1, Letter10);
-			set_bkg_tiles (12, 6, 1, 1, Letter11);
-
+		else if (level1counter == 100) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
@@ -280,6 +129,7 @@ void Update_StateLevel1() {
 			}
 		}
 
+		LevelStart_Update();
 		if (level1counter < 105) level1counter++;
 	}
 
