@@ -8,76 +8,44 @@
 #include "GlobalVars.h"
 #include "Palette.h"
 
+//water tiles are stored in 1A, 1B, and 1C
+//in GBTD, water is 26, 27, 28
+const unsigned char level_water1[] = {
+	0x00,0x08,0x08,0x3c,0x3c,0xff,0xff,0xfb,
+	0xff,0xdf,0xf7,0xff,0x7f,0xff,0xfd,0xff
+};
+const unsigned char level_water2[] = {
+	0x00,0x20,0x20,0xf3,0xf3,0xff,0xff,0xff,
+	0xdf,0xff,0xff,0xf7,0x7f,0xff,0xfd,0xff
+};
+const unsigned char level_water3[] = {
+	0x00,0x82,0x82,0xcf,0xcf,0xff,0xff,0xfb,
+	0xdf,0xff,0xff,0xf7,0x7f,0xff,0xfd,0xff
+};
+
 #define WATER_TILE_1 (0x1A)
 #define WATER_TILE_2 (0x1B)
 #define WATER_TILE_3 (0x1C)
 
-void FlagPole_Animate (void) BANKED
-{
-	if (flagpole_activated == 0) {
-        //animate grey flagpole
-		if (anim_flag_counter < 12) {
-			set_bkg_data (WATER_TILE_1, 1, grey_33);
-			set_bkg_data (WATER_TILE_2, 1, grey_41);
-			set_bkg_data (WATER_TILE_3, 1, grey_41);
-		}
-		else if (anim_flag_counter >= 12 && anim_flag_counter < 24) {
-			set_bkg_data (WATER_TILE_1, 1, grey_34);
-			set_bkg_data (WATER_TILE_2, 1, grey_42);
-			set_bkg_data (WATER_TILE_3, 1, grey_42);
-		}
-		else if (anim_flag_counter >= 24 && anim_flag_counter < 36) {
-			set_bkg_data (WATER_TILE_1, 1, grey_35);
-			set_bkg_data (WATER_TILE_2, 1, grey_43);
-			set_bkg_data (WATER_TILE_3, 1, grey_43);
-		}
-		else if (anim_flag_counter >= 36 && anim_flag_counter < 48) {
-			set_bkg_data (WATER_TILE_1, 1, grey_36);
-			set_bkg_data (WATER_TILE_2, 1, grey_44);
-			set_bkg_data (WATER_TILE_3, 1, grey_44);
-		}
-		anim_flag_counter++;
-		if (anim_flag_counter >= 48) anim_flag_counter = 0;
+UINT8 anim_water_counter = 0;
+
+void Water_Animate (void) BANKED {
+	//animate water
+	if (anim_water_counter >= 0 && anim_water_counter < 10) {
+		set_bkg_data (WATER_TILE_1, 1, level_water1);
+		set_bkg_data (WATER_TILE_2, 1, level_water2);
+		set_bkg_data (WATER_TILE_3, 1, level_water3);
 	}
-    else
-    {
-        //animate pink flagpole
-        if (anim_flag_counter < 5) {
-			set_bkg_data (WATER_TILE_1, 1, pink_37);
-			set_bkg_data (WATER_TILE_2, 1, pink_45);
-			set_bkg_data (WATER_TILE_3, 1, pink_45);
-		}
-		else if (anim_flag_counter >= 5 && anim_flag_counter < 10) {
-			set_bkg_data (WATER_TILE_1, 1, pink_38);
-			set_bkg_data (WATER_TILE_2, 1, pink_46);
-			set_bkg_data (WATER_TILE_3, 1, pink_46);
-		}
-		else if (anim_flag_counter >= 10 && anim_flag_counter < 15) {
-			set_bkg_data (WATER_TILE_1, 1, pink_39);
-			set_bkg_data (WATER_TILE_2, 1, pink_47);
-			set_bkg_data (WATER_TILE_3, 1, pink_47);
-		}
-		else if (anim_flag_counter >= 15 && anim_flag_counter < 20) {
-			set_bkg_data (WATER_TILE_1, 1, pink_40);
-			set_bkg_data (WATER_TILE_2, 1, pink_48);
-			set_bkg_data (WATER_TILE_3, 1, pink_48);
-		}
-		anim_flag_counter++;
-		if (anim_flag_counter >= 20) anim_flag_counter = 0;
-
-        finish_counter++;
-
-        if (finish_counter == 10) {
-			SpriteManagerAdd(SpriteStarLeft, stars_x, stars_y);
-			SpriteManagerAdd(SpriteStarRight, stars_x+8, 96);
-		}
-		else if (finish_counter == 30) {
-			SpriteManagerAdd(SpriteStarLeft, stars_x, stars_y-16);
-			SpriteManagerAdd(SpriteStarRight, stars_x+8, stars_y-16);
-		}
-		else if (finish_counter == 50) {
-			SpriteManagerAdd(SpriteStarLeft, stars_x, stars_y-32);
-			SpriteManagerAdd(SpriteStarRight, stars_x+8, stars_y-32);
-		}
-    }
+	else if (anim_water_counter >= 10 && anim_water_counter < 20) {
+		set_bkg_data (WATER_TILE_1, 1, level_water2);
+		set_bkg_data (WATER_TILE_2, 1, level_water3);
+		set_bkg_data (WATER_TILE_3, 1, level_water1);
+	}
+	else if (anim_water_counter >= 20 && anim_water_counter < 30) {
+		set_bkg_data (WATER_TILE_1, 1, level_water3);
+		set_bkg_data (WATER_TILE_2, 1, level_water1);
+		set_bkg_data (WATER_TILE_3, 1, level_water2);
+	}
+	anim_water_counter++;
+	if (anim_water_counter >= 30) anim_water_counter = 0;
 }
