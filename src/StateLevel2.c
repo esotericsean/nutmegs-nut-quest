@@ -9,13 +9,12 @@
 #include "Palette.h"
 #include "../src/GlobalVars.h"
 #include "FlagPole.h"
+#include "Water.h"
 
 IMPORT_MAP (level2map);
 IMPORT_MAP (hud);
 
 UINT16 level2counter = 0;
-
-UINT8 anim_water_counter2 = 0;
 UINT8 endlevel_counter2 = 0;
 
 
@@ -32,28 +31,6 @@ extern Sprite * spr_nutmeg;
 //extern Sprite * spr_nutmeg2;
 extern Sprite * spr_camera;
 //struct Sprite * spr_nutmegbow;
-
-//water tiles are stored in 1A, 1B, and 1C
-//in GBTD, water is 26, 27, 28
-const unsigned char level2_water1[] = {
-	0x00,0x08,0x08,0x3c,0x3c,0xff,0xff,0xfb,
-	0xff,0xdf,0xf7,0xff,0x7f,0xff,0xfd,0xff
-};
-const unsigned char level2_water2[] = {
-	0x00,0x20,0x20,0xf3,0xf3,0xff,0xff,0xff,
-	0xdf,0xff,0xff,0xf7,0x7f,0xff,0xfd,0xff
-};
-const unsigned char level2_water3[] = {
-	0x00,0x82,0x82,0xcf,0xcf,0xff,0xff,0xfb,
-	0xdf,0xff,0xff,0xf7,0x7f,0xff,0xfd,0xff
-};
-
-/*
-//water anim data locations
-const unsigned char level_water_anim1[] = { 0x1A };
-const unsigned char level_water_anim2[] = { 0x1B };
-const unsigned char level_water_anim3[] = { 0x1C };
-*/
 
 //Level Start! Text
 const unsigned char UpperL2[] = {
@@ -415,24 +392,7 @@ void Update_StateLevel2() {
 		if (level2counter < 105) level2counter++;
 	}
 
-	//animate water
-	if (anim_water_counter2 >= 0 && anim_water_counter2 < 10) {
-		set_bkg_data (0x1A, 1, level2_water1);
-		set_bkg_data (0x1B, 1, level2_water2);
-		set_bkg_data (0x1C, 1, level2_water3);
-	}
-	else if (anim_water_counter2 >= 10 && anim_water_counter2 < 20) {
-		set_bkg_data (0x1A, 1, level2_water2);
-		set_bkg_data (0x1B, 1, level2_water3);
-		set_bkg_data (0x1C, 1, level2_water1);
-	}
-	else if (anim_water_counter2 >= 20 && anim_water_counter2 < 30) {
-		set_bkg_data (0x1A, 1, level2_water3);
-		set_bkg_data (0x1B, 1, level2_water1);
-		set_bkg_data (0x1C, 1, level2_water2);
-	}
-	anim_water_counter2++;
-	if (anim_water_counter2 >= 30) anim_water_counter2 = 0;
+	Water_Animate();
 
 	FlagPole_Animate();
 	
