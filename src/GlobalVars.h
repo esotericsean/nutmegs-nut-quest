@@ -29,7 +29,8 @@ extern UINT8 collisionY;
 extern UINT8 groundCollision;
 
 //random typedefs
-typedef enum { true, false } bool;
+
+typedef enum { false, true } bool;
 typedef enum { grounded, inair } move_state;
 typedef enum { enabled, disabled } switcher;
 typedef enum { right, left } direction;
@@ -114,18 +115,6 @@ extern UINT8 nut_region;
 extern UINT8 fish_pal_loc;
 
 //world 1 things
-
-extern const unsigned char Letter1[];
-extern const unsigned char Letter2[];
-extern const unsigned char Letter3[];
-extern const unsigned char Letter4[];
-extern const unsigned char Letter5[];
-extern const unsigned char Letter6[];
-extern const unsigned char Letter7[];
-extern const unsigned char Letter8[];
-extern const unsigned char Letter9[];
-extern const unsigned char Letter10[];
-extern const unsigned char Letter11[];
 extern const UINT8 collision_tiles_level1[];
 extern const UINT16 bg_palette_level1[];
 extern const UINT16 sprites_palette_level1[];
