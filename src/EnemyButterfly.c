@@ -7,9 +7,6 @@
 
 extern Sprite * nutmeg_sprite;
 
-UINT8 a = 0; //up and down
-UINT8 b = 0; //left and right
-
 static const UINT8 anim_butterfly_fly[] = {4, 1, 2, 3, 2};
 
 void Start_EnemyButterfly() {
@@ -24,10 +21,15 @@ void Start_EnemyButterfly() {
 
 	SetSpriteAnim(THIS, anim_butterfly_fly, 6);
 	THIS->mirror = V_MIRROR;
+	THIS->custom_data[0] = 0;
+	THIS->custom_data[1] = 0;
 }
 
 void Update_EnemyButterfly() {
 	//up and down
+	UINT8 a = THIS->custom_data[0];
+	UINT8 b = THIS->custom_data[1];
+
 	if (a < 100 && a % 5 == 0)
 		TranslateSprite(THIS, 0, -1);
 
@@ -40,21 +42,23 @@ void Update_EnemyButterfly() {
 		TranslateSprite(THIS, 1, 0);
 	}
 
-	if (b >= 210 && b < 310 && b % 10 == 0) {
+	if (b >= 210 && b % 10 == 0) {
 		THIS->mirror = V_MIRROR;
 		TranslateSprite(THIS, -1, 0);
 	}
 
-	a++;
-	b++;
+	THIS->custom_data[0]++;
+	THIS->custom_data[1]++;
 
-	if (a >= 220) a = 0;
-	if (b >= 320) b = 0;
+	if (THIS->custom_data[0] >= 220)
+	{
+		THIS->custom_data[0] = 0;
+	}
 	
 	//kill butterfly if jump on it
 	if (CheckCollision(THIS, nutmeg_sprite) && movestate == inair && accelY > 0 && nutmeg_death == false) {
 		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-		isjumping = true;
+		isjumping = true; 
 		accelY = -600;
 		jumpPeak = 0;
 		movestate = inair;
