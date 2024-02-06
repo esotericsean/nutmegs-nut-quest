@@ -6,25 +6,25 @@
 #include "SpriteManager.h"
 #include "../src/GlobalVars.h"
 
-const UINT8 anim_nutmeg_idle_right[] = {4, 1, 2, 3, 4};
-const UINT8 anim_nutmeg_idle_left[]  = {4, 1, 2, 3, 4};
+static const UINT8 anim_nutmeg_idle_right[] = {4, 1, 2, 3, 4};
+static const UINT8 anim_nutmeg_idle_left[]  = {4, 1, 2, 3, 4};
 
-const UINT8 anim_nutmeg_walk_right[] = {4, 5, 6, 7, 8};
-const UINT8 anim_nutmeg_walk_left[]  = {4, 5, 6, 7, 8};
+static const UINT8 anim_nutmeg_walk_right[] = {4, 5, 6, 7, 8};
+static const UINT8 anim_nutmeg_walk_left[]  = {4, 5, 6, 7, 8};
 
-const UINT8 anim_nutmeg_jump_right[] = {1, 9};
-const UINT8 anim_nutmeg_jump_left[]  = {1, 9};
+static const UINT8 anim_nutmeg_jump_right[] = {1, 9};
+static const UINT8 anim_nutmeg_jump_left[]  = {1, 9};
 
-const UINT8 anim_nutmeg_fall_right[] = {1, 10};
-const UINT8 anim_nutmeg_fall_left[]  = {1, 10};
+static const UINT8 anim_nutmeg_fall_right[] = {1, 10};
+static const UINT8 anim_nutmeg_fall_left[]  = {1, 10};
 
-const UINT8 anim_nutmeg_land_right[] = {1, 11};
-const UINT8 anim_nutmeg_land_left[]  = {1, 11};
+static const UINT8 anim_nutmeg_land_right[] = {1, 11};
+static const UINT8 anim_nutmeg_land_left[]  = {1, 11};
    
-const UINT8 anim_nutmeg_hurt_right[] = {14, 12, 12, 12, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14};
-const UINT8 anim_nutmeg_hurt_left[]  = {14, 12, 12, 12, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14};
+static const UINT8 anim_nutmeg_hurt_right[] = {14, 12, 12, 12, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14};
+static const UINT8 anim_nutmeg_hurt_left[]  = {14, 12, 12, 12, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14};
 
-const UINT8 anim_nutmeg_lostbow[] = {2, 11, 0};
+static const UINT8 anim_nutmeg_lostbow[] = {2, 11, 0};
 
 direction nutmeg_direction;
 bool isjumping = true;
@@ -108,14 +108,12 @@ void Start_SpriteNutmeg() {
 }
 
 void Update_SpriteNutmeg() {
-    UINT8 i;
-    Sprite * spr;
     nutmeg_sprite = THIS;
     
     // extra life from 100 acorns
     if (acorncounter == 100) {
         nutmeglives++;
-        //PLAY FUN SOUND HERE!
+        // TODO - PLAY FUN SOUND HERE!
         acorncounter = 0;
         if (nutmeglives > 99) nutmeglives = 99;
     }
