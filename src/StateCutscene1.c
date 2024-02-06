@@ -22,35 +22,8 @@ INT8 nutmeglives;
 
 const UINT8 collision_tiles_cutscene1[] = {0};
 
-/*
-const UWORD pal_cut1[] = {
-	RGB(28, 23, 18),
-	RGB(16, 10, 7),
-	RGB(11, 6,  6),
-	RGB(0,  0,  0)
-};
-const UWORD pal_cut2[] = {
-	RGB(28, 23, 18),
-    RGB(27, 13, 6),
-	RGB(16, 10, 7),
-	RGB(0,  0,  0)
-};
-
-const UWORD bowPalette[] = {
-	0,
-    RGB(28, 15, 15),
-    RGB(22, 5, 5),
-    RGB(0, 0, 0)
-};
-*/
-
 //extern UINT8* oaktree_mod_Data[];
 DECLARE_MUSIC(oaktree);
-
-//need to specify a param when loading bg
-//SetPalette only has 2 options: BG_PAL and SPRITES_PAL
-//PALETTE_FROM_HEADER I don't think is it
-//void InitScrollTiles(UINT8 first_tile, UINT8 n_tiles, UINT8* tile_data, UINT8 tile_bank);
 
 const unsigned char font_upper_WW[] = {
 0x00,0x00,0x44,0x44,0x44,0x44,0x44,0x44,
@@ -163,41 +136,43 @@ void Update_StateCutscene1() {
     }
 
     //We're
-    if (cutscene1counter >= 35 && cutscene1counter < 40) set_bkg_data (0x02, 1, font_upper_WW);
-    else if (cutscene1counter >= 40 && cutscene1counter < 45) set_bkg_data (0x03, 1, font_lower_ee);
-    else if (cutscene1counter >= 45 && cutscene1counter < 50) set_bkg_data (0x04, 1, font_apostrophee);
-    else if (cutscene1counter >= 50 && cutscene1counter < 55) set_bkg_data (0x05, 1, font_lower_rr);
-    else if (cutscene1counter >= 55 && cutscene1counter < 60) set_bkg_data (0x06, 1, font_lower_ee);
+    if (cutscene1counter == 35) set_bkg_data (0x02, 1, font_upper_WW);
+    else if (cutscene1counter == 40) set_bkg_data (0x03, 1, font_lower_ee);
+    else if (cutscene1counter == 45) set_bkg_data (0x04, 1, font_apostrophee);
+    else if (cutscene1counter == 50) set_bkg_data (0x05, 1, font_lower_rr);
+    else if (cutscene1counter == 55) set_bkg_data (0x06, 1, font_lower_ee);
 
     //hungry,
-    else if (cutscene1counter >= 60 && cutscene1counter < 65) set_bkg_data (0x08, 1, font_lower_hh);
-    else if (cutscene1counter >= 65 && cutscene1counter < 70) set_bkg_data (0x09, 1, font_lower_uu);
-    else if (cutscene1counter >= 70 && cutscene1counter < 75) set_bkg_data (0x0A, 1, font_lower_nn);
-    else if (cutscene1counter >= 75 && cutscene1counter < 80) set_bkg_data (0x0B, 1, font_lower_gg);
-    else if (cutscene1counter >= 80 && cutscene1counter < 85) set_bkg_data (0x0C, 1, font_lower_rr);
-    else if (cutscene1counter >= 85 && cutscene1counter < 90) set_bkg_data (0x0D, 1, font_lower_yy);
-    else if (cutscene1counter >= 90 && cutscene1counter < 95) set_bkg_data (0x0E, 1, font_commaa);
+    else if (cutscene1counter == 60) set_bkg_data (0x08, 1, font_lower_hh);
+    else if (cutscene1counter == 65) set_bkg_data (0x09, 1, font_lower_uu);
+    else if (cutscene1counter == 70) set_bkg_data (0x0A, 1, font_lower_nn);
+    else if (cutscene1counter == 75) set_bkg_data (0x0B, 1, font_lower_gg);
+    else if (cutscene1counter == 80) set_bkg_data (0x0C, 1, font_lower_rr);
+    else if (cutscene1counter == 85) set_bkg_data (0x0D, 1, font_lower_yy);
+    else if (cutscene1counter == 90) set_bkg_data (0x0E, 1, font_commaa);
 
     //mama...
-    else if (cutscene1counter >= 95 && cutscene1counter < 100) set_bkg_data (0x10, 1, font_lower_mm);
-    else if (cutscene1counter >= 100 && cutscene1counter < 105) set_bkg_data (0x11, 1, font_lower_aa);
-    else if (cutscene1counter >= 105 && cutscene1counter < 110) set_bkg_data (0x12, 1, font_lower_mm);
-    else if (cutscene1counter >= 110 && cutscene1counter < 115) set_bkg_data (0x13, 1, font_lower_aa);
-    else if (cutscene1counter >= 115 && cutscene1counter < 120) set_bkg_data (0x14, 1, font_periodd);
-    else if (cutscene1counter >= 120 && cutscene1counter < 125) set_bkg_data (0x15, 1, font_periodd);
-    else if (cutscene1counter >= 125 && cutscene1counter < 130) set_bkg_data (0x16, 1, font_periodd);
-
+    else if (cutscene1counter == 95 ) set_bkg_data (0x10, 1, font_lower_mm);
+    else if (cutscene1counter == 100) set_bkg_data (0x11, 1, font_lower_aa);
+    else if (cutscene1counter == 105) set_bkg_data (0x12, 1, font_lower_mm);
+    else if (cutscene1counter == 110) set_bkg_data (0x13, 1, font_lower_aa);
+    else if (cutscene1counter == 115) set_bkg_data (0x14, 1, font_periodd);
+    else if (cutscene1counter == 120) set_bkg_data (0x15, 1, font_periodd);
+    else if (cutscene1counter == 125) set_bkg_data (0x16, 1, font_periodd);
     //▼
-    else if (cutscene1counter >= 135 && cutscene1counter < 155) set_bkg_data (0x6E, 1, font_arroww);
-    else if (cutscene1counter >= 155 && cutscene1counter < 175) set_bkg_data (0x6E, 1, font_blankk);
+    else if (cutscene1counter == 135) set_bkg_data (0x6E, 1, font_arroww);
+    else if (cutscene1counter == 155) set_bkg_data (0x6E, 1, font_blankk);
 
     cutscene1counter++;
 
-    if (KEY_PRESSED(J_A) && cutscene1counter >= 135 && cutscene1counter < 175) {
+    if (KEY_PRESSED(J_A) && cutscene1counter >= 135) {
         //CHANGE THIS TO CUTSCENE 2, then CUTSCENE 3, then Gordon Cutscene, then Overworld1
         //and set variable for first time visiting overworld
         SetState(StateCutscene2);
     }
 
-    if (cutscene1counter >= 175) cutscene1counter = 135;
+    if (cutscene1counter >= 175)
+    {
+         cutscene1counter = 135;
+    }
 }
