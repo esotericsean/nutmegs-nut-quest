@@ -54,7 +54,6 @@ const unsigned char level_water_anim1[] = { 0x1A };
 const unsigned char level_water_anim2[] = { 0x1B };
 const unsigned char level_water_anim3[] = { 0x1C };
 
-
 //Level Start! Text
 const unsigned char UpperL[] = {
 	0xff,0x00,0xff,0x20,0xff,0x20,0xff,0x20,

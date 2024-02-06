@@ -194,7 +194,7 @@ void FlagPole_Animate (void) BANKED
 
         finish_counter++;
 
-        if (finish_counter== 10) {
+        if (finish_counter == 10) {
 			SpriteManagerAdd(SpriteStarLeft, stars_x, stars_y);
 			SpriteManagerAdd(SpriteStarRight, stars_x+8, 96);
 		}
