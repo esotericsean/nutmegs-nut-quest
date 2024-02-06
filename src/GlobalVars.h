@@ -58,6 +58,9 @@ extern bool GameOver;
 extern bool deathmusicplayed;
 extern bool pitdeathactive;
 
+// level timer countdown - controlled by Hud.c
+extern UINT16 timerlevel;
+
 //first time visiting overworld1
 extern bool overworld1visited;
 
