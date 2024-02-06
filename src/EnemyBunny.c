@@ -7,11 +7,11 @@
 
 extern Sprite * nutmeg_sprite;
 
-UINT16 c = 0; // counter
-
 const UINT8 anim_bunny_idle[] = {1, 0};
 const UINT8 anim_bunny_jump[] = {6, 0, 1, 2, 3, 4, 5};
 const UINT8 anim_bunny_die[] = {1, 6};
+
+
 
 void Start_EnemyBunny() {
 	if (levelorientation == horizontal) {
@@ -25,9 +25,20 @@ void Start_EnemyBunny() {
 
 	SetSpriteAnim(THIS, anim_bunny_idle, 1);
 	THIS->mirror = V_MIRROR;
+
+
+	*((UINT16 *)THIS->custom_data) = 0;
 }
 
 void Update_EnemyBunny() {
+	
+	UINT16 c = *(UINT16 *)THIS->custom_data;
+	c++;
+	if (c >= 292)
+		c = 0;
+	
+	*((UINT16 *)THIS->custom_data) = c;
+
 	if (c < 25) {
 		//SPRITE_UNSET_VMIRROR(THIS);
 		THIS->mirror = NO_MIRROR;
@@ -55,11 +66,7 @@ void Update_EnemyBunny() {
 		SetSpriteAnim(THIS, anim_bunny_idle, 1);
 	}
 
-	c++;
 
-	if (c >= 292)
-		c = 0;
-	
 	TranslateSprite (THIS, 0, 1);
 
 	//kill bunny if jump on it
