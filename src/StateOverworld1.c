@@ -114,14 +114,6 @@ const unsigned char current_acorn1[]  = { 0x44 };
 
 bool overworld1visited = false;
 
-/*
-const UINT16 bg_palette_overworld1[] = {PALETTE_FROM_HEADER(overworld1)};
-
-const UINT16 sprites_palette_overworld1[] = {
-	PALETTE_INDEX (nutmeg, 0),
-	PALETTE_INDEX (acorn, 1)
-};
-*/
 
 UINT8 collision_tiles_overworld1[] = {0};
 
@@ -144,12 +136,6 @@ const unsigned char overworld1_water1[] = {
 const unsigned char overworld1_water2[] = {
 	0xff,0x00,0xff,0x00,0xff,0x00,0x9f,0x00,
 	0x69,0x00,0xf6,0x00,0xff,0x00,0xff,0x00
-};
-
-//This is a map of a single water tile located in data location 3E
-//Use a separate map for things that you want to animate separately
-const unsigned char water_anim[] = {
-	0x3E
 };
 
 unsigned char mapdark[] = { 6 }; 
@@ -261,21 +247,17 @@ void Update_StateOverworld1() {
 	//set_bkg_tiles (6, 8, 1, 1, overworld1_water1); //x, y, w, h, *tiles
 
 	//water anim
-	if (f >= 0 && f < 20) set_bkg_data (0x3E, 1, overworld1_water1);
-	if (f >= 20 && f < 40) set_bkg_data (0x3E, 1, overworld1_water2);
-	set_bkg_tiles ( 0,  2, 1, 1, water_anim);
-	set_bkg_tiles (19,  1, 1, 1, water_anim);
-	set_bkg_tiles ( 0,  8, 1, 1, water_anim);
-	set_bkg_tiles (19,  4, 1, 1, water_anim);
-	set_bkg_tiles (19,  9, 1, 1, water_anim);
-	set_bkg_tiles ( 1, 16, 1, 1, water_anim);
-	//set_bkg_tiles (19, 12, 1, 1, water_anim);
-	set_bkg_tiles (11, 17, 1, 1, water_anim);
-	set_bkg_tiles (17, 17, 1, 1, water_anim);
-
+	if (f == 0) 
+	{
+		set_bkg_data (0x01, 1, overworld1_water1);
+	}
+	else if (f == 20) 
+	{
+		set_bkg_data (0x01, 1, overworld1_water2);
+	}
 	f++;
 
-	if (f >= 40) {
+	if (f == 40) {
 		f = 0;
 	}
 
