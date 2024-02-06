@@ -9,13 +9,13 @@
 
 extern Sprite * nutmeg_sprite;
 
-UINT8 fishcounter = 0; // counter
+static UINT8 fishcounter = 0; // counter
 
-const UINT8 anim_fish_idle[] = {1, 0};
+static const UINT8 anim_fish_idle[] = {1, 0};
 
 //fish color palettes
-const UWORD pal_fishgreen4[] = { RGB(31, 31, 31), RGB(5,  24, 14), RGB(5,  19, 12), RGB(0,  0,  0) };
-const UWORD pal_fishblue4[] =  { RGB(31, 31, 31), RGB(19, 22, 30), RGB(12, 13, 28), RGB(8,  8, 27) };
+static const UWORD pal_fishgreen4[] = { RGB(31, 31, 31), RGB(5,  24, 14), RGB(5,  19, 12), RGB(0,  0,  0) };
+static const UWORD pal_fishblue4[] =  { RGB(31, 31, 31), RGB(19, 22, 30), RGB(12, 13, 28), RGB(8,  8, 27) };
 
 void Start_EnemyFish() {
 	THIS->lim_x = 500;
@@ -28,12 +28,12 @@ void Start_EnemyFish() {
 }
 
 void Update_EnemyFish() {
-	if (fishcounter >=  0 && fishcounter < 30) TranslateSprite(THIS, 0, -2);
+	if (fishcounter < 30) TranslateSprite(THIS, 0, -2);
 	if (fishcounter >= 30 && fishcounter < 40) TranslateSprite(THIS, 0, -1);
 	if (fishcounter >= 42 && fishcounter < 52) TranslateSprite(THIS, 0, 1);
 	if (fishcounter >= 52 && fishcounter < 82) TranslateSprite(THIS, 0, 2);
 
-	if (fishcounter >=  0 && fishcounter < 20) THIS->mirror = V_MIRROR;
+	if (fishcounter < 20) THIS->mirror = V_MIRROR;
 	if (fishcounter >= 20 && fishcounter < 40) THIS->mirror = NO_MIRROR;
 	if (fishcounter >= 40 && fishcounter < 60) THIS->mirror = V_MIRROR;
 	if (fishcounter >= 60 && fishcounter < 80) THIS->mirror = NO_MIRROR;
@@ -60,14 +60,8 @@ void Update_EnemyFish() {
 		jumpPeak = 0;
 		movestate = inair;
 
-		if (nutmeg_direction == right) {
-			SpriteManagerAdd(SpriteStarLeft, THIS->x+16, THIS->y+8);
-			SpriteManagerAdd(SpriteStarRight, THIS->x+16, THIS->y+8);
-		}
-		else if (nutmeg_direction == left) {
-			SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y+8);
-			SpriteManagerAdd(SpriteStarRight, THIS->x-4, THIS->y+8);
-		}
+		SpriteManagerAdd(SpriteStarLeft, THIS->x, THIS->y+2);
+		SpriteManagerAdd(SpriteStarRight, THIS->x+8, THIS->y+2);
 
 		SpriteManagerRemoveSprite (THIS);
 	}
