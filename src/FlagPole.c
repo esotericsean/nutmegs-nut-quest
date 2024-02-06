@@ -131,7 +131,7 @@ void FlagPole_Activate(int x, int y) BANKED
     //change flagpole color palette to pink
 	if (W1LevelSelection == 5)
 	{
-		SetPalette(BG_PALETTE, 1, 1, pal_pink5, _current_bank);
+		SetPalette(BG_PALETTE, 5, 1, pal_pink5, _current_bank);
 	}
 	else if (W1LevelSelection == 3)
 	{
