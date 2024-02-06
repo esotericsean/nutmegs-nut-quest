@@ -8,9 +8,10 @@
 #include "SpriteManager.h"
 #include "Palette.h"
 #include "../src/GlobalVars.h"
+#include "Hud.h"
 
 IMPORT_MAP (w1bossmap);
-IMPORT_MAP (hudboss);
+
 
 UINT16 w1bosscounter = 0;
 
@@ -39,66 +40,6 @@ extern Sprite * spr_nutmeg;
 extern Sprite * spr_hand;
 extern Sprite * spr_spatula;
 extern Sprite * spr_popsicle;
-
-void UpdateHudw1b() {
-	//health system DISPLAY
-	//health first number:
-	if (nutmeg_death == false) {
-		switch (nutmeglives - (nutmeglives % 10)) {
-			case 0:  UPDATE_HUD_TILE (3, 0, 6);  break;
-			case 10: UPDATE_HUD_TILE (3, 0, 7);  break;
-			case 20: UPDATE_HUD_TILE (3, 0, 8);  break;
-			case 30: UPDATE_HUD_TILE (3, 0, 9);  break;
-			case 40: UPDATE_HUD_TILE (3, 0, 10); break;
-			case 50: UPDATE_HUD_TILE (3, 0, 11); break;
-			case 60: UPDATE_HUD_TILE (3, 0, 12); break;
-			case 70: UPDATE_HUD_TILE (3, 0, 13); break;
-			case 80: UPDATE_HUD_TILE (3, 0, 14); break;
-			case 90: UPDATE_HUD_TILE (3, 0, 15); break;
-		}
-		//health second number:
-		switch (nutmeglives % 10) {
-			case 0: UPDATE_HUD_TILE (4, 0, 6);  break;
-			case 1: UPDATE_HUD_TILE (4, 0, 7);  break;
-			case 2: UPDATE_HUD_TILE (4, 0, 8);  break;
-			case 3: UPDATE_HUD_TILE (4, 0, 9);  break;
-			case 4: UPDATE_HUD_TILE (4, 0, 10); break;
-			case 5: UPDATE_HUD_TILE (4, 0, 11); break;
-			case 6: UPDATE_HUD_TILE (4, 0, 12); break;
-			case 7: UPDATE_HUD_TILE (4, 0, 13); break;
-			case 8: UPDATE_HUD_TILE (4, 0, 14); break;
-			case 9: UPDATE_HUD_TILE (4, 0, 15); break;
-		}
-	}
-
-	//acorns:
-	//acorns first number:
-	switch (acorncounter - (acorncounter % 10)) {
-		case 0:  UPDATE_HUD_TILE (17, 0, 6);  break;
-		case 10: UPDATE_HUD_TILE (17, 0, 7);  break;
-		case 20: UPDATE_HUD_TILE (17, 0, 8);  break;
-		case 30: UPDATE_HUD_TILE (17, 0, 9);  break;
-		case 40: UPDATE_HUD_TILE (17, 0, 10); break;
-		case 50: UPDATE_HUD_TILE (17, 0, 11); break;
-		case 60: UPDATE_HUD_TILE (17, 0, 12); break;
-		case 70: UPDATE_HUD_TILE (17, 0, 13); break;
-		case 80: UPDATE_HUD_TILE (17, 0, 14); break;
-		case 90: UPDATE_HUD_TILE (17, 0, 15); break;
-	}
-	//acorns second number:
-	switch (acorncounter % 10) {
-		case 0: UPDATE_HUD_TILE (18, 0, 6);  break;
-		case 1: UPDATE_HUD_TILE (18, 0, 7);  break;
-		case 2: UPDATE_HUD_TILE (18, 0, 8);  break;
-		case 3: UPDATE_HUD_TILE (18, 0, 9);  break;
-		case 4: UPDATE_HUD_TILE (18, 0, 10); break;
-		case 5: UPDATE_HUD_TILE (18, 0, 11); break;
-		case 6: UPDATE_HUD_TILE (18, 0, 12); break;
-		case 7: UPDATE_HUD_TILE (18, 0, 13); break;
-		case 8: UPDATE_HUD_TILE (18, 0, 14); break;
-		case 9: UPDATE_HUD_TILE (18, 0, 15); break;
-	}
-}
 
 void Start_StateW1Boss() {
 	w1bosscounter = 0;
@@ -133,7 +74,7 @@ void Start_StateW1Boss() {
 
 	InitScrollTiles(0, &w1bosstiles);
 	InitScroll(BANK(w1bossmap), &w1bossmap, collision_tiles_levelw1b, collision_tiles_down_levelw1b);
-	INIT_HUD(hudboss);
+	Hud_Init(true);
 
 	cutscenemode = enabled;
 	isAcornMoving = true; //yes, it is moving
@@ -173,7 +114,7 @@ void Start_StateW1Boss() {
 }
 
 void Update_StateW1Boss() {
-	UpdateHudw1b();
+	Hud_Update();
 
 	if (nutmeg_death == true) {
 		if (deathmusicplayed == false) {

@@ -14,7 +14,6 @@
 #include "Hud.h"
 
 IMPORT_MAP (level1map);
-IMPORT_MAP (hud);
 
 UINT16 level1counter = 0;
 UINT8 endlevel_counter = 0;
@@ -121,8 +120,8 @@ void Start_StateLevel1() {
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level1map), &level1map, collision_tiles_level1, collision_tiles_down_level1);
-	INIT_HUD(hud);
-	Hud_Init();
+	
+	Hud_Init(false);
 	cutscenemode = enabled;
 	isAcornMoving = true; //yes, it is moving
 	FlagPole_Init();
@@ -137,7 +136,7 @@ void Update_StateLevel1() {
 
 	if (timerlevel == 0) {
 		nutmeg_death = true;
-
+	
 		if (health == full) {
 			lostbow = true;
 			bow_counter = 0;

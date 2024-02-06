@@ -6,6 +6,8 @@
 
 #include "GlobalVars.h"
 
+IMPORT_MAP (hud);
+IMPORT_MAP (hudboss);
 
 // global variables for every level
 
@@ -20,9 +22,20 @@ static INT8 lastLives = 0;
 static UINT8 lastAcorn = 0;
 static UINT16 lastTimer = 0;
 
+static bool _isBoss = false;
 
-void Hud_Init(void) BANKED
+void Hud_Init(bool isBoss) BANKED
 {
+    if (isBoss == true)
+    {
+        INIT_HUD(hudboss);
+    }
+    else
+    {
+        INIT_HUD(hud);
+    }
+
+    _isBoss = isBoss;
     timerlevel = 300;
     timerclock = 0;
 
@@ -67,14 +80,20 @@ void Hud_Update(void) BANKED
         UPDATE_HUD_TILE (18, 0, 6 + ones);
     }
     
+    if (_isBoss == true)
+    {
+        // boss levels we don't track time
+        return;
+    }
+
 	if (cutscenemode == disabled) 
     { 
         timerclock ++; 
      
         //25 seems good
         if (timerclock == 25) {
-		timerclock = 0;
-		timerlevel--;
+            timerclock = 0;
+            timerlevel--;
 	    }
     }
 

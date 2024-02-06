@@ -10,9 +10,9 @@
 #include "../src/GlobalVars.h"
 #include "FlagPole.h"
 #include "Water.h"
+#include "Hud.h"
 
 IMPORT_MAP (level4map);
-IMPORT_MAP (hud);
 
 UINT16 level4counter = 0;
 UINT8 endlevel_counter4 = 0;
@@ -88,142 +88,10 @@ const unsigned char Letter9_4[]  = { 0x5C };
 const unsigned char Letter10_4[] = { 0x5D };
 const unsigned char Letter11_4[] = { 0x5E };
 
-//timer counter
-UINT16 timerlevel4;
-UINT8 timerclock4;
 
-void UpdateHud4() {
-	//health system DISPLAY
-	//health first number:
-	if (nutmeg_death == false) {
-		switch (nutmeglives - (nutmeglives % 10)) {
-			case 0:  UPDATE_HUD_TILE (3, 0, 6);  break;
-			case 10: UPDATE_HUD_TILE (3, 0, 7);  break;
-			case 20: UPDATE_HUD_TILE (3, 0, 8);  break;
-			case 30: UPDATE_HUD_TILE (3, 0, 9);  break;
-			case 40: UPDATE_HUD_TILE (3, 0, 10); break;
-			case 50: UPDATE_HUD_TILE (3, 0, 11); break;
-			case 60: UPDATE_HUD_TILE (3, 0, 12); break;
-			case 70: UPDATE_HUD_TILE (3, 0, 13); break;
-			case 80: UPDATE_HUD_TILE (3, 0, 14); break;
-			case 90: UPDATE_HUD_TILE (3, 0, 15); break;
-		}
-		//health second number:
-		switch (nutmeglives % 10) {
-			case 0: UPDATE_HUD_TILE (4, 0, 6);  break;
-			case 1: UPDATE_HUD_TILE (4, 0, 7);  break;
-			case 2: UPDATE_HUD_TILE (4, 0, 8);  break;
-			case 3: UPDATE_HUD_TILE (4, 0, 9);  break;
-			case 4: UPDATE_HUD_TILE (4, 0, 10); break;
-			case 5: UPDATE_HUD_TILE (4, 0, 11); break;
-			case 6: UPDATE_HUD_TILE (4, 0, 12); break;
-			case 7: UPDATE_HUD_TILE (4, 0, 13); break;
-			case 8: UPDATE_HUD_TILE (4, 0, 14); break;
-			case 9: UPDATE_HUD_TILE (4, 0, 15); break;
-		}
-	}
-
-	//acorns:
-	//acorns first number:
-	switch (acorncounter - (acorncounter % 10)) {
-		case 0:  UPDATE_HUD_TILE (17, 0, 6);  break;
-		case 10: UPDATE_HUD_TILE (17, 0, 7);  break;
-		case 20: UPDATE_HUD_TILE (17, 0, 8);  break;
-		case 30: UPDATE_HUD_TILE (17, 0, 9);  break;
-		case 40: UPDATE_HUD_TILE (17, 0, 10); break;
-		case 50: UPDATE_HUD_TILE (17, 0, 11); break;
-		case 60: UPDATE_HUD_TILE (17, 0, 12); break;
-		case 70: UPDATE_HUD_TILE (17, 0, 13); break;
-		case 80: UPDATE_HUD_TILE (17, 0, 14); break;
-		case 90: UPDATE_HUD_TILE (17, 0, 15); break;
-	}
-	//acorns second number:
-	switch (acorncounter % 10) {
-		case 0: UPDATE_HUD_TILE (18, 0, 6);  break;
-		case 1: UPDATE_HUD_TILE (18, 0, 7);  break;
-		case 2: UPDATE_HUD_TILE (18, 0, 8);  break;
-		case 3: UPDATE_HUD_TILE (18, 0, 9);  break;
-		case 4: UPDATE_HUD_TILE (18, 0, 10); break;
-		case 5: UPDATE_HUD_TILE (18, 0, 11); break;
-		case 6: UPDATE_HUD_TILE (18, 0, 12); break;
-		case 7: UPDATE_HUD_TILE (18, 0, 13); break;
-		case 8: UPDATE_HUD_TILE (18, 0, 14); break;
-		case 9: UPDATE_HUD_TILE (18, 0, 15); break;
-	}
-
-	if (timerclock4 <= 25 && cutscenemode == disabled) timerclock4 ++; //25 seems good
-
-	if (timerclock4 == 25) {
-		timerclock4 = 0;
-		timerlevel4--;
-	}
-
-	//timer:
-	//timer 100s digit:
-	if (timerlevel4 == 300) UPDATE_HUD_TILE (10, 0, 9);
-	if (timerlevel4 < 300 && timerlevel4 >= 200) UPDATE_HUD_TILE (10, 0, 8);
-	if (timerlevel4 < 200 && timerlevel4 >= 100) UPDATE_HUD_TILE (10, 0, 7);
-	if (timerlevel4 < 100) UPDATE_HUD_TILE (10, 0, 6);
-	//timer 10s digit:
-	if (timerlevel4 < 300 && timerlevel4 >= 200) {
-		switch (timerlevel4 - 200 - (timerlevel4 % 10)) {
-			case 0:  UPDATE_HUD_TILE (11, 0, 6);  break;
-			case 10: UPDATE_HUD_TILE (11, 0, 7);  break;
-			case 20: UPDATE_HUD_TILE (11, 0, 8);  break;
-			case 30: UPDATE_HUD_TILE (11, 0, 9);  break;
-			case 40: UPDATE_HUD_TILE (11, 0, 10); break;
-			case 50: UPDATE_HUD_TILE (11, 0, 11); break;
-			case 60: UPDATE_HUD_TILE (11, 0, 12); break;
-			case 70: UPDATE_HUD_TILE (11, 0, 13); break;
-			case 80: UPDATE_HUD_TILE (11, 0, 14); break;
-			case 90: UPDATE_HUD_TILE (11, 0, 15); break;
-		}
-	}
-	else if (timerlevel4 < 200 && timerlevel4 >= 100) {
-		switch (timerlevel4 - 100 - (timerlevel4 % 10)) {
-			case 0:  UPDATE_HUD_TILE (11, 0, 6);  break;
-			case 10: UPDATE_HUD_TILE (11, 0, 7);  break;
-			case 20: UPDATE_HUD_TILE (11, 0, 8);  break;
-			case 30: UPDATE_HUD_TILE (11, 0, 9);  break;
-			case 40: UPDATE_HUD_TILE (11, 0, 10); break;
-			case 50: UPDATE_HUD_TILE (11, 0, 11); break;
-			case 60: UPDATE_HUD_TILE (11, 0, 12); break;
-			case 70: UPDATE_HUD_TILE (11, 0, 13); break;
-			case 80: UPDATE_HUD_TILE (11, 0, 14); break;
-			case 90: UPDATE_HUD_TILE (11, 0, 15); break;
-		}
-	}
-	switch (timerlevel4 - (timerlevel4 % 10)) {
-		case 0:  UPDATE_HUD_TILE (11, 0, 6);  break;
-		case 10: UPDATE_HUD_TILE (11, 0, 7);  break;
-		case 20: UPDATE_HUD_TILE (11, 0, 8);  break;
-		case 30: UPDATE_HUD_TILE (11, 0, 9);  break;
-		case 40: UPDATE_HUD_TILE (11, 0, 10); break;
-		case 50: UPDATE_HUD_TILE (11, 0, 11); break;
-		case 60: UPDATE_HUD_TILE (11, 0, 12); break;
-		case 70: UPDATE_HUD_TILE (11, 0, 13); break;
-		case 80: UPDATE_HUD_TILE (11, 0, 14); break;
-		case 90: UPDATE_HUD_TILE (11, 0, 15); break;
-	}
-	//timer 1s digit:
-	switch (timerlevel4 % 10) {
-		case 0: UPDATE_HUD_TILE (12, 0, 6);  break;
-		case 1: UPDATE_HUD_TILE (12, 0, 7);  break;
-		case 2: UPDATE_HUD_TILE (12, 0, 8);  break;
-		case 3: UPDATE_HUD_TILE (12, 0, 9);  break;
-		case 4: UPDATE_HUD_TILE (12, 0, 10); break;
-		case 5: UPDATE_HUD_TILE (12, 0, 11); break;
-		case 6: UPDATE_HUD_TILE (12, 0, 12); break;
-		case 7: UPDATE_HUD_TILE (12, 0, 13); break;
-		case 8: UPDATE_HUD_TILE (12, 0, 14); break;
-		case 9: UPDATE_HUD_TILE (12, 0, 15); break;
-	}
-}
 
 void Start_StateLevel4() {
 	level4counter = 0;
-	timerlevel4 = 300;
-	timerclock4 = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
 
@@ -247,7 +115,7 @@ void Start_StateLevel4() {
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level4map), &level4map, collision_tiles_level4, collision_tiles_down_level4);
-	INIT_HUD(hud);
+	Hud_Init(false);
 
 	cutscenemode = enabled;
 	isAcornMoving = true; //yes, it is moving
@@ -259,9 +127,12 @@ void Start_StateLevel4() {
 }
 
 void Update_StateLevel4() {
-	UpdateHud4();
+	Hud_Update();
 
-	if (timerlevel4 <= 0) nutmeg_death = true;
+	if (timerlevel == 0) 
+	{
+		nutmeg_death = true;
+	}
 
 	if (nutmeg_death == true) {
 		if (deathmusicplayed == false) {

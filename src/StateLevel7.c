@@ -10,9 +10,9 @@
 #include "../src/GlobalVars.h"
 #include "FlagPole.h"
 #include "Water.h"
+#include "Hud.h"
 
 IMPORT_MAP (level7map);
-IMPORT_MAP (hud);
 
 UINT16 level7counter = 0;
 UINT8 endlevel_counter7 = 0;
@@ -32,78 +32,6 @@ DECLARE_MUSIC(quickdeath);
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
 extern Sprite * spr_camera;
-
-//grey top
-const unsigned char grey7_33[] = {
-	0xff,0x3c,0xc3,0x46,0x81,0x81,0x81,0x81,
-	0x81,0xe1,0x81,0xf9,0x81,0xff,0x81,0xff
-};
-const unsigned char grey7_34[] = {
-	0xff,0x3c,0xc3,0x7e,0x81,0x9f,0x81,0x87,
-	0x81,0x81,0x81,0x81,0x81,0xe1,0x81,0xf9
-};
-const unsigned char grey7_35[] = {
-	0xff,0x3c,0xc3,0x7a,0x81,0xff,0x81,0xff,
-	0x81,0x9f,0x81,0x87,0x81,0x81,0x81,0x81
-};
-const unsigned char grey7_36[] = {
-	0xff,0x3c,0xc3,0x42,0x81,0xe1,0x81,0xf9,
-	0x81,0xff,0x81,0xff,0x81,0x9f,0x81,0x87
-};
-
-//pink top
-const unsigned char pink7_37[] = {
-	0xff,0x3c,0xc3,0x42,0x81,0x87,0x81,0x9f,
-	0x81,0xff,0x81,0xff,0x81,0xf9,0x81,0xe1
-};
-const unsigned char pink7_38[] = {
-	0xff,0x3c,0xc3,0x5e,0x81,0xff,0x81,0xff,
-	0x81,0xf9,0x81,0xe1,0x81,0x81,0x81,0x81
-};
-const unsigned char pink7_39[] = {
-	0xff,0x3c,0xc3,0x7e,0x81,0xf9,0x81,0xe1,
-	0x81,0x81,0x81,0x81,0x81,0x87,0x81,0x9f
-};
-const unsigned char pink7_40[] = {
-	0xff,0x3c,0xc3,0x62,0x81,0x81,0x81,0x81,
-	0x81,0x87,0x81,0x9f,0x81,0xff,0x81,0xff
-};
-
-//grey mid/bottom
-const unsigned char grey7_41[] = {
-	0x81,0x9f,0x81,0x87,0x81,0x81,0x81,0x81,
-	0x81,0xe1,0x81,0xf9,0x81,0xff,0x81,0xff
-};
-const unsigned char grey7_42[] = {
-	0x81,0xff,0x81,0xff,0x81,0x9f,0x81,0x87,
-	0x81,0x81,0x81,0x81,0x81,0xe1,0x81,0xf9
-};
-const unsigned char grey7_43[] = {
-	0x81,0xe1,0x81,0xf9,0x81,0xff,0x81,0xff,
-	0x81,0x9f,0x81,0x87,0x81,0x81,0x81,0x81
-};
-const unsigned char grey7_44[] = {
-	0x81,0x81,0x81,0x81,0x81,0xe1,0x81,0xf9,
-	0x81,0xff,0x81,0xff,0x81,0x9f,0x81,0x87
-};
-
-//pink mid/bottom
-const unsigned char pink7_45[] = {
-	0x81,0x81,0x81,0x81,0x81,0x87,0x81,0x9f,
-	0x81,0xff,0x81,0xff,0x81,0xf9,0x81,0xe1
-};
-const unsigned char pink7_46[] = {
-	0x81,0x87,0x81,0x9f,0x81,0xff,0x81,0xff,
-	0x81,0xf9,0x81,0xe1,0x81,0x81,0x81,0x81
-};
-const unsigned char pink7_47[] = {
-	0x81,0xff,0x81,0xff,0x81,0xf9,0x81,0xe1,
-	0x81,0x81,0x81,0x81,0x81,0x87,0x81,0x9f
-};
-const unsigned char pink7_48[] = {
-	0x81,0xf9,0x81,0xe1,0x81,0x81,0x81,0x81,
-	0x81,0x87,0x81,0x9f,0x81,0xff,0x81,0xff
-};
 
 //Level Start! Text
 const unsigned char UpperL7[] = {
@@ -159,142 +87,10 @@ const unsigned char Letter9_7[]  = { 0x5C };
 const unsigned char Letter10_7[] = { 0x5D };
 const unsigned char Letter11_7[] = { 0x5E };
 
-//timer counter
-UINT16 timerlevel7;
-UINT8 timerclock7;
 
-void UpdateHud7() {
-	//health system DISPLAY
-	//health first number:
-	if (nutmeg_death == false) {
-		switch (nutmeglives - (nutmeglives % 10)) {
-			case 0:  UPDATE_HUD_TILE (3, 0, 6);  break;
-			case 10: UPDATE_HUD_TILE (3, 0, 7);  break;
-			case 20: UPDATE_HUD_TILE (3, 0, 8);  break;
-			case 30: UPDATE_HUD_TILE (3, 0, 9);  break;
-			case 40: UPDATE_HUD_TILE (3, 0, 10); break;
-			case 50: UPDATE_HUD_TILE (3, 0, 11); break;
-			case 60: UPDATE_HUD_TILE (3, 0, 12); break;
-			case 70: UPDATE_HUD_TILE (3, 0, 13); break;
-			case 80: UPDATE_HUD_TILE (3, 0, 14); break;
-			case 90: UPDATE_HUD_TILE (3, 0, 15); break;
-		}
-		//health second number:
-		switch (nutmeglives % 10) {
-			case 0: UPDATE_HUD_TILE (4, 0, 6);  break;
-			case 1: UPDATE_HUD_TILE (4, 0, 7);  break;
-			case 2: UPDATE_HUD_TILE (4, 0, 8);  break;
-			case 3: UPDATE_HUD_TILE (4, 0, 9);  break;
-			case 4: UPDATE_HUD_TILE (4, 0, 10); break;
-			case 5: UPDATE_HUD_TILE (4, 0, 11); break;
-			case 6: UPDATE_HUD_TILE (4, 0, 12); break;
-			case 7: UPDATE_HUD_TILE (4, 0, 13); break;
-			case 8: UPDATE_HUD_TILE (4, 0, 14); break;
-			case 9: UPDATE_HUD_TILE (4, 0, 15); break;
-		}
-	}
-
-	//acorns:
-	//acorns first number:
-	switch (acorncounter - (acorncounter % 10)) {
-		case 0:  UPDATE_HUD_TILE (17, 0, 6);  break;
-		case 10: UPDATE_HUD_TILE (17, 0, 7);  break;
-		case 20: UPDATE_HUD_TILE (17, 0, 8);  break;
-		case 30: UPDATE_HUD_TILE (17, 0, 9);  break;
-		case 40: UPDATE_HUD_TILE (17, 0, 10); break;
-		case 50: UPDATE_HUD_TILE (17, 0, 11); break;
-		case 60: UPDATE_HUD_TILE (17, 0, 12); break;
-		case 70: UPDATE_HUD_TILE (17, 0, 13); break;
-		case 80: UPDATE_HUD_TILE (17, 0, 14); break;
-		case 90: UPDATE_HUD_TILE (17, 0, 15); break;
-	}
-	//acorns second number:
-	switch (acorncounter % 10) {
-		case 0: UPDATE_HUD_TILE (18, 0, 6);  break;
-		case 1: UPDATE_HUD_TILE (18, 0, 7);  break;
-		case 2: UPDATE_HUD_TILE (18, 0, 8);  break;
-		case 3: UPDATE_HUD_TILE (18, 0, 9);  break;
-		case 4: UPDATE_HUD_TILE (18, 0, 10); break;
-		case 5: UPDATE_HUD_TILE (18, 0, 11); break;
-		case 6: UPDATE_HUD_TILE (18, 0, 12); break;
-		case 7: UPDATE_HUD_TILE (18, 0, 13); break;
-		case 8: UPDATE_HUD_TILE (18, 0, 14); break;
-		case 9: UPDATE_HUD_TILE (18, 0, 15); break;
-	}
-
-	if (timerclock7 <= 25 && cutscenemode == disabled) timerclock7 ++; //25 seems good
-
-	if (timerclock7 == 25) {
-		timerclock7 = 0;
-		timerlevel7--;
-	}
-
-	//timer:
-	//timer 100s digit:
-	if (timerlevel7 == 300) UPDATE_HUD_TILE (10, 0, 9);
-	if (timerlevel7 < 300 && timerlevel7 >= 200) UPDATE_HUD_TILE (10, 0, 8);
-	if (timerlevel7 < 200 && timerlevel7 >= 100) UPDATE_HUD_TILE (10, 0, 7);
-	if (timerlevel7 < 100) UPDATE_HUD_TILE (10, 0, 6);
-	//timer 10s digit:
-	if (timerlevel7 < 300 && timerlevel7 >= 200) {
-		switch (timerlevel7 - 200 - (timerlevel7 % 10)) {
-			case 0:  UPDATE_HUD_TILE (11, 0, 6);  break;
-			case 10: UPDATE_HUD_TILE (11, 0, 7);  break;
-			case 20: UPDATE_HUD_TILE (11, 0, 8);  break;
-			case 30: UPDATE_HUD_TILE (11, 0, 9);  break;
-			case 40: UPDATE_HUD_TILE (11, 0, 10); break;
-			case 50: UPDATE_HUD_TILE (11, 0, 11); break;
-			case 60: UPDATE_HUD_TILE (11, 0, 12); break;
-			case 70: UPDATE_HUD_TILE (11, 0, 13); break;
-			case 80: UPDATE_HUD_TILE (11, 0, 14); break;
-			case 90: UPDATE_HUD_TILE (11, 0, 15); break;
-		}
-	}
-	else if (timerlevel7 < 200 && timerlevel7 >= 100) {
-		switch (timerlevel7 - 100 - (timerlevel7 % 10)) {
-			case 0:  UPDATE_HUD_TILE (11, 0, 6);  break;
-			case 10: UPDATE_HUD_TILE (11, 0, 7);  break;
-			case 20: UPDATE_HUD_TILE (11, 0, 8);  break;
-			case 30: UPDATE_HUD_TILE (11, 0, 9);  break;
-			case 40: UPDATE_HUD_TILE (11, 0, 10); break;
-			case 50: UPDATE_HUD_TILE (11, 0, 11); break;
-			case 60: UPDATE_HUD_TILE (11, 0, 12); break;
-			case 70: UPDATE_HUD_TILE (11, 0, 13); break;
-			case 80: UPDATE_HUD_TILE (11, 0, 14); break;
-			case 90: UPDATE_HUD_TILE (11, 0, 15); break;
-		}
-	}
-	switch (timerlevel7 - (timerlevel7 % 10)) {
-		case 0:  UPDATE_HUD_TILE (11, 0, 6);  break;
-		case 10: UPDATE_HUD_TILE (11, 0, 7);  break;
-		case 20: UPDATE_HUD_TILE (11, 0, 8);  break;
-		case 30: UPDATE_HUD_TILE (11, 0, 9);  break;
-		case 40: UPDATE_HUD_TILE (11, 0, 10); break;
-		case 50: UPDATE_HUD_TILE (11, 0, 11); break;
-		case 60: UPDATE_HUD_TILE (11, 0, 12); break;
-		case 70: UPDATE_HUD_TILE (11, 0, 13); break;
-		case 80: UPDATE_HUD_TILE (11, 0, 14); break;
-		case 90: UPDATE_HUD_TILE (11, 0, 15); break;
-	}
-	//timer 1s digit:
-	switch (timerlevel7 % 10) {
-		case 0: UPDATE_HUD_TILE (12, 0, 6);  break;
-		case 1: UPDATE_HUD_TILE (12, 0, 7);  break;
-		case 2: UPDATE_HUD_TILE (12, 0, 8);  break;
-		case 3: UPDATE_HUD_TILE (12, 0, 9);  break;
-		case 4: UPDATE_HUD_TILE (12, 0, 10); break;
-		case 5: UPDATE_HUD_TILE (12, 0, 11); break;
-		case 6: UPDATE_HUD_TILE (12, 0, 12); break;
-		case 7: UPDATE_HUD_TILE (12, 0, 13); break;
-		case 8: UPDATE_HUD_TILE (12, 0, 14); break;
-		case 9: UPDATE_HUD_TILE (12, 0, 15); break;
-	}
-}
 
 void Start_StateLevel7() {
 	level7counter = 0;
-	timerlevel7 = 300;
-	timerclock7 = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
 
@@ -313,7 +109,7 @@ void Start_StateLevel7() {
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level7map), &level7map, collision_tiles_level7, collision_tiles_down_level7);
-	INIT_HUD(hud);
+	Hud_Init(false);
 
 	cutscenemode = enabled;
 	isAcornMoving = true; //yes, it is moving
@@ -325,9 +121,12 @@ void Start_StateLevel7() {
 }
 
 void Update_StateLevel7() {
-	UpdateHud7();
+	Hud_Update();
 
-	if (timerlevel7 <= 0) nutmeg_death = true;
+	if (timerlevel == 0)
+	{
+		nutmeg_death = true;
+	}
 
 	if (nutmeg_death == true) {
 		if (deathmusicplayed == false) {
