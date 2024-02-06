@@ -245,7 +245,7 @@ void Update_StateLevel6() {
 	}
 
 	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg_death == false) {
-		FlagPole_Activate(1948,96);
+		FlagPole_Activate(244,13);
 		levelbeat = true;
 		endlevel_counter6 = 0;
 		cutscenemode = enabled;

@@ -119,28 +119,30 @@ void FlagPole_Init (void) BANKED
     stars_y = 0;
 }
 
-// x = first left star x, 
-// y = first left star y
-void FlagPole_Activate(int x, int y) BANKED
+// x = tile x of bottom of flagpole
+// y = tile y of bottom of flagpole
+void FlagPole_Activate(int tilex, int tiley) BANKED
 {
     flagpole_activated = 1;
 
-    stars_x = x;
-    stars_y = y;
+    stars_x = tilex * 8;
+    stars_y = tiley * 8;
+	
+	// start a bit up the pole.
+	stars_y -= 26;
 
     //change flagpole color palette to pink
-	if (W1LevelSelection == 5)
+	if (W1LevelSelection == 7) // level 5
 	{
 		SetPalette(BG_PALETTE, 5, 1, pal_pink5, _current_bank);
 	}
-	else if (W1LevelSelection == 3)
+	else if (W1LevelSelection == 5) // level 3
 	{
 		SetPalette(BG_PALETTE, 1, 1, pal_pink3, _current_bank);
 	}
 	else
 	{
 		SetPalette(BG_PALETTE, 1, 1, pal_pink, _current_bank);
-		
 	}
     __critical { PlayMusic(flagpole, 1); }
 }
@@ -201,16 +203,16 @@ void FlagPole_Animate (void) BANKED
         finish_counter++;
 
         if (finish_counter == 10) {
-			SpriteManagerAdd(SpriteStarLeft, stars_x, stars_y);
-			SpriteManagerAdd(SpriteStarRight, stars_x+8, 96);
+			SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y);
+			SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y);
 		}
 		else if (finish_counter == 30) {
-			SpriteManagerAdd(SpriteStarLeft, stars_x, stars_y-16);
-			SpriteManagerAdd(SpriteStarRight, stars_x+8, stars_y-16);
+			SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y-16);
+			SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y-16);
 		}
 		else if (finish_counter == 50) {
-			SpriteManagerAdd(SpriteStarLeft, stars_x, stars_y-32);
-			SpriteManagerAdd(SpriteStarRight, stars_x+8, stars_y-32);
+			SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y-32);
+			SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y-32);
 		}
     }
 }

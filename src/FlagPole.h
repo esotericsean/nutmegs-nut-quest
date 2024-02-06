@@ -5,6 +5,8 @@
 
 void FlagPole_Init(void) BANKED;
 void FlagPole_Animate (void) BANKED;
-void FlagPole_Activate(int x, int y) BANKED;
+// x = tile x of bottom of flagpole
+// y = tile y of bottom of flagpole
+void FlagPole_Activate(int tilex, int tiley) BANKED;
 
 #endif // FLAGPOLE_H

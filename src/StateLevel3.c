@@ -147,7 +147,7 @@ void Update_StateLevel3() {
 	}
 
 	if (spr_nutmeg->x >= 256 && spr_nutmeg->x < 280 && spr_nutmeg->y > 904 && spr_nutmeg->y < 968 && levelbeat == false && nutmeg_death == false) {
-		FlagPole_Activate(252,950);
+		FlagPole_Activate(32,120);
 		levelbeat = true;
 		endlevel_counter3 = 0;
 		cutscenemode = enabled;
