@@ -61,9 +61,6 @@ switcher powerupleaf; //enabled or disabled
 switcher powerupstar; //enabled or disabled
 
 // Declare a pointer to a sprite
-//struct Sprite * spr_nutmeg2;
-//struct Sprite * spr_camera;
-//Sprite * spr_nutmeg2;
 Sprite * spr_camera;
 Sprite * nutmeg_sprite;
 
@@ -101,6 +98,8 @@ void ResetState() {
 }
 
 void Start_SpriteNutmeg() {
+    nutmeg_sprite = THIS;
+
     ResetState();
 
     THIS->lim_x = 500;
@@ -108,8 +107,6 @@ void Start_SpriteNutmeg() {
 }
 
 void Update_SpriteNutmeg() {
-    nutmeg_sprite = THIS;
-    
     // extra life from 100 acorns
     if (acorncounter == 100) {
         nutmeglives++;

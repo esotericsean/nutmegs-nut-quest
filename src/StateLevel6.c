@@ -250,8 +250,6 @@ void Update_StateLevel6() {
 		endlevel_counter6 = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
-		//distance = 0;
-		//SetState(StateOverworld1);
 	}
 
 	//switched puff to Nutmeg's palette, so leave it alone for this level

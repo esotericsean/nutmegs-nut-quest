@@ -371,9 +371,6 @@ void Update_StateLevel5() {
 		endlevel_counter5 = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
-		
-		//distance = 0;
-		//SetState(StateOverworld1);
 	}
 
 	/*

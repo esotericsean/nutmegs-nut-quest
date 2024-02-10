@@ -23,11 +23,6 @@ extern INT16 accelX;
 extern UINT8 jumpPeak;
 extern UINT8 runJump;
 
-//storing collisions around player after movement
-extern UINT8 collisionX;
-extern UINT8 collisionY;
-extern UINT8 groundCollision;
-
 //random typedefs
 
 typedef enum { false, true } bool;
@@ -47,9 +42,6 @@ extern switcher powerupstar;
 
 extern bool firstplay;
 
-//balloon pop
-extern UINT8 balloonjump;
-extern bool balloonpop;
 
 //health system - reset to 0 in StateCutscene1
 //start with 0 acorns and 3 lives
@@ -104,9 +96,8 @@ extern bool gordonjump;
 
 //level selection
 extern bool levelbeat;
-extern UINT8 distance;
 extern UINT8 W1LevelSelection;
-extern UINT8 W2LevelSelection;
+
 
 //nutmeg sprite region
 extern UINT8 nut_region;
@@ -114,16 +105,8 @@ extern UINT8 nut_region;
 //fish color palette location based on level
 extern UINT8 fish_pal_loc;
 
-//world 1 things
-extern const UINT8 collision_tiles_level1[];
-extern const UINT16 bg_palette_level1[];
-extern const UINT16 sprites_palette_level1[];
-
 //Nutmeg Stop Moving After Dying
 extern UINT8 nutmegdeathmove;
-
-//Enemy Rockith
-extern bool rockdamage;
 
 //Sprite Limits if Vertical or Horizontal Level
 extern orientation levelorientation;

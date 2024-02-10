@@ -38,11 +38,6 @@ struct Sprite * spr_gordon2;
 direction gordon_direction;
 bool Gisjumping = true;
 
-//storing collisions around player after movement
-UINT8 GcollisionX;
-UINT8 GcollisionY;
-UINT8 GgroundCollision;
-
 UINT8 gordoncounter;
 
 void Start_SpriteGordon1() {
