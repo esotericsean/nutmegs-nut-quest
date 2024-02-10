@@ -124,49 +124,49 @@ static const mapStepT steps_ow1 [] = {
 	{17, 12, 9},
 	{18, 12, 9},
 	{19, 12, 9},
-	{20, 12, 10},
+	{20, 12, 10}, // go off the screen
 };
 
 
 static const mapStepT steps_ow2 [] = {
-	{0, 12, 0},
-	{1, 12, 0},
-	{2, 12, 0},
-	{3, 12, 1},
-	{4, 12, 1},
-	{5, 12, 1},
-	{6, 12, 2},
-	{7, 12, 2},
-	{8, 12, 2},
-	{9, 12, 3},
-	{10, 12, 3},
-	{11, 12, 3},
-	{12, 12, 4},
-	{13, 12, 4},
-	{14, 12, 4},
-	{14, 11, 4},
-	{14, 10, 5},
-	{13, 10, 5},
-	{12, 10, 5},
-	{12, 9, 5},
-	{12, 8, 6},
-	{11, 8, 6},
-	{10, 8, 6},
-	{10, 7, 6},
-	{10, 6, 6},
-	{11, 6, 6},
-	{11, 5, 7},
-	{12, 5, 7},
-	{13, 5, 7},
-	{13, 6, 7},
-	{13, 7, 7},
-	{14, 7, 7},
-	{15, 7, 8},
-	{15, 6, 8},
-	{16, 6, 8},
-	{17, 6, 9},
-	{17, 5, 9},
-	{17, 4, 10},
+	{0, 12, 9},
+	{1, 12, 9},
+	{2, 12, 9},
+	{3, 12, 10},
+	{4, 12, 10},
+	{5, 12, 10},
+	{6, 12, 11},
+	{7, 12, 11},
+	{8, 12, 11},
+	{9, 12, 12},
+	{10, 12, 12},
+	{11, 12, 12},
+	{12, 12, 13},
+	{13, 12, 13},
+	{14, 12, 13},
+	{14, 11, 13},
+	{14, 10, 14},
+	{13, 10, 14},
+	{12, 10, 14},
+	{12, 9, 14},
+	{12, 8, 15},
+	{11, 8, 15},
+	{10, 8, 15},
+	{10, 7, 15},
+	{10, 6, 15},
+	{11, 6, 15},
+	{11, 5, 16},
+	{12, 5, 16},
+	{13, 5, 16},
+	{13, 6, 16},
+	{13, 7, 16},
+	{14, 7, 16},
+	{15, 7, 17},
+	{15, 6, 17},
+	{16, 6, 17},
+	{17, 6, 18},
+	{17, 5, 18},
+	{17, 4, 19},
 };
 
 #define PAL_LIGHT_PATH (6)
@@ -231,62 +231,66 @@ static void twoDigitsAt (UINT8 x, UINT8 y, UINT8 val)
 
 void Setup_HUD(void)
 {
-	
-	UINT8 level = level_current;
+	UINT8 level = level_current - (getTens(level_current) * 10);
 	level += TILE_0;
 
 	//level display
-	// TODO - tree, mushroom and boss have different tiles instead of numbers
 	set_tile_xy (11, 1, level);	
-	
-	/*
-		if (W1LevelSelection == 11) {
-			if 		(bossflash >= 0 && bossflash < 5)  set_bkg_data (0x3F, 1, overworld1_boss1);
-			else if (bossflash >= 5 && bossflash < 10) set_bkg_data (0x3F, 1, overworld1_boss2);
 
-			bossflash++;
-
-			if (bossflash > 10) bossflash = 0;
-		}
-	*/
-
-	//health system DISPLAY
-	// lives
 	twoDigitsAt (4, 1, nutmeglives);
 	twoDigitsAt (16, 1, acorncounter);
 }
 
 #define TINY_NUTMEG_OFFSET_X (0)
-#define TINY_NUTMEG_OFFSET_Y (0)
+#define TINY_NUTMEG_OFFSET_Y (-3)
 
 static void SetTinyNutmegAtCurrentLevel(void)
 {
 	UINT8 level = level_current;
 	const mapStepT *p = mapStepForLevel (level_current);
 
-	UINT8 x = (p->x * 8) + TINY_NUTMEG_OFFSET_X;
-	UINT8 y = (p->y * 8) - TINY_NUTMEG_OFFSET_Y;
+	UINT8 x = (p->x << 3) + TINY_NUTMEG_OFFSET_X;
+	UINT8 y = (p->y << 3) + TINY_NUTMEG_OFFSET_Y;
 
 	spr_tinyNutmeg = SpriteManagerAdd(SpriteNutmegTiny, x, y); 
 
 	if (level == 0)
 	{
-		// move nutmeg off the left side of the screen
+		// move nutmeg onto the tree
 		TranslateSprite(spr_tinyNutmeg, -8, 0);
+	}
+
+	if (level == 10)
+	{
+		// move nutmeg off the left side of the screen
+		TranslateSprite(spr_tinyNutmeg, -20, 0);
 	}
 }
 
 void Start_StateOverworld1() {
 	SPRITES_8x16;
 
+	// testing - start on world 2
+	//level_max = 10;
+
 	// Setup the map steps for the current overworld;
- 	currentMapSteps = steps_ow1;
+	if (level_max < 10)
+	{
+		currentMapSteps = steps_ow1;
+		InitScroll(BANK(overworld1map), &overworld1map, collision_tiles_overworld1, 0);
+	}
+	else 
+	{
+		currentMapSteps = steps_ow2;
+		InitScroll(BANK(overworld2map), &overworld2map, collision_tiles_overworld1, 0);
+	}
 
-	InitScroll(BANK(overworld1map), &overworld1map, collision_tiles_overworld1, 0);
-	//InitScroll(BANK(overworld2map), &overworld2map, collision_tiles_overworld1, 0);
+	// TESTING some fiddling around the first level of the second overworld
+	//level_max = 9;
+	//level_current = 9;
 
-	if (levelbeat){	
-		
+	if (levelbeat)
+	{	
 		level_max++;
 
 		level_next = level_max;
@@ -351,6 +355,9 @@ void Update_StateOverworld1() {
 			else if (level_current == 7) SetState(StateLevel7);
 			else if (level_current == 8) SetState(StateLevel8);
 			else if (level_current == 9) SetState(StateW1Boss);
+			else if (level_current >= 10) SetState(StateLevel2_1);
+
+			return;
 		}
 	}
 
@@ -360,6 +367,18 @@ void Update_StateOverworld1() {
 	// dir 3 = down
 	if (automove == true)
 	{
+		// TODO - flash the screen when we enter the boss stage
+		/*
+		if (W1LevelSelection == 11) {
+			if 		(bossflash >= 0 && bossflash < 5)  set_bkg_data (0x3F, 1, overworld1_boss1);
+			else if (bossflash >= 5 && bossflash < 10) set_bkg_data (0x3F, 1, overworld1_boss2);
+
+			bossflash++;
+
+			if (bossflash > 10) bossflash = 0;
+		}
+		*/
+
 		if (moveCount == 0)
 		{
 			UINT16 x = spr_tinyNutmeg->x - TINY_NUTMEG_OFFSET_X;

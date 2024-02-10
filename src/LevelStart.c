@@ -70,7 +70,7 @@ void LevelStart_Update(void) BANKED
     }
     else if (c == 40) {
         // blank
-         set_bkg_tiles ( x, y, 5, 1, blank); 
+        set_bkg_tiles ( x, y, 5, 1, blank); 
         set_bkg_tiles ( x, y+1, 6, 1, blank); 
     }
     else if (c == 70) {

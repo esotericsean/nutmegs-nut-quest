@@ -151,28 +151,28 @@ void FlagPole_Animate (void) BANKED
 {
 	if (flagpole_activated == 0) {
         //animate grey flagpole
-		if (anim_flag_counter < 12) {
+		if (anim_flag_counter == 12) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_33);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, grey_41);
 			set_bkg_data (FLAGPOLE_TILE_3, 1, grey_41);
 		}
-		else if (anim_flag_counter >= 12 && anim_flag_counter < 24) {
+		else if (anim_flag_counter == 24) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_34);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, grey_42);
 			set_bkg_data (FLAGPOLE_TILE_3, 1, grey_42);
 		}
-		else if (anim_flag_counter >= 24 && anim_flag_counter < 36) {
+		else if (anim_flag_counter == 36) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_35);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, grey_43);
 			set_bkg_data (FLAGPOLE_TILE_3, 1, grey_43);
 		}
-		else if (anim_flag_counter >= 36 && anim_flag_counter < 48) {
+		else if (anim_flag_counter == 48) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_36);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, grey_44);
 			set_bkg_data (FLAGPOLE_TILE_3, 1, grey_44);
 		}
 		anim_flag_counter++;
-		if (anim_flag_counter >= 48) anim_flag_counter = 0;
+		if (anim_flag_counter == 49) anim_flag_counter = 0;
 	}
     else
     {

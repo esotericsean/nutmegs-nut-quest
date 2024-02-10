@@ -18,17 +18,15 @@ void Start_SpriteAcorn() {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}
+
+	if (isAcornMoving == true) SetSpriteAnim(THIS, anim_acorn_moving, 10);
+	else if (isAcornMoving == false) SetSpriteAnim(THIS, anim_acorn_static, 1);
 }
 
 void Update_SpriteAcorn() {
-	if (isAcornMoving == true) SetSpriteAnim(THIS, anim_acorn_moving, 10);
-	else if (isAcornMoving == false) SetSpriteAnim(THIS, anim_acorn_static, 1);
-
 	if (CheckCollision(THIS, spr_nutmeg)) {
 		PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
-
 		acorncounter++;
-
 		SpriteManagerRemoveSprite (THIS);
 	}
 }

@@ -24,61 +24,83 @@ void Start_EnemyButterfly() {
 	THIS->mirror = V_MIRROR;
 	THIS->custom_data[0] = 0;
 	THIS->custom_data[1] = 0;
+	THIS->custom_data[2] = 0;
+	THIS->custom_data[3] = 0;
 }
+
 
 void Update_EnemyButterfly() {
 	//up and down
-	UINT8 a = THIS->custom_data[0];
-	UINT8 b = THIS->custom_data[1];
+	UINT8 ystep = THIS->custom_data[2];
+	UINT8 xstep = THIS->custom_data[3];
 
-	if (a < 100 && a % 5 == 0)
-		TranslateSprite(THIS, 0, -1);
+	ystep ++;
+	if (ystep == 5) 
+	{  
+		ystep = 0;
 
-	if (a >= 110 && a < 210 && a % 5 == 0)
-		TranslateSprite(THIS, 0, 1);
-
-	//left and right
-	if (b < 200 && b % 10 == 0) {
-		THIS->mirror = NO_MIRROR;
-		TranslateSprite(THIS, 1, 0);
+		UINT8 ycnt = THIS->custom_data[0];
+		ycnt ++;
+		if (ycnt < 10)
+		{
+			TranslateSprite(THIS, 0, -1);
+		} else if (ycnt >= 11 && ycnt < 21)
+		{
+			TranslateSprite(THIS, 0, 1);
+		}
+		if (ycnt == 22)
+		{
+			ycnt = 0;
+		}
+		THIS->custom_data[0] = ycnt;
 	}
+	THIS->custom_data[2] = ystep;
 
-	if (b >= 210 && b % 10 == 0) {
-		THIS->mirror = V_MIRROR;
-		TranslateSprite(THIS, -1, 0);
+	xstep ++;
+	if (xstep == 10) 
+	{ 
+		xstep = 0; 
+		UINT8 xcnt = THIS->custom_data[1];
+		xcnt ++;
+		//left and right
+		if (xcnt < 20) {
+			THIS->mirror = NO_MIRROR;
+			TranslateSprite(THIS, 1, 0);
+		}
+		else if (xcnt >= 22 && xcnt < 42) {
+			THIS->mirror = V_MIRROR;
+			TranslateSprite(THIS, -1, 0);
+		}
+		if (xcnt == 43) { xcnt = 0;}
+		THIS->custom_data[1] =  xcnt;
 	}
+	THIS->custom_data[3] = xstep;
 
-	THIS->custom_data[0]++;
-	THIS->custom_data[1]++;
-
-	if (THIS->custom_data[0] >= 220)
-	{
-		THIS->custom_data[0] = 0;
-	}
-	
 	//kill butterfly if jump on it
-	if (CheckCollision(THIS, spr_nutmeg) && movestate == inair && accelY > 0 && nutmeg_death == false) {
-		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-		isjumping = true; 
-		accelY = -600;
-		jumpPeak = 0;
-		movestate = inair;
-		
-		if (nutmeg_direction == right) {
-			SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y);
-			SpriteManagerAdd(SpriteStarRight, THIS->x+4, THIS->y);
-		}
-		else if (nutmeg_direction == left) {
-			SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y);
-			SpriteManagerAdd(SpriteStarRight, THIS->x+4, THIS->y);
-		}
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
+		if (movestate == inair && accelY > 0)
+		{
+			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+			isjumping = true; 
+			accelY = -600;
+			jumpPeak = 0;
+			movestate = inair;
+			
+			if (nutmeg_direction == right) {
+				SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y);
+				SpriteManagerAdd(SpriteStarRight, THIS->x+4, THIS->y);
+			}
+			else if (nutmeg_direction == left) {
+				SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y);
+				SpriteManagerAdd(SpriteStarRight, THIS->x+4, THIS->y);
+			}
 
-		SpriteManagerRemoveSprite (THIS);
-	}
-	
-	//die if touch butterfly
-	else if (CheckCollision(THIS, spr_nutmeg) && accelY <= 0 && nutmeg_death == false) {
-		nutmeg_hit();
+			SpriteManagerRemoveSprite (THIS);
+		}
+		else
+		{
+			nutmeg_hit();
+		}
 	}
 }
 

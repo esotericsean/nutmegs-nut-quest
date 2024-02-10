@@ -91,6 +91,7 @@ void LCD_isr() NONBANKED {
 		}
 	}
 	else {
+		// turn sprites off over the window
 		if (LYC_REG == 0) {
 			if (WY_REG == 0) {
 				HIDE_SPRITES;
@@ -143,6 +144,8 @@ void main() {
 	
 	CRITICAL {
 #ifdef CGB
+		// turn on the double speed cpu, as there seem to be sone performance issues
+ 		//cpu_fast();
 		TMA_REG = _cpu == CGB_TYPE ? 120U : 0xBCU;
 #else
 		TMA_REG = 0xBCU;
@@ -153,9 +156,6 @@ void main() {
 		add_low_priority_TIM(MusicCallback); 
 		                          
 		add_VBL(vbl_update);
-
-		STAT_REG |= 0x40; 
-		add_LCD(LCD_isr);
 	}
 
 	set_interrupts(VBL_IFLAG | TIM_IFLAG | LCD_IFLAG);
@@ -164,6 +164,7 @@ void main() {
 	WY_REG = 145;
 
 	// TESTING - Skip past the start stuff
+	/*
 	// 6 = force scroll
 	// w1 = 10 - stage 8
 	W1LevelSelection = 0;
@@ -174,9 +175,16 @@ void main() {
 	level_next = 0;
 	nutmeglives = 99;
 	// END TESTING
+	*/
 
 	while(1) {
 		DISPLAY_OFF
+
+		if (current_state == 2)	
+		{
+			STAT_REG -= 0x40; 
+			remove_LCD(LCD_isr);
+		}
 
 		if(stop_music_on_new_state)
 		{
@@ -208,6 +216,11 @@ void main() {
 		scroll_y_vblank = scroll_y;
 
 		if(state_running) {
+			if (current_state == 2)	
+			{
+				STAT_REG |= 0x40; 
+				add_LCD(LCD_isr);
+			}
 			// FadeOut (from white to our real colors)
 			// This takes a second, so update the sprite manager one time,
 			// so our starting sprites are on the screne during the fade

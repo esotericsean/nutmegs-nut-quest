@@ -39,7 +39,6 @@ void Start_StateScroll() {
     backgroundoffset = 0;
     
     __critical {
-        remove_LCD (LCD_isr);
         add_LCD (interruptLCD);
         STAT_REG |= 0x40;
         LYC_REG = 160u;
@@ -55,7 +54,7 @@ void Update_StateScroll() {
     if (KEY_PRESSED(J_START)) {
         __critical {
             remove_LCD (interruptLCD);
-            add_LCD (LCD_isr);
+            STAT_REG -= 0x40;
         }
 
         SetState (StateTreeCutscene);
