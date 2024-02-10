@@ -58,11 +58,8 @@ void Start_StateLevel1() {
 	PlayMusic(quickstart, 1);
 
 	//start the game off with a bow (full health)
-	if (firstplay == true) {
+	if (hasbow == true) {
 		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49);
-		health = full;
-		lostbow = false;
-		firstplay = false;
 	}
 	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49);
 

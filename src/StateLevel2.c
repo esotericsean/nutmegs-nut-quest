@@ -45,7 +45,7 @@ void Start_StateLevel2() {
 	PlayMusic(quickstart, 1);
 
 	//if health is full, add the bow
-	if (health == full) { spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
+	if (hasbow == true) { spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
 	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49); //36
 	
 	InitScrollTiles(0, &level1tiles);

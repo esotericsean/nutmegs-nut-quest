@@ -3,7 +3,7 @@
 #include "../src/GlobalVars.h"
 
 extern Sprite * spr_nutmeg;
-Sprite *spr_nutmegbow;
+Sprite *spr_nutmegbow = 0;
 
 const UINT8 anim_nutmegbow_static[] = {1, 1};
 
@@ -65,16 +65,16 @@ void Start_SpriteNutmegBow() {
 
 	bow_counter = 0;
 	//bow_catch_x = 0;
+	spr_nutmegbow = THIS;
 }
 
 
 // returns false if the bow sprite has been destroyed
-bool nutmegBow_update(void ) BANKED 
+// can't use THIS, because it is called fromthe spr_nutmeg update fn
+void nutmegBow_update(void ) BANKED 
 {
 	if (lostbow == false) {
-		//lostbow = false;
-
-		THIS->y = spr_nutmeg->y-24;
+		spr_nutmegbow->y = spr_nutmeg->y-24;
 
 		switch (bowanim) {
 			case 0:
@@ -157,26 +157,23 @@ bool nutmegBow_update(void ) BANKED
 			default: bow_y =  0; break;
 		}
 
-		TranslateSprite (THIS, 0, bow_y);
+		TranslateSprite (spr_nutmegbow, 0, bow_y);
 
 		bow_counter++;
 
 		if (bow_counter >= 37) {
 			health = low;
 			bowanim = 10;
-			SpriteManagerRemoveSprite(THIS);
-			return false;
+			SpriteManagerRemoveSprite(spr_nutmegbow);
 		}
 	}
-	return true;
 }
 
 void Update_SpriteNutmegBow() {
-	// TODO call this from nutmeg, so the positioning can happen after nutmeg has moved,
-	// even though the sprites have to be earlier in the queue so they are on top
-	nutmegBow_update();
+
 }
 
 
 void Destroy_SpriteNutmegBow() {
+	spr_nutmegbow = 0;
 }

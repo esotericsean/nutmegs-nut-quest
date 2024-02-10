@@ -35,6 +35,9 @@ Sprite * spr_nutmeg;
 UINT8 nutmeglives;
 UINT8 acorncounter;
 
+// does nutmeg have a bow?
+bool hasbow = true;
+
 direction nutmeg_direction;
 bool isjumping = true;
 

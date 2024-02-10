@@ -49,7 +49,7 @@ void Start_StateLevel2_1() {
 	__critical { PlayMusic(quickstart, 1); }
 
 	//start the game off with a bow (full health)
-	if (lostbow == false) {
+	if (hasbow == true) {
 		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49);
 	}
 	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49);

@@ -21,12 +21,6 @@ UINT8 handhurt;
 bool abletohurthand;
 UINT8 handhealth;
 
-UINT8 anim_water_counterw1b = 0;
-UINT8 anim_flag_counterw1b = 0;
-UINT8 flagpole_activatedw1b = 0;
-UINT8 flagpole_starsw1b = 0;
-UINT8 endlevel_counterw1b = 0;
-
 const UINT8 collision_tiles_levelw1b[] = {44,45,46,47,58,51,70,71,72,73,74,75,76,77,78,79,80,81,0};
 const UINT8 collision_tiles_down_levelw1b[] = {0};
 
@@ -54,18 +48,7 @@ void Start_StateW1Boss() {
 
 	PlayMusic(thehands2, 1);
 
-	//testing:
-	//health = low;
-	//lostbow = false;
-	
-	//if health is full, add the bow
-	//if (health == full) lostbow = false;
-	//else if (health == low) lostbow = true;
-
-	//if (lostbow == true) health = low;
-	//else if (lostbow == false) health = full;
-
-	if (health == full) { SpriteManagerAdd(SpriteNutmegBow, 5*8, 1*8); lostbow = false; }
+	if (hasbow == true) { SpriteManagerAdd(SpriteNutmegBow, 5*8, 1*8); }
 	
 	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 5*8, 1*8);
 	spr_hand = SpriteManagerAdd(EnemyHand, 17*8+32, 11*8+6); //start on right side
@@ -79,8 +62,6 @@ void Start_StateW1Boss() {
 
 	cutscenemode = enabled;
 	isAcornMoving = true; //yes, it is moving
-	flagpole_activatedw1b = 0;
-	endlevel_counterw1b = 0;
 
 	handpos = 0; //start on right side
 
