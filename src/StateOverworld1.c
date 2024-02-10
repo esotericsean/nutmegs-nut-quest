@@ -1,22 +1,13 @@
 #include "Banks/SetAutoBank.h"
 
 #include "BankManager.h"
-
-//#include "..\res\src\overworld1.h"
-//#include "..\res\src\overworld1map.h"
-
 #include "ZGBMain.h"
 #include "Music.h"
 #include "Scroll.h"
 #include "Sound.h"
 #include "Keys.h"
 #include "SpriteManager.h"
-
-//#include "..\res\src\nutmeg.h"
-//#include "..\res\src\acorn.h"
-//#include "..\res\src\nutmegtiny.h"
 #include "Palette.h"
-
 #include "../src/GlobalVars.h"
 
 IMPORT_MAP (overworld1map);
@@ -33,7 +24,6 @@ IMPORT_MAP (overworld2map);
 
 static UINT8 waterAnimCounter = 0; // water animation counter
 
-//copied from SpriteNutmegTiny
 UINT8 e = 0;
 UINT8 bossflash = 0;
 UINT8 W1LevelSelection; 		// nutmeg starts at level 1
@@ -45,11 +35,7 @@ UINT8 distance  = 0;
 bool inputenabled;
 UINT8 treetolevel1move;
 bool levelbeat;
-//end copied from SpriteNutmegTiny
 
-
-
-//copied from SpriteNutmegTiny
 const unsigned char overworld1_tree[] = {
 	0x36,0x00,0x5b,0x00,0xff,0x00,0xbb,0x00,
 	0x6e,0x00,0x0c,0x1c,0x04,0x1c,0x26,0x3e
@@ -225,7 +211,6 @@ static void Move (UINT8 dir, UINT8 dis) {
 		}
 	}
 }
-//end copied from SpriteNutmegTiny
 
 static UINT8 getTens (UINT8 full)
 {
