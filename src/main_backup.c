@@ -164,8 +164,9 @@ void main() {
 
 	// TESTING - Skip past the start stuff
 	// 6 = force scroll
-	//W1LevelSelection = 7;
-	//next_state = StateLevel7;
+	// w1 = 10 - stage 8
+	//W1LevelSelection = 10;
+	//next_state = StateLevel8;
 	//levelbeat = false;
 	//nutmeglives = 99;
 	// END TESTING
