@@ -5,10 +5,10 @@
 #include "Palette.h"
 #include "../src/GlobalVars.h"
 
-const UINT8 anim_lightningspot[] = {11, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0};
-const UINT8 anim_lightningspot_empty[] = {1, 0};
+static const UINT8 anim_lightningspot[] = {11, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0};
+static const UINT8 anim_lightningspot_empty[] = {1, 0};
 
-UINT8 lightningspotcounter;
+static UINT8 lightningspotcounter;
 
 void Start_EnemyLightningSpot() {
 	if (levelorientation == horizontal) {

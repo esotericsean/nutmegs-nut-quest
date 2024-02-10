@@ -3,10 +3,11 @@
 #include "Scroll.h"
 #include "SpriteManager.h"
 #include "../src/GlobalVars.h"
+#include "SpriteNutmeg.h"
 
 extern Sprite * nutmeg_sprite;
 
-const UINT8 anim_topspike_idle[] = {1, 0};
+static const UINT8 anim_topspike_idle[] = {1, 0};
 
 void Start_EnemyTopSpike() {
 	if (levelorientation == horizontal) {
@@ -25,19 +26,7 @@ void Start_EnemyTopSpike() {
 void Update_EnemyTopSpike() {
 	//die if touch topspike
 	if (CheckCollision(THIS, nutmeg_sprite) && accelY < 0 && nutmeg_death == false) {
-		if (health == full) {
-			lostbow = true;
-			bow_counter = 0;
-			if (nutmeg_direction == right) { bowanim = 8; }
-			else if (nutmeg_direction == left) { bowanim = 9; }
-		}
-		else if (health == low) {
-			nutmeg_death = true;
-			nutmegdeathtimer = 0;
-			
-			if (nutmeglives <= 0) { GameOver = true; }
-			else { nutmeglives--; }
-		}
+		nutmeg_hit();
 	}
 }
 

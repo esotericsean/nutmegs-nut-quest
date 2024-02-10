@@ -12,13 +12,11 @@
 #include "../src/GlobalVars.h"
 #include "../src/Font.h"
 
+#include "SpriteNutmeg.h"
+
 IMPORT_MAP (cutscene1map);
 
 UINT16 cutscene1counter;
-
-//health system
-UINT8 acorncounter;
-INT8 nutmeglives;
 
 
 const UINT8 collision_tiles_cutscene1[] = {0};
@@ -125,13 +123,8 @@ void Start_StateCutscene1() {
 	SHOW_BKG;
 
     cutscene1counter = 0;
-
-    //health system
-    acorncounter = 0;
-    nutmeglives = 99; //3
-    health = full;
-    lostbow = false;
     firstplay = true;
+    nutmeg_SetupGame();
 
     //RESET SO NUTMEG DOESN'T FLY OFF SCREEN
     accelY = 0;
@@ -139,11 +132,13 @@ void Start_StateCutscene1() {
     jumpPeak = 0;
     runJump = 0;
     nutmeg_direction = right;
+
     movestate = grounded;
     isjumping = false;
 }
 
 void Update_StateCutscene1() {
+ 
     if (KEY_PRESSED(J_START)) SetState(StateCutscene2);
 
     if (cutscene1counter == 0) {

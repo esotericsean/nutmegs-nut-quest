@@ -4,9 +4,9 @@
 #include "SpriteManager.h"
 #include "Sound.h"
 #include "../src/GlobalVars.h"
+#include "SpriteNutmeg.h"
 
 extern Sprite * nutmeg_sprite;
-Sprite * spr_spatula;
 
 const UINT8 anim_spatula_spin[]  = {14, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 
@@ -26,19 +26,7 @@ void UPDATE() {
 
 	//die if touch spatula
 	if (CheckCollision(THIS, nutmeg_sprite) && nutmeg_death == false) {
-		if (health == full) {
-			lostbow = true;
-			bow_counter = 0;
-			if (nutmeg_direction == right) { bowanim = 8; }
-			else if (nutmeg_direction == left) { bowanim = 9; }
-		}
-		else if (health == low) {
-			nutmeg_death = true;
-			nutmegdeathtimer = 0;
-			
-			if (nutmeglives <= 0) { GameOver = true; }
-			else { nutmeglives--; }
-		}
+		nutmeg_hit();
 	}
 }
 

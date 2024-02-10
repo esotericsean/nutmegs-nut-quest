@@ -6,6 +6,7 @@
 #include "Sound.h"
 #include "Palette.h"
 #include "../src/GlobalVars.h"
+#include "SpriteNutmeg.h"
 
 extern Sprite * nutmeg_sprite;
 
@@ -53,18 +54,26 @@ void Update_EnemyFish() {
 
 	if (fishcounter >= 156) fishcounter = 0;
 
-	if (CheckCollision(THIS, nutmeg_sprite) && movestate == inair && accelY > 0) {
-		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-		isjumping = true;
-		accelY = -600;
-		jumpPeak = 0;
-		movestate = inair;
+	if (CheckCollision(THIS, nutmeg_sprite) && (nutmeg_death == false)){
+		if (movestate == inair && accelY > 0) 
+		{
+			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+			isjumping = true;
+			accelY = -600;
+			jumpPeak = 0;
+			movestate = inair;
 
-		SpriteManagerAdd(SpriteStarLeft, THIS->x, THIS->y+2);
-		SpriteManagerAdd(SpriteStarRight, THIS->x+8, THIS->y+2);
+			SpriteManagerAdd(SpriteStarLeft, THIS->x, THIS->y+2);
+			SpriteManagerAdd(SpriteStarRight, THIS->x+8, THIS->y+2);
 
-		SpriteManagerRemoveSprite (THIS);
+			SpriteManagerRemoveSprite (THIS);
+		}
+		else
+		{
+			nutmeg_hit();
+		}
 	}
+	
 }
 
 void Destroy_EnemyFish() {

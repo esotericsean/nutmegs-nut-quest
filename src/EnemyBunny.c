@@ -4,12 +4,13 @@
 #include "SpriteManager.h"
 #include "Sound.h"
 #include "../src/GlobalVars.h"
+#include "SpriteNutmeg.h"
 
 extern Sprite * nutmeg_sprite;
 
-const UINT8 anim_bunny_idle[] = {1, 0};
-const UINT8 anim_bunny_jump[] = {6, 0, 1, 2, 3, 4, 5};
-const UINT8 anim_bunny_die[] = {1, 6};
+static const UINT8 anim_bunny_idle[] = {1, 0};
+static const UINT8 anim_bunny_jump[] = {6, 0, 1, 2, 3, 4, 5};
+static const UINT8 anim_bunny_die[] = {1, 6};
 
 
 
@@ -90,19 +91,7 @@ void Update_EnemyBunny() {
 	}
 	//die if touch bunny
 	else if (CheckCollision(THIS, nutmeg_sprite) && movestate == grounded && nutmeg_death == false) {
-		if (health == full) {
-			lostbow = true;
-			bow_counter = 0;
-			if (nutmeg_direction == right) { bowanim = 8; }
-			else if (nutmeg_direction == left) { bowanim = 9; }
-		}
-		else if (health == low) {
-			nutmeg_death = true;
-			nutmegdeathtimer = 0;
-			
-			if (nutmeglives <= 0) { GameOver = true; }
-			else { nutmeglives--; }
-		}
+		nutmeg_hit();
 	}
 }
 

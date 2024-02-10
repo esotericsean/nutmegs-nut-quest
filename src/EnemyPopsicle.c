@@ -4,11 +4,11 @@
 #include "SpriteManager.h"
 #include "Sound.h"
 #include "../src/GlobalVars.h"
+#include "SpriteNutmeg.h"
 
 extern Sprite * nutmeg_sprite;
-Sprite * spr_popsicle;
 
-const UINT8 anim_popsicle_spin[]  = {8, 0, 1, 2, 3, 4, 5, 6, 7};
+static const UINT8 anim_popsicle_spin[]  = {8, 0, 1, 2, 3, 4, 5, 6, 7};
 
 UINT8 popsicle_counter;
 
@@ -26,19 +26,7 @@ void UPDATE() {
 
 	//die if touch popsicle
 	if (CheckCollision(THIS, nutmeg_sprite) && nutmeg_death == false) {
-		if (health == full) {
-			lostbow = true;
-			bow_counter = 0;
-			if (nutmeg_direction == right) { bowanim = 8; }
-			else if (nutmeg_direction == left) { bowanim = 9; }
-		}
-		else if (health == low) {
-			nutmeg_death = true;
-			nutmegdeathtimer = 0;
-			
-			if (nutmeglives <= 0) { GameOver = true; }
-			else { nutmeglives--; }
-		}
+		nutmeg_hit();
 	}
 }
 

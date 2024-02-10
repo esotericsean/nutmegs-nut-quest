@@ -4,6 +4,7 @@
 #include "SpriteManager.h"
 #include "Sound.h"
 #include "../src/GlobalVars.h"
+#include "SpriteNutmeg.h"
 
 extern Sprite * nutmeg_sprite;
 
@@ -17,21 +18,15 @@ UINT8 rockithdirection = 0; // 0 is left, 1 is right
 // 4 is walk frame 2
 // 5 is flatten
 // 6, 7, 8 is death poof
-const UINT8 anim_rockith_idle[]  	 = {1, 1};
-const UINT8 anim_rockith_eyeball[]   = {1, 2};
-const UINT8 anim_rockith_stand[] 	 = {8, 2, 2, 2, 2, 3, 3, 3, 3};
-const UINT8 anim_rockith_walk[]  	 = {2, 3, 4};
-const UINT8 anim_rockith_death[] 	 = {13, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0};
-const UINT8 anim_rockith_death_alt[] = {16, 5, 5, 5, 5, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0};
+static const UINT8 anim_rockith_idle[]  	 = {1, 1};
+static const UINT8 anim_rockith_eyeball[]   = {1, 2};
+static const UINT8 anim_rockith_stand[] 	 = {8, 2, 2, 2, 2, 3, 3, 3, 3};
+static const UINT8 anim_rockith_walk[]  	 = {2, 3, 4};
+static const UINT8 anim_rockith_death[] 	 = {13, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0};
+static const UINT8 anim_rockith_death_alt[] = {16, 5, 5, 5, 5, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0};
 
-bool rockdamage;
 
 void Start_EnemyRockith() {
-	/*THIS->coll_x = 0;
-	THIS->coll_y = 3;
-	THIS->coll_w = 8;
-	THIS->coll_h = 5;*/
-
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
@@ -46,10 +41,11 @@ void Start_EnemyRockith() {
 	THIS->mirror = NO_MIRROR;
 
 	rockithcounter = 0;
-	rockdamage = false;
 }
 
 void Update_EnemyRockith() {
+	bool rockdamage = false;
+
 	//rock mode
 	if (rockithcounter == 0) {
 		SetSpriteAnim(THIS, anim_rockith_idle, 1);
@@ -117,19 +113,7 @@ void Update_EnemyRockith() {
 	}
 	//die if touch rockith
 	else if (CheckCollision(THIS, nutmeg_sprite) && rockdamage == true && movestate == grounded && nutmeg_death == false) {
-		if (health == full) {
-			lostbow = true;
-			bow_counter = 0;
-			if (nutmeg_direction == right) { bowanim = 8; }
-			else if (nutmeg_direction == left) { bowanim = 9; }
-		}
-		else if (health == low) {
-			nutmeg_death = true;
-			nutmegdeathtimer = 0;
-			
-			if (nutmeglives <= 0) { GameOver = true; }
-			else { nutmeglives--; }
-		}
+		nutmeg_hit();
 	}
 }
 

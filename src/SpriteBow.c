@@ -2,6 +2,7 @@
 
 #include "SpriteManager.h"
 
+// This is rubys bow in cutscene 1
 void Start_SpriteBow() {
 }
 

@@ -4,12 +4,12 @@
 #include "SpriteManager.h"
 #include "Sound.h"
 #include "../src/GlobalVars.h"
+#include "SpriteNutmeg.h"
 
 extern Sprite * nutmeg_sprite;
-Sprite * spr_cola;
 
-const UINT8 anim_cola[]  = {1, 1};
-const UINT8 anim_cola_flash[]  = {2, 0, 1};
+static const UINT8 anim_cola[]  = {1, 1};
+static const UINT8 anim_cola_flash[]  = {2, 0, 1};
 
 void START() {
 	THIS->lim_x = 350;
@@ -85,19 +85,7 @@ void UPDATE() {
 
 	//die if touch cola
 	if (CheckCollision(THIS, nutmeg_sprite) && nutmeg_death == false) {
-		if (health == full) {
-			lostbow = true;
-			bow_counter = 0;
-			if (nutmeg_direction == right) { bowanim = 8; }
-			else if (nutmeg_direction == left) { bowanim = 9; }
-		}
-		else if (health == low) {
-			nutmeg_death = true;
-			nutmegdeathtimer = 0;
-			
-			if (nutmeglives <= 0) { GameOver = true; }
-			else { nutmeglives--; }
-		}
+		nutmeg_hit();
 	}
 }
 

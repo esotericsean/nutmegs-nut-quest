@@ -4,6 +4,7 @@
 #include "SpriteManager.h"
 #include "Sound.h"
 #include "../src/GlobalVars.h"
+#include "SpriteNutmeg.h"
 
 extern Sprite * nutmeg_sprite;
 
@@ -64,20 +65,8 @@ void Update_EnemyBatty() {
 		SpriteManagerRemoveSprite (THIS);
 	}
 	//die if touch batty
-	else if (CheckCollision(THIS, nutmeg_sprite) && accelY < 0 && nutmeg_death == false) {
-		if (health == full) {
-			lostbow = true;
-			bow_counter = 0;
-			if (nutmeg_direction == right) { bowanim = 8; }
-			else if (nutmeg_direction == left) { bowanim = 9; }
-		}
-		else if (health == low) {
-			nutmeg_death = true;
-			nutmegdeathtimer = 0;
-			
-			if (nutmeglives <= 0) { GameOver = true; }
-			else { nutmeglives--; }
-		}
+	else if (CheckCollision(THIS, nutmeg_sprite) && accelY <= 0 && nutmeg_death == false) {
+		nutmeg_hit();
 	}
 }
 

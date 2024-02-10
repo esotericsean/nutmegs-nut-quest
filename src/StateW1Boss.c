@@ -38,8 +38,9 @@ DECLARE_MUSIC(boss1win);
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
 extern Sprite * spr_hand;
-extern Sprite * spr_spatula;
-extern Sprite * spr_popsicle;
+
+static Sprite * spr_spatula;
+static Sprite * spr_popsicle;
 
 void Start_StateW1Boss() {
 	w1bosscounter = 0;

@@ -4,6 +4,7 @@
 #include "SpriteManager.h"
 #include "Sound.h"
 #include "../src/GlobalVars.h"
+#include "SpriteNutmeg.h"
 
 extern Sprite * nutmeg_sprite;
 
@@ -92,35 +93,27 @@ void UPDATE() {
 	}
 
 	//hurt hand if jump on it
-	if (CheckCollision(THIS, nutmeg_sprite) && movestate == inair && accelY > 0 && nutmeg_death == false) {
-		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-		isjumping = true;
-		accelY = -400;
-		jumpPeak = 0;
-		movestate = inair;
+	if (CheckCollision(THIS, nutmeg_sprite) && nutmeg_death == false) {
+		if ( movestate == inair && accelY > 0 )
+		{
+			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+			isjumping = true;
+			accelY = -400;
+			jumpPeak = 0;
+			movestate = inair;
 
-		if (abletohurthand == true) {
-			handhealth = handhealth + 1;
-			abletohurthand = false;
-		}
-		
-		if (handphase == 0 || handphase == 2) handpos = 4; //hand on the right side, facing left
-		else if (handphase == 1 || handphase == 3) handpos = 9; //hand on left side, facing right
-	}
-	//die if touch hand
-	else if (CheckCollision(THIS, nutmeg_sprite) && accelY < 0 && nutmeg_death == false) {
-		if (health == full) {
-			lostbow = true;
-			bow_counter = 0;
-			if (nutmeg_direction == right) { bowanim = 8; }
-			else if (nutmeg_direction == left) { bowanim = 9; }
-		}
-		else if (health == low) {
-			nutmeg_death = true;
-			nutmegdeathtimer = 0;
+			if (abletohurthand == true) {
+				handhealth = handhealth + 1;
+				abletohurthand = false;
+			}
 			
-			if (nutmeglives <= 0) { GameOver = true; }
-			else { nutmeglives--; }
+			if (handphase == 0 || handphase == 2) handpos = 4; //hand on the right side, facing left
+			else if (handphase == 1 || handphase == 3) handpos = 9; //hand on left side, facing right
+		}
+		else
+		{
+			//die if touch hand
+			nutmeg_hit();
 		}
 	}
 }

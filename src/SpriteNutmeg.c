@@ -26,6 +26,9 @@ static const UINT8 anim_nutmeg_hurt_left[]  = {14, 12, 12, 12, 12, 13, 14, 14, 1
 
 static const UINT8 anim_nutmeg_lostbow[] = {2, 11, 0};
 
+UINT8 nutmeglives;
+UINT8 acorncounter;
+
 direction nutmeg_direction;
 bool isjumping = true;
 
@@ -562,4 +565,34 @@ void Update_SpriteNutmeg() {
 }
 
 void Destroy_SpriteNutmeg() {
+}
+
+void nutmeg_SetupGame(void) BANKED
+{
+    //health system
+    acorncounter = 0;
+    
+    // TESTING - Should be 3 lives
+    nutmeglives = 99; 
+
+    health = full;
+    lostbow = false;
+}
+
+// call this when nutmeg has been hit
+void nutmeg_hit(void) BANKED
+{
+    if (health == full) {
+        lostbow = true;
+        bow_counter = 0;
+        if (nutmeg_direction == right) { bowanim = 8; }
+        else if (nutmeg_direction == left) { bowanim = 9; }
+    }
+    else if (health == low) {
+        nutmeg_death = true;
+        nutmegdeathtimer = 0;
+        
+        if (nutmeglives <= 0) { GameOver = true; }
+        else { nutmeglives--; }
+    }
 }
