@@ -131,7 +131,6 @@ const unsigned char rainsplash2_pt4[] = {
 	0x80,0x00,0x00,0x00,0x02,0x00,0x00,0x00
 };
 
-
 void Start_StateLevel5() {
 	level5counter = 0;
 	levelorientation = horizontal;

@@ -31,10 +31,7 @@ DECLARE_MUSIC(quickdeath);
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
-//extern Sprite * spr_nutmeg2;
 extern Sprite * spr_camera;
-//struct Sprite * spr_nutmegbow;
-
 
 void Start_StateLevel4() {
 	level4counter = 0;
@@ -50,10 +47,6 @@ void Start_StateLevel4() {
 	deathmusicplayed = false;
 
 	PlayMusic(quickstart, 1);
-
-	//testing:
-	//health = full;
-	//lostbow = false;
 
 	//if health is full, add the bow
 	if (health == full) { SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
