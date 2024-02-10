@@ -227,7 +227,7 @@ void Update_SpriteNutmeg() {
         // Note that we can't start running when jumping,
         // but we can keep the running speed if we start the jump from run
         if (movestate == grounded) {
-            if (KEY_TICKED(J_A)) {
+            if (KEY_TICKED(J_A) && (nutmeg_death == false)) {
                 isjumping = true;
                 accelY = -150;
                 jumpPeak = 0;
