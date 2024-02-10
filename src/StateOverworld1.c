@@ -340,6 +340,8 @@ static void startAutoMoveTowards (UINT8 towards)
 void Start_StateOverworld1() {
 	SPRITES_8x16;
 
+	isAcornMoving = false;
+	
 	// Setup the map steps for the current overworld;
 	if ((level_current < 10) || (level_current == ENTERING_WORLD_1))
 	{
@@ -494,7 +496,7 @@ static void moveTowardsNextLevel(void)
 	}
 
 	moveCount++;
-	if (moveCount == 3)
+	if (moveCount == 2)
 	{
 		moveCount = 0;
 	}
