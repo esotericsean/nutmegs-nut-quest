@@ -48,7 +48,7 @@ void Update_EnemyButterfly() {
 		{
 			TranslateSprite(THIS, 0, 1);
 		}
-		if (ycnt == 22)
+		if (ycnt == 26)
 		{
 			ycnt = 0;
 		}
@@ -63,15 +63,15 @@ void Update_EnemyButterfly() {
 		UINT8 xcnt = THIS->custom_data[1];
 		xcnt ++;
 		//left and right
-		if (xcnt < 20) {
+		if (xcnt < 10) {
 			THIS->mirror = NO_MIRROR;
 			TranslateSprite(THIS, 1, 0);
 		}
-		else if (xcnt >= 22 && xcnt < 42) {
+		else if (xcnt >= 11 && xcnt < 22) {
 			THIS->mirror = V_MIRROR;
 			TranslateSprite(THIS, -1, 0);
 		}
-		if (xcnt == 43) { xcnt = 0;}
+		if (xcnt == 25) { xcnt = 0;}
 		THIS->custom_data[1] =  xcnt;
 	}
 	THIS->custom_data[3] = xstep;

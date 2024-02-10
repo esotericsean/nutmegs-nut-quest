@@ -24,6 +24,7 @@ _STATE(StateScroll)\
 _STATE(StateLevel8)\
 _STATE(StateW1Boss)\
 _STATE(StateLevel2_1)\
+_STATE(StateOverworldChange)\
 _STATE(StateCredits)\
 STATE_DEF_END
 

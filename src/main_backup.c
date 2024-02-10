@@ -164,18 +164,18 @@ void main() {
 	WY_REG = 145;
 
 	// TESTING - Skip past the start stuff
-	/*
+	
 	// 6 = force scroll
 	// w1 = 10 - stage 8
 	W1LevelSelection = 0;
 	next_state = StateOverworld1;
 	levelbeat = true;
-	level_max = 0;
+	level_max = 20;
 	level_current = 0;
-	level_next = 0;
+	level_next = 1;
 	nutmeglives = 99;
 	// END TESTING
-	*/
+	
 
 	while(1) {
 		DISPLAY_OFF
