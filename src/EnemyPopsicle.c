@@ -6,7 +6,7 @@
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
 
-extern Sprite * nutmeg_sprite;
+extern Sprite * spr_nutmeg;
 
 static const UINT8 anim_popsicle_spin[]  = {8, 0, 1, 2, 3, 4, 5, 6, 7};
 
@@ -25,7 +25,7 @@ void UPDATE() {
 	THIS->x = THIS->x+1;
 
 	//die if touch popsicle
-	if (CheckCollision(THIS, nutmeg_sprite) && nutmeg_death == false) {
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
 		nutmeg_hit();
 	}
 }

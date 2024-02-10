@@ -2,7 +2,8 @@
 #include "SpriteManager.h"
 #include "../src/GlobalVars.h"
 
-extern Sprite * nutmeg_sprite;
+extern Sprite * spr_nutmeg;
+Sprite *spr_nutmegbow;
 
 const UINT8 anim_nutmegbow_static[] = {1, 1};
 
@@ -66,50 +67,53 @@ void Start_SpriteNutmegBow() {
 	//bow_catch_x = 0;
 }
 
-void Update_SpriteNutmegBow() {
+
+// returns false if the bow sprite has been destroyed
+bool nutmegBow_update(void ) BANKED 
+{
 	if (lostbow == false) {
 		//lostbow = false;
 
-		THIS->y = nutmeg_sprite->y-24;
+		THIS->y = spr_nutmeg->y-24;
 
 		switch (bowanim) {
 			case 0:
-				THIS->x = nutmeg_sprite->x-8;
+				THIS->x = spr_nutmeg->x-8;
 				SetSpriteAnim(THIS, anim_nutmegbow_idle_right, 5);
 				THIS->mirror = NO_MIRROR;
 				break;
 			case 1:
-				THIS->x = nutmeg_sprite->x+8;
+				THIS->x = spr_nutmeg->x+8;
 				SetSpriteAnim(THIS, anim_nutmegbow_idle_left, 5);
 				THIS->mirror = V_MIRROR;
 				break;
 			case 2:
-				THIS->x = nutmeg_sprite->x-8;
+				THIS->x = spr_nutmeg->x-8;
 				SetSpriteAnim(THIS, anim_nutmegbow_walk_right, 15);
 				THIS->mirror = NO_MIRROR;
 				break;
 			case 3:
-				THIS->x = nutmeg_sprite->x+8;
+				THIS->x = spr_nutmeg->x+8;
 				SetSpriteAnim(THIS, anim_nutmegbow_walk_left, 15);
 				THIS->mirror = V_MIRROR;
 				break;
 			case 4:
-				THIS->x = nutmeg_sprite->x-8;
+				THIS->x = spr_nutmeg->x-8;
 				SetSpriteAnim(THIS, anim_nutmegbow_jump_right, 1);
 				THIS->mirror = NO_MIRROR;
 				break;
 			case 5:
-				THIS->x = nutmeg_sprite->x+8;
+				THIS->x = spr_nutmeg->x+8;
 				SetSpriteAnim(THIS, anim_nutmegbow_jump_left, 1);
 				THIS->mirror = V_MIRROR;
 				break;
 			case 6:
-				THIS->x = nutmeg_sprite->x-8;
+				THIS->x = spr_nutmeg->x-8;
 				SetSpriteAnim(THIS, anim_nutmegbow_fall_right, 1);
 				THIS->mirror = NO_MIRROR;
 				break;
 			case 7:
-				THIS->x = nutmeg_sprite->x+8;
+				THIS->x = spr_nutmeg->x+8;
 				SetSpriteAnim(THIS, anim_nutmegbow_fall_left, 1);
 				THIS->mirror = V_MIRROR;
 				break;
@@ -122,7 +126,7 @@ void Update_SpriteNutmegBow() {
 		
 		if (bow_counter == 0) {
 			//bow_x = 0;
-			//bow_catch_x = nutmeg_sprite->x - 8;
+			//bow_catch_x = spr_nutmeg->x - 8;
 
 			if (bowanim == 9) {
 				//bow_catch_x = bow_catch_x + 16;
@@ -161,9 +165,18 @@ void Update_SpriteNutmegBow() {
 			health = low;
 			bowanim = 10;
 			SpriteManagerRemoveSprite(THIS);
+			return false;
 		}
 	}
+	return true;
 }
+
+void Update_SpriteNutmegBow() {
+	// TODO call this from nutmeg, so the positioning can happen after nutmeg has moved,
+	// even though the sprites have to be earlier in the queue so they are on top
+	nutmegBow_update();
+}
+
 
 void Destroy_SpriteNutmegBow() {
 }

@@ -21,11 +21,8 @@ UINT8 endlevel_counter5 = 0;
 UINT8 lightningstrikecounter1 = 0;
 UINT8 lightningstrikecounter2 = 0;
 
-//nutmeg rainy colors
-const UWORD pal_nut5[] = { RGB(31, 31, 31), RGB(25, 21, 19), RGB(23, 13, 4), RGB(2, 2, 2) };
-
-const UINT8 collision_tiles_level5[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
-const UINT8 collision_tiles_down_level5[] = {29,30,31,32,0};
+static const UINT8 collision_tiles_level5[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
+static const UINT8 collision_tiles_down_level5[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(raindrops);
 DECLARE_MUSIC(quickdeath);

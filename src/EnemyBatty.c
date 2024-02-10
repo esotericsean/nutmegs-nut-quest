@@ -6,7 +6,7 @@
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
 
-extern Sprite * nutmeg_sprite;
+extern Sprite * spr_nutmeg;
 
 const UINT8 anim_batty_fly[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
 
@@ -46,7 +46,7 @@ void Update_EnemyBatty() {
 	if (battycounter >= 180) battycounter = 0;
 
 	//kill batty if jump on it
-	if (CheckCollision(THIS, nutmeg_sprite) && movestate == inair && accelY > 0 && nutmeg_death == false) {
+	if (CheckCollision(THIS, spr_nutmeg) && movestate == inair && accelY > 0 && nutmeg_death == false) {
 		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
 		isjumping = true;
 		accelY = -600;
@@ -65,7 +65,7 @@ void Update_EnemyBatty() {
 		SpriteManagerRemoveSprite (THIS);
 	}
 	//die if touch batty
-	else if (CheckCollision(THIS, nutmeg_sprite) && accelY <= 0 && nutmeg_death == false) {
+	else if (CheckCollision(THIS, spr_nutmeg) && accelY <= 0 && nutmeg_death == false) {
 		nutmeg_hit();
 	}
 }

@@ -6,7 +6,7 @@
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
 
-extern Sprite * nutmeg_sprite;
+extern Sprite * spr_nutmeg;
 
 static const UINT8 anim_bunny_idle[] = {1, 0};
 static const UINT8 anim_bunny_jump[] = {6, 0, 1, 2, 3, 4, 5};
@@ -71,7 +71,7 @@ void Update_EnemyBunny() {
 	TranslateSprite (THIS, 0, 1);
 
 	//kill bunny if jump on it
-	if (CheckCollision(THIS, nutmeg_sprite) && movestate == inair && accelY > 0 && nutmeg_death == false) {
+	if (CheckCollision(THIS, spr_nutmeg) && movestate == inair && accelY > 0 && nutmeg_death == false) {
 		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
 		isjumping = true;
 		accelY = -600;
@@ -90,7 +90,7 @@ void Update_EnemyBunny() {
 		SpriteManagerRemoveSprite (THIS);
 	}
 	//die if touch bunny
-	else if (CheckCollision(THIS, nutmeg_sprite) && movestate == grounded && nutmeg_death == false) {
+	else if (CheckCollision(THIS, spr_nutmeg) && movestate == grounded && nutmeg_death == false) {
 		nutmeg_hit();
 	}
 }

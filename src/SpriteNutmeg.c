@@ -26,6 +26,12 @@ static const UINT8 anim_nutmeg_hurt_left[]  = {14, 12, 12, 12, 12, 13, 14, 14, 1
 
 static const UINT8 anim_nutmeg_lostbow[] = {2, 11, 0};
 
+extern Sprite *spr_nutmegbow;
+
+// Declare a pointer to a sprite
+Sprite * spr_camera;
+Sprite * spr_nutmeg;
+
 UINT8 nutmeglives;
 UINT8 acorncounter;
 
@@ -63,9 +69,7 @@ amount health; //full or low
 switcher powerupleaf; //enabled or disabled
 switcher powerupstar; //enabled or disabled
 
-// Declare a pointer to a sprite
-Sprite * spr_camera;
-Sprite * nutmeg_sprite;
+
 
 UINT8 nutmegdeathmove = 0;
 
@@ -101,7 +105,7 @@ void ResetState() {
 }
 
 void Start_SpriteNutmeg() {
-    nutmeg_sprite = THIS;
+    spr_nutmeg = THIS;
 
     ResetState();
 
@@ -109,7 +113,11 @@ void Start_SpriteNutmeg() {
 	THIS->lim_y = 144;
 }
 
+bool nutmegBow_update(void ) BANKED ;
+
 void Update_SpriteNutmeg() {
+    
+    
     // extra life from 100 acorns
     if (acorncounter == 100) {
         nutmeglives++;
@@ -562,6 +570,15 @@ void Update_SpriteNutmeg() {
             }
         }
     }
+
+    /*
+    // update the bow after we are done updating, so the x & y positions can track us correctly
+    if (spr_nutmegbow != NULL)
+    {
+        if (nutmegBow_update() == true);
+        spr_nutmegbow = NULL;
+    }
+    */
 }
 
 void Destroy_SpriteNutmeg() {
@@ -577,6 +594,23 @@ void nutmeg_SetupGame(void) BANKED
 
     health = full;
     lostbow = false;
+
+    level_current = 0;
+	level_next = 0;
+	level_max = 0;
+    
+    // advance to the first level
+    levelbeat = true;
+
+    W1LevelSelection = 0;
+
+    accelY = 0;
+    accelX = 0;
+    jumpPeak = 0;
+    runJump = 0;
+    nutmeg_direction = right;
+    movestate = grounded;
+    isjumping = false;
 }
 
 // call this when nutmeg has been hit

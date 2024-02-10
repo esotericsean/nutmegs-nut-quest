@@ -30,7 +30,7 @@ UINT8 cutscenegordonspeedlimit;
 
 const UINT8 collision_tiles_cutscenegordon[] = {3,4,0};
 
-Sprite * spr_nutmeg;
+extern Sprite * spr_nutmeg;
 
 Sprite * spr_gordoncamera;
 Sprite * spr_gordonposition;

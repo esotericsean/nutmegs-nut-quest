@@ -19,30 +19,9 @@
 
 IMPORT_MAP (treemap);
 
-//direction nutmeg_direction;
-//switcher cutscenemode;
-
-/*
-const UINT16 bg_palette_tree[] = {
-	PALETTE_FROM_HEADER(treetiles)
-};
-
-const UINT16 sprites_palette_tree[] = {
-	PALETTE_INDEX (nutmeg, 0),
-	PALETTE_INDEX (puff, 4)
-};
-*/
-
 UINT8 collision_tiles_tree[] = {2,3,4,5,7,8,9,10,12,49,50,51,52,53,54,55,56,57,58, 0};
 
-//extern UINT8* oaktree_mod_Data[];
 DECLARE_MUSIC(oaktree);
-
-// You can reference it from other files by including this
-// (or by adding it to a .h include file and including that)
-extern Sprite * spr_nutmeg;
-//extern Sprite * spr_nutmeg2;
-//extern struct Sprite * spr_camera;
 
 UINT8 cutscenetimer = 0;
 

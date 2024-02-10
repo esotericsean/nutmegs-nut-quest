@@ -4,7 +4,7 @@
 #include "GlobalVars.h"
 
 bool isAcornMoving;
-extern Sprite * nutmeg_sprite;
+extern Sprite * spr_nutmeg;
 
 const UINT8 anim_acorn_moving[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
 const UINT8 anim_acorn_static[] = {1, 0};
@@ -24,7 +24,7 @@ void Update_SpriteAcorn() {
 	if (isAcornMoving == true) SetSpriteAnim(THIS, anim_acorn_moving, 10);
 	else if (isAcornMoving == false) SetSpriteAnim(THIS, anim_acorn_static, 1);
 
-	if (CheckCollision(THIS, nutmeg_sprite)) {
+	if (CheckCollision(THIS, spr_nutmeg)) {
 		PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
 
 		acorncounter++;

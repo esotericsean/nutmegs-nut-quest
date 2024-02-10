@@ -5,7 +5,7 @@
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
 
-extern Sprite * nutmeg_sprite;
+extern Sprite * spr_nutmeg;
 
 static const UINT8 anim_topspike_idle[] = {1, 0};
 
@@ -25,7 +25,7 @@ void Start_EnemyTopSpike() {
 
 void Update_EnemyTopSpike() {
 	//die if touch topspike
-	if (CheckCollision(THIS, nutmeg_sprite) && accelY < 0 && nutmeg_death == false) {
+	if (CheckCollision(THIS, spr_nutmeg) && accelY < 0 && nutmeg_death == false) {
 		nutmeg_hit();
 	}
 }

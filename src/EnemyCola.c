@@ -6,7 +6,7 @@
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
 
-extern Sprite * nutmeg_sprite;
+extern Sprite * spr_nutmeg;
 
 static const UINT8 anim_cola[]  = {1, 1};
 static const UINT8 anim_cola_flash[]  = {2, 0, 1};
@@ -84,7 +84,7 @@ void UPDATE() {
 	}
 
 	//die if touch cola
-	if (CheckCollision(THIS, nutmeg_sprite) && nutmeg_death == false) {
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
 		nutmeg_hit();
 	}
 }

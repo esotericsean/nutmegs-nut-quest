@@ -24,16 +24,11 @@ IMPORT_MAP (overworld2map);
 
 static UINT8 waterAnimCounter = 0; // water animation counter
 
-UINT8 e = 0;
+UINT8 walkCounter = 0;
 UINT8 bossflash = 0;
 UINT8 W1LevelSelection; 		// nutmeg starts at level 1
 								// level 0 is the tree
 								// mushroom is level 4
-UINT8 overWorldDirection  = 0;
-UINT8 distance  = 0;
-
-bool inputenabled;
-UINT8 treetolevel1move;
 bool levelbeat;
 
 const unsigned char overworld1_tree[] = {
@@ -53,18 +48,13 @@ const unsigned char overworld1_boss2[] = {
 	0x5f,0x61,0x5f,0x61,0x2e,0x32,0x1c,0x1c
 };
 
-//end copied from SpriteNutmegTiny
 UINT8 level_current = 0;
 UINT8 level_next = 0;
-
-bool overworld1visited = false;
+UINT8 level_max = 0;
 
 UINT8 collision_tiles_overworld1[] = {0};
 
-//extern UINT8* acornkingdom_mod_Data[];
 DECLARE_MUSIC(acornkingdom);
-
-extern Sprite * spr_nutmegtiny;
 
 //List of tiles that will be animated
 static const unsigned char overworld1_water1[] = {
@@ -76,6 +66,8 @@ static const unsigned char overworld1_water2[] = {
 	0xff,0x00,0xff,0x00,0xff,0x00,0x9f,0x00,
 	0x69,0x00,0xf6,0x00,0xff,0x00,0xff,0x00
 };
+
+static Sprite *spr_tinyNutmeg;
 
 // index = level, value = stateEnum
 static UINT8 StageForLevel [] = {0, 1, 2, 5, 6, 7, 8, 9, 10, 11};
@@ -91,6 +83,13 @@ typedef struct mapStepT {
 
 // map steps for the currnent overworld map 
 static const mapStepT * currentMapSteps;
+
+// are we moving the player to a different level?
+bool automove = false;
+UINT8 moveCount = 0;
+
+// The map step the player is currently moving towards (if automove is on)
+static const mapStepT * movingToStep;
 
 #define TILE_0 (0x29)
 
@@ -158,7 +157,7 @@ static const mapStepT steps_ow2 [] = {
 	{11, 6, 6},
 	{11, 5, 7},
 	{12, 5, 7},
-	{12, 5, 7},
+	{13, 5, 7},
 	{13, 6, 7},
 	{13, 7, 7},
 	{14, 7, 7},
@@ -172,6 +171,15 @@ static const mapStepT steps_ow2 [] = {
 
 #define PAL_LIGHT_PATH (6)
 
+static const mapStepT *mapStepForLevel (UINT8 l)
+{
+	const mapStepT *p = currentMapSteps;
+	while (p->level != l)
+	{ 
+		p++;
+	}
+	return p;
+}
 
 static void LightenPath (UINT8 topLevel)
 {
@@ -190,28 +198,6 @@ static void LightenPath (UINT8 topLevel)
 	VBK_REG = 0;
 }
 
-//copied from SpriteNutmegTiny
-//Need to update THIS to spr_nutmegtiny
-static void Move (UINT8 dir, UINT8 dis) {
-	if (dis > 0) {
-		if (e >= 0 && e <= dis) {
-			if (dir == 0) TranslateSprite (spr_nutmegtiny, -1, 0);
-			if (dir == 1) TranslateSprite (spr_nutmegtiny, 1, 0);
-			if (dir == 2) TranslateSprite (spr_nutmegtiny, 0, -1);
-			if (dir == 3) TranslateSprite (spr_nutmegtiny, 0, 1);
-		}
-
-		e++;
-
-		if (e > dis) {
-			e = 0;
-			distance = 0;
-			levelbeat = false;
-			inputenabled = true;
-		}
-	}
-}
-
 static UINT8 getTens (UINT8 full)
 {
     UINT8 t = 0 ;
@@ -222,6 +208,7 @@ static UINT8 getTens (UINT8 full)
     }
     return t;
 }
+
 static void twoDigitsAt (UINT8 x, UINT8 y, UINT8 val)
 {
 	UINT8 tile = 0;
@@ -244,7 +231,8 @@ static void twoDigitsAt (UINT8 x, UINT8 y, UINT8 val)
 
 void Setup_HUD(void)
 {
-	UINT8 level = LevelForStage[W1LevelSelection];
+	
+	UINT8 level = level_current;
 	level += TILE_0;
 
 	//level display
@@ -268,30 +256,50 @@ void Setup_HUD(void)
 	twoDigitsAt (16, 1, acorncounter);
 }
 
+#define TINY_NUTMEG_OFFSET_X (0)
+#define TINY_NUTMEG_OFFSET_Y (0)
+
 static void SetTinyNutmegAtCurrentLevel(void)
 {
-	UINT8 level = LevelForStage[W1LevelSelection];
+	UINT8 level = level_current;
+	const mapStepT *p = mapStepForLevel (level_current);
 
-	mapStepT *p = currentMapSteps;
-	while (p->level < level)
+	UINT8 x = (p->x * 8) + TINY_NUTMEG_OFFSET_X;
+	UINT8 y = (p->y * 8) - TINY_NUTMEG_OFFSET_Y;
+
+	spr_tinyNutmeg = SpriteManagerAdd(SpriteNutmegTiny, x, y); 
+
+	if (level == 0)
 	{
-		p ++;
+		// move nutmeg off the left side of the screen
+		TranslateSprite(spr_tinyNutmeg, -8, 0);
 	}
-	UINT8 x = (p->x * 8) + 15;
-	UINT8 y = (p->y * 8) - 3;
-	SpriteManagerAdd(SpriteNutmegTiny, x, y); 
 }
 
 void Start_StateOverworld1() {
 	SPRITES_8x16;
 
-	// TODO Setup the right overworld
- 	currentMapSteps = steps_ow2;
+	// Setup the map steps for the current overworld;
+ 	currentMapSteps = steps_ow1;
 
-	//InitScroll(BANK(overworld1map), &overworld1map, collision_tiles_overworld1, 0);
-	InitScroll(BANK(overworld2map), &overworld2map, collision_tiles_overworld1, 0);
+	InitScroll(BANK(overworld1map), &overworld1map, collision_tiles_overworld1, 0);
+	//InitScroll(BANK(overworld2map), &overworld2map, collision_tiles_overworld1, 0);
 
-	LightenPath(LevelForStage[W1LevelSelection]);
+	if (levelbeat){	
+		
+		level_max++;
+
+		level_next = level_max;
+		automove = true;
+		
+		// Start moving towards the next step
+		movingToStep = mapStepForLevel(level_current);
+		movingToStep ++;
+
+		levelbeat = false;
+	}
+
+	LightenPath(level_max);
 	Setup_HUD();
 
 	// sprites
@@ -305,12 +313,7 @@ void Start_StateOverworld1() {
 
 	PlayMusic(acornkingdom, 1);
 
-	if (overworld1visited == false) {
-		W1LevelSelection = 0;
-		treetolevel1move = 0;
-		inputenabled = false;
-	}
-
+	
 	SHOW_SPRITES;
 	SHOW_BKG;
 	HIDE_WIN;
@@ -334,36 +337,20 @@ static void animateWater (void)
 }
 
 void Update_StateOverworld1() {
-	// if first time visiting Overworld 1, set to tree level
-	// and set overworld1visited to true so it can't do it again
-	if (overworld1visited == false) {
-		if 		(treetolevel1move < 50)  { overWorldDirection  = 1; W1LevelSelection = 0; inputenabled = false; levelbeat = false; }
-		else if (treetolevel1move == 50) { overWorldDirection  = 1; distance = 23; W1LevelSelection = 1; inputenabled = false; }
-		else if (treetolevel1move >= 65) { inputenabled = false; overworld1visited = true; levelbeat = false; }
-
-		treetolevel1move++;
-	}
-
-	//use this to modify background tiles in static scenes
-	//set_bkg_tiles (6, 8, 1, 1, overworld1_water1); //x, y, w, h, *tiles
-
-	//water anim
 	animateWater ();
 
-	//level selection
-	if (inputenabled == true) {
+	// level selection
+	if (automove == false) {
 		if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
-			//if (W1LevelSelection == 0) SetState(StateTree);
-			//distance = 0;
-			if (W1LevelSelection == 1) SetState(StateLevel1);
-			else if (W1LevelSelection == 2) SetState(StateLevel2);
-			else if (W1LevelSelection == 5) SetState(StateLevel3);
-			else if (W1LevelSelection == 6) SetState(StateLevel4);
-			else if (W1LevelSelection == 7) SetState(StateLevel5);
-			else if (W1LevelSelection == 8) SetState(StateLevel6);
-			else if (W1LevelSelection == 9) SetState(StateLevel7);
-			else if (W1LevelSelection == 10) SetState(StateLevel8);
-			else if (W1LevelSelection == 11) SetState(StateW1Boss);
+			if (level_current == 1) SetState(StateLevel1);
+			else if (level_current == 2) SetState(StateLevel2);
+			else if (level_current == 3) SetState(StateLevel3);
+			else if (level_current == 4) SetState(StateLevel4);
+			else if (level_current == 5) SetState(StateLevel5);
+			else if (level_current == 6) SetState(StateLevel6);
+			else if (level_current == 7) SetState(StateLevel7);
+			else if (level_current == 8) SetState(StateLevel8);
+			else if (level_current == 9) SetState(StateW1Boss);
 		}
 	}
 
@@ -371,56 +358,51 @@ void Update_StateOverworld1() {
 	// dir 1 = right
 	// dir 2 = up
 	// dir 3 = down
-
-	if (e == 0 && levelbeat == true) {
-		// LEVEL 1
-		if (W1LevelSelection == 1 && levelbeat == true) {
-			overWorldDirection  = 3; distance = 15; W1LevelSelection = 2;  inputenabled = false;
-		}
-		// LEVEL 2
-		else if (W1LevelSelection == 2 && levelbeat == true) {
-			overWorldDirection  = 1; distance = 23; W1LevelSelection = 5; inputenabled = false;
-		}
-		// LEVEL 5
-		else if (W1LevelSelection == 5 && levelbeat == true) {
-			overWorldDirection  = 3; distance = 15; W1LevelSelection = 6; inputenabled = false;
-		}
-		// LEVEL 6
-		else if (W1LevelSelection == 6 && levelbeat == true) {
-			overWorldDirection  = 1; distance = 23; W1LevelSelection = 7; inputenabled = false;
-		}
-		// LEVEL 7
-		else if (W1LevelSelection == 7 && levelbeat == true) {
-			overWorldDirection  = 2; distance = 31; W1LevelSelection = 8; inputenabled = false;
-		}
-		// LEVEL 8
-		else if (W1LevelSelection == 8 && levelbeat == true) {
-			overWorldDirection  = 1; distance = 23; W1LevelSelection = 9; inputenabled = false;
-		}
-		// LEVEL 9
-		else if (W1LevelSelection == 9 && levelbeat == true) {
-			overWorldDirection  = 3; distance = 23; W1LevelSelection = 10; inputenabled = false;
-		}
-		// LEVEL 10
-		else if (W1LevelSelection == 10 && levelbeat == true) {
-			overWorldDirection  = 3; distance = 24; W1LevelSelection = 11; inputenabled = false;
-		}
-		// LEVEL 11 - PICNIC TABLE (MINI BOSS)
-		else if (W1LevelSelection == 11 && levelbeat == true) {
-			overWorldDirection  = 1; distance = 46; W1LevelSelection = 12; inputenabled = false;
-		} //change to overworld2
-	}
-
-	/* * * * * * * * * * * * * * * * * * * * * */ // 1. Depending on which level player is standing on
-	/*     Send to Move Function (line 137)    */ //    define a overWorldDirection  and DISTANCE and update player
-	/*                                         */ //    to the level Nutmeg will be traveling to
-	if (distance > 0) 
+	if (automove == true)
 	{
-		Move (overWorldDirection , distance); // 2. Send DIR and DIS to a function that moves the
+		if (moveCount == 0)
+		{
+			UINT16 x = spr_tinyNutmeg->x - TINY_NUTMEG_OFFSET_X;
+			UINT16 y = spr_tinyNutmeg->y - TINY_NUTMEG_OFFSET_Y;
+
+			UINT16 tx = movingToStep->x;
+			tx <<= 3;
+			UINT16 ty = movingToStep->y;
+			ty <<= 3;
+
+			// check if we are there
+			if ((x == tx) && (y == ty))
+			{
+				// check if we need to move another step
+				if (movingToStep->level == level_next)
+				{
+					// we are there
+					automove = false;
+					level_current = level_next;
+					Setup_HUD();
+				}
+				else 
+				{
+					// start moving to the next step
+					movingToStep++;
+					tx = movingToStep->x;
+					tx <<= 3;
+					ty = movingToStep->y;
+					ty <<= 3;
+				}
+			}
+
+			// move 1 pixel towards the goal
+			if (x < tx) { TranslateSprite (spr_tinyNutmeg, 1, 0);}
+			else if (x > tx) { TranslateSprite (spr_tinyNutmeg, -1, 0);}
+			else if (y < ty) { TranslateSprite (spr_tinyNutmeg, 0, 1);}
+			else if (y > ty) { TranslateSprite (spr_tinyNutmeg, 0, -1);}
+		}
+
+		moveCount++;
+		if (moveCount == 3)
+		{
+			moveCount = 0;
+		}
 	}
-	/*                                         */ //    player, run the function until e = distance
-	/*                                         */ // 3. Reset e to 0, distance to 0
-	/* * * * * * * * * * * * * * * * * * * * * */ //
-
-
 }

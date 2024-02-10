@@ -166,10 +166,13 @@ void main() {
 	// TESTING - Skip past the start stuff
 	// 6 = force scroll
 	// w1 = 10 - stage 8
-	//W1LevelSelection = 10;
-	//next_state = StateOverworld1;
-	//levelbeat = false;
-	//nutmeglives = 99;
+	W1LevelSelection = 0;
+	next_state = StateOverworld1;
+	levelbeat = true;
+	level_max = 0;
+	level_current = 0;
+	level_next = 0;
+	nutmeglives = 99;
 	// END TESTING
 
 	while(1) {

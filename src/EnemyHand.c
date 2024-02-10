@@ -6,7 +6,7 @@
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
 
-extern Sprite * nutmeg_sprite;
+extern Sprite * spr_nutmeg;
 
 static const UINT8 anim_hand_idle[]  = {1, 0};
 static const UINT8 anim_hand_open[]  = {28, 0,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3};
@@ -93,7 +93,7 @@ void UPDATE() {
 	}
 
 	//hurt hand if jump on it
-	if (CheckCollision(THIS, nutmeg_sprite) && nutmeg_death == false) {
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
 		if ( movestate == inair && accelY > 0 )
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);

@@ -9,9 +9,7 @@
 #include "Palette.h"
 #include "Sound.h"
 #include "../src/GlobalVars.h"
-
-//#include "../src/titletiles.h"
-//#include "../src/titlemap.h"
+#include "SpriteNutmeg.h"
 
 IMPORT_MAP (titlemap);
 
@@ -74,19 +72,9 @@ void Start_StateTitle() {
 		ScrollUpdateColumn (i, 0);
 	}
 
+    nutmeg_SetupGame();
+
     SHOW_BKG;
-
-    //RESET SO NUTMEG DOESN'T FLY OFF SCREEN
-    accelY = 0;
-    accelX = 0;
-    jumpPeak = 0;
-    runJump = 0;
-    nutmeg_direction = right;
-    movestate = grounded;
-    isjumping = false;
-
-    W1LevelSelection = 0;
-    overworld1visited = false;
 }
 
 void Update_StateTitle() {

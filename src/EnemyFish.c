@@ -8,7 +8,7 @@
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
 
-extern Sprite * nutmeg_sprite;
+extern Sprite * spr_nutmeg;
 
 static UINT8 fishcounter = 0; // counter
 
@@ -54,7 +54,7 @@ void Update_EnemyFish() {
 
 	if (fishcounter >= 156) fishcounter = 0;
 
-	if (CheckCollision(THIS, nutmeg_sprite) && (nutmeg_death == false)){
+	if (CheckCollision(THIS, spr_nutmeg) && (nutmeg_death == false)){
 		if (movestate == inair && accelY > 0) 
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);

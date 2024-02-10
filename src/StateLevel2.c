@@ -28,6 +28,7 @@ DECLARE_MUSIC(quickdeath);
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
+extern Sprite * spr_nutmegbow;
 extern Sprite * spr_camera;
 
 void Start_StateLevel2() {
@@ -44,7 +45,7 @@ void Start_StateLevel2() {
 	PlayMusic(quickstart, 1);
 
 	//if health is full, add the bow
-	if (health == full) { SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
+	if (health == full) { spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
 	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49); //36
 	
 	InitScrollTiles(0, &level1tiles);

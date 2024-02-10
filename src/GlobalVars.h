@@ -1,5 +1,5 @@
-#ifndef GLOBALVARS_H
-#define GLOBALVARS_H
+#ifndef GLOBALVARS_H_
+#define GLOBALVARS_H_
 
 // Nutmeg Physics Old
 //#define walkSpeed 100
@@ -43,6 +43,15 @@ extern switcher powerupstar;
 extern bool firstplay;
 
 
+// the level we are currently at / playing
+extern UINT8 level_current;
+
+// the level we are moving towards
+extern UINT8 level_next;
+
+// the highest level we have unlocked
+extern UINT8 level_max;
+
 //health system - reset to 0 in StateCutscene1
 //start with 0 acorns and 3 lives
 extern UINT8 acorncounter;
@@ -53,9 +62,6 @@ extern bool pitdeathactive;
 
 // level timer countdown - controlled by Hud.c
 extern UINT16 timerlevel;
-
-//first time visiting overworld1
-extern bool overworld1visited;
 
 //acorn animation
 extern bool isAcornMoving;
