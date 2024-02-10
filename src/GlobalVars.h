@@ -46,7 +46,7 @@ extern bool firstplay;
 //health system - reset to 0 in StateCutscene1
 //start with 0 acorns and 3 lives
 extern UINT8 acorncounter;
-extern INT8 nutmeglives;
+extern UINT8 nutmeglives;
 extern bool GameOver;
 extern bool deathmusicplayed;
 extern bool pitdeathactive;

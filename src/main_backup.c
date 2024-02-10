@@ -119,6 +119,7 @@ void SetWindowY(UINT8 y) {
 extern UINT8 last_bg_pal_loaded;
 extern UINT8 last_tile_loaded;
 UINT16 default_palette[] = {RGB(31, 31, 31), RGB(20, 20, 20), RGB(10, 10, 10), RGB(0, 0, 0)};
+
 void main() {
 	// this delay is required for PAL SNES SGB border commands to work
 	for (UINT8 i = 4; i != 0; i--) {
@@ -166,7 +167,7 @@ void main() {
 	// 6 = force scroll
 	// w1 = 10 - stage 8
 	//W1LevelSelection = 10;
-	//next_state = StateLevel8;
+	//next_state = StateOverworld1;
 	//levelbeat = false;
 	//nutmeglives = 99;
 	// END TESTING
