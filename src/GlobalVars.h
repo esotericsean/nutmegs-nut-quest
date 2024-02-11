@@ -27,7 +27,7 @@ extern UINT8 runJump;
 
 typedef enum { false, true } bool;
 typedef enum { grounded, inair } move_state;
-typedef enum { enabled, disabled } switcher;
+typedef enum { disabled, enabled  } switcher;
 typedef enum { right, left } direction;
 typedef enum { full, low } amount;
 typedef enum { vertical, horizontal } orientation;

@@ -66,7 +66,7 @@ UINT8 runJump;
 //storing collisions around player after movement
 UINT8 collisionX;
 UINT8 collisionY;
-UINT8 groundCollision;
+
 
 //powerups
 amount health; //full or low
@@ -86,7 +86,6 @@ void ResetState() {
     accelX = 0;
     collisionX = 0;
     collisionY = 0;
-    groundCollision = 0;
     jumpPeak = 0;
     runJump = 0;
     movestate = grounded;
@@ -122,7 +121,7 @@ void nutmegBow_update(void ) BANKED ;
 // returns true if removed
 static void update_whileDead(void)
 {
-    cutscenemode = true;
+    cutscenemode = enabled;
 
     nutmegdeathmove++;
 
@@ -178,18 +177,7 @@ static void update_inCutscene(void)
                 accelX = -100;
         }
     }
-
-    if (cutscenewalkleft == false && cutscenewalkright == false) {
-        if (nutmeg_direction == right)
-        {
-            THIS->mirror = NO_MIRROR;
-        }
-        else
-        {
-            THIS->mirror = V_MIRROR;
-        }
-    }
-
+  
     if (movestate == inair) {
 
         if (collisionY != 0) {
@@ -223,65 +211,62 @@ static void update_inCutscene(void)
     }
 
     if (accelY > 0) {
-        groundCollision = collisionY;
-
-        if (groundCollision == 0) {
+        if (collisionY == 0) {
             movestate = inair;
         }
         else {
-            if (movestate == inair) {
-                //PlayFx(CHANNEL_4, 4, 0x32, 0x71, 0x73, 0x80);
-                movestate = grounded;
-            }
+            movestate = grounded;
             accelY = 100;
         }
     }
     else {
-        groundCollision = 0;
         movestate = inair;
     }
 
-    if (movestate == grounded) {
-        if (accelX < 100 && accelX > -100) {
-            if (nutmeg_direction == right) {
-                SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
-                bowanim = 0;
+    if (nutmeg_death == false)
+    {
+        if (movestate == grounded) {
+            if (accelX < 100 && accelX > -100) {
+                if (nutmeg_direction == right) {
+                    SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
+                    bowanim = 0;
+                }
+                else {
+                    SetSpriteAnim(THIS, anim_nutmeg_idle_left, 5);
+                    bowanim = 1;
+                }
             }
             else {
-                SetSpriteAnim(THIS, anim_nutmeg_idle_left, 5);
-                bowanim = 1;
+                if (nutmeg_direction == right) {
+                    SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
+                    bowanim = 2;
+                }
+                else {
+                    SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
+                    bowanim = 3;
+                }
             }
         }
-        else {
-            if (nutmeg_direction == right) {
-                SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
-                bowanim = 2;
+        else if (movestate == inair) {
+            if (accelY > 60) {
+                if (nutmeg_direction == right) {
+                    SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
+                    bowanim = 6;
+                }
+                else  {
+                    SetSpriteAnim(THIS, anim_nutmeg_fall_left, 1);
+                    bowanim = 7;
+                }
             }
-            else {
-                SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
-                bowanim = 3;
-            }
-        }
-    }
-    else if (movestate == inair) {
-        if (accelY > 60) {
-            if (nutmeg_direction == right) {
-                SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
-                bowanim = 6;
-            }
-            else  {
-                SetSpriteAnim(THIS, anim_nutmeg_fall_left, 1);
-                bowanim = 7;
-            }
-        }
-        else if (accelY < -60) {
-            if (nutmeg_direction == right) {
-                SetSpriteAnim(THIS, anim_nutmeg_jump_right, 1);
-                bowanim = 4;
-            }
-            else {
-                SetSpriteAnim(THIS, anim_nutmeg_jump_left, 1);
-                bowanim = 5;
+            else if (accelY < -60) {
+                if (nutmeg_direction == right) {
+                    SetSpriteAnim(THIS, anim_nutmeg_jump_right, 1);
+                    bowanim = 4;
+                }
+                else {
+                    SetSpriteAnim(THIS, anim_nutmeg_jump_left, 1);
+                    bowanim = 5;
+                }
             }
         }
     }
@@ -427,9 +412,7 @@ void update_aliveInControl (void)
     // Play audio on land
     // Start from step sound 6 on land to have start playing stepping audio when we walk quickly
     if (accelY > 0) {
-        groundCollision = collisionY;
-
-        if (groundCollision == 0) {
+        if (collisionY == 0) {
             movestate = inair;
         }
         else {
@@ -441,7 +424,6 @@ void update_aliveInControl (void)
         }
     }
     else {
-        groundCollision = 0;
         movestate = inair;
     }
 
