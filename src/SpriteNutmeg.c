@@ -120,7 +120,7 @@ void Start_SpriteNutmeg() {
 void nutmegBow_update(void ) BANKED ;
 
 // returns true if removed
-static bool update_whileDead(void)
+static void update_whileDead(void)
 {
     cutscenemode = true;
 
@@ -141,9 +141,7 @@ static bool update_whileDead(void)
 
     if (nutmeg_pitdeath == true) {
         SpriteManagerRemoveSprite(THIS);
-        return true;
     }
-    return false;
 }
 
 static void update_inCutscene(void)
