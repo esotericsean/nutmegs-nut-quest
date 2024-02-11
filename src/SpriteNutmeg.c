@@ -229,7 +229,6 @@ static void update_inCutscene(void)
 
         if (groundCollision == 0) {
             movestate = inair;
-            isjumping = true;
         }
         else {
             if (movestate == inair) {
