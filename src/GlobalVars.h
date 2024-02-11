@@ -76,7 +76,6 @@ extern direction nutmeg_direction;
 extern direction gordon_direction;
 
 extern move_state movestate;
-extern bool isjumping;
 
 /* * * * * * * * * * * * * * */
 /*      c u t s c e n e      */

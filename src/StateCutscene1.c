@@ -134,7 +134,6 @@ void Start_StateCutscene1() {
     nutmeg_direction = right;
 
     movestate = grounded;
-    isjumping = false;
 }
 
 void Update_StateCutscene1() {

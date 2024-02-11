@@ -78,7 +78,6 @@ void Start_StateTreeCutscene() {
     runJump = 0;
     nutmeg_direction = right;
     movestate = grounded;
-    isjumping = false;
 
 	SpriteManagerAdd(SpriteNutmeg, 12*8, 104);
 	SpriteManagerAdd(SpriteCinnamon, 36, 96);

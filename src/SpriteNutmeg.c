@@ -41,7 +41,6 @@ UINT8 acorncounter;
 bool hasbow = true;
 
 direction nutmeg_direction;
-bool isjumping = true;
 
 bool nutmeg_death = false;
 bool nutmeg_pitdeath = false;
@@ -194,7 +193,6 @@ static void update_inCutscene(void)
     }
 
     if (movestate == inair) {
-        isjumping = true;
 
         if (collisionY != 0) {
             jumpPeak = 1;
@@ -357,7 +355,6 @@ void update_aliveInControl (void)
     // but we can keep the running speed if we start the jump from run
     if (movestate == grounded) {
         if (KEY_TICKED(J_A)) {
-            isjumping = true;
             accelY = -150;
             jumpPeak = 0;
             movestate = inair;
@@ -375,8 +372,6 @@ void update_aliveInControl (void)
         }
     }
     else if (movestate == inair) {
-        isjumping = true;
-
         if (collisionY != 0) {
             jumpPeak = 1;
         }
@@ -439,7 +434,6 @@ void update_aliveInControl (void)
 
         if (groundCollision == 0) {
             movestate = inair;
-            isjumping = true;
         }
         else {
             if (movestate == inair) {
@@ -544,11 +538,7 @@ void Update_SpriteNutmeg() {
 
     // death
     if (nutmeg_death == true) {
-        if (update_whileDead())
-        {
-            // we have completed the death cycle, and asked for the sprite to be destroyed.
-            return;
-        }
+        update_whileDead();
     }
 
     /* * * * * * * * * * * * * * * * * * * */

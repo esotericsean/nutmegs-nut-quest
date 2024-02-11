@@ -71,7 +71,6 @@ void Update_EnemyBunny() {
 		if (movestate == inair && accelY > 0)
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-			isjumping = true;
 			accelY = -600;
 			jumpPeak = 0;
 			movestate = inair;
