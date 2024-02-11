@@ -13,7 +13,7 @@
 
 IMPORT_MAP (titlemap);
 
-UINT8 title_counter;
+static UINT8 title_counter;
 UINT8 acorn_position;
 
 // BG1 //
@@ -77,8 +77,18 @@ void Start_StateTitle() {
     SHOW_BKG;
 }
 
+static UINT8 maintimer = 0;
+extern UINT8 backgroundoffsetmain;
+
 void Update_StateTitle() {
-    if (title_counter >= 0 && title_counter < 1) {
+
+    maintimer++;
+    if (maintimer == 4) {
+        maintimer = 0;
+        backgroundoffsetmain += 1;
+    }
+
+    if (title_counter < 1) {
         SetPalette(SPRITES_PALETTE, 0, 1, leafPalette, _current_bank);
     }
 

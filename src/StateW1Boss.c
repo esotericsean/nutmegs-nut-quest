@@ -9,6 +9,7 @@
 #include "Palette.h"
 #include "../src/GlobalVars.h"
 #include "Hud.h"
+#include "SpriteNutmeg.h"
 
 IMPORT_MAP (w1bossmap);
 
@@ -109,8 +110,10 @@ void Update_StateW1Boss() {
 				SetState(StateGameOver);
 			}
 			else if (GameOver == false) {
+				nutmeg_setupNewLife();
 				SetState(StateOverworld1); // change to correct world
 			}
+			return;
 		}
 
 		nutmegdeathtimer++;

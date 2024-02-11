@@ -28,7 +28,6 @@ UINT8 current_state;
 UINT8 state_running = 0;
 
 UINT8 backgroundoffsetmain = 0;
-UINT8 maintimer = 0;
 
 void SetState(UINT8 state) {
 	state_running = 0;
@@ -73,9 +72,8 @@ void SetPalette(PALETTE_TYPE t, UINT8 first_palette, UINT8 nb_palettes, UINT16 *
 }
 #endif
 
-void LCD_isr() NONBANKED {
-	if (current_state == 2) {
-		switch (LYC_REG)
+void LCD_Title_isr() NONBANKED{
+	switch (LYC_REG)
 		{
         case 0x00:
             LYC_REG = 0x48;
@@ -89,20 +87,20 @@ void LCD_isr() NONBANKED {
             LYC_REG = 0x00;
             break;            
 		}
-	}
-	else {
-		// turn sprites off over the window
-		if (LYC_REG == 0) {
-			if (WY_REG == 0) {
-				HIDE_SPRITES;
-			} else {
-				SHOW_SPRITES;
-				LYC_REG = WY_REG - 1;
-			}
-		} else {
+}
+
+void LCD_NoSpritesOnHUD_isr() NONBANKED {
+	// turn sprites off over the window
+	if (LYC_REG == 0) {
+		if (WY_REG == 0) {
 			HIDE_SPRITES;
-			LYC_REG = 0;
+		} else {
+			SHOW_SPRITES;
+			LYC_REG = WY_REG - 1;
 		}
+	} else {
+		HIDE_SPRITES;
+		LYC_REG = 0;
 	}
 }
 
@@ -159,7 +157,8 @@ void main() {
 	}
 
 	set_interrupts(VBL_IFLAG | TIM_IFLAG | LCD_IFLAG);
-
+	
+	STAT_REG |= 0x40; 
 	LCDC_REG |= LCDCF_OBJDEFAULT | LCDCF_OBJON | LCDCF_BGON;
 	WY_REG = 145;
 
@@ -174,6 +173,7 @@ void main() {
 	level_current = 0;
 	level_next = 1;
 	nutmeglives = 99;
+	add_LCD (LCD_NoSpritesOnHUD_isr);
 	// END TESTING
 	
 
@@ -182,8 +182,8 @@ void main() {
 
 		if (current_state == 2)	
 		{
-			STAT_REG -= 0x40; 
-			remove_LCD(LCD_isr);
+			remove_LCD(LCD_Title_isr);
+			add_LCD (LCD_NoSpritesOnHUD_isr);
 		}
 
 		if(stop_music_on_new_state)
@@ -218,9 +218,10 @@ void main() {
 		if(state_running) {
 			if (current_state == 2)	
 			{
-				STAT_REG |= 0x40; 
-				add_LCD(LCD_isr);
+				remove_LCD (LCD_NoSpritesOnHUD_isr);
+				add_LCD (LCD_Title_isr);
 			}
+
 			// FadeOut (from white to our real colors)
 			// This takes a second, so update the sprite manager one time,
 			// so our starting sprites are on the screne during the fade
@@ -230,16 +231,7 @@ void main() {
 		}
 
 		while (state_running) {
-			if (current_state == 2) {
-				if (maintimer == 3) {
-					backgroundoffsetmain += 1;
-				}
-				
-				maintimer++;
-				
-				if (maintimer > 3) maintimer = 0;
-			}
-			
+		
 			if(!vbl_count)
 			{
 				wait_vbl_done();

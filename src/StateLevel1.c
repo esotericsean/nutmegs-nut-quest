@@ -13,6 +13,7 @@
 #include "Water.h"
 #include "Hud.h"
 #include "LevelStart.h"
+#include "SpriteNutmeg.h"
 
 IMPORT_MAP (level1map);
 
@@ -102,8 +103,10 @@ void Update_StateLevel1() {
 				SetState(StateGameOver);
 			}
 			else if (GameOver == false) {
+				nutmeg_setupNewLife();
 				SetState(StateOverworld1); // change to correct world
 			}
+			return;
 		}
 
 		nutmegdeathtimer++;

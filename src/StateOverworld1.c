@@ -341,7 +341,7 @@ void Start_StateOverworld1() {
 	SPRITES_8x16;
 
 	isAcornMoving = false;
-	
+
 	// Setup the map steps for the current overworld;
 	if ((level_current < 10) || (level_current == ENTERING_WORLD_1))
 	{
@@ -489,14 +489,20 @@ static void moveTowardsNextLevel(void)
 		}
 
 		// move 1 pixel towards the goal
-		if ((x > 60000) || (x < tx)) { TranslateSprite (spr_tinyNutmeg, 1, 0);}
-		else if (x > tx) { TranslateSprite (spr_tinyNutmeg, -1, 0);}
+		if ((x > 60000) || (x < tx)) { 
+			TranslateSprite (spr_tinyNutmeg, 1, 0);
+			spr_tinyNutmeg->mirror = NO_MIRROR;	
+		}
+		else if (x > tx) { 
+			TranslateSprite (spr_tinyNutmeg, -1, 0);
+			spr_tinyNutmeg->mirror = V_MIRROR;
+		}
 		else if (y < ty) { TranslateSprite (spr_tinyNutmeg, 0, 1);}
 		else if (y > ty) { TranslateSprite (spr_tinyNutmeg, 0, -1);}
 	}
 
 	moveCount++;
-	if (moveCount == 2)
+	if (moveCount == 1)
 	{
 		moveCount = 0;
 	}

@@ -12,6 +12,7 @@
 #include "Water.h"
 #include "Hud.h"
 #include "LevelStart.h"
+#include "SpriteNutmeg.h"
 
 IMPORT_MAP (level7map);
 
@@ -49,7 +50,6 @@ void Start_StateLevel7() {
 
 	PlayMusic(quickstart, 1);
 	
-	//if health is full, add the bow
 	if (hasbow == true) { SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
 	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49); //36
 
@@ -87,8 +87,10 @@ void Update_StateLevel7() {
 				SetState(StateGameOver);
 			}
 			else if (GameOver == false) {
+				nutmeg_setupNewLife();
 				SetState(StateOverworld1); // change to correct world
 			}
+			return;
 		}
 
 		nutmegdeathtimer++;

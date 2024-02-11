@@ -5,19 +5,19 @@
 extern Sprite * spr_nutmeg;
 Sprite *spr_nutmegbow = 0;
 
-const UINT8 anim_nutmegbow_static[] = {1, 1};
+static const UINT8 anim_nutmegbow_static[] = {1, 1};
 
-const UINT8 anim_nutmegbow_idle_right[] = {4, 1, 2, 3, 4};
-const UINT8 anim_nutmegbow_idle_left[]  = {4, 1, 2, 3, 4};
+static const UINT8 anim_nutmegbow_idle_right[] = {4, 1, 2, 3, 4};
+static const UINT8 anim_nutmegbow_idle_left[]  = {4, 1, 2, 3, 4};
 
-const UINT8 anim_nutmegbow_walk_right[] = {4, 5, 6, 7, 8};
-const UINT8 anim_nutmegbow_walk_left[]  = {4, 5, 6, 7, 8};
+static const UINT8 anim_nutmegbow_walk_right[] = {4, 5, 6, 7, 8};
+static const UINT8 anim_nutmegbow_walk_left[]  = {4, 5, 6, 7, 8};
 
-const UINT8 anim_nutmegbow_jump_right[] = {1, 9};
-const UINT8 anim_nutmegbow_jump_left[]  = {1, 9};
+static const UINT8 anim_nutmegbow_jump_right[] = {1, 9};
+static const UINT8 anim_nutmegbow_jump_left[]  = {1, 9};
 
-const UINT8 anim_nutmegbow_fall_right[] = {1, 10};
-const UINT8 anim_nutmegbow_fall_left[]  = {1, 10};
+static const UINT8 anim_nutmegbow_fall_right[] = {1, 10};
+static const UINT8 anim_nutmegbow_fall_left[]  = {1, 10};
 
 // 0 = idle (5)
 // 1 = walking (15)
@@ -25,14 +25,8 @@ const UINT8 anim_nutmegbow_fall_left[]  = {1, 10};
 // 3 = static (1)
 
 UINT8 bowanim;
-
-//UINT8 bow_x;
 UINT8 bow_y;
-
 UINT8 bow_counter;
-
-//UINT8 bow_catch_x;
-
 bool lostbow;
 
 /* * * * * * * * * * * * */
@@ -59,15 +53,53 @@ void Start_SpriteNutmegBow() {
 
 	SetSpriteAnim(THIS, anim_nutmegbow_idle_right, 5);
 	bowanim = 0;
-
-	//bow_x = 0;
 	bow_y = 0;
 
 	bow_counter = 0;
-	//bow_catch_x = 0;
 	spr_nutmegbow = THIS;
 }
 
+// the falling speed of the box at each bow_counter frame
+const INT8 Y_OFFSET_AT_COUNTER [] = {
+	0,
+	-5,
+	-4,
+	-3,
+	-2,
+	-1,
+	-1,
+	0,
+	0,
+	1,
+	1,
+	2,
+	2,
+	3,
+	3,
+	4,
+	4,
+	5,
+	5,
+	6,
+	6,
+	7,
+	7,
+	8,
+	8,
+	9,
+	9,
+	10,
+	10,
+	11,
+	11,
+	12,
+	12,
+	13,
+	13,
+	14,
+	14,
+	0,
+};
 
 // returns false if the bow sprite has been destroyed
 // can't use THIS, because it is called fromthe spr_nutmeg update fn
@@ -78,85 +110,54 @@ void nutmegBow_update(void ) BANKED
 
 		switch (bowanim) {
 			case 0:
-				THIS->x = spr_nutmeg->x-8;
-				SetSpriteAnim(THIS, anim_nutmegbow_idle_right, 5);
-				THIS->mirror = NO_MIRROR;
+				spr_nutmegbow->x = spr_nutmeg->x-8;
+				SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_idle_right, 5);
+				spr_nutmegbow->mirror = NO_MIRROR;
 				break;
 			case 1:
-				THIS->x = spr_nutmeg->x+8;
-				SetSpriteAnim(THIS, anim_nutmegbow_idle_left, 5);
-				THIS->mirror = V_MIRROR;
+				spr_nutmegbow->x = spr_nutmeg->x+8;
+				SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_idle_left, 5);
+				spr_nutmegbow->mirror = V_MIRROR;
 				break;
 			case 2:
-				THIS->x = spr_nutmeg->x-8;
-				SetSpriteAnim(THIS, anim_nutmegbow_walk_right, 15);
-				THIS->mirror = NO_MIRROR;
+				spr_nutmegbow->x = spr_nutmeg->x-8;
+				SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_walk_right, 15);
+				spr_nutmegbow->mirror = NO_MIRROR;
 				break;
 			case 3:
-				THIS->x = spr_nutmeg->x+8;
-				SetSpriteAnim(THIS, anim_nutmegbow_walk_left, 15);
-				THIS->mirror = V_MIRROR;
+				spr_nutmegbow->x = spr_nutmeg->x+8;
+				SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_walk_left, 15);
+				spr_nutmegbow->mirror = V_MIRROR;
 				break;
 			case 4:
-				THIS->x = spr_nutmeg->x-8;
-				SetSpriteAnim(THIS, anim_nutmegbow_jump_right, 1);
-				THIS->mirror = NO_MIRROR;
+				spr_nutmegbow->x = spr_nutmeg->x-8;
+				SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_jump_right, 1);
+				spr_nutmegbow->mirror = NO_MIRROR;
 				break;
 			case 5:
-				THIS->x = spr_nutmeg->x+8;
-				SetSpriteAnim(THIS, anim_nutmegbow_jump_left, 1);
-				THIS->mirror = V_MIRROR;
+				spr_nutmegbow->x = spr_nutmeg->x+8;
+				SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_jump_left, 1);
+				spr_nutmegbow->mirror = V_MIRROR;
 				break;
 			case 6:
-				THIS->x = spr_nutmeg->x-8;
-				SetSpriteAnim(THIS, anim_nutmegbow_fall_right, 1);
-				THIS->mirror = NO_MIRROR;
+				spr_nutmegbow->x = spr_nutmeg->x-8;
+				SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_fall_right, 1);
+				spr_nutmegbow->mirror = NO_MIRROR;
 				break;
 			case 7:
-				THIS->x = spr_nutmeg->x+8;
-				SetSpriteAnim(THIS, anim_nutmegbow_fall_left, 1);
-				THIS->mirror = V_MIRROR;
+				spr_nutmegbow->x = spr_nutmeg->x+8;
+				SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_fall_left, 1);
+				spr_nutmegbow->mirror = V_MIRROR;
 				break;
 		}
 	}
 	else if (health == full && lostbow == true) {
-		//lostbow = true;
-		
-		SetSpriteAnim(THIS, anim_nutmegbow_static, 1);
-		
-		if (bow_counter == 0) {
-			//bow_x = 0;
-			//bow_catch_x = spr_nutmeg->x - 8;
+		SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_static, 1);
+	
+		if (bowanim == 8) { spr_nutmegbow->mirror = NO_MIRROR; }
+		else { spr_nutmegbow->mirror = V_MIRROR; }
 
-			if (bowanim == 9) {
-				//bow_catch_x = bow_catch_x + 16;
-			}
-		}
-
-		if (bowanim == 8) { THIS->mirror = NO_MIRROR; }
-		else if (bowanim == 9) { THIS->mirror = V_MIRROR; }
-
-		switch (bow_counter) {
-			case 1:  bow_y = -5; break;
-			case 3:  bow_y = -4; break;
-			case 5:  bow_y = -3; break;
-			case 7:  bow_y = -2; break;
-			case 9:  bow_y = -1; break;
-			case 15: bow_y =  1; break;
-			case 17: bow_y =  2; break;
-			case 19: bow_y =  3; break;
-			case 21: bow_y =  4; break;
-			case 23: bow_y =  5; break;
-			case 25: bow_y =  6; break;
-			case 27: bow_y =  7; break;
-			case 29: bow_y =  8; break;
-			case 31: bow_y =  9; break;
-			case 33: bow_y = 10; break;
-			case 35: bow_y = 11; break;
-			case 37: bow_y = 50; break;
-			default: bow_y =  0; break;
-		}
-
+		bow_y = Y_OFFSET_AT_COUNTER[bow_counter];
 		TranslateSprite (spr_nutmegbow, 0, bow_y);
 
 		bow_counter++;
@@ -170,7 +171,7 @@ void nutmegBow_update(void ) BANKED
 }
 
 void Update_SpriteNutmegBow() {
-
+	// updates are done from the spr_nutmeg
 }
 
 
