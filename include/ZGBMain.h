@@ -20,7 +20,6 @@ _STATE(StateLevel4)\
 _STATE(StateLevel5)\
 _STATE(StateLevel6)\
 _STATE(StateLevel7)\
-_STATE(StateScroll)\
 _STATE(StateLevel8)\
 _STATE(StateW1Boss)\
 _STATE(StateLevel2_1)\
