@@ -1,11 +1,5 @@
 #include "Banks/SetAutoBank.h"
 
-#include "..\res\src\cutscenegordontiles.h"
-#include "..\res\src\cutscenegordonmap.h"
-
-#include "..\res\src\gordon1.h"
-#include "..\res\src\nutmeg.h"
-#include "..\res\src\acorn.h"
 
 #include "ZGBMain.h"
 #include "Music.h"

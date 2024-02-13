@@ -2,9 +2,6 @@
 
 #include <gbdk/platform.h>
 
-#include "..\res\src\gameovertiles.h"
-#include "..\res\src\gameovermap.h"
-
 #include "ZGBMain.h"
 #include "Music.h"
 #include "Scroll.h"
@@ -12,9 +9,6 @@
 #include "Keys.h"
 #include "SpriteManager.h"
 
-//#include "../res/src/nutmeg.h"
-//#include "../res/src/acorn.h"
-//#include "../res/src/puff.h"
 #include "Palette.h"
 
 #include "../src/GlobalVars.h"

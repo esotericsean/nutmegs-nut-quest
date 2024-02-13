@@ -1,8 +1,5 @@
 #include "Banks/SetAutoBank.h"
 
-#include "..\res\src\treetiles.h"
-#include "..\res\src\treemap2.h"
-
 #include "ZGBMain.h"
 #include "Music.h"
 #include "Scroll.h"
@@ -10,12 +7,6 @@
 #include "Keys.h"
 #include "SpriteManager.h"
 
-#include "../res/src/nutmeg.h"
-#include "../res/src/nutmeg2.h"
-#include "../res/src/cinnamon.h"
-#include "../res/src/ruby.h"
-#include "../res/src/maple.h"
-#include "../res/src/puff.h"
 #include "Palette.h"
 
 #include "../src/GlobalVars.h"

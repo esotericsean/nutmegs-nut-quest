@@ -1,9 +1,5 @@
 #include "Banks/SetAutoBank.h"
 
-#include "..\res\src\esologotiles.h"
-#include "..\res\src\esologomap.h"
-#include "..\res\src\esofire.h"
-
 #include "ZGBMain.h"
 #include "Music.h"
 #include "Scroll.h"

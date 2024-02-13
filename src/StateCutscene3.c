@@ -1,9 +1,5 @@
 #include "Banks/SetAutoBank.h"
 
-#include "..\res\src\cutscene3tiles.h"
-#include "..\res\src\cutscene3map.h"
-
-#include "..\res\src\incube8G.h"
 
 #include "ZGBMain.h"
 #include "Scroll.h"
