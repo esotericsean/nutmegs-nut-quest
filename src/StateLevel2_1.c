@@ -48,11 +48,13 @@ void Start_StateLevel2_1() {
 
 	__critical { PlayMusic(quickstart, 1); }
 
-	//start the game off with a bow (full health)
 	if (hasbow == true) {
 		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49);
 	}
+	
+	//start the game off with a bow (full health)
 	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49);
+
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level2_1map), &level2_1map, collision_tiles_level, 0);
