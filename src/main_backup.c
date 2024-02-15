@@ -68,7 +68,7 @@ void SetPalette(PALETTE_TYPE t, UINT8 first_palette, UINT8 nb_palettes, UINT16 *
 		set_sprite_palette(first_palette, nb_palettes, rgb_data);
 	}
 	memcpy(&pal_ptr[first_palette << 2], rgb_data, nb_palettes << 3);
-	POP_BANK;
+	POP_BANK();
 }
 #endif
 
@@ -138,7 +138,7 @@ void main() {
 	PUSH_BANK(1);
 	InitStates();
 	InitSprites();
-	POP_BANK;
+	POP_BANK();
 	
 	CRITICAL {
 #ifdef CGB
@@ -211,7 +211,7 @@ void main() {
 
 		PUSH_BANK(stateBanks[current_state]);
 			(startFuncs[current_state])();
-		POP_BANK;
+		POP_BANK();
 		scroll_x_vblank = scroll_x;
 		scroll_y_vblank = scroll_y;
 
@@ -244,7 +244,7 @@ void main() {
 			SpriteManagerUpdate();
 			PUSH_BANK(stateBanks[current_state]);
 				updateFuncs[current_state]();
-			POP_BANK;
+			POP_BANK();
 		}
 
 		FadeIn();
