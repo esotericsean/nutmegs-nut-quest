@@ -534,8 +534,8 @@ void Update_StateOverworld1() {
 			else if (level_current == 8) SetState(StateLevel8);
 			else if (level_current == 9) SetState(StateW1Boss);
 			else if (level_current == 10) SetState(StateLevel2_1);
-			else if (level_current >= 11) SetState(StateLevel2_2);
-
+			else if (level_current == 11) SetState(StateLevel2_2);
+			else if (level_current >= 12) SetState(StateLevel2_glidefall);
 
 			return;
 		}

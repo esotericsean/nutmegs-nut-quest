@@ -26,6 +26,8 @@ static const UINT8 anim_nutmeg_land_left[]  = {1, 11};
 static const UINT8 anim_nutmeg_hurt_right[] = {14, 12, 12, 12, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14};
 static const UINT8 anim_nutmeg_hurt_left[]  = {14, 12, 12, 12, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14};
 
+static const UINT8 anim_nutmeg_glide[] = {1, 15};
+
 static const UINT8 anim_nutmeg_lostbow[] = {2, 11, 0};
 
 extern Sprite *spr_nutmegbow;
@@ -53,6 +55,8 @@ bool cutscenewalkleft;
 bool cutscenewalkright;
 bool cutscenerun;
 bool cutscenejump;
+
+bool nutmegGliding = false;
 
 //movement states
 move_state movestate; //nutmeg starts in the air and falls to the ground
@@ -389,6 +393,16 @@ void update_aliveInControl (void)
             accelY += 20;
             jumpPeak = 1;
         }
+        
+        nutmegGliding = false;
+        if (KEY_PRESSED(J_B) && jumpPeak == 1)
+        {
+            nutmegGliding = true;
+            // this will slow nutmeg down to 1 pixel drop per second
+            if (accelY > 190){
+                accelY = 190;
+            }
+        }
 
         if (runJump) {
             if (accelX < -runSpeed) accelX = -runSpeed;
@@ -488,7 +502,20 @@ void update_aliveInControl (void)
         }
     }
     else if (movestate == inair) {
-        if (accelY > 60) {
+        if (nutmegGliding)
+        {
+            if (nutmeg_direction == right)
+            {
+                SetSpriteAnim(THIS, anim_nutmeg_glide, 1);
+                bowanim = 11;
+            }
+            else
+            {
+                SetSpriteAnim(THIS, anim_nutmeg_glide, 1);
+                bowanim = 12;
+            }
+        }
+        else if (accelY > 60) {
             if (nutmeg_direction == right) {
                 SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
                 bowanim = 6;

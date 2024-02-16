@@ -47,6 +47,9 @@ bool lostbow;
 
 // 10 = disabled
 
+// 11 = glide right
+// 12 = glide left
+
 void Start_SpriteNutmegBow() {
 	THIS->lim_x = 500;
 	THIS->lim_y = 144;
@@ -147,6 +150,20 @@ void nutmegBow_update(void ) BANKED
 			case 7:
 				spr_nutmegbow->x = spr_nutmeg->x+8;
 				SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_fall_left, 1);
+				spr_nutmegbow->mirror = V_MIRROR;
+				break;
+			case 11:
+				// glide right
+				spr_nutmegbow->x = spr_nutmeg->x-11;
+				spr_nutmegbow->y -= 1;
+				SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_static, 1);
+				spr_nutmegbow->mirror = NO_MIRROR;
+				break;
+			case 12:
+				// glide left
+				spr_nutmegbow->x = spr_nutmeg->x+11;
+				spr_nutmegbow->y -= 1;
+				SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_idle_left, 1);
 				spr_nutmegbow->mirror = V_MIRROR;
 				break;
 		}

@@ -27,6 +27,7 @@ _STATE(StateOverworldChange)\
 _STATE(StateCredits)\
 _STATE(StateLevelTree)\
 _STATE(StateLevel2_2)\
+_STATE(StateLevel2_glidefall)\
 STATE_DEF_END
 
 #define SPRITES \
