@@ -154,8 +154,8 @@ void Update_StateLevel2_1() {
 
 	if (nutmeg_death == false)
 	{
-		if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false ) {
-			FlagPole_Activate(244,13);
+		if (spr_nutmeg->x >= 1992 && spr_nutmeg->x < 2000 && levelbeat == false ) {
+			FlagPole_Activate(250,19);
 
 			levelbeat = true;
 			endlevel_counter = 0;
