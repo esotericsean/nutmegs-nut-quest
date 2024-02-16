@@ -132,11 +132,11 @@ void FlagPole_Activate(int tilex, int tiley) BANKED
 	stars_y -= 26;
 
     //change flagpole color palette to pink
-	if (W1LevelSelection == 7) // level 5
+	if (level_current == 5) 
 	{
 		SetPalette(BG_PALETTE, 5, 1, pal_pink5, _current_bank);
 	}
-	else if (W1LevelSelection == 5) // level 3
+	else if (level_current == 3) 
 	{
 		SetPalette(BG_PALETTE, 1, 1, pal_pink3, _current_bank);
 	}
