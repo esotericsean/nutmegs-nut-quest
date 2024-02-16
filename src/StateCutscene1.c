@@ -16,10 +16,10 @@
 
 IMPORT_MAP (cutscene1map);
 
-UINT16 cutscene1counter;
+static UINT16 cutscene1counter;
 
 
-const UINT8 collision_tiles_cutscene1[] = {0};
+static const UINT8 collision_tiles_cutscene1[] = {0};
 
 //extern UINT8* oaktree_mod_Data[];
 DECLARE_MUSIC(oaktree);
@@ -99,7 +99,7 @@ static const unsigned char font_blankk[] = {
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
 };
 
-void Start_StateCutscene1() {
+void Start_StateCutscene1(void) {
     SPRITES_8x16;
 
     stop_music_on_new_state = 0;
@@ -136,7 +136,7 @@ void Start_StateCutscene1() {
     movestate = grounded;
 }
 
-void Update_StateCutscene1() {
+void Update_StateCutscene1(void) {
  
     if (KEY_PRESSED(J_START)) SetState(StateCutscene2);
 

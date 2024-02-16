@@ -18,20 +18,20 @@ IMPORT_MAP (cutscenegordonmap);
 DECLARE_MUSIC (gordoncutscene);
 DECLARE_MUSIC (nutmeghey);
 
-UINT16 cutscenegordoncounter;
-UINT8 cutscenegordonspeed;
-UINT8 cutscenegordonspeedlimit;
+static UINT16 cutscenegordoncounter;
+static UINT8 cutscenegordonspeed;
+static UINT8 cutscenegordonspeedlimit;
 
-const UINT8 collision_tiles_cutscenegordon[] = {3,4,0};
+static const UINT8 collision_tiles_cutscenegordon[] = {3,4,0};
 
 extern Sprite * spr_nutmeg;
 
-Sprite * spr_gordoncamera;
-Sprite * spr_gordonposition;
-Sprite * spr_gordon2position;
-Sprite * spr_acorn;
+static Sprite * spr_gordoncamera;
+static Sprite * spr_gordonposition;
+static Sprite * spr_gordon2position;
+static Sprite * spr_acorn;
 
-void Start_StateCutsceneGordon() {
+void Start_StateCutsceneGordon(void) {
     SPRITES_8x16;
 
     spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 8, 96);
@@ -56,7 +56,7 @@ void Start_StateCutsceneGordon() {
     PlayMusic(gordoncutscene, 0);
 }
 
-void Update_StateCutsceneGordon() {
+void Update_StateCutsceneGordon(void) {
     //acorn shake
     switch (cutscenegordoncounter) {
         case 25: spr_acorn->x = spr_acorn->x - 2; spr_acorn->y = spr_acorn->y + 1; break;
