@@ -116,6 +116,30 @@ void Start_SpriteNutmeg() {
 	THIS->lim_y = 144;
 }
 
+static INT8 Hundreds (INT16 v)
+{
+    INT8 r = 0;
+    if (v < 0)
+    {
+        while (v <= -100)
+        {
+            v += 100;
+            r--;
+        }
+
+    }
+    else if (v > 0)
+    {
+        while (v >= 100)
+        {
+            v -= 100;
+            r++;
+        }
+    }
+
+    return r;
+}
+
 void nutmegBow_update(void ) BANKED ;
 
 // returns true if removed
@@ -193,8 +217,8 @@ static void update_inCutscene(void)
         if (accelX > 100) accelX = 100;
     }
 
-    collisionX = TranslateSprite(THIS, accelX / 100, 0);
-    collisionY = TranslateSprite(THIS, 0, accelY / 100);
+    collisionX = TranslateSprite(THIS, Hundreds(accelX), 0);
+    collisionY = TranslateSprite(THIS, 0, Hundreds(accelY));
 
     if (collisionX != 0) {
         accelX = 0;
@@ -381,8 +405,8 @@ void update_aliveInControl (void)
     /* * * * * * * * * * * * * * * * * * * */
     // Move player and check for collisions
     // Do two movements to get colliders from both directions
-    collisionX = TranslateSprite(THIS, accelX / 100, 0);
-    collisionY = TranslateSprite(THIS, 0, accelY / 100);
+    collisionX = TranslateSprite(THIS, Hundreds(accelX), 0);
+    collisionY = TranslateSprite(THIS, 0, Hundreds(accelY));
 
     /* * * * * * * * * * * * * * * * * * * */
     /*             X physics               */
