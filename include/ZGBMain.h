@@ -26,6 +26,7 @@ _STATE(StateLevel2_1)\
 _STATE(StateOverworldChange)\
 _STATE(StateCredits)\
 _STATE(StateLevelTree)\
+_STATE(StateLevel2_2)\
 STATE_DEF_END
 
 #define SPRITES \
