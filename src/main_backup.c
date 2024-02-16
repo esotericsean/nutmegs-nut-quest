@@ -167,7 +167,7 @@ void main() {
 	// 6 = force scroll
 	// w1 = 10 - stage 8
 	W1LevelSelection = 0;
-	next_state = StateOverworld1;
+	next_state = StateLevelTree;
 	levelbeat = true;
 	level_max = 20;
 	level_current = 0;

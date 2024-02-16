@@ -1,23 +1,23 @@
 #include "Banks/SetAutoBank.h"
-
+#include "ZGBMain.h"
+#include "Sound.h"
 #include "SpriteManager.h"
 
-UINT8 maple_counter;
-const UINT8 anim_maple_idle[] = {2, 1, 2};
-const UINT8 anim_maple_jump[] = {9, 1, 2, 3, 4, 5, 6, 7, 0, 1};
+#include "../src/GlobalVars.h"
 
-void Start_SpriteMaple() {
-	/*THIS->coll_x = 8;
-	THIS->coll_y = 8;
-	THIS->coll_w = 8;
-	THIS->coll_h = 8;*/
+extern Sprite * spr_nutmeg;
 
+static UINT8 maple_counter;
+static const UINT8 anim_maple_idle[] = {2, 1, 2};
+static const UINT8 anim_maple_jump[] = {9, 1, 2, 3, 4, 5, 6, 7, 0, 1};
+
+void Start_SpriteMaple(void) {
 	maple_counter = 0;
 
 	SetSpriteAnim(THIS, anim_maple_idle, 10);
 }
 
-void Update_SpriteMaple() {
+void Update_SpriteMaple(void) {
 	if (maple_counter >= 0 && maple_counter < 80) {
 		SetSpriteAnim(THIS, anim_maple_idle, 10);
 	}
@@ -29,7 +29,29 @@ void Update_SpriteMaple() {
 
 	if (maple_counter >= 100)
 		maple_counter = 0;
+
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false)
+	{
+		if (movestate == inair && accelY > 0)
+		{
+			PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
+			accelY = -600;
+			jumpPeak = 0;
+			movestate = inair;
+			
+			if (nutmeg_direction == right) {
+				SpriteManagerAdd(SpritePuffLeft, THIS->x+0, THIS->y+2);
+				SpriteManagerAdd(SpritePuffRight, THIS->x+8, THIS->y+2);
+			}
+			else if (nutmeg_direction == left) {
+				SpriteManagerAdd(SpritePuffLeft, THIS->x+0, THIS->y+2);
+				SpriteManagerAdd(SpritePuffRight, THIS->x+8, THIS->y+2);
+			}
+
+			// nutmeg can bounce as many times as they want
+		}
+	}
 }
 
-void Destroy_SpriteMaple() {
+void Destroy_SpriteMaple(void) {
 }
