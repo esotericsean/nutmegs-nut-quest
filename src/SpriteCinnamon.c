@@ -31,12 +31,14 @@ void Update_SpriteCinnamon(void) {
 	if (cinnamon_counter >= 208)
 		cinnamon_counter = 0;
 
+	THIS->y +=7;
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false)
 	{
+		THIS->y -=7;
 		if (movestate == inair && accelY > 0)
 		{
 			PlayFx(CHANNEL_4, 60, 0x3a, 0xf2, 0x62, 0x80);
-			accelY = -600;
+			accelY = -400;
 			jumpPeak = 0;
 			movestate = inair;
 			
@@ -55,6 +57,7 @@ void Update_SpriteCinnamon(void) {
 			// nutmeg can bounce as many times as they want
 		}
 	}
+	else {THIS->y -=7;}
 }
 
 void Destroy_SpriteCinnamon(void) {

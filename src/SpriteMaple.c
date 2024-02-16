@@ -15,6 +15,7 @@ void Start_SpriteMaple(void) {
 	maple_counter = 0;
 
 	SetSpriteAnim(THIS, anim_maple_idle, 10);
+
 }
 
 void Update_SpriteMaple(void) {
@@ -30,12 +31,14 @@ void Update_SpriteMaple(void) {
 	if (maple_counter >= 100)
 		maple_counter = 0;
 
+	THIS->y +=7;
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false)
 	{
+		THIS->y -=7;
 		if (movestate == inair && accelY > 0)
 		{
 			PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
-			accelY = -600;
+			accelY = -400;
 			jumpPeak = 0;
 			movestate = inair;
 			
@@ -50,6 +53,10 @@ void Update_SpriteMaple(void) {
 
 			// nutmeg can bounce as many times as they want
 		}
+	}
+	else
+	{
+		THIS->y -=7;
 	}
 }
 

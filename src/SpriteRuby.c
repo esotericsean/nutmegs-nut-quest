@@ -14,13 +14,15 @@ void Start_SpriteRuby(void) {
 }
 
 void Update_SpriteRuby(void) {
+	THIS->y +=7;
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false)
 	{
+		THIS->y -=7;
 		if (movestate == inair && accelY > 0)
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
 			
-			accelY = -600;
+			accelY = -400;
 			jumpPeak = 0;
 			movestate = inair;
 			
@@ -36,6 +38,7 @@ void Update_SpriteRuby(void) {
 			// nutmeg can bounce as many times as they want
 		}
 	}
+	else {THIS->y -=7;}
 }
 
 void Destroy_SpriteRuby(void) {

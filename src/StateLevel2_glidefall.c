@@ -35,6 +35,7 @@ extern Sprite * spr_camera;
 //nutmeg sprite region
 extern UINT8 nut_region;
 
+static UINT8 camera_delta_y;
 
 static void AddNut (UINT16 x, UINT16 y)
 {
@@ -60,18 +61,24 @@ levelbeat = false;
 
 	__critical { PlayMusic(quickstart, 1); }
 
-	UINT16 startx = 10;
-	UINT16 starty = 1;
+	// clear some nutmeg 
+	accelX = 0;
+	accelY = 0;
+	movestate = inair;
 
-	startx << 3;
-	starty << 3;
+	UINT16 startx = 10;
+	UINT16 starty = 2;
+
+	startx <<= 3;
+	starty <<= 3;
 
 	if (hasbow == true) {
 		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, startx, starty);
 	}
-	
-	//start the game off with a bow (full health)
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, startx, starty);
+	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, startx, starty);
+
+	scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, startx, starty);
+	camera_delta_y = 0;
 
 	AddNut (10,20);
 	AddNut(5,40);
@@ -163,9 +170,19 @@ void Update_StateLevel2_glidefall(void)
 		if (endlevel_counter < 250) endlevel_counter++;
 	}
 
+	// invisible walls left and right
+	if (spr_nutmeg->x < 3) { spr_nutmeg->x = 3; }
+	if (spr_nutmeg->x > 149) { spr_nutmeg->x = 149; }
+
+	if (camera_delta_y < 70)
+	{
+		camera_delta_y ++;
+	}
+	scroll_target->y = spr_nutmeg->y + camera_delta_y;
+
 	if (nutmeg_death == false)
 	{
-		if (spr_nutmeg->y >= 2000 && spr_nutmeg-> y < 2500 && levelbeat == false ) {
+		if (spr_nutmeg->y >= 1950 && spr_nutmeg-> y < 2500 && levelbeat == false ) {
 			FlagPole_Activate(10, 256);
 
 			levelbeat = true;
