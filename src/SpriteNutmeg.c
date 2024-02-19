@@ -28,6 +28,8 @@ static const UINT8 anim_nutmeg_hurt_left[]  = {14, 12, 12, 12, 12, 13, 14, 14, 1
 
 static const UINT8 anim_nutmeg_glide[] = {1, 15};
 
+static const UINT8 anim_nutmeg_swim[] = {2, 16, 17}; //The speed of the animation in SetSpriteAnim(THIS, anim_nutmeg_swim, 5); needs to be tested to see how fast it should animate
+
 static const UINT8 anim_nutmeg_lostbow[] = {2, 11, 0};
 
 extern Sprite *spr_nutmegbow;
