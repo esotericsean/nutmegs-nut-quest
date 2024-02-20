@@ -36,21 +36,82 @@ extern Sprite * spr_camera;
 extern UINT8 nut_region;
 
 static UINT8 camera_delta_y;
+typedef struct {
+	UINT8 x;
+	UINT8 y;
+} nutPosT;
 
+
+static const nutPosT levelNuts [] = 
+{
+	{9, 18},
+	{4, 29},
+	{3, 35},
+	{10, 52},
+	{5, 64},
+	{15, 73},
+	{3, 87},
+	{7, 91},
+	{16, 96},
+	{11, 107},
+	{4, 111},
+	{18,140},
+	{18,147},
+	{12, 150},
+	{4, 153},
+	{2, 171},
+	{12, 183},
+	{6, 188},
+	{5, 193},
+	{12, 208},
+	{11, 213},
+	{10, 217},
+	{9, 221},
+	{9, 225},
+	{8, 229},
+	{9, 232},
+	{12, 235},
+	{12, 238},
+	{11, 240},
+	{8, 241},
+	{4, 242},
+	{1, 243},
+	{0, 0},
+};
+
+#define NUM_NUTS (sizeof (levelNuts) / sizeof(levelNuts[0]))
+static UINT8 levelNutPos;
 static void AddNut (UINT16 x, UINT16 y)
 {
 	x <<= 3;
 	y <<= 3;
 	Sprite *s = SpriteManagerAdd(SpriteAcorn, x, y);
-	s->lim_x = 1000;
+	s->lim_x = 200;
 	s->lim_y = 300;
+}
+
+static void AddNuts (void)
+{
+	UINT16 ypos = spr_nutmeg->y;
+	UINT8 y = ypos >> 3;
+
+	if (spr_nutmeg->y > 60000)
+	{ 
+		y = 0;
+	}
+
+	while ((levelNutPos < NUM_NUTS) && (levelNuts[levelNutPos].y < y + 20))
+	{
+		AddNut (levelNuts[levelNutPos].x, levelNuts[levelNutPos].y);
+		levelNutPos ++;
+	}
 }
 
 void Start_StateLevel2_glidefall(void) 
 {
-
+	isSpikeLevel = true;
 	levelorientation = vertical;
-levelbeat = false;
+	levelbeat = false;
 	levelStartCount = 0;
 	SPRITES_8x16;
 
@@ -80,12 +141,11 @@ levelbeat = false;
 	scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, startx, starty);
 	camera_delta_y = 0;
 
-	AddNut (10,20);
-	AddNut(5,40);
+	levelNutPos = 0;
+	AddNuts ();
 	
-	AddNut(15,60);
 	
-	InitScrollTiles(0, &level1tiles);
+	InitScrollTiles(0, &levelFreeFallTiles);
 	InitScroll(BANK(level2_glidefallmap), &level2_glidefallmap, collision_tiles_level, 0);
 	
 	Hud_Init(false);
@@ -104,7 +164,7 @@ levelbeat = false;
 void Update_StateLevel2_glidefall(void) 
 {
 	Hud_Update();
-
+	AddNuts ();
 	if (timerlevel == 0) {
 		while (nutmeg_death == false)
 		{
@@ -117,6 +177,8 @@ void Update_StateLevel2_glidefall(void)
 			__critical { PlayMusic(quickdeath, 1); }
 			deathmusicplayed = true;
 		}
+
+		isSpikeLevel = false;
 
 		if (nutmegdeathtimer >= 125) {
 			if (GameOver == true) {
@@ -164,6 +226,7 @@ void Update_StateLevel2_glidefall(void)
 
 	
 		if (endlevel_counter >= 100) {
+			isSpikeLevel = false;
 			SetState(StateOverworld1);
 		}
 

@@ -123,4 +123,6 @@ extern bool abletohurthand;
 extern UINT8 handhurt;
 extern UINT8 handhealth;
 
+// if it is a spike level, and collision hurts nutmeg
+extern bool isSpikeLevel;
 #endif

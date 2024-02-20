@@ -80,7 +80,7 @@ switcher powerupleaf; //enabled or disabled
 switcher powerupstar; //enabled or disabled
 
 
-
+bool isSpikeLevel = false;
 UINT8 nutmegdeathmove = 0;
 
 //if nutmeg loses her bow, add some kickback
@@ -432,6 +432,15 @@ void update_aliveInControl (void)
     // Otherwise drag
     if (collisionX != 0) {
         accelX = 0;
+        if (isSpikeLevel == true)
+        {
+            // just assume for now we have died
+            nutmeg_hit();
+            if (nutmeg_death == false)
+            {
+                accelY = 300;
+            }
+        }
     }
     else if (!KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT)) {
         if (accelX > 0) {
@@ -461,6 +470,15 @@ void update_aliveInControl (void)
                 movestate = grounded;
             }
             accelY = 100;
+            if (isSpikeLevel == true)
+            {
+                // just assume for now we have died
+                nutmeg_hit();
+                if (nutmeg_death == false)
+                {
+                    accelY = 300;
+                }
+            }
         }
     }
     else {

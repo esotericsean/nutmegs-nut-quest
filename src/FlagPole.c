@@ -18,6 +18,26 @@ static const UWORD pal_pink5[] = { RGB(31, 31, 31), RGB(7,  8,  9), RGB(28, 19, 
 
 static const UWORD pal_pink3[] = { RGB(31, 31, 31), RGB(19, 26, 30), RGB(28, 19, 30), RGB(0,  0,  0) };
 
+
+static const UINT8 sideways_1[] = {
+ 	0xFF,0xFF,0x00,0x38,0x00,0x38,0x00,0x70,
+  	0x00,0x70,0x00,0xE0,0x00,0xE0,0xFF,0xFF
+};
+
+static const UINT8 sideways_2[] = {
+	0xFF,0xFF,0x00,0xE0,0x00,0xE0,0x00,0xC1,
+	0x00,0xC1,0x00,0x83,0x00,0x83,0xFF,0xFF
+};
+
+static const UINT8 sideways_3[] = {
+  	0xFF,0xFF,0x00,0x83,0x00,0x83,0x00,0x07,
+  	0x00,0x07,0x00,0x0E,0x00,0x0E,0xFF,0xFF
+};
+static const UINT8 sideways_4[] = {
+	0xFF,0xFF,0x00,0x0E,0x00,0x0E,0x00,0x1C,
+  	0x00,0x1C,0x00,0x38,0x00,0x38,0xFF,0xFF
+};
+
 //grey top
 static const unsigned char grey_33[] = {
 	0xff,0x3c,0xc3,0x46,0x81,0x81,0x81,0x81,
@@ -149,7 +169,29 @@ void FlagPole_Activate(int tilex, int tiley) BANKED
 
 void FlagPole_Animate (void) BANKED
 {
-	if (flagpole_activated == 0) {
+	if (isSpikeLevel == true)
+	{
+		if (anim_flag_counter == 12)
+		{
+			set_bkg_data (FLAGPOLE_TILE_2, 1, sideways_1);
+		}
+		else if (anim_flag_counter == 24)
+		{
+			set_bkg_data (FLAGPOLE_TILE_2, 1, sideways_2);
+		}
+		else if (anim_flag_counter == 36)
+		{
+			set_bkg_data (FLAGPOLE_TILE_2, 1, sideways_3);
+		}
+		else if (anim_flag_counter == 48)
+		{
+			set_bkg_data (FLAGPOLE_TILE_2, 1, sideways_4);
+		}
+
+		anim_flag_counter++;
+		if (anim_flag_counter == 49) anim_flag_counter = 0;
+	}
+	else if (flagpole_activated == 0) {
         //animate grey flagpole
 		if (anim_flag_counter == 12) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_33);
