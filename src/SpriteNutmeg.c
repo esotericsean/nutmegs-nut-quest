@@ -438,7 +438,7 @@ void update_aliveInControl (void)
             nutmeg_hit();
             if (nutmeg_death == false)
             {
-                accelY = 300;
+                accelY = -300;
             }
         }
     }
@@ -476,7 +476,7 @@ void update_aliveInControl (void)
                 nutmeg_hit();
                 if (nutmeg_death == false)
                 {
-                    accelY = 300;
+                     accelY = -300;
                 }
             }
         }

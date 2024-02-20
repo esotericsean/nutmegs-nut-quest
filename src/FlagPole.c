@@ -18,7 +18,7 @@ static const UWORD pal_pink5[] = { RGB(31, 31, 31), RGB(7,  8,  9), RGB(28, 19, 
 
 static const UWORD pal_pink3[] = { RGB(31, 31, 31), RGB(19, 26, 30), RGB(28, 19, 30), RGB(0,  0,  0) };
 
-
+// Sideways pole - just 1 tile meant to run the full screen or between 2 walls
 static const UINT8 sideways_1[] = {
  	0xFF,0xFF,0x00,0x38,0x00,0x38,0x00,0x70,
   	0x00,0x70,0x00,0xE0,0x00,0xE0,0xFF,0xFF
