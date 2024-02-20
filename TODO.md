@@ -5,3 +5,4 @@ TODO
 * Entering world 1 from world 2 - scroll off the left side of the map
 * Fix palettes and flagpole at the end of the rain level
 * kids hit boxes should be smaller vertically - start about 7 pixels down
+* level start in the freefall level gets messed up if you drop too fast while it is flashing

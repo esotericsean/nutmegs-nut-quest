@@ -110,6 +110,7 @@ static void AddNuts (void)
 void Start_StateLevel2_glidefall(void) 
 {
 	isSpikeLevel = true;
+	
 	levelorientation = vertical;
 	levelbeat = false;
 	levelStartCount = 0;
@@ -122,11 +123,6 @@ void Start_StateLevel2_glidefall(void)
 
 	__critical { PlayMusic(quickstart, 1); }
 
-	// clear some nutmeg 
-	accelX = 0;
-	accelY = 0;
-	movestate = inair;
-
 	UINT16 startx = 10;
 	UINT16 starty = 2;
 
@@ -137,6 +133,13 @@ void Start_StateLevel2_glidefall(void)
 		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, startx, starty);
 	}
 	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, startx, starty);
+
+	// clear some nutmeg 
+	accelX = 0;
+	accelY = 0;
+	movestate = inair;
+	// stop nutmeg from being able to jump in mid air at the start of the level
+	jumpPeak = 1; 
 
 	scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, startx, starty);
 	camera_delta_y = 0;
@@ -165,6 +168,7 @@ void Update_StateLevel2_glidefall(void)
 {
 	Hud_Update();
 	AddNuts ();
+	
 	if (timerlevel == 0) {
 		while (nutmeg_death == false)
 		{
