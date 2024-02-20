@@ -19,8 +19,6 @@ IMPORT_MAP (level4map);
 UINT16 level4counter = 0;
 UINT8 endlevel_counter4 = 0;
 
-UINT8 fish_pal_loc;
-
 
 const UINT8 collision_tiles_level4[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
 const UINT8 collision_tiles_down_level4[] = {29,30,31,32,0};
@@ -38,9 +36,6 @@ void Start_StateLevel4() {
 	level4counter = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
-
-	if (health == full) fish_pal_loc = 3;
-	else fish_pal_loc = 2;
 
 	nut_region = 0;
 	pitdeathactive = true;

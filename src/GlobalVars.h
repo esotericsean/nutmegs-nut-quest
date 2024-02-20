@@ -110,9 +110,6 @@ extern UINT8 W1LevelSelection;
 //nutmeg sprite region
 extern UINT8 nut_region;
 
-//fish color palette location based on level
-extern UINT8 fish_pal_loc;
-
 //Nutmeg Stop Moving After Dying
 extern UINT8 nutmegdeathmove;
 
