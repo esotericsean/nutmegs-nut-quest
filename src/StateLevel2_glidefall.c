@@ -235,12 +235,15 @@ void Update_StateLevel2_glidefall(void)
 
 	// invisible walls left and right
 	if (spr_nutmeg->x < 3) { spr_nutmeg->x = 3; }
-	if (spr_nutmeg->x > 149) { spr_nutmeg->x = 149; }
 
+	if ((spr_nutmeg->y < 1950) && (spr_nutmeg->x > 149)) { spr_nutmeg->x = 149; }
+
+	// ramp up as you drop until the camera is well below you
 	if (camera_delta_y < 70)
 	{
 		camera_delta_y ++;
 	}
+
 	scroll_target->y = spr_nutmeg->y + camera_delta_y;
 
 	if (nutmeg_death == false)
