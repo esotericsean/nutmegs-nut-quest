@@ -395,7 +395,7 @@ void update_aliveInControl (void)
         }
         
         nutmegGliding = false;
-        if (KEY_PRESSED(J_B) && jumpPeak == 1)
+        if (KEY_PRESSED(J_B) && accelY > 0)
         {
             nutmegGliding = true;
             // this will slow nutmeg down to 1 pixel drop per second
