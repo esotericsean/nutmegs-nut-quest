@@ -29,6 +29,7 @@ extern Sprite * spr_nutmeg;
 extern Sprite * spr_nutmegbow;
 extern Sprite * spr_camera;
 
+void nutmegBow_update(void) BANKED;
 
 void Start_StateLevelTree(void) {
 	SPRITES_8x16;
@@ -46,10 +47,11 @@ void Start_StateLevelTree(void) {
 	//SpriteManagerLoad(28); 	//ruby
 
 	if (hasbow == true) {
-		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 36+28, 96);
+		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 36+28, 104);
 	}
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 36+28, 96);
-
+	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 36+28, 104);
+	nutmeg_direction = right;
+	
 	SpriteManagerAdd(SpriteCinnamon, 8, 96);
 	
 	SpriteManagerAdd(SpriteRuby, 32, 60);
@@ -62,14 +64,14 @@ void Start_StateLevelTree(void) {
 	InitScroll(BANK(treemap2), &treemap2, collision_tiles_level, 0);
 
 	LevelStart_Init(12,12);
-	nutmeg_direction = left;
+	
 	cutscenemode = disabled;
+
 	SHOW_SPRITES;
 	SHOW_BKG;
 }
 
 void Update_StateLevelTree(void) {
-	
 	//if Nutmeg touches the Oak Tree Door, then leave
 	if (spr_nutmeg->x >= 120 && spr_nutmeg->x < 132 && spr_nutmeg->y >=80 && spr_nutmeg->y < 104)
 	{
