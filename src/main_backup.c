@@ -96,23 +96,12 @@ void LCD_NoSpritesOnHUD_isr(void) NONBANKED {
 			HIDE_SPRITES;
 		} else {
 			SHOW_SPRITES;
-			LYC_REG = WY_REG - 1;
+			LYC_REG = WY_REG; // was  - 1;
 		}
 	} else {
 		HIDE_SPRITES;
 		LYC_REG = 0;
 	}
-}
-
-void SetWindowY(UINT8 y) {
-	WY_REG = y;
-	LYC_REG = y - 1;
-	if (y < 144u) {
-		SHOW_WIN; 
-	} else { 
-		HIDE_WIN; 
-		LYC_REG = 160u; 
-	} 
 }
 
 extern UINT8 last_bg_pal_loaded;
