@@ -164,6 +164,7 @@ static const mapStepT steps_ow1 [] = {
 
 
 static const mapStepT steps_ow2 [] = {
+	{254, 12, 9}, // 255 = special value to force off the left hand side of the map
 	{0, 12, 9},
 	{1, 12, 9},
 	{2, 12, 9},
@@ -316,7 +317,7 @@ static void SetTinyNutmegAtCurrentLevel(void)
 	if (overworldNum == 2 && level == 9)
 	{
 		// move nutmeg off the left side of the screen
-		TranslateSprite(spr_tinyNutmeg, -8, 0);
+		spr_tinyNutmeg->x = 65527;
 	}
 }
 
@@ -367,6 +368,7 @@ void Start_StateOverworld1() {
 		level_current = 9;
 		level_next = 10;
 		startAutoMoveTowards(level_next);
+
 	}
 
 	if (levelbeat)
@@ -429,7 +431,15 @@ static void moveTowardsNextLevel(void)
 		UINT16 y = spr_tinyNutmeg->y - TINY_NUTMEG_OFFSET_Y;
 
 		UINT16 tx = movingToStep->x;
-		tx <<= 3;
+		if (tx == 254)
+		{
+			// max - 8
+			tx = 65527;
+		}
+		else
+		{
+			tx <<= 3;
+		}
 		UINT16 ty = movingToStep->y;
 		ty <<= 3;
 
@@ -482,14 +492,28 @@ static void moveTowardsNextLevel(void)
 				}
 
 				tx = movingToStep->x;
-				tx <<= 3;
+				if (tx == 254)
+				{
+					// max - 8
+					tx = 65527;
+				}
+				else
+				{
+					tx <<= 3;
+				}
 				ty = movingToStep->y;
 				ty <<= 3;
 			}
 		}
 
 		// move 1 pixel towards the goal
-		if ((x > 60000) || (x < tx)) { 
+		if (tx == 65527)
+		{
+			// this is the special case to move nutmeg off the left hand side of the map
+			TranslateSprite (spr_tinyNutmeg, -1, 0);
+			spr_tinyNutmeg->mirror = V_MIRROR;
+		}
+		else if ((x > 60000) || (x < tx)) { 
 			TranslateSprite (spr_tinyNutmeg, 1, 0);
 			spr_tinyNutmeg->mirror = NO_MIRROR;	
 		}
