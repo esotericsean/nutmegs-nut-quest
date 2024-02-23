@@ -8,12 +8,12 @@
 
 extern Sprite * spr_nutmeg;
 
-UINT16 earthycounter = 0;
-UINT8 earthydirection = 0;
+static UINT16 earthycounter = 0;
+static UINT8 earthydirection = 0;
 
-const UINT8 anim_earthy_walk[] = {6, 1, 1, 2, 3, 3, 2};
+static const UINT8 anim_earthy_walk[] = {6, 1, 1, 2, 3, 3, 2};
 
-void Start_EnemyEarthy() {
+void Start_EnemyEarthy(void) {
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
@@ -28,7 +28,7 @@ void Start_EnemyEarthy() {
 	earthydirection = 0;
 }
 
-void Update_EnemyEarthy() {
+void Update_EnemyEarthy(void) {
 	if (earthycounter % 5 == 0) {
 		if (earthydirection == 0) TranslateSprite (THIS, -1, 0);
 		else if (earthydirection == 1) TranslateSprite (THIS, 1, 0);
@@ -79,5 +79,5 @@ void Update_EnemyEarthy() {
 	}
 }
 
-void Destroy_EnemyEarthy() {
+void Destroy_EnemyEarthy(void) {
 }

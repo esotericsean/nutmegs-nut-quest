@@ -8,11 +8,11 @@
 
 extern Sprite * spr_nutmeg;
 
-const UINT8 anim_birdy_fly[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
+static const UINT8 anim_birdy_fly[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
 
-UINT8 birdycounter;
+static UINT8 birdycounter;
 
-void Start_EnemyBirdy() {
+void Start_EnemyBirdy(void) {
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
@@ -27,7 +27,7 @@ void Start_EnemyBirdy() {
 	birdycounter = 0;
 }
 
-void Update_EnemyBirdy() {
+void Update_EnemyBirdy(void) {
 	if (birdycounter >= 0 && birdycounter < 30) {
 		TranslateSprite(THIS, 0, 1);
 	}
@@ -73,5 +73,5 @@ void Update_EnemyBirdy() {
 	}
 }
 
-void Destroy_EnemyBirdy() {
+void Destroy_EnemyBirdy(void) {
 }

@@ -10,7 +10,7 @@ extern Sprite * spr_nutmeg;
 
 static const UINT8 anim_butterfly_fly[] = {4, 1, 2, 3, 2};
 
-void Start_EnemyButterfly() {
+void Start_EnemyButterfly(void) {
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
@@ -29,7 +29,7 @@ void Start_EnemyButterfly() {
 }
 
 
-void Update_EnemyButterfly() {
+void Update_EnemyButterfly(void) {
 	//up and down
 	UINT8 ystep = THIS->custom_data[2];
 	UINT8 xstep = THIS->custom_data[3];
@@ -103,5 +103,5 @@ void Update_EnemyButterfly() {
 	}
 }
 
-void Destroy_EnemyButterfly() {
+void Destroy_EnemyButterfly(void) {
 }

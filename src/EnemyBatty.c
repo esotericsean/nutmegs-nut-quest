@@ -8,11 +8,11 @@
 
 extern Sprite * spr_nutmeg;
 
-const UINT8 anim_batty_fly[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
+static const UINT8 anim_batty_fly[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
 
-UINT8 battycounter;
+static UINT8 battycounter;
 
-void Start_EnemyBatty() {
+void Start_EnemyBatty(void) {
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
@@ -27,7 +27,7 @@ void Start_EnemyBatty() {
 	battycounter = 0;
 }
 
-void Update_EnemyBatty() {
+void Update_EnemyBatty(void) {
 	if (battycounter >= 0 && battycounter < 30) {
 		TranslateSprite(THIS, 0, 1);
 	}
@@ -73,5 +73,5 @@ void Update_EnemyBatty() {
 	}
 }
 
-void Destroy_EnemyBatty() {
+void Destroy_EnemyBatty(void) {
 }
