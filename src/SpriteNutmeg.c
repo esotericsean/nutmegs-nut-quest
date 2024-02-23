@@ -87,7 +87,7 @@ UINT8 nutmegdeathmove = 0;
 UINT8 kickbackcounter;
 
 //reset nutmeg's state back to default
-void ResetState() {
+void ResetState(void) {
     accelY = 0;
     accelX = 0;
     collisionX = 0;
@@ -113,7 +113,7 @@ void ResetState() {
     kickbackcounter = 0;
 }
 
-void Start_SpriteNutmeg() {
+void Start_SpriteNutmeg(void) {
     spr_nutmeg = THIS;
 
     ResetState();
@@ -486,78 +486,6 @@ void update_aliveInControl (void)
     }
 
     /* * * * * * * * * * * * * * * * * * * */
-    /*             animation               */
-    /* * * * * * * * * * * * * * * * * * * */
-    //play correct animation based on current state & input
-    if (movestate == grounded) {
-        if (accelX < 100 && accelX > -100) {
-            if (nutmeg_direction == right) {
-                SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
-                bowanim = 0;
-            }
-            if (nutmeg_direction == left) {
-                SetSpriteAnim(THIS, anim_nutmeg_idle_left, 5);
-                bowanim = 1;
-            }
-        }
-        else if (KEY_PRESSED(J_B)) {
-            if (nutmeg_direction == right) {
-                SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
-                bowanim = 2;
-            }
-            if (nutmeg_direction == left) {
-                SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
-                bowanim = 3;
-            }
-        }
-        else {
-            if (nutmeg_direction == right) {
-                SetSpriteAnim(THIS, anim_nutmeg_walk_right, 15);
-                bowanim = 2;
-            }
-            if (nutmeg_direction == left) {
-                SetSpriteAnim(THIS, anim_nutmeg_walk_left, 15);
-                bowanim = 3;
-            }
-        }
-    }
-    else if (movestate == inair) {
-        if (nutmegGliding)
-        {
-            if (nutmeg_direction == right)
-            {
-                SetSpriteAnim(THIS, anim_nutmeg_glide, 1);
-                bowanim = 11;
-            }
-            else
-            {
-                SetSpriteAnim(THIS, anim_nutmeg_glide, 1);
-                bowanim = 12;
-            }
-        }
-        else if (accelY > 60) {
-            if (nutmeg_direction == right) {
-                SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
-                bowanim = 6;
-            }
-            if (nutmeg_direction == left) {
-                SetSpriteAnim(THIS, anim_nutmeg_fall_left, 1);
-                bowanim = 7;
-            }
-        }
-        else if (accelY < -60) {
-            if (nutmeg_direction == right) {
-                SetSpriteAnim(THIS, anim_nutmeg_jump_right, 1);
-                bowanim = 4;
-            }
-            if (nutmeg_direction == left) {
-                SetSpriteAnim(THIS, anim_nutmeg_jump_left, 1);
-                bowanim = 5;
-            }
-        }
-    }
-
-    /* * * * * * * * * * * * * * * * * * * */
     /*      kickback from losing bow       */
     /* * * * * * * * * * * * * * * * * * * */
     if (health == full && lostbow == true) {
@@ -576,7 +504,7 @@ void update_aliveInControl (void)
     }
 }
 
-void Update_SpriteNutmeg() {
+void Update_SpriteNutmeg(void) {
     
     // extra life from 100 acorns
     if (acorncounter == 100) {
@@ -603,15 +531,10 @@ void Update_SpriteNutmeg() {
     {
         update_inCutscene();
     }
-    
-    // update the bow after we are done updating, so the x & y positions can track us correctly
-    if (spr_nutmegbow != 0)
-    {
-        nutmegBow_update();
-    }
 }
 
-void Destroy_SpriteNutmeg() {
+void Destroy_SpriteNutmeg(void) {
+    spr_nutmeg = 0;
 }
 
 void nutmeg_SetupGame(void) BANKED
@@ -664,5 +587,87 @@ void nutmeg_hit(void) BANKED
         
         if (nutmeglives <= 0) { GameOver = true; }
         else { nutmeglives--; }
+    }
+}
+
+// WARNING - Not called with THIS pointing to spr_nutmeg
+void nutmeg_Animate(void) BANKED
+{
+     /* * * * * * * * * * * * * * * * * * * */
+    /*             animation               */
+    /* * * * * * * * * * * * * * * * * * * */
+    //play correct animation based on current state & input
+    if (movestate == grounded) {
+        if (accelX < 100 && accelX > -100) {
+            if (nutmeg_direction == right) {
+                SetSpriteAnim(spr_nutmeg, anim_nutmeg_idle_right, 5);
+                bowanim = 0;
+            }
+            if (nutmeg_direction == left) {
+                SetSpriteAnim(spr_nutmeg, anim_nutmeg_idle_left, 5);
+                bowanim = 1;
+            }
+        }
+        else if (KEY_PRESSED(J_B)) {
+            if (nutmeg_direction == right) {
+                SetSpriteAnim(spr_nutmeg, anim_nutmeg_walk_right, 15);
+                bowanim = 2;
+            }
+            if (nutmeg_direction == left) {
+                SetSpriteAnim(spr_nutmeg, anim_nutmeg_walk_left, 15);
+                bowanim = 3;
+            }
+        }
+        else {
+            if (nutmeg_direction == right) {
+                SetSpriteAnim(spr_nutmeg, anim_nutmeg_walk_right, 15);
+                bowanim = 2;
+            }
+            if (nutmeg_direction == left) {
+                SetSpriteAnim(spr_nutmeg, anim_nutmeg_walk_left, 15);
+                bowanim = 3;
+            }
+        }
+    }
+    else if (movestate == inair) {
+        if (nutmegGliding)
+        {
+            if (nutmeg_direction == right)
+            {
+                SetSpriteAnim(spr_nutmeg, anim_nutmeg_glide, 1);
+                bowanim = 11;
+            }
+            else
+            {
+                SetSpriteAnim(spr_nutmeg, anim_nutmeg_glide, 1);
+                bowanim = 12;
+            }
+        }
+        else if (accelY > 60) {
+            if (nutmeg_direction == right) {
+                SetSpriteAnim(spr_nutmeg, anim_nutmeg_fall_right, 1);
+                bowanim = 6;
+            }
+            if (nutmeg_direction == left) {
+                SetSpriteAnim(spr_nutmeg, anim_nutmeg_fall_left, 1);
+                bowanim = 7;
+            }
+        }
+        else if (accelY < -60) {
+            if (nutmeg_direction == right) {
+                SetSpriteAnim(spr_nutmeg, anim_nutmeg_jump_right, 1);
+                bowanim = 4;
+            }
+            if (nutmeg_direction == left) {
+                SetSpriteAnim(spr_nutmeg, anim_nutmeg_jump_left, 1);
+                bowanim = 5;
+            }
+        }
+    }
+
+    // update the bow after we are done updating, so the x & y positions can track us correctly
+    if (spr_nutmegbow != 0)
+    {
+        nutmegBow_update();
     }
 }

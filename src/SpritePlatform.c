@@ -47,7 +47,8 @@ void Update_SpritePlatform(void)
 
     // If nutmeg is inside sprite (plus an extra pixel upwads), and nutmeg is falling, 
     // then stick nutmeg to the platform, and stop accel (and rechoose the sprite?)
-    if ((spr_nutmeg->x + 14 > THIS->x)
+    // was 14
+    if ((spr_nutmeg->x + 8 > THIS->x)
         && (spr_nutmeg->x < THIS->x + 22)
         && (accelY >= 0)
         && (spr_nutmeg->y + 10 > THIS->y)

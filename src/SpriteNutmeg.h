@@ -6,5 +6,6 @@
 void nutmeg_setupNewLife (void) BANKED;
 void nutmeg_SetupGame(void) BANKED;
 void nutmeg_hit(void) BANKED;
+void nutmeg_Animate(void) BANKED;
 
 #endif
