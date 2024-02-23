@@ -79,6 +79,7 @@ _SPRITE_DMG(EnemyCola, cola)\
 _SPRITE_DMG(SpriteShockline1, shockline1)\
 _SPRITE_DMG(SpriteShockline2, shockline2)\
 _SPRITE_DMG(SpriteShockline3, shockline3)\
+_SPRITE_DMG(SpritePlatform, platform)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

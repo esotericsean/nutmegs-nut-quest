@@ -11,7 +11,7 @@ extern Sprite * spr_nutmeg;
 static const UINT8 anim_cola[]  = {1, 1};
 static const UINT8 anim_cola_flash[]  = {2, 0, 1};
 
-void START() {
+void START(void) {
 	THIS->lim_x = 350;
 	THIS->lim_y = 144;
 
@@ -23,7 +23,7 @@ void START() {
 	THIS->custom_data[3] = 0; //cola blink counter
 }
 
-void UPDATE() {
+void UPDATE(void) {
 	if (THIS->custom_data[0] == 0 || THIS->custom_data[0] == 2) {
 		if (THIS->y < 86 && THIS->custom_data[2] == 0) {
 			TranslateSprite (THIS, 0, 1 + THIS->custom_data[1]); //checks for collisions
@@ -89,5 +89,6 @@ void UPDATE() {
 	}
 }
 
-void DESTROY() {
+void DESTROY(void) 
+{
 }

@@ -2,18 +2,18 @@
 
 #include "SpriteManager.h"
 
-UINT8 leaf_counter;
+static UINT8 leaf_counter;
 
-const UINT8 leaf_static[] = {1, 0};
-const UINT8 leaf_fall[]   = {16, 0, 0, 0, 1, 1, 2, 3, 3, 4, 4, 4, 3, 3, 2, 1, 1};
+static const UINT8 leaf_static[] = {1, 0};
+static const UINT8 leaf_fall[]   = {16, 0, 0, 0, 1, 1, 2, 3, 3, 4, 4, 4, 3, 3, 2, 1, 1};
 
-void Start_SpriteLeaf() {
+void Start_SpriteLeaf(void) {
 	leaf_counter = 0;
 
 	SetSpriteAnim(THIS, leaf_fall, 16);
 }
 
-void Update_SpriteLeaf() {
+void Update_SpriteLeaf(void) {
 	if 		(leaf_counter == 2)   TranslateSprite (THIS,  0,  1);
 	else if (leaf_counter == 5)   TranslateSprite (THIS, -1,  0);
 	else if (leaf_counter == 6)   TranslateSprite (THIS,  0,  1);
@@ -56,5 +56,5 @@ void Update_SpriteLeaf() {
 	if (leaf_counter < 254) leaf_counter++;
 }
 
-void Destroy_SpriteLeaf() {
+void Destroy_SpriteLeaf(void) {
 }

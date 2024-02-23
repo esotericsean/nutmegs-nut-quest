@@ -7,16 +7,18 @@
 
 extern Sprite * spr_nutmeg;
 
-const UINT8 anim_mushroom_moving[] = {4, 0, 0, 1, 1};
+static const UINT8 anim_mushroom_moving[] = {4, 0, 0, 1, 1};
 
-void Start_SpriteMushroom() {
+void Start_SpriteMushroom(void) 
+{
 	THIS->lim_x = 500;
 	THIS->lim_y = 144;
 
 	SetSpriteAnim(THIS, anim_mushroom_moving, 10);
 }
 
-void Update_SpriteMushroom() {
+void Update_SpriteMushroom(void) 
+{
 	//mushroom bounce
 	if (CheckCollision(THIS, spr_nutmeg)) {
 		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
@@ -26,5 +28,5 @@ void Update_SpriteMushroom() {
 	}
 }
 
-void Destroy_SpriteMushroom() {
+void Destroy_SpriteMushroom(void) {
 }
