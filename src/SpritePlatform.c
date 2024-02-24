@@ -10,9 +10,9 @@ static const UINT8 anim_mushroom_moving[] = {1, 0};
 #define PLAT_UPDOWN (0)
 #define PLAY_LEFTRIGHT (1)
 
-#define PLATFORM_TYPE_POS (0)
-#define PLATFORM_STEPS (1)
-#define PLATFORM_CURRENT_DIRECTION (2)
+#define PLATFORM_X (0)
+#define PLATFORM_Y (1)
+#define PLATFORM_STEPS (2)
 #define PLATFORM_COUNT (3)
 
 void Start_SpritePlatform(void) 
@@ -21,29 +21,17 @@ void Start_SpritePlatform(void)
 	THIS->lim_y = 144;
 
     SetSpriteAnim(THIS, anim_mushroom_moving, 10);
-    THIS->custom_data[PLATFORM_TYPE_POS] = PLAT_UPDOWN;
+    THIS->custom_data[PLATFORM_X] = 1;
+    THIS->custom_data[PLATFORM_Y] = -1;
     THIS->custom_data[PLATFORM_STEPS] = 100;
-    THIS->custom_data[PLATFORM_CURRENT_DIRECTION] = 0;
     THIS->custom_data[PLATFORM_COUNT] = 0;
 }
 
 void Update_SpritePlatform(void) 
 {
-    if (THIS->custom_data[PLATFORM_CURRENT_DIRECTION] == 0)
-    {
-        THIS->y --;
-    }
-    else 
-    {
-        THIS->y ++;
-    }
+    THIS->x += (INT8) (THIS->custom_data[PLATFORM_X]);
+    THIS->y += (INT8) (THIS->custom_data[PLATFORM_Y]);
 
-    THIS->custom_data[PLATFORM_COUNT]++;
-    if (THIS->custom_data[PLATFORM_COUNT] == THIS->custom_data[PLATFORM_STEPS])
-    {
-        THIS->custom_data[PLATFORM_COUNT] = 0;
-        THIS->custom_data[PLATFORM_CURRENT_DIRECTION] = 1 - THIS->custom_data[PLATFORM_CURRENT_DIRECTION];
-    }
 
     // If nutmeg is inside sprite (plus an extra pixel upwads), and nutmeg is falling, 
     // then stick nutmeg to the platform, and stop accel (and rechoose the sprite?)
@@ -58,6 +46,21 @@ void Update_SpritePlatform(void)
         movestate = grounded;
         accelY = 0;
         spr_nutmeg->y = THIS->y - 8;
+
+        // nutmeg gets moved with the platform
+        spr_nutmeg->x += (INT8) (THIS->custom_data[PLATFORM_X]);
+        // y movement is already taken care of above
+        //spr_nutmeg->y += (INT8) (THIS->custom_data[PLATFORM_Y]);
+    }
+
+
+    // check if we flip direction
+    THIS->custom_data[PLATFORM_COUNT]++;
+    if (THIS->custom_data[PLATFORM_COUNT] == THIS->custom_data[PLATFORM_STEPS])
+    {
+        THIS->custom_data[PLATFORM_COUNT] = 0;
+        THIS->custom_data[PLATFORM_X] = 0 - THIS->custom_data[PLATFORM_X];
+        THIS->custom_data[PLATFORM_Y] = 0 - THIS->custom_data[PLATFORM_Y];
     }
 }
 
