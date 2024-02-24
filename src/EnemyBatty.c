@@ -28,7 +28,7 @@ void Start_EnemyBatty(void) {
 }
 
 void Update_EnemyBatty(void) {
-	if (battycounter >= 0 && battycounter < 30) {
+	if (battycounter < 30) {
 		TranslateSprite(THIS, 0, 1);
 	}
 	//else if (battycounter >= 30 && battycounter < 90) {

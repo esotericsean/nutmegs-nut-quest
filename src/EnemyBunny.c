@@ -12,7 +12,7 @@ static const UINT8 anim_bunny_idle[] = {1, 0};
 static const UINT8 anim_bunny_jump[] = {6, 0, 1, 2, 3, 4, 5};
 static const UINT8 anim_bunny_die[] = {1, 6};
 
-void Start_EnemyBunny() {
+void Start_EnemyBunny(void) {
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
@@ -28,7 +28,7 @@ void Start_EnemyBunny() {
 	*((UINT16 *)THIS->custom_data) = 0;
 }
 
-void Update_EnemyBunny() {
+void Update_EnemyBunny(void) {
 	
 	UINT16 c = *(UINT16 *)THIS->custom_data;
 	c++;
@@ -42,25 +42,25 @@ void Update_EnemyBunny() {
 		THIS->mirror = NO_MIRROR;
 		SetSpriteAnim(THIS, anim_bunny_idle, 1);
 	}
-	if (c >= 25 && c < 120) {
+	else if (c >= 25 && c < 120) {
 		SetSpriteAnim(THIS, anim_bunny_jump, 12);
 		if (c % 5 == 0)
 			TranslateSprite(THIS, 1, 0);
 	}
-	if (c >= 120 && c < 145) {
+	else if (c >= 120 && c < 145) {
 		SetSpriteAnim(THIS, anim_bunny_idle, 1);
 	}
-	if (c >= 145 && c < 171) {
+	else if (c >= 145 && c < 171) {
 		//SPRITE_SET_VMIRROR(THIS);
 		THIS->mirror = V_MIRROR;
 		SetSpriteAnim(THIS, anim_bunny_idle, 1);
 	}
-	if (c >= 171 && c < 267) {
+	else if (c >= 171 && c < 267) {
 		SetSpriteAnim(THIS, anim_bunny_jump, 12);
 		if (c % 5 == 0)
 			TranslateSprite(THIS, -1, 0);
 	}
-	if (c >= 267 && c < 292) {
+	else if (c >= 267) {
 		SetSpriteAnim(THIS, anim_bunny_idle, 1);
 	}
 
@@ -94,5 +94,5 @@ void Update_EnemyBunny() {
 	}
 }
 
-void Destroy_EnemyBunny() {
+void Destroy_EnemyBunny(void) {
 }

@@ -28,16 +28,14 @@ void Start_EnemyBirdy(void) {
 }
 
 void Update_EnemyBirdy(void) {
-	if (birdycounter >= 0 && birdycounter < 30) {
+	if (birdycounter < 30) {
 		TranslateSprite(THIS, 0, 1);
-	}
-	else if (birdycounter >= 30 && birdycounter < 90) {
-		//stay still
 	}
 	else if (birdycounter >= 90 && birdycounter < 120) {
 		TranslateSprite(THIS, 0, -1);
 	}
-	else if (birdycounter >= 120 && birdycounter < 180) {
+	else
+	{ 
 		//stay still
 	}
 
