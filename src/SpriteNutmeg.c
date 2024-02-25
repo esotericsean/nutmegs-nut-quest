@@ -120,6 +120,7 @@ void Start_SpriteNutmeg(void) {
 
     THIS->lim_x = 500;
 	THIS->lim_y = 144;
+    SetSpriteAnim(spr_nutmeg, anim_nutmeg_idle_left, 5);
 }
 
 static INT8 Hundreds (INT16 v)
