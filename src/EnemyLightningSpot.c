@@ -10,7 +10,8 @@ static const UINT8 anim_lightningspot_empty[] = {1, 0};
 
 static UINT8 lightningspotcounter;
 
-void Start_EnemyLightningSpot() {
+void Start_EnemyLightningSpot (void) 
+{
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
@@ -25,7 +26,8 @@ void Start_EnemyLightningSpot() {
 	lightningspotcounter = 0;
 }
 
-void Update_EnemyLightningSpot() {
+void Update_EnemyLightningSpot (void) 
+{
 	if (lightningspotcounter == 0) {
 		//PlayFx(CHANNEL_4, 60, 0x3f, 0x81, 0x28, 0xC0);
 	}
@@ -39,5 +41,6 @@ void Update_EnemyLightningSpot() {
 	}
 }
 
-void Destroy_EnemyLightningSpot() {
+void Destroy_EnemyLightningSpot (void) 
+{
 }

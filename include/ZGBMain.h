@@ -29,6 +29,7 @@ _STATE(StateLevelTree)\
 _STATE(StateLevel2_2)\
 _STATE(StateLevel2_glidefall)\
 _STATE(StateLevel1_platform)\
+_STATE(StateLevel2_platform)\
 STATE_DEF_END
 
 #define SPRITES \
@@ -66,7 +67,6 @@ _SPRITE_DMG(SpriteNutmegBow, nutmegbow)\
 _SPRITE_DMG(EnemyRockith, rockith)\
 _SPRITE_DMG(EnemyTopSpike, topspike)\
 _SPRITE_DMG(SpriteNutmeg, nutmeg)\
-_SPRITE_DMG(SpriteRock, rock)\
 _SPRITE_DMG(EnemyBatty, batty)\
 _SPRITE_DMG(EnemyLightning, lightning)\
 _SPRITE_DMG(EnemyLightningSpot, lightningspot)\

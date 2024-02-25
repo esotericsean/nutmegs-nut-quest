@@ -10,8 +10,6 @@ extern Sprite * spr_nutmeg;
 
 static const UINT8 anim_birdy_fly[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
 
-static UINT8 birdycounter;
-
 void Start_EnemyBirdy(void) {
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
@@ -24,14 +22,14 @@ void Start_EnemyBirdy(void) {
 
 	SetSpriteAnim(THIS, anim_birdy_fly, 22);
 
-	birdycounter = 0;
+	THIS->custom_data[0] = 0;
 }
 
 void Update_EnemyBirdy(void) {
-	if (birdycounter < 30) {
+	if (THIS->custom_data[0] < 30) {
 		TranslateSprite(THIS, 0, 1);
 	}
-	else if (birdycounter >= 90 && birdycounter < 120) {
+	else if (THIS->custom_data[0] >= 90 && THIS->custom_data[0] < 120) {
 		TranslateSprite(THIS, 0, -1);
 	}
 	else
@@ -39,9 +37,12 @@ void Update_EnemyBirdy(void) {
 		//stay still
 	}
 
-	birdycounter++;
+	THIS->custom_data[0]++;
 
-	if (birdycounter >= 180) birdycounter = 0;
+	if (THIS->custom_data[0] >= 180) 
+	{ 
+		THIS->custom_data[0] = 0;
+	}
 
 	//kill birdy if jump on it
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {

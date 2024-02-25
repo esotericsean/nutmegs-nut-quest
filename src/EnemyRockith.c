@@ -26,7 +26,8 @@ static const UINT8 anim_rockith_death[] 	 = {13, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0
 static const UINT8 anim_rockith_death_alt[] = {16, 5, 5, 5, 5, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
-void Start_EnemyRockith() {
+void Start_EnemyRockith (void) 
+{
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
@@ -43,7 +44,8 @@ void Start_EnemyRockith() {
 	rockithcounter = 0;
 }
 
-void Update_EnemyRockith() {
+void Update_EnemyRockith (void) 
+{
 	bool rockdamage = false;
 
 	//rock mode
@@ -120,5 +122,6 @@ void Update_EnemyRockith() {
 	}
 }
 
-void Destroy_EnemyRockith() {
+void Destroy_EnemyRockith (void)
+{
 }
