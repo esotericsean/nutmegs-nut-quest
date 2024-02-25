@@ -16,11 +16,11 @@
 
 IMPORT_MAP (level3map);
 
-UINT16 level3counter = 0;
-UINT8 endlevel_counter3 = 0;
+static UINT16 level3counter = 0;
+static UINT8 endlevel_counter3 = 0;
 
-const UINT8 collision_tiles_level3[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
-const UINT8 collision_tiles_down_level3[] = {29,30,31,32,0};
+static const UINT8 collision_tiles_level3[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
+static const UINT8 collision_tiles_down_level3[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(quickstart);
 DECLARE_MUSIC(mushrooms);
@@ -32,7 +32,8 @@ extern Sprite * spr_nutmeg;
 extern Sprite * spr_camera;
 
 
-void Start_StateLevel3() {
+void Start_StateLevel3 (void)
+{
 
 	level3counter = 0;
 	levelorientation = vertical;
@@ -62,7 +63,8 @@ void Start_StateLevel3() {
 	SHOW_BKG;
 }
 
-void Update_StateLevel3() {
+void Update_StateLevel3 (void) 
+{
 	Hud_Update();
 
 	if (timerlevel == 0) 
@@ -217,11 +219,8 @@ void Update_StateLevel3() {
 	// Up to 125:
 	else if (spr_nutmeg->y > 250 && spr_nutmeg->y <= 375 && nut_region <= 2) {
 		SpriteManagerAdd(EnemyRockith, 20*8, 33*8);
-		//SpriteManagerAdd(SpriteRock, 20*8, 32*8);
-		//SpriteManagerAdd(SpriteRock, 26*8, 32*8);
 		SpriteManagerAdd(EnemyTopSpike, 12*8, 38*8);
 		SpriteManagerAdd(EnemyBatty, 26*8, 40*8);
-		//SpriteManagerAdd(SpriteRock, 10*8, 41*8);
 	    nut_region = 3;
 	}
 	// Up to 156:
@@ -240,10 +239,7 @@ void Update_StateLevel3() {
 	}
 	// Up to 219:
 	else if (spr_nutmeg->y > 625 && spr_nutmeg->y <= 750 && nut_region <= 5) {
-		//SpriteManagerAdd(SpriteRock, 22*8, 82*8);
 		SpriteManagerAdd(EnemyRockith, 20*8, 92*8);
-		//SpriteManagerAdd(SpriteRock, 26*8, 91*8);
-		//SpriteManagerAdd(SpriteRock, 10*8, 91*8);
 		SpriteManagerAdd(SpriteAcorn, 4*8, 79*8);
 		SpriteManagerAdd(SpriteAcorn, 4*8, 83*8);
 		SpriteManagerAdd(SpriteAcorn, 4*8, 87*8);

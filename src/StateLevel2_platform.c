@@ -15,7 +15,7 @@
 #include "LevelStart.h"
 #include "SpriteNutmeg.h"
 
-IMPORT_MAP (level1_platformmap);
+IMPORT_MAP (level2_platformmap);
 
 static UINT8 startLevel_counter = 0;
 static UINT8 endlevel_counter = 0;
@@ -35,35 +35,62 @@ extern Sprite * spr_nutmegbow;
 extern Sprite * spr_camera;
 
 
+typedef struct {
+	UINT8 x;
+	UINT8 y;
+	UINT8 type; // sprite type
+	UINT8 cd0;
+	UINT8 cd1;
+	UINT8 cd2;
+	UINT8 cd3;
+	UINT8 cd4;
+} actorPosT;
 
-static const nutPosT levelNuts [] = 
+static const actorPosT levelActors [] = 
 {
-	{22, 1},
-	{37, 6},
-	{74, 1},
-	{78, 3},
-	{93, 13},
-	{117, 2},
-	{144, 10},
-	{154, 1},
-	{164, 13},
-	{227, 7},
-	{0,0}
+	{20, 5, SpritePlatform, 0, 1, PLATFORM_TYPE_BACK_AND_FORTH, 11*8, 0}, // up down
+	{24, 5, SpritePlatform, 0, 0, PLATFORM_TYPE_WAITING_TO_DROP, 0 , 0}, // dropping
+	{29, 7, SpriteAcorn, 0, 0, 0, 0, 0},
+	{31, 3, SpriteAcorn, 0, 0, 0, 0, 0},
+	{31, 10, SpriteAcorn, 0, 0, 0, 0, 0},
+	{46, 6, SpritePlatform, 0, 0, PLATFORM_TYPE_WAITING_TO_DROP, 0, 0}, // dropping
+	{56, 5, SpritePlatform, 0, 0, PLATFORM_TYPE_WAITING_TO_DROP, 0, 0}, // dropping
+	{66, 4, SpritePlatform, 0, 0, PLATFORM_TYPE_WAITING_TO_DROP, 0, 0}, // dropping
+	{76, 3, SpritePlatform, 0, 0, PLATFORM_TYPE_WAITING_TO_DROP, 0, 0}, // dropping
+	{79, 11, SpriteAcorn, 0, 0, 0, 0, 0},
+	{79, 11, SpriteAcorn, 0, 0, 0, 0, 0},
+	{87, 15, SpriteMushroom, 0, 0, 0, 0, 0},
+	{89, 4, SpriteAcorn, 0, 0, 0, 0, 0},
+	{91, 7, SpritePlatform, 1, 0, PLATFORM_TYPE_BACK_AND_FORTH, 14*8, 0}, // left right
+	{114, 16, SpritePlatform, 1, ((UINT8)-1), PLATFORM_TYPE_BACK_AND_FORTH, 13*8, 0}, // diagonal
+	{119, 3, SpriteAcorn, 0, 0, 0, 0, 0},
+	{146, 10, EnemyBirdy, 0, 0, 0, 0, 0},
+	{153, 3, SpriteAcorn, 0, 0, 0, 0, 0},
+	{159, 10, EnemyBirdy, 0, 0, 0, 0, 0},
+	{167, 3, SpriteAcorn, 0, 0, 0, 0, 0},
+	{172, 10, EnemyBirdy, 0, 0, 0, 0, 0},
+	{180, 2, SpriteAcorn, 0, 0, 0, 0, 0},
+	{185, 10, EnemyBirdy, 0, 0, 0, 0, 0},
+	{194, 2, SpriteAcorn, 0, 0, 0, 0, 0},
+	{231, 6, SpriteAcorn, 0, 0, 0, 0, 0},
 };
 
-#define NUM_NUTS (sizeof (levelNuts) / sizeof(levelNuts[0]))
-static UINT8 levelNutPos;
+#define NUM_ACTORS (sizeof (levelActors) / sizeof(levelActors[0]))
+static UINT8 levelActorPos;
 
-static void AddNut (UINT16 x, UINT16 y)
+static void AddActor (actorPosT *a)
 {
-	x <<= 3;
-	y <<= 3;
-	Sprite *s = SpriteManagerAdd(SpriteAcorn, x, y);
+	Sprite *s = SpriteManagerAdd(a->type, (UINT16)(a->x) << 3, (UINT16)(a->y) << 3);
 	s->lim_x = 400;
 	s->lim_y = 300;
+	s->custom_data[0] = a->cd0;
+	s->custom_data[1] = a->cd1;
+	s->custom_data[2] = a->cd2;
+	s->custom_data[3] = a->cd3;
+	s->custom_data[4] = a->cd4;
 }
 
-static void AddNuts (void)
+static void AddActors (void)
 {
 	UINT16 xpos = spr_nutmeg->x;
 	UINT8 x = xpos >> 3;
@@ -73,14 +100,14 @@ static void AddNuts (void)
 		x = 0;
 	}
 
-	while ((levelNutPos < NUM_NUTS) && (levelNuts[levelNutPos].x < x + 25))
+	while ((levelActorPos < NUM_ACTORS) && (levelActors[levelActorPos].x < x + 25))
 	{
-		AddNut (levelNuts[levelNutPos].x, levelNuts[levelNutPos].y);
-		levelNutPos ++;
+		AddActor (&levelActors[levelActorPos]);
+		levelActorPos ++;
 	}
 }
 
-void Start_StateLevel1_platform (void) {
+void Start_StateLevel2_platform (void) {
 	startLevel_counter = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
@@ -98,7 +125,7 @@ void Start_StateLevel1_platform (void) {
 	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49);
 
 	InitScrollTiles(0, &level1tiles);
-	InitScroll(BANK(level1_platformmap), &level1_platformmap, collision_tiles, collision_tiles_down);
+	InitScroll(BANK(level2_platformmap), &level2_platformmap, collision_tiles, collision_tiles_down);
 	
 	Hud_Init(false);
 	cutscenemode = enabled;
@@ -107,46 +134,16 @@ void Start_StateLevel1_platform (void) {
 	endlevel_counter = 0;
 	LevelStart_Init(6,4);
 
-
-	Sprite *s = SpriteManagerAdd(SpritePlatform, 16*8, 3*8);
-	Platform_Setup(s, -1, 1, PLATFORM_TYPE_BACK_AND_FORTH, 7*8);
-
-	s = SpriteManagerAdd (SpritePlatform, 53*8, 14*8);
-	Platform_Setup(s, 1, 0, PLATFORM_TYPE_BACK_AND_FORTH, 26*8);
-
-	s = SpriteManagerAdd (SpritePlatform, 65*8, 14*8);
-	Platform_Setup(s, 0, -1, PLATFORM_TYPE_BACK_AND_FORTH, 10*8);
-
-	s = SpriteManagerAdd (SpritePlatform, 92*8, 16*8);
-	Platform_Setup(s, 1, -1, PLATFORM_TYPE_BACK_AND_FORTH, 13*8);
-
-	// upward platforms
-	s = SpriteManagerAdd (SpritePlatform, 143*8, 5*8);
-	Platform_Setup(s, 0, -1, PLATFORM_TYPE_WRAP_TOP_BOTTOM, 255);
-
-	s = SpriteManagerAdd (SpritePlatform, 153*8, 9*8);
-	Platform_Setup(s, 0, -1, PLATFORM_TYPE_WRAP_TOP_BOTTOM, 255);
-
-	s = SpriteManagerAdd (SpritePlatform, 163*8, 13*8);
-	Platform_Setup(s, 0, -1, PLATFORM_TYPE_WRAP_TOP_BOTTOM, 255);
-
-	// downward platforms
-	s = SpriteManagerAdd (SpritePlatform, 182*8, 4*8);
-	Platform_Setup(s, 0, 1, PLATFORM_TYPE_WRAP_TOP_BOTTOM, 255);
-
-	s = SpriteManagerAdd (SpritePlatform, 192*8, 0*8);
-	Platform_Setup(s, 0, -1,PLATFORM_TYPE_WRAP_TOP_BOTTOM, 255);
-	
-	levelNutPos = 0;
-	AddNuts();
+	levelActorPos = 0;
+	AddActors();
 
 	SHOW_SPRITES;
 	SHOW_BKG;
 }
 
-void Update_StateLevel1_platform (void) {
+void Update_StateLevel2_platform (void) {
 	Hud_Update();
-	AddNuts();
+	AddActors();
 
 	if (timerlevel == 0) {
 		nutmeg_death = true;

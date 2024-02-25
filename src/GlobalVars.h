@@ -131,6 +131,14 @@ typedef struct {
 	UINT8 y;
 } nutPosT;
 
-void Platform_Setup (Sprite *s, INT8 x, INT8 y, UINT8 steps) BANKED;
+
+// PLATFORMS
+#define PLATFORM_TYPE_BACK_AND_FORTH (0)
+#define PLATFORM_TYPE_WRAP_TOP_BOTTOM (1)
+#define PLATFORM_TYPE_WAITING_TO_DROP (2)
+#define PLATFORM_TYPE_SHAKING (3)
+#define PLATFORM_TYPE_DROPPING (4)
+
+void Platform_Setup (Sprite *s, INT8 x, INT8 y, UINT8 type, UINT8 steps) BANKED;
 
 #endif
