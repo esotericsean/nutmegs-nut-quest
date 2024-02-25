@@ -36,10 +36,6 @@ extern Sprite * spr_camera;
 extern UINT8 nut_region;
 
 static UINT8 camera_delta_y;
-typedef struct {
-	UINT8 x;
-	UINT8 y;
-} nutPosT;
 
 
 static const nutPosT levelNuts [] = 
