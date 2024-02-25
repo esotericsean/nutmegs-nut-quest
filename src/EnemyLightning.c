@@ -33,7 +33,8 @@ static const UWORD pal_flag_flash2[] = {   RGB(31, 31, 31), RGB(23, 25, 26), RGB
 static UINT8 lightningcounter;
 
 
-void Start_EnemyLightning() {
+void Start_EnemyLightning (void) 
+{
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
@@ -48,8 +49,9 @@ void Start_EnemyLightning() {
 	lightningcounter = 0;
 }
 
-void Update_EnemyLightning() {
-	if (lightningcounter >= 0 && lightningcounter < 10) {
+void Update_EnemyLightning (void) 
+{
+	if (lightningcounter < 10) {
 		SetSpriteAnim(THIS, anim_lightning_fall1, 1);
 		TranslateSprite(THIS, 0, 6);
 	}
@@ -100,5 +102,6 @@ void Update_EnemyLightning() {
 	}
 }
 
-void Destroy_EnemyLightning() {
+void Destroy_EnemyLightning (void) 
+{
 }

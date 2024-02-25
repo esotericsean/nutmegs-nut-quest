@@ -34,7 +34,7 @@ void Update_EnemyEarthy(void) {
 		else if (earthydirection == 1) TranslateSprite (THIS, 1, 0);
 	}
 
-	if (earthycounter >= 0 && earthycounter < 350) {
+	if (earthycounter < 350) {
 		if (earthydirection == 1) TranslateSprite (THIS, 4, 0);
 
 		earthydirection = 0; //left

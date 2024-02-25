@@ -30,7 +30,8 @@ Sprite * spr_hand;
 	// 8 = start to close, facing right, left side
 	// 9 = hurt, facing right, left side
 
-void START() {
+void START (void)
+{
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
@@ -44,7 +45,8 @@ void START() {
 	THIS->mirror = NO_MIRROR;
 }
 
-void UPDATE() {
+void UPDATE(void) 
+{
 	//Jump on/hurt hand
 	if (handpos == 4 || handpos == 9) handhurt = 1;
 	else if (handpos == 0 || handpos == 5) handhurt = 0;
@@ -117,5 +119,6 @@ void UPDATE() {
 	}
 }
 
-void DESTROY() {
+void DESTROY(void) 
+{
 }
