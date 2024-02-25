@@ -111,8 +111,8 @@ void Start_StateLevel1_platform (void) {
 	Sprite *s = SpriteManagerAdd(SpritePlatform, 16*8, 3*8);
 	Platform_Setup(s, -1, 1, PLATFORM_TYPE_BACK_AND_FORTH, 7*8);
 
-	s = SpriteManagerAdd (SpritePlatform, 53*8, 14*8);
-	Platform_Setup(s, 1, 0, PLATFORM_TYPE_BACK_AND_FORTH, 26*8);
+	s = SpriteManagerAdd (SpritePlatform, 53*8, 16*8);
+	Platform_Setup(s, 1, 0, PLATFORM_TYPE_BACK_AND_FORTH, 24*8);
 
 	s = SpriteManagerAdd (SpritePlatform, 65*8, 14*8);
 	Platform_Setup(s, 0, -1, PLATFORM_TYPE_BACK_AND_FORTH, 10*8);

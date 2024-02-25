@@ -64,6 +64,7 @@ static const actorPosT levelActors [] =
 	{91, 7, SpritePlatform, 1, 0, PLATFORM_TYPE_BACK_AND_FORTH, 14*8, 0}, // left right
 	{114, 16, SpritePlatform, 1, ((UINT8)-1), PLATFORM_TYPE_BACK_AND_FORTH, 13*8, 0}, // diagonal
 	{119, 3, SpriteAcorn, 0, 0, 0, 0, 0},
+	{136, 16, SpritePlatform, 0, ((UINT8)-1), PLATFORM_TYPE_WRAP_TOP_BOTTOM, 0, 0}, // diagonal
 	{146, 10, EnemyBirdy, 0, 0, 0, 0, 0},
 	{153, 3, SpriteAcorn, 0, 0, 0, 0, 0},
 	{159, 10, EnemyBirdy, 0, 0, 0, 0, 0},
