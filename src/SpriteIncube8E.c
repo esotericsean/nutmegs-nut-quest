@@ -4,11 +4,13 @@
 
 UINT8 moveE;
 
-void Start_SpriteIncube8E() {
+void Start_SpriteIncube8E (void) 
+{
     moveE = 0;
 }
 
-void Update_SpriteIncube8E() {
+void Update_SpriteIncube8E (void) 
+{
     if      (moveE == 10+1) TranslateSprite(THIS, 0, -1);
     else if (moveE == 15+1) TranslateSprite(THIS, 0, -1);
     else if (moveE == 20+1) TranslateSprite(THIS, 0, -1);
@@ -20,5 +22,6 @@ void Update_SpriteIncube8E() {
     moveE++;
 }
 
-void Destroy_SpriteIncube8E() {
+void Destroy_SpriteIncube8E (void) 
+{
 }

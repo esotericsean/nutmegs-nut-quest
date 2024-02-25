@@ -14,11 +14,11 @@
 
 IMPORT_MAP (treemap);
 
-UINT8 collision_tiles_tree[] = {2,3,4,5,7,8,9,10,12,49,50,51,52,53,54,55,56,57,58, 0};
+static const UINT8 collision_tiles_tree[] = {2,3,4,5,7,8,9,10,12,49,50,51,52,53,54,55,56,57,58, 0};
 
 DECLARE_MUSIC(oaktree);
 
-UINT8 cutscenetimer = 0;
+static UINT8 cutscenetimer = 0;
 
 static const unsigned char font_blank2[] = {
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -50,7 +50,8 @@ static const unsigned char font_arrow2[] = {
 0x00,0x00,0x7c,0x7c,0x38,0x38,0x10,0x10
 };
 
-void Start_StateTreeCutscene() {
+void Start_StateTreeCutscene (void) 
+{
 	//UINT8 i;
 	SPRITES_8x16;
 
@@ -84,7 +85,8 @@ void Start_StateTreeCutscene() {
 
 }
 
-void Update_StateTreeCutscene() {
+void Update_StateTreeCutscene (void) 
+{
 	//if you press START at any point of this opening cutscene it jumps to the next cutscene
 	if (KEY_PRESSED(J_START)) {
 		//set variable for first time entering overworld1

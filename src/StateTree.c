@@ -14,15 +14,16 @@
 
 IMPORT_MAP (treemap2);
 
-UINT8 collision_tiles_tree2[] = {2,3,4,5,7,8,9,10,12,49,50,51,52,53,54,55,56,57,58, 0};
+static const UINT8 collision_tiles_tree2[] = {2,3,4,5,7,8,9,10,12,49,50,51,52,53,54,55,56,57,58, 0};
 
 DECLARE_MUSIC(oaktree);
 
 extern Sprite * spr_nutmeg;
 
-UINT16 treecounter = 0;
+static UINT16 treecounter = 0;
 
-void Start_StateTree() {
+void Start_StateTree (void) 
+{
 	SPRITES_8x16;
 
 	treecounter = 0;
@@ -32,7 +33,7 @@ void Start_StateTree() {
 	//SetPalette (BG_PALETTE, 0, 8, bg_palette_tree2, bank_StateTree);
 	//SetPalette (SPRITES_PALETTE, 0, 8, sprites_palette_tree2, bank_StateTree);
 
-	SpriteManagerLoad(35);  	//nutmeg
+	SpriteManagerLoad(35);  //nutmeg
 	SpriteManagerLoad(12); 	//puff1
 	SpriteManagerLoad(13); 	//puff2
 	SpriteManagerLoad(14); 	//cinnamon
@@ -54,7 +55,8 @@ void Start_StateTree() {
 	cutscenemode = enabled;
 }
 
-void Update_StateTree() {
+void Update_StateTree (void) 
+{
 	//if Nutmeg touches the Oak Tree Door, then leave
 	if (spr_nutmeg->x >= 110 && spr_nutmeg->x < 118) SetState(StateOverworld1);
 

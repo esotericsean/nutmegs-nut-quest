@@ -29,9 +29,10 @@ extern Sprite * spr_nutmeg;
 extern Sprite * spr_nutmegbow;
 extern Sprite * spr_camera;
 
-void nutmegBow_update(void) BANKED;
+void nutmegBow_update (void) BANKED;
 
-void Start_StateLevelTree(void) {
+void Start_StateLevelTree(void)
+{
 	SPRITES_8x16;
 
 	pitdeathactive = true;
@@ -71,7 +72,8 @@ void Start_StateLevelTree(void) {
 	SHOW_BKG;
 }
 
-void Update_StateLevelTree(void) {
+void Update_StateLevelTree (void) 
+{
 	//if Nutmeg touches the Oak Tree Door, then leave
 	if (spr_nutmeg->x >= 120 && spr_nutmeg->x < 132 && spr_nutmeg->y >=80 && spr_nutmeg->y < 104)
 	{

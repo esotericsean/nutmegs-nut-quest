@@ -13,7 +13,6 @@
 
 IMPORT_MAP (w1bossmap);
 
-
 UINT16 w1bosscounter = 0;
 
 UINT8 handpos;
@@ -22,8 +21,8 @@ UINT8 handhurt;
 bool abletohurthand;
 UINT8 handhealth;
 
-const UINT8 collision_tiles_levelw1b[] = {44,45,46,47,58,51,70,71,72,73,74,75,76,77,78,79,80,81,0};
-const UINT8 collision_tiles_down_levelw1b[] = {0};
+static const UINT8 collision_tiles_levelw1b[] = {44,45,46,47,58,51,70,71,72,73,74,75,76,77,78,79,80,81,0};
+static const UINT8 collision_tiles_down_levelw1b[] = {0};
 
 DECLARE_MUSIC(thehands2);
 DECLARE_MUSIC(quickdeath);
@@ -37,7 +36,8 @@ extern Sprite * spr_hand;
 static Sprite * spr_spatula;
 static Sprite * spr_popsicle;
 
-void Start_StateW1Boss() {
+void Start_StateW1Boss (void) 
+{
 	w1bosscounter = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
@@ -96,7 +96,8 @@ void Start_StateW1Boss() {
 	SHOW_BKG;
 }
 
-void Update_StateW1Boss() {
+void Update_StateW1Boss (void) 
+{
 	Hud_Update();
 
 	if (nutmeg_death == true) {

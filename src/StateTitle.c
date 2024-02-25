@@ -14,45 +14,47 @@
 IMPORT_MAP (titlemap);
 
 static UINT8 title_counter;
-UINT8 acorn_position;
+static UINT8 acorn_position;
 
 // BG1 //
-const UWORD pal_titleyellow[] = { RGB(31, 31, 31), RGB(9, 23, 27), RGB(28, 27, 9), RGB(22, 21, 5) };
-const UWORD pal_titleyellowpale[] = { RGB(31, 31, 31), RGB(21, 29, 30), RGB(30, 30, 22), RGB(28, 27, 19) };
-const UWORD pal_titleyellowpalest[] = { RGB(31, 31, 31), RGB(27, 30, 30), RGB(30, 30, 28), RGB(30, 29, 27) };
+static const UWORD pal_titleyellow[] = { RGB(31, 31, 31), RGB(9, 23, 27), RGB(28, 27, 9), RGB(22, 21, 5) };
+static const UWORD pal_titleyellowpale[] = { RGB(31, 31, 31), RGB(21, 29, 30), RGB(30, 30, 22), RGB(28, 27, 19) };
+static const UWORD pal_titleyellowpalest[] = { RGB(31, 31, 31), RGB(27, 30, 30), RGB(30, 30, 28), RGB(30, 29, 27) };
 
 // BG 2 //
-const UWORD pal_titlelogo[] = { RGB(9, 23, 27), RGB(23, 14, 11), RGB(17, 10, 7), RGB(13, 6, 5) };
-const UWORD pal_titlelogopale[] = { RGB(21, 29, 30), RGB(29, 23, 20), RGB(26, 21, 19), RGB(23, 19, 18) };
-const UWORD pal_titlelogopalest[] = { RGB(27, 30, 30), RGB(30, 27, 25), RGB(29, 26, 25), RGB(28, 25, 23) };
+static const UWORD pal_titlelogo[] = { RGB(9, 23, 27), RGB(23, 14, 11), RGB(17, 10, 7), RGB(13, 6, 5) };
+static const UWORD pal_titlelogopale[] = { RGB(21, 29, 30), RGB(29, 23, 20), RGB(26, 21, 19), RGB(23, 19, 18) };
+static const UWORD pal_titlelogopalest[] = { RGB(27, 30, 30), RGB(30, 27, 25), RGB(29, 26, 25), RGB(28, 25, 23) };
 
 // BG 3 //
-const UWORD pal_titlefont[] = { RGB(31, 31, 31), RGB(9, 23, 27), RGB(7, 7, 7), 0 };
-const UWORD pal_titlefontpale[] = { RGB(31, 31, 31), RGB(21, 29, 30), RGB(21, 21, 21), RGB(15, 15, 15) };
-const UWORD pal_titlefontpalest[] = { RGB(31, 31, 31), RGB(27, 31, 31), RGB(27, 27, 27), RGB(24, 24, 24) };
+static const UWORD pal_titlefont[] = { RGB(31, 31, 31), RGB(9, 23, 27), RGB(7, 7, 7), 0 };
+static const UWORD pal_titlefontpale[] = { RGB(31, 31, 31), RGB(21, 29, 30), RGB(21, 21, 21), RGB(15, 15, 15) };
+static const UWORD pal_titlefontpalest[] = { RGB(31, 31, 31), RGB(27, 31, 31), RGB(27, 27, 27), RGB(24, 24, 24) };
 
 // BG 4 //
-const UWORD pal_titleacorn[] = { RGB(31, 31, 31), RGB(25, 19, 11), RGB(13, 6, 5), 0 };
-const UWORD pal_titleacornpale[] = { RGB(31, 31, 31), RGB(29, 26, 21), RGB(23, 19, 18), RGB(15, 15, 15) };
-const UWORD pal_titleacornpalest[] = { RGB(31, 31, 31), RGB(30, 29, 27), RGB(29, 27, 26), RGB(24, 24, 24) };
+static const UWORD pal_titleacorn[] = { RGB(31, 31, 31), RGB(25, 19, 11), RGB(13, 6, 5), 0 };
+static const UWORD pal_titleacornpale[] = { RGB(31, 31, 31), RGB(29, 26, 21), RGB(23, 19, 18), RGB(15, 15, 15) };
+static const UWORD pal_titleacornpalest[] = { RGB(31, 31, 31), RGB(30, 29, 27), RGB(29, 27, 26), RGB(24, 24, 24) };
 
 //List of tiles that will be animated
-const unsigned char whitespace[] = {
+static const unsigned char whitespace[] = {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
 };
-const unsigned char titleacorn[] = {
+
+static const unsigned char titleacorn[] = {
 	0x00,0x00,0x00,0x00,0x0d,0x0d,0x0a,0x1e,
 	0x1d,0x17,0x1f,0x23,0x3c,0x26,0x10,0x38
 };
 
-UINT8 collision_tiles_title[] = {1, 0};
+static const UINT8 collision_tiles_title[] = {1, 0};
 
 DECLARE_MUSIC(chase);
 
-UWORD leafPalette[] = { 0, RGB(8, 23, 8), RGB(5, 19, 12), 0 };
+static const UWORD leafPalette[] = { 0, RGB(8, 23, 8), RGB(5, 19, 12), 0 };
 
-void Start_StateTitle() {
+void Start_StateTitle (void) 
+{
     PlayMusic(chase, 1);
     
     SPRITES_8x8;
@@ -80,7 +82,8 @@ void Start_StateTitle() {
 static UINT8 maintimer = 0;
 extern UINT8 backgroundoffsetmain;
 
-void Update_StateTitle() {
+void Update_StateTitle (void) 
+{
 
     maintimer++;
     if (maintimer == 4) {

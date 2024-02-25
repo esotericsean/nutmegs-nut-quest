@@ -9,7 +9,8 @@ extern Sprite * spr_nutmeg;
 
 static const UINT8 anim_topspike_idle[] = {1, 0};
 
-void Start_EnemyTopSpike() {
+void Start_EnemyTopSpike (void) 
+{
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
@@ -23,12 +24,14 @@ void Start_EnemyTopSpike() {
 	THIS->mirror = NO_MIRROR;
 }
 
-void Update_EnemyTopSpike() {
+void Update_EnemyTopSpike (void) 
+{
 	//die if touch topspike
 	if (CheckCollision(THIS, spr_nutmeg) && accelY < 0 && nutmeg_death == false) {
 		nutmeg_hit();
 	}
 }
 
-void Destroy_EnemyTopSpike() {
+void Destroy_EnemyTopSpike (void) 
+{
 }
