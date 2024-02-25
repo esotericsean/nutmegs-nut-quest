@@ -60,7 +60,10 @@ void Update_SpritePlatform(void)
         // nutmeg gets moved with the platform
         if (THIS->custom_data[PLATFORM_STATE] == PLAT_STATE_MOVE)
         {
-            spr_nutmeg->x += (INT8) (THIS->custom_data[PLATFORM_X]);
+            // Translate, so we get collision detection
+            TranslateSprite(spr_nutmeg, (INT8) (THIS->custom_data[PLATFORM_X]), 0);
+            
+            // spr_nutmeg->x += (INT8) (THIS->custom_data[PLATFORM_X]);
             
             // y movement is already taken care of above with locking to the platform
             //spr_nutmeg->y += (INT8) (THIS->custom_data[PLATFORM_Y]);
