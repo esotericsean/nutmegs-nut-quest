@@ -125,4 +125,8 @@ extern UINT8 handhealth;
 
 // if it is a spike level, and collision hurts nutmeg
 extern bool isSpikeLevel;
+
+
+void Platform_Setup (Sprite *s, INT8 x, INT8 y, UINT8 steps) BANKED;
+
 #endif

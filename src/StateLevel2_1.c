@@ -35,7 +35,7 @@ extern Sprite * spr_camera;
 //nutmeg sprite region
 extern UINT8 nut_region;
 
-void Start_StateLevel2_1() {
+void Start_StateLevel2_1 (void) {
 	levelCounter = 0;
 	levelorientation = horizontal;
 
@@ -72,7 +72,7 @@ void Start_StateLevel2_1() {
 	SHOW_BKG;
 }
 
-void Update_StateLevel2_1() {
+void Update_StateLevel2_1 (void) {
 	Hud_Update();
 
 	if (timerlevel == 0) {

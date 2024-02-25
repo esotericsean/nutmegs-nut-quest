@@ -159,8 +159,8 @@ void main(void) {
 	next_state = StateLevelTree;
 	levelbeat = true;
 	level_max = 20;
-	level_current = 0;
-	level_next = 1;
+	level_current = 12;
+	level_next = 12;
 	nutmeglives = 99;
 	add_LCD (LCD_NoSpritesOnHUD_isr);
 	// END TESTING
