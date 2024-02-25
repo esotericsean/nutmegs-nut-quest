@@ -69,7 +69,7 @@ void Update_SpritePlatform(void)
     {
         if ((INT8) (THIS->custom_data[PLATFORM_Y]) < 0)
         {
-            if (THIS->y > 60000)
+            if ((THIS->y > 60000) && (THIS->y < 65530))
             {
                 THIS->y = 17 * 8;
             }
