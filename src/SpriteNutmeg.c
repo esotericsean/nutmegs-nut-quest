@@ -591,6 +591,18 @@ void nutmeg_hit(void) BANKED
     }
 }
 
+bool nutmeg_isInsideXY(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) BANKED
+{
+    if ((spr_nutmeg->x > x1)
+      && (spr_nutmeg->x < x2)
+      && (spr_nutmeg->y > y1)
+      && (spr_nutmeg->y < y2))
+    {
+        return true;
+    }
+    return false;
+}
+
 // WARNING - Not called with THIS pointing to spr_nutmeg
 void nutmeg_Animate(void) BANKED
 {

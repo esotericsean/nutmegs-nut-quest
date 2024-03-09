@@ -561,7 +561,8 @@ void Update_StateOverworld1() {
 			else if (level_current == 11) SetState(StateLevel2_2);
 			else if (level_current == 12) SetState(StateLevel2_platform);
 			else if (level_current == 13) SetState(StateLevel1_platform);
-			else if (level_current >= 14) SetState(StateLevel2_glidefall);
+			else if (level_current == 14) SetState(StateLevel2_glidefall);
+			else if (level_current >= 15) SetState(StateLevel2_multi);
 			return;
 		}
 	}

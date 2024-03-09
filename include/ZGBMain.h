@@ -30,6 +30,7 @@ _STATE(StateLevel2_2)\
 _STATE(StateLevel2_glidefall)\
 _STATE(StateLevel1_platform)\
 _STATE(StateLevel2_platform)\
+_STATE(StateLevel2_multi)\
 STATE_DEF_END
 
 #define SPRITES \

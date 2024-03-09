@@ -5,6 +5,8 @@
 
 #include "../src/GlobalVars.h"
 
+bool showLevelStart;
+
 static const unsigned char StrLevel[] = { 0x54, 0x55, 0x56, 0x57, 0x58};
 static const unsigned char StrStart[] = {0x59, 0x5a, 0x5b, 0x5c, 0x5d, 0x5e};
 
@@ -57,6 +59,7 @@ void LevelStart_Init (UINT8 xstart, UINT8 ystart) BANKED
     c = 0;
 	x = xstart;
 	y = ystart;
+	showLevelStart = true;
 }
 
 static void drawLevelStart(void)
@@ -115,6 +118,10 @@ static void drawBlank(void)
 }
 void LevelStart_Update(void) BANKED
 {
+	if (!showLevelStart)
+	{
+		return;
+	}
     c++;
     
     if (c == 10) 
@@ -129,6 +136,7 @@ void LevelStart_Update(void) BANKED
     }
     else if (c == 100) {
         drawBlank();
+		showLevelStart = false;
     }
     else {
         // don't advance past 101, if we get called more often 
