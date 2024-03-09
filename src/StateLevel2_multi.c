@@ -266,25 +266,36 @@ void Update_StateLevel2_multi (void) {
 	}
 	
 	if (cutscenemode == enabled) {
-		//Level Start!
-		//Make Nutmeg Walk In
-		if (levelCounter == 0) {
-			cutscenewalkright = true;
-		}
-		else if (levelCounter == 36) {
-			cutscenewalkright = false;
-			//but leave cutscene mode enabled still until Level Start! goes away
-		}
-		else if (levelCounter == 100) {
-			cutscenemode = disabled;
-			if (levelbeat == false) {
-				__critical { PlayMusic(mushrooms, 1); }
+		
+		if (levelbeat == true) {
+			if (endlevel_counter >= 100) {
+				NextRoom();
+				return;
 			}
+		 	endlevel_counter++;
+		}	
+		else
+		{
+			//Level Start!
+			//Make Nutmeg Walk In
+			if (levelCounter == 0) {
+				cutscenewalkright = true;
+			}
+			else if (levelCounter == 36) {
+				cutscenewalkright = false;
+				//but leave cutscene mode enabled still until Level Start! goes away
+			}
+			else if (levelCounter == 100) {
+				cutscenemode = disabled;
+				if (levelbeat == false) {
+					__critical { PlayMusic(mushrooms, 1); }
+				}
+			}
+
+			LevelStart_Update();
+
+			levelCounter++;
 		}
-
-		LevelStart_Update();
-
-		levelCounter++;
 	}
 	else
 	{
@@ -307,13 +318,7 @@ void Update_StateLevel2_multi (void) {
 		FlagPole_Animate();
 	}
 
-	if (levelbeat == true) {
-		if (endlevel_counter >= 100) {
-			NextRoom();
-			return;
-		}
-		 endlevel_counter++;
-	}
+	
 
 	if (nutmeg_death == false)
 	{
