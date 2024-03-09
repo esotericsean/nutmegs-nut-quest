@@ -606,6 +606,10 @@ bool nutmeg_isInsideXY(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) BANKE
 // WARNING - Not called with THIS pointing to spr_nutmeg
 void nutmeg_Animate(void) BANKED
 {
+    if (nutmeg_death == true) {
+        return;
+    }
+    
      /* * * * * * * * * * * * * * * * * * * */
     /*             animation               */
     /* * * * * * * * * * * * * * * * * * * */
