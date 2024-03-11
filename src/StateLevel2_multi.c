@@ -129,7 +129,6 @@ void StartRoom2 (void)
 	mapRight = 87*8;
 
 	SetExit (70, 21, 90, 22);
-	__critical { PlayMusic(quickstart, 1); }
 
 	if (hasbow == true) {
 		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49);
@@ -176,8 +175,6 @@ void StartRoom3 (void)
 
 	mapRight = 19*8;
 	SetExit (14, 30, 15, 37);
-
-	__critical { PlayMusic(quickstart, 1); }
 
 	if (hasbow == true) {
 		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49);
@@ -287,7 +284,7 @@ void Update_StateLevel2_multi (void) {
 			}
 			else if (levelCounter == 100) {
 				cutscenemode = disabled;
-				if (levelbeat == false) {
+				if ((levelbeat == false) && (roomNumber == 1)) {
 					__critical { PlayMusic(mushrooms, 1); }
 				}
 			}
@@ -317,8 +314,6 @@ void Update_StateLevel2_multi (void) {
 	{
 		FlagPole_Animate();
 	}
-
-	
 
 	if (nutmeg_death == false)
 	{
