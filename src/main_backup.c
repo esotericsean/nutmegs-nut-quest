@@ -158,7 +158,7 @@ void main(void) {
 	W1LevelSelection = 0;
 	next_state = StateLevelTree;
 	levelbeat = true;
-	level_max = 20;
+	level_max = 25;
 	level_current = 12;
 	level_next = 12;
 	nutmeglives = 99;

@@ -12,6 +12,7 @@
 
 IMPORT_MAP (overworld1map);
 IMPORT_MAP (overworld2map);
+IMPORT_MAP (overworld3map);
 
 // OVerworld map scene
 
@@ -32,8 +33,10 @@ UINT8 W1LevelSelection; 		// nutmeg starts at level 1
 bool levelbeat;
 static UINT8 overworldNum = 0;
 
-#define ENTERING_WORLD_2 (0xfe)
+#define ENTERING_WORLD_2_FROM_1 (0xfe)
 #define ENTERING_WORLD_1 (0xfd)
+#define ENTERING_WORLD_3_FROM_2 (0xfc)
+#define ENTERING_WORLD_2_FROM_3 (0xfb)
 
 const unsigned char overworld1_tree[] = {
 	0x36,0x00,0x5b,0x00,0xff,0x00,0xbb,0x00,
@@ -105,7 +108,13 @@ static const mapLevelDirectionT levelDirections[] = {
 	{J_DOWN, J_RIGHT},
 	{J_LEFT, J_UP},
 	{J_LEFT, J_UP},
-	{J_DOWN, 0xff}, // 2-Boss
+	{J_DOWN, J_RIGHT}, // 2-Boss
+	{J_LEFT, J_RIGHT}, // 3-1
+	{J_LEFT, J_DOWN},
+	{J_RIGHT, J_LEFT},
+	{J_LEFT, J_RIGHT},
+	{J_UP, J_DOWN},
+	{J_UP, 0xff}, // 3-Boss
 };
 
 typedef struct mapStepT {
@@ -164,7 +173,7 @@ static const mapStepT steps_ow1 [] = {
 
 
 static const mapStepT steps_ow2 [] = {
-	{254, 12, 9}, // 255 = special value to force off the left hand side of the map
+	{254, 12, 9}, // 254 = special value to force off the left hand side of the map
 	{0, 12, 9},
 	{1, 12, 9},
 	{2, 12, 9},
@@ -203,6 +212,62 @@ static const mapStepT steps_ow2 [] = {
 	{17, 6, 18},
 	{17, 5, 18},
 	{17, 4, 19},
+	{18, 4, 19},
+	{19, 4, 19},
+	{20, 4, 20},
+	{0xff, 0xff, 0xff} // end of array
+};
+
+static const mapStepT steps_ow3 [] = {
+	{254, 4, 19}, // 254 = special value to force off the left hand side of the map
+	{0, 4, 19},
+	{1, 4, 19},
+	{2, 4, 19},
+	{3, 4, 19},
+	{4, 4, 20},
+	{5, 4, 20},
+	{6, 4, 20},
+	{7, 4, 20},
+	{8, 4, 20},
+	{9, 4, 20},
+	{9, 5, 20},
+	{10, 5, 20},
+	{11, 5, 20},
+	{12, 5, 20},
+	{12, 4, 20},
+	{13, 4, 20},
+	{14, 4, 21},
+	{14, 5, 21},
+	{14, 6, 21},
+	{14, 7, 21},
+	{14, 8, 21},
+	{14, 9, 21},
+	{13, 9, 21},
+	{12, 9, 22},
+	{11, 9, 22},
+	{10, 9, 22},
+	{9, 9, 22},
+	{8, 9, 22},
+	{7, 9, 22},
+	{7, 8, 22},
+	{7, 7, 22},
+	{8, 7, 22},
+	{9, 7, 23},
+	{10, 7, 23},
+	{11, 7, 23},
+	{12, 7, 23},
+	{13, 7, 23},
+	{14, 7, 23},
+	{15, 7, 23},
+	{16, 7, 23},
+	{16, 8, 24},
+	{16, 9, 24},
+	{16, 10, 24},
+	{16, 11, 24},
+	{16, 12, 24},
+	{16, 13, 24},
+	{16, 14, 24},
+	{16, 15, 25},
 	{0xff, 0xff, 0xff} // end of array
 };
 
@@ -279,8 +344,19 @@ void Setup_HUD(void)
 	if (overworldNum == 2)
 	{
 		level = level_current + 1 - (getTens(level_current) * 10);
+		if (level_current < 11)
+		{
+			level = 1;
+		}
 	} 
-
+	else if (overworldNum == 3)
+	{
+		level = level_current - 19;
+		if (level_current < 21)
+		{
+			level = 1;
+		}
+	}
 	level += TILE_0;
 
 	if (level_current == 0)
@@ -288,7 +364,7 @@ void Setup_HUD(void)
 		// show the tree icon?
 		level = 0x1e;
 	}
-	else if (level_current == 9)
+	else if ((level_current == 9) || (level_current == 19) || (level_current == 25))
 	{
 		// show the boss icon?
 		level = 0x27;
@@ -319,6 +395,11 @@ static void SetTinyNutmegAtCurrentLevel(void)
 		// move nutmeg off the left side of the screen
 		spr_tinyNutmeg->x = 65527;
 	}
+	if (overworldNum == 3 && level == 19)
+	{
+		// move nutmeg off the left side of the screen
+		spr_tinyNutmeg->x = 65527;
+	}
 }
 
 static void startAutoMoveTowards (UINT8 towards)
@@ -338,7 +419,7 @@ static void startAutoMoveTowards (UINT8 towards)
 	}
 }
 
-void Start_StateOverworld1() {
+void Start_StateOverworld1 (void) {
 	SPRITES_8x16;
 
 	isAcornMoving = false;
@@ -350,11 +431,18 @@ void Start_StateOverworld1() {
 		currentMapSteps = steps_ow1;
 		InitScroll(BANK(overworld1map), &overworld1map, collision_tiles_overworld1, 0);
 	}
-	else 
+	else if (((level_current >= 10) && (level_current < 20))
+		|| (level_current == ENTERING_WORLD_2_FROM_1)
+		|| (level_current == ENTERING_WORLD_2_FROM_3))
 	{
 		overworldNum = 2;
 		currentMapSteps = steps_ow2;
 		InitScroll(BANK(overworld2map), &overworld2map, collision_tiles_overworld1, 0);
+	} else
+	{
+		overworldNum = 3;
+		currentMapSteps = steps_ow3;
+		InitScroll(BANK(overworld3map), &overworld3map, collision_tiles_overworld1, 0);
 	}
 
 	// on world transistions do some fiddling to make nutmeg walk to the correct level
@@ -363,12 +451,21 @@ void Start_StateOverworld1() {
 		level_current = 10;
 		level_next = 9;
 		startAutoMoveTowards(level_next);
-	} else if (level_current == ENTERING_WORLD_2)
+	} else if (level_current == ENTERING_WORLD_2_FROM_1)
 	{
 		level_current = 9;
 		level_next = 10;
 		startAutoMoveTowards(level_next);
-
+	} else if (level_current == ENTERING_WORLD_2_FROM_3)
+	{
+		level_current = 20;
+		level_next = 19;
+		startAutoMoveTowards(level_next);
+	} else if (level_current == ENTERING_WORLD_3_FROM_2)
+	{
+		level_current = 19;
+		level_next = 20;
+		startAutoMoveTowards(level_next);
 	}
 
 	if (levelbeat)
@@ -456,7 +553,12 @@ static void moveTowardsNextLevel(void)
 				level_current = level_next;
 				if ((overworldNum == 1) && (level_next == 10))
 				{
-					level_current = ENTERING_WORLD_2;
+					level_current = ENTERING_WORLD_2_FROM_1;
+					SetState (StateOverworldChange);
+				}
+				else if ((overworldNum == 2) && (level_next == 20))
+				{
+					level_current = ENTERING_WORLD_3_FROM_2;
 					SetState (StateOverworldChange);
 				}
 				else
@@ -472,6 +574,11 @@ static void moveTowardsNextLevel(void)
 				if ((overworldNum == 2) && (level_next == 9))
 				{
 					level_current = ENTERING_WORLD_1;
+					SetState (StateOverworldChange);
+				}
+				if ((overworldNum == 3) && (level_next == 19))
+				{
+					level_current = ENTERING_WORLD_2_FROM_3;
 					SetState (StateOverworldChange);
 				}
 				else
@@ -531,7 +638,8 @@ static void moveTowardsNextLevel(void)
 		moveCount = 0;
 	}
 }
-void Update_StateOverworld1() {
+
+void Update_StateOverworld1 (void) {
 	animateWater ();
 
 	// level selection
@@ -541,7 +649,7 @@ void Update_StateOverworld1() {
 		{
 			startAutoMoveTowards (level_current-1);
 		}
-		else if ((levelDirections[level_current].next == j) && (level_current < 19))
+		else if ((levelDirections[level_current].next == j) && (level_current < 25))
 		{
 			startAutoMoveTowards (level_current+1);
 		}
