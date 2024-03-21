@@ -268,6 +268,10 @@ static const mapStepT steps_ow3 [] = {
 	{16, 13, 24},
 	{16, 14, 24},
 	{16, 15, 25},
+	{16, 16, 25},
+	{16, 17, 25},
+	{16, 18, 25},
+	{16, 19, 26},
 	{0xff, 0xff, 0xff} // end of array
 };
 
@@ -297,7 +301,31 @@ static void LightenPath (UINT8 topLevel)
 
 	do
 	{
-		set_tile_xy ( p->x, p->y, PAL_LIGHT_PATH);
+		if ((overworldNum == 1) && (p->x == 15) && (p->y == 12))
+		{
+			// change the boss tile instead of the attribute
+			VBK_REG=0;
+			set_tile_xy(p->x, p->y, 0x27);
+			VBK_REG=1;
+		}
+		else if ((overworldNum == 2) && (p->x == 17) && (p->y == 4))
+		{
+			// change the boss tile instead of the attribute
+			VBK_REG=0;
+			set_tile_xy(p->x, p->y, 0x27);
+			VBK_REG=1;
+		}
+		else if ((overworldNum == 3) && (p->x == 16) && (p->y == 15))
+		{
+			// change the boss tile instead of the attribute
+			VBK_REG=0;
+			set_tile_xy(p->x, p->y, 0x27);
+			VBK_REG=1;
+		}
+		else
+		{
+			set_tile_xy ( p->x, p->y, PAL_LIGHT_PATH);
+		}
 		p++;
 	} while ((p->level != topLevel) && (p->level != 0xff));
 
