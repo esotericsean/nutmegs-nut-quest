@@ -105,7 +105,8 @@ extern Sprite * spr_camera;
 
 
 
-void Start_StateLevel6() {
+void Start_StateLevel6 (void) 
+{
 	level6counter = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
@@ -142,7 +143,8 @@ void Start_StateLevel6() {
 	SHOW_BKG;
 }
 
-void Update_StateLevel6() {
+void Update_StateLevel6 (void) 
+{
 	Hud_Update();
 
 	if (timerlevel == 0)

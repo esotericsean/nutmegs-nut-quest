@@ -32,7 +32,8 @@ extern Sprite * spr_nutmeg;
 extern Sprite * spr_nutmegbow;
 extern Sprite * spr_camera;
 
-void Start_StateLevel2() {
+void Start_StateLevel2 (void) 
+{
 	level2counter = 0;
 
 	levelorientation = horizontal;
@@ -62,7 +63,8 @@ void Start_StateLevel2() {
 	SHOW_BKG;
 }
 
-void Update_StateLevel2() {
+void Update_StateLevel2 (void)
+{
 	Hud_Update();
 
 	if (timerlevel == 0)

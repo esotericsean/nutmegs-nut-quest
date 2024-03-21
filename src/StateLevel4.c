@@ -32,7 +32,8 @@ DECLARE_MUSIC(quickdeath);
 extern Sprite * spr_nutmeg;
 extern Sprite * spr_camera;
 
-void Start_StateLevel4() {
+void Start_StateLevel4 (void) 
+{
 	level4counter = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
@@ -61,7 +62,8 @@ void Start_StateLevel4() {
 	SHOW_BKG;
 }
 
-void Update_StateLevel4() {
+void Update_StateLevel4 (void) 
+{
 	Hud_Update();
 
 	if (timerlevel == 0) 

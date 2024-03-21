@@ -142,7 +142,8 @@ static const unsigned char rainsplash2_pt4[] = {
 	0x80,0x00,0x00,0x00,0x02,0x00,0x00,0x00
 };
 
-void Start_StateLevel5() {
+void Start_StateLevel5 (void) 
+{
 	level5counter = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
@@ -175,7 +176,8 @@ void Start_StateLevel5() {
 	SHOW_BKG;
 }
 
-void Update_StateLevel5() {
+void Update_StateLevel5 (void) 
+{
 	Hud_Update();
 
 	if (timerlevel == 0)
