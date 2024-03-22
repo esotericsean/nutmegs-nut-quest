@@ -290,9 +290,9 @@ static const mapStepT *mapStepForLevel (UINT8 l)
 static void LightenPath (UINT8 topLevel)
 {
 	//change level dots color palettes when beating levels
-	VBK_REG = 1;
+	
 	const mapStepT *p = currentMapSteps;
-
+	uint8_t lastStage = p->level;
 	if (overworldNum == 1)
 	{
 		// skip highlighting the tree
@@ -301,31 +301,68 @@ static void LightenPath (UINT8 topLevel)
 
 	do
 	{
-		if ((overworldNum == 1) && (p->x == 15) && (p->y == 12))
+		
+		if (overworldNum == 1)
 		{
-			// change the boss tile instead of the attribute
-			VBK_REG=0;
-			set_tile_xy(p->x, p->y, 0x27);
+			if (p->level == lastStage)
+			{	
+				set_tile_xy ( p->x, p->y, 37);
+			}
+			else if (p->level == 9)
+			{
+				// change the boss tile instead of the attribute
+				set_tile_xy(p->x, p->y, 39);
+			}
+			else
+			{
+				// change the boss tile instead of the attribute
+				set_tile_xy(p->x, p->y, 36);
+			}
 			VBK_REG=1;
-		}
-		else if ((overworldNum == 2) && (p->x == 17) && (p->y == 4))
-		{
-			// change the boss tile instead of the attribute
+			set_tile_xy(p->x, p->y, 6);
 			VBK_REG=0;
-			set_tile_xy(p->x, p->y, 0x27);
-			VBK_REG=1;
 		}
-		else if ((overworldNum == 3) && (p->x == 16) && (p->y == 15))
+		else if (overworldNum == 2) 
 		{
-			// change the boss tile instead of the attribute
+			if (p->level == lastStage)
+			{	
+				set_tile_xy ( p->x, p->y, 37);
+			}
+			else if (p->level == 19)
+			{
+				// change the boss tile instead of the attribute
+				set_tile_xy(p->x, p->y, 39);
+			}
+			else
+			{
+				// change the boss tile instead of the attribute
+				set_tile_xy(p->x, p->y, 36);
+			}
+			VBK_REG=1;
+			set_tile_xy(p->x, p->y, 7);
 			VBK_REG=0;
-			set_tile_xy(p->x, p->y, 0x27);
-			VBK_REG=1;
 		}
-		else
+		else if (overworldNum == 3) 
 		{
-			set_tile_xy ( p->x, p->y, PAL_LIGHT_PATH);
+			if (p->level == lastStage)
+			{	
+				set_tile_xy ( p->x, p->y, 37);
+			}
+			else if (p->level == 25)
+			{
+				// change the boss tile instead of the attribute
+				set_tile_xy(p->x, p->y, 39);
+			}
+			else
+			{
+				// regular levels have a new tile and palette
+				set_tile_xy(p->x, p->y, 36);
+			}
+			VBK_REG=1;
+			set_tile_xy(p->x, p->y, 3);
+			VBK_REG=0;
 		}
+		lastStage = p->level;
 		p++;
 	} while ((p->level != topLevel) && (p->level != 0xff));
 
@@ -367,32 +404,32 @@ static void twoDigitsAt (UINT8 x, UINT8 y, UINT8 val)
 
 void Setup_HUD(void)
 {
-	UINT8 level = level_current;
+	UINT8 level = level_next;
 
 	if (overworldNum == 2)
 	{
-		level = level_current + 1 - (getTens(level_current) * 10);
-		if (level_current < 11)
+		level = level_next + 1 - (getTens(level_next) * 10);
+		if (level_next < 11)
 		{
 			level = 1;
 		}
 	} 
 	else if (overworldNum == 3)
 	{
-		level = level_current - 19;
-		if (level_current < 21)
+		level = level_next - 19;
+		if (level_next < 21)
 		{
 			level = 1;
 		}
 	}
 	level += TILE_0;
 
-	if (level_current == 0)
+	if (level_next == 0)
 	{
 		// show the tree icon?
 		level = 0x1e;
 	}
-	else if ((level_current == 9) || (level_current == 19) || (level_current == 25))
+	else if ((level_next == 9) || (level_next == 19) || (level_next == 25))
 	{
 		// show the boss icon?
 		level = 0x27;
