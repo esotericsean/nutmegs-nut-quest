@@ -133,6 +133,8 @@ UINT8 moveCount = 0;
 // The map step the player is currently moving towards (if automove is on)
 static const mapStepT * movingToStep;
 
+static uint8_t unlockedPalette = 3;
+static uint8_t bossLevel = 9;
 #define TILE_0 (0x29)
 
 static const mapStepT steps_ow1 [] = {
@@ -287,88 +289,46 @@ static const mapStepT *mapStepForLevel (UINT8 l)
 	return p;
 }
 
-static void LightenPath (UINT8 topLevel)
+static void LightenPath (void)
 {
 	//change level dots color palettes when beating levels
-	
 	const mapStepT *p = currentMapSteps;
 	uint8_t lastStage = p->level;
+	bool done = false;
 	if (overworldNum == 1)
 	{
 		// skip highlighting the tree
 		p ++;
 	}
 
-	do
+	while ((done == false) && (p->level != 0xff))
 	{
+		if (p->level == lastStage)
+		{	
+			set_tile_xy ( p->x, p->y, 37);
+		}
+		else if (p->level == bossLevel)
+		{
+			// change the boss tile instead of the attribute
+			set_tile_xy(p->x, p->y, 39);
+		}
+		else
+		{
+			// regular levels have a new tile and palette
+			set_tile_xy(p->x, p->y, 36);
+		}
 		
-		if (overworldNum == 1)
-		{
-			if (p->level == lastStage)
-			{	
-				set_tile_xy ( p->x, p->y, 37);
-			}
-			else if (p->level == 9)
-			{
-				// change the boss tile instead of the attribute
-				set_tile_xy(p->x, p->y, 39);
-			}
-			else
-			{
-				// change the boss tile instead of the attribute
-				set_tile_xy(p->x, p->y, 36);
-			}
-			VBK_REG=1;
-			set_tile_xy(p->x, p->y, 6);
-			VBK_REG=0;
-		}
-		else if (overworldNum == 2) 
-		{
-			if (p->level == lastStage)
-			{	
-				set_tile_xy ( p->x, p->y, 37);
-			}
-			else if (p->level == 19)
-			{
-				// change the boss tile instead of the attribute
-				set_tile_xy(p->x, p->y, 39);
-			}
-			else
-			{
-				// change the boss tile instead of the attribute
-				set_tile_xy(p->x, p->y, 36);
-			}
-			VBK_REG=1;
-			set_tile_xy(p->x, p->y, 7);
-			VBK_REG=0;
-		}
-		else if (overworldNum == 3) 
-		{
-			if (p->level == lastStage)
-			{	
-				set_tile_xy ( p->x, p->y, 37);
-			}
-			else if (p->level == 25)
-			{
-				// change the boss tile instead of the attribute
-				set_tile_xy(p->x, p->y, 39);
-			}
-			else
-			{
-				// regular levels have a new tile and palette
-				set_tile_xy(p->x, p->y, 36);
-			}
-			VBK_REG=1;
-			set_tile_xy(p->x, p->y, 3);
-			VBK_REG=0;
-		}
-		lastStage = p->level;
-		p++;
-	} while ((p->level != topLevel) && (p->level != 0xff));
+		set_attribute_xy(p->x, p->y, unlockedPalette);
 
-	// color the current level as well
-	set_tile_xy ( p->x, p->y, PAL_LIGHT_PATH);
-	VBK_REG = 0;
+		lastStage = p->level;
+
+		if (p->level >= level_max) 
+		{
+			// if we have just adjusted the current top level, we are done
+			done = true;
+		}
+		p++;
+	} 
 }
 
 static UINT8 getTens (UINT8 full)
@@ -495,6 +455,8 @@ void Start_StateOverworld1 (void) {
 		overworldNum = 1;
 		currentMapSteps = steps_ow1;
 		InitScroll(BANK(overworld1map), &overworld1map, collision_tiles_overworld1, 0);
+		unlockedPalette = 6;
+		bossLevel = 9;
 	}
 	else if (((level_current >= 10) && (level_current < 20))
 		|| (level_current == ENTERING_WORLD_2_FROM_1)
@@ -503,11 +465,15 @@ void Start_StateOverworld1 (void) {
 		overworldNum = 2;
 		currentMapSteps = steps_ow2;
 		InitScroll(BANK(overworld2map), &overworld2map, collision_tiles_overworld1, 0);
+		unlockedPalette = 7;
+		bossLevel = 19;
 	} else
 	{
 		overworldNum = 3;
 		currentMapSteps = steps_ow3;
 		InitScroll(BANK(overworld3map), &overworld3map, collision_tiles_overworld1, 0);
+		unlockedPalette = 3;
+		bossLevel = 25;
 	}
 
 	// on world transistions do some fiddling to make nutmeg walk to the correct level
@@ -536,10 +502,10 @@ void Start_StateOverworld1 (void) {
 	if (levelbeat)
 	{	
 		// Did we beat a new level
-		if (level_current == level_max)
+		if (level_current >= level_max)
 		{
 			// update the max
-			level_max++;
+			level_max = level_current+1;
 
 			// start moving towads the new level
 			startAutoMoveTowards (level_max);
@@ -548,7 +514,7 @@ void Start_StateOverworld1 (void) {
 		levelbeat = false;
 	}
 
-	LightenPath(level_max);
+	LightenPath();
 	Setup_HUD();
 
 	// sprites
