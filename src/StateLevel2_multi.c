@@ -207,7 +207,7 @@ void NextRoom (void)
 	roomNumber ++;
 	if (roomNumber > maxRoomNumber)
 	{
-		SetState(StateOverworld1);
+		SetState(StateOverworld);
 		return;
 	}
 
@@ -253,7 +253,7 @@ void Update_StateLevel2_multi (void) {
 			}
 			else if (GameOver == false) {
 				nutmeg_setupNewLife();
-				SetState(StateOverworld1); // change to correct world
+				SetState(StateOverworld); // change to correct world
 			}
 			return;
 		}

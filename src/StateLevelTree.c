@@ -77,6 +77,6 @@ void Update_StateLevelTree (void)
 	//if Nutmeg touches the Oak Tree Door, then leave
 	if (spr_nutmeg->x >= 120 && spr_nutmeg->x < 132 && spr_nutmeg->y >=80 && spr_nutmeg->y < 104)
 	{
-		SetState(StateOverworld1);
+		SetState(StateOverworld);
 	}
 }

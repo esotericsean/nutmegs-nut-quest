@@ -17,5 +17,5 @@ void Start_StateOverworldChange (void)
 // we just want to hop straight back to the overworld map
 void Update_StateOverworldChange (void) 
 {
-	SetState(StateOverworld1);
+	SetState(StateOverworld);
 }

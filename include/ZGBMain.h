@@ -7,7 +7,7 @@ _STATE(StateLogo)\
 _STATE(StateTitle)\
 _STATE(StateTreeCutscene)\
 _STATE(StateLevel1)\
-_STATE(StateOverworld1)\
+_STATE(StateOverworld)\
 _STATE(StateCutscene1)\
 _STATE(StateCutscene2)\
 _STATE(StateCutscene3)\

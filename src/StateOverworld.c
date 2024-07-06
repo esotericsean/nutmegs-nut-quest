@@ -23,14 +23,17 @@ IMPORT_MAP (overworld3map);
 //												   //
 /////////////////////////////////////////////////////
 
-static UINT8 waterAnimCounter = 0; // water animation counter
-
-UINT8 walkCounter = 0;
-UINT8 bossflash = 0;
+// globals
 UINT8 W1LevelSelection; 		// nutmeg starts at level 1
 								// level 0 is the tree
 								// mushroom is level 4
 bool levelbeat;
+
+// local
+static UINT8 waterAnimCounter = 0; // water animation counter
+
+static UINT8 walkCounter = 0;
+static UINT8 bossflash = 0;
 static UINT8 overworldNum = 0;
 
 #define ENTERING_WORLD_2_FROM_1 (0xfe)
@@ -444,7 +447,7 @@ static void startAutoMoveTowards (UINT8 towards)
 	}
 }
 
-void Start_StateOverworld1 (void) {
+void Start_StateOverworld (void) {
 	SPRITES_8x16;
 
 	// Setup the map steps for the current overworld;
@@ -668,7 +671,7 @@ static void moveTowardsNextLevel(void)
 	}
 }
 
-void Update_StateOverworld1 (void) {
+void Update_StateOverworld (void) {
 	animateWater ();
 
 	// level selection

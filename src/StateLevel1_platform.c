@@ -170,7 +170,7 @@ void Update_StateLevel1_platform (void) {
 			}
 			else if (GameOver == false) {
 				nutmeg_setupNewLife();
-				SetState(StateOverworld1); // change to correct world
+				SetState(StateOverworld); // change to correct world
 			}
 			return;
 		}
@@ -221,7 +221,7 @@ void Update_StateLevel1_platform (void) {
 
 	
 		if (endlevel_counter >= 100) {
-			SetState(StateOverworld1);
+			SetState(StateOverworld);
 		}
 
 		endlevel_counter++;

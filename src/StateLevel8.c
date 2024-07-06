@@ -82,7 +82,7 @@ void Update_StateLevel8 (void)
 			}
 			else if (GameOver == false) {
 				nutmeg_setupNewLife();
-				SetState(StateOverworld1); // change to correct world
+				SetState(StateOverworld); // change to correct world
 			}
 			return;
 		}
@@ -140,7 +140,7 @@ void Update_StateLevel8 (void)
 			//cutscenewalkright = false;
 			//cutscenemode = disabled;
 
-			SetState(StateOverworld1);
+			SetState(StateOverworld);
 		}
 
 		if (endlevel_counter8 < 250) endlevel_counter8++;

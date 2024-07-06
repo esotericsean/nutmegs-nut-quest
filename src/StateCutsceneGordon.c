@@ -198,7 +198,7 @@ void Update_StateCutsceneGordon(void) {
 
     //end
     if (cutscenegordoncounter >= 840) {
-        SetState(StateOverworld1);
+        SetState(StateOverworld);
     }
     
     cutscenegordoncounter++;
@@ -208,6 +208,6 @@ void Update_StateCutsceneGordon(void) {
     if (cutscenegordonspeed > cutscenegordonspeedlimit) cutscenegordonspeed = 0;
 
     if (KEY_PRESSED(J_START)) {
-        SetState(StateOverworld1);
+        SetState(StateOverworld);
     }
 }

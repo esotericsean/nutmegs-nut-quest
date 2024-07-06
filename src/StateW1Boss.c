@@ -111,7 +111,7 @@ void Update_StateW1Boss (void)
 			}
 			else if (GameOver == false) {
 				nutmeg_setupNewLife();
-				SetState(StateOverworld1); // change to correct world
+				SetState(StateOverworld); // change to correct world
 			}
 			return;
 		}
@@ -282,7 +282,7 @@ void Update_StateW1Boss (void)
 		}
 
 		if (w1bosscounter == 200) {
-			SetState (StateOverworld1);
+			SetState (StateOverworld);
 
 			//flagpole_activated = 1;
 			levelbeat = true;

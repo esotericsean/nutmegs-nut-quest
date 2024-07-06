@@ -58,7 +58,7 @@ void Start_StateTree (void)
 void Update_StateTree (void) 
 {
 	//if Nutmeg touches the Oak Tree Door, then leave
-	if (spr_nutmeg->x >= 110 && spr_nutmeg->x < 118) SetState(StateOverworld1);
+	if (spr_nutmeg->x >= 110 && spr_nutmeg->x < 118) SetState(StateOverworld);
 
 	if (treecounter == 0) {
 		cutscenewalkleft = true;

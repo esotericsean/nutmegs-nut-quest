@@ -45,7 +45,8 @@ bool firstplay = true;
 
 bool deathmusicplayed = false;
 
-void Start_StateLevel1() {
+void Start_StateLevel1(void) 
+{
 	level1counter = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
@@ -77,7 +78,8 @@ void Start_StateLevel1() {
 	SHOW_BKG;
 }
 
-void Update_StateLevel1() {
+void Update_StateLevel1(void) 
+{
 	Hud_Update();
 
 	if (timerlevel == 0) {
@@ -103,7 +105,7 @@ void Update_StateLevel1() {
 			}
 			else if (GameOver == false) {
 				nutmeg_setupNewLife();
-				SetState(StateOverworld1); // change to correct world
+				SetState(StateOverworld); // change to correct world
 			}
 			return;
 		}
@@ -161,7 +163,7 @@ void Update_StateLevel1() {
 			//cutscenewalkright = false;
 			//cutscenemode = disabled;
 
-			SetState(StateOverworld1);
+			SetState(StateOverworld);
 		}
 
 		if (endlevel_counter < 250) endlevel_counter++;
@@ -191,7 +193,7 @@ void Update_StateLevel1() {
 	
 	/*
 	if (KEY_PRESSED(J_START)) {
-        SetState(StateOverworld1);
+        SetState(StateOverworld);
     }
 	*/
 
