@@ -155,8 +155,7 @@ void Start_StateLevel5 (void)
 
 	PlayMusic(raindrops, 1);
 
-	if (hasbow == true) { SpriteManagerAdd(SpriteNutmegBow, 3*8, 11*8); }
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 3*8, 11*8); //36
+	scroll_target = nutmeg_Add(3*8, 11*8); 
 
 	InitScrollTiles(0, &level5tiles);
 	InitScroll(BANK(level5map), &level5map, collision_tiles_level5, collision_tiles_down_level5);

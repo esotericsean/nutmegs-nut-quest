@@ -46,8 +46,7 @@ void Start_StateLevel3 (void)
 
 	PlayMusic(quickstart, 1);
 
-	if (hasbow == true) { SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49); //36
+	scroll_target = nutmeg_Add(4, 49);
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level3map), &level3map, collision_tiles_level3, collision_tiles_down_level3);

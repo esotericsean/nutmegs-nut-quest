@@ -29,7 +29,6 @@ DECLARE_MUSIC (quickdeath);
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
-extern Sprite * spr_nutmegbow;
 extern Sprite * spr_camera;
 
 //nutmeg sprite region
@@ -48,12 +47,7 @@ void Start_StateLevel2_1 (void) {
 
 	__critical { PlayMusic(quickstart, 1); }
 
-	if (hasbow == true) {
-		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49);
-	}
-	
-	//start the game off with a bow (full health)
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49);
+	scroll_target = nutmeg_Add (4, 49);
 
 	// TEST OUT A PLATFORM
 	SpriteManagerAdd(SpritePlatform, 14*8, 18*8);

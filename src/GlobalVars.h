@@ -34,6 +34,7 @@ typedef enum { vertical, horizontal } orientation;
 
 //powerups
 extern amount health;
+
 extern bool hasbow;
 
 extern UINT8 bowanim;

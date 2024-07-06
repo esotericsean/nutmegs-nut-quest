@@ -49,9 +49,7 @@ void Start_StateW1Boss (void)
 
 	PlayMusic(thehands2, 1);
 
-	if (hasbow == true) { SpriteManagerAdd(SpriteNutmegBow, 5*8, 1*8); }
-	
-	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 5*8, 1*8);
+	nutmeg_Add(5*8, 1*8);
 	spr_hand = SpriteManagerAdd(EnemyHand, 17*8+32, 11*8+6); //start on right side
 
 	SpriteManagerAdd(SpriteAcorn, 1*8+2, 14*8-4);

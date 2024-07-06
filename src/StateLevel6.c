@@ -121,9 +121,8 @@ void Start_StateLevel6 (void)
 	//add butterfly so yellow palette is loaded first if bow isn't present
 	SpriteManagerAdd(EnemyButterfly, 3*8, 4*8);
 	
-	if (hasbow == true) { SpriteManagerAdd(SpriteNutmegBow, 80, 12); }
 	scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, 80, 12); //49
-	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49);
+	nutmeg_Add(4, 49);
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level6map), &level6map, collision_tiles_level6, collision_tiles_down_level6);

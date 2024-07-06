@@ -29,7 +29,6 @@ DECLARE_MUSIC(quickdeath);
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
-extern Sprite * spr_nutmegbow;
 extern Sprite * spr_camera;
 
 void Start_StateLevel2 (void) 
@@ -46,8 +45,7 @@ void Start_StateLevel2 (void)
 
 	PlayMusic(quickstart, 1);
 
-	if (hasbow == true) { spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49); //36
+	scroll_target = nutmeg_Add(4, 49); 
 	
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level2map), &level2map, collision_tiles_level2, collision_tiles_down_level2);

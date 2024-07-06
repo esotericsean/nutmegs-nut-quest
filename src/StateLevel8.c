@@ -45,8 +45,7 @@ void Start_StateLevel8 (void)
 
 	PlayMusic(quickstart, 1);
 	
-	if (hasbow == true) { SpriteManagerAdd(SpriteNutmegBow, 4, 15*8); }
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 15*8); //36
+	scroll_target =nutmeg_Add(4, 15*8);
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level8map), &level8map, collision_tiles_level8, collision_tiles_down_level8);

@@ -26,7 +26,6 @@ DECLARE_MUSIC(oaktree);
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
-extern Sprite * spr_nutmegbow;
 extern Sprite * spr_camera;
 
 void nutmegBow_update (void) BANKED;
@@ -47,10 +46,7 @@ void Start_StateLevelTree(void)
 	//SpriteManagerLoad(15); 	//maple
 	//SpriteManagerLoad(28); 	//ruby
 
-	if (hasbow == true) {
-		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 36+28, 104);
-	}
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 36+28, 104);
+	scroll_target = nutmeg_Add(36+28, 104);
 	nutmeg_direction = right;
 	
 	SpriteManagerAdd(SpriteCinnamon, 8, 96);

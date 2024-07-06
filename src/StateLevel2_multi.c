@@ -29,7 +29,6 @@ DECLARE_MUSIC (mushrooms);
 DECLARE_MUSIC (quickdeath);
 
 extern Sprite * spr_nutmeg;
-extern Sprite * spr_nutmegbow;
 extern Sprite * spr_camera;
 
 uint16_t exitTopX;
@@ -85,12 +84,8 @@ void StartRoom1 (void)
 	__critical { PlayMusic(quickstart, 1); }
 	
 
-	if (hasbow == true) {
-		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49);
-	}
-
 	//start the game off with a bow (full health)
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49);
+	scroll_target = nutmeg_Add(4, 49);
 
 
 	SMAdd(EnemyButterfly, 23*8, 10*8);
@@ -129,12 +124,7 @@ void StartRoom2 (void)
 
 	SetExit (70, 21, 90, 22);
 
-	if (hasbow == true) {
-		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49);
-	}
-
-	//start the game off with a bow (full health)
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49);
+	scroll_target = nutmeg_Add(4, 49);
 
 	SMAdd(EnemyBunny, 23*8, 14*8); 
 	SMAdd(EnemyButterfly, 27*8, 10*8);
@@ -175,12 +165,7 @@ void StartRoom3 (void)
 	mapRight = 19*8;
 	SetExit (14, 30, 15, 37);
 
-	if (hasbow == true) {
-		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, 4, 49);
-	}
-
-	//start the game off with a bow (full health)
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 6*8, 65535-16);
+	scroll_target = nutmeg_Add(6*8, 65535-16);
 
 	SMAdd (SpriteAcorn, 1*8, 1*8);
 	SMAdd (SpriteAcorn, 17*8, 8*8);

@@ -29,7 +29,6 @@ DECLARE_MUSIC (quickdeath);
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
-extern Sprite * spr_nutmegbow;
 extern Sprite * spr_camera;
 
 //nutmeg sprite region
@@ -119,16 +118,9 @@ void Start_StateLevel2_glidefall(void)
 
 	__critical { PlayMusic(quickstart, 1); }
 
-	UINT16 startx = 10;
-	UINT16 starty = 2;
-
-	startx <<= 3;
-	starty <<= 3;
-
-	if (hasbow == true) {
-		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, startx, starty);
-	}
-	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, startx, starty);
+	uint16_t startx = 10 << 3;
+	uint16_t starty = 2 << 3;
+	nutmeg_Add (startx, starty);
 
 	// clear some nutmeg 
 	accelX = 0;

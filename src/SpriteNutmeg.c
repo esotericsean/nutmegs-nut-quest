@@ -123,6 +123,17 @@ void Start_SpriteNutmeg(void) {
     SetSpriteAnim(spr_nutmeg, anim_nutmeg_idle_left, 5);
 }
 
+// Create nugmeg sprite at x,y (and her bow if required)
+Sprite *nutmeg_Add (uint16_t x, uint16_t y) BANKED
+{
+	if (hasbow == true) {
+		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, x, y);
+	}
+	
+    spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, x, y);
+    return spr_nutmeg;
+}
+
 static INT8 Hundreds (INT16 v)
 {
     INT8 r = 0;
