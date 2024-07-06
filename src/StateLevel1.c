@@ -17,9 +17,6 @@
 
 IMPORT_MAP (level1map);
 
-UINT16 level1counter = 0;
-UINT8 endlevel_counter = 0;
-
 bool pitdeathactive;
 
 orientation levelorientation;
@@ -46,7 +43,7 @@ bool deathmusicplayed = false;
 
 void Start_StateLevel1(void) 
 {
-	level1counter = 0;
+	levelStartCounter = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
 
@@ -67,7 +64,7 @@ void Start_StateLevel1(void)
 	Hud_Init(false);
 	cutscenemode = enabled;
 	FlagPole_Init();
-	endlevel_counter = 0;
+	levelEndCounter = 0;
 	LevelStart_Init(7,5);
 
 	SHOW_SPRITES;
@@ -112,14 +109,14 @@ void Update_StateLevel1(void)
 	if (cutscenemode == enabled) {
 		//Level Start!
 		//Make Nutmeg Walk In
-		if (level1counter == 0) {
+		if (levelStartCounter == 0) {
 			cutscenewalkright = true;
 		}
-		else if (level1counter == 36) {
+		else if (levelStartCounter == 36) {
 			cutscenewalkright = false;
 			//but leave cutscene mode enabled still until Level Start! goes away
 		}
-		else if (level1counter == 100) {
+		else if (levelStartCounter == 100) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
@@ -128,7 +125,7 @@ void Update_StateLevel1(void)
 		}
 
 		LevelStart_Update();
-		if (level1counter < 105) level1counter++;
+		if (levelStartCounter < 105) levelStartCounter++;
 	}
 
 	Water_Animate();
@@ -153,8 +150,8 @@ void Update_StateLevel1(void)
 		}
 
 	
-		if (endlevel_counter >= 100) {
-			//endlevel_counter = 0;
+		if (levelEndCounter >= 100) {
+			//levelEndCounter = 0;
 			//cutscenewalkleft = false;
 			//cutscenewalkright = false;
 			//cutscenemode = disabled;
@@ -162,7 +159,7 @@ void Update_StateLevel1(void)
 			SetState(StateOverworld);
 		}
 
-		if (endlevel_counter < 250) endlevel_counter++;
+		if (levelEndCounter < 250) levelEndCounter++;
 
 	}
 
@@ -170,7 +167,7 @@ void Update_StateLevel1(void)
 		FlagPole_Activate(244,13);
 
 		levelbeat = true;
-		endlevel_counter = 0;
+		levelEndCounter = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 	}

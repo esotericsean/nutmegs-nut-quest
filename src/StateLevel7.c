@@ -16,9 +16,6 @@
 
 IMPORT_MAP (level7map);
 
-UINT16 level7counter = 0;
-UINT8 endlevel_counter7 = 0;
-
 //nutmeg color palettes
 const UWORD pal_nutmegnormal7[] = { RGB(31, 31, 31), RGB(5,  24, 14), RGB(5,  19, 12), RGB(0,  0,  0) };
 const UWORD pal_nutmegblue7[] 	= { RGB(31, 31, 31), RGB(19, 22, 30), RGB(12, 13, 28), RGB(8,  8, 27) };
@@ -38,7 +35,7 @@ extern Sprite * spr_camera;
 
 void Start_StateLevel7 (void) 
 {
-	level7counter = 0;
+	levelStartCounter = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
 
@@ -59,7 +56,7 @@ void Start_StateLevel7 (void)
 	FlagPole_Init();
 	LevelStart_Init(7,5);
 
-	endlevel_counter7 = 0;
+	levelEndCounter = 0;
 
 	SHOW_SPRITES;
 	SHOW_BKG;
@@ -97,14 +94,14 @@ void Update_StateLevel7 (void)
 	if (cutscenemode == enabled) {
 		//Level Start!
 		//Make Nutmeg Walk In
-		if (level7counter == 0) {
+		if (levelStartCounter == 0) {
 			cutscenewalkright = true;
 		}
-		else if (level7counter == 36) {
+		else if (levelStartCounter == 36) {
 			cutscenewalkright = false;
 			//but leave cutscene mode enabled still until Level Start! goes away
 		}
-		else if (level7counter == 100) {
+		else if (levelStartCounter == 100) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
@@ -113,7 +110,7 @@ void Update_StateLevel7 (void)
 		}
 
 		LevelStart_Update();
-		if (level7counter < 105) level7counter++;
+		if (levelStartCounter < 105) levelStartCounter++;
 	}
 
 	Water_Animate();
@@ -138,8 +135,8 @@ void Update_StateLevel7 (void)
 			cutscenewalkleft = false;
 		}
 
-		if (endlevel_counter7 >= 100) {
-			//endlevel_counter7 = 0;
+		if (levelEndCounter >= 100) {
+			//levelEndCounter = 0;
 			//cutscenewalkleft = false;
 			//cutscenewalkright = false;
 			//cutscenemode = disabled;
@@ -147,13 +144,13 @@ void Update_StateLevel7 (void)
 			SetState(StateOverworld);
 		}
 
-		if (endlevel_counter7 < 250) endlevel_counter7++;
+		if (levelEndCounter < 250) levelEndCounter++;
 	}
 
 	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg_death == false) {
 		FlagPole_Activate(244, 13); 
 		levelbeat = true;
-		endlevel_counter7 = 0;
+		levelEndCounter = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 	

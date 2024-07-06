@@ -16,10 +16,6 @@
 
 IMPORT_MAP (level4map);
 
-UINT16 level4counter = 0;
-UINT8 endlevel_counter4 = 0;
-
-
 const UINT8 collision_tiles_level4[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
 const UINT8 collision_tiles_down_level4[] = {29,30,31,32,0};
 
@@ -34,7 +30,7 @@ extern Sprite * spr_camera;
 
 void Start_StateLevel4 (void) 
 {
-	level4counter = 0;
+	levelStartCounter = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
 
@@ -54,7 +50,7 @@ void Start_StateLevel4 (void)
 	cutscenemode = enabled;
 	FlagPole_Init();
 	LevelStart_Init(7,5);
-	endlevel_counter4 = 0;
+	levelEndCounter = 0;
 
 	SHOW_SPRITES;
 	SHOW_BKG;
@@ -92,14 +88,14 @@ void Update_StateLevel4 (void)
 	if (cutscenemode == enabled) {
 		//Level Start!
 		//Make Nutmeg Walk In
-		if (level4counter == 0) {
+		if (levelStartCounter == 0) {
 			cutscenewalkright = true;
 		}
-		else if (level4counter == 36) {
+		else if (levelStartCounter == 36) {
 			cutscenewalkright = false;
 			//but leave cutscene mode enabled still until Level Start! goes away
 		}
-		else if (level4counter == 100) {
+		else if (levelStartCounter == 100) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
@@ -108,7 +104,7 @@ void Update_StateLevel4 (void)
 		}
 
 		LevelStart_Update();
-		if (level4counter < 105) level4counter++;
+		if (levelStartCounter < 105) levelStartCounter++;
 	}
 
 	Water_Animate();
@@ -133,8 +129,8 @@ void Update_StateLevel4 (void)
 			cutscenewalkleft = false;
 		}
 
-		if (endlevel_counter4 >= 100) {
-			//endlevel_counter4 = 0;
+		if (levelEndCounter >= 100) {
+			//levelEndCounter = 0;
 			//cutscenewalkleft = false;
 			//cutscenewalkright = false;
 			//cutscenemode = disabled;
@@ -142,13 +138,13 @@ void Update_StateLevel4 (void)
 			SetState(StateOverworld);
 		}
 
-		if (endlevel_counter4 < 250) endlevel_counter4++;
+		if (levelEndCounter < 250) levelEndCounter++;
 	}
 
 	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg_death == false) {
 		FlagPole_Activate(244, 13);
 		levelbeat = true;
-		endlevel_counter4 = 0;
+		levelEndCounter = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 	}

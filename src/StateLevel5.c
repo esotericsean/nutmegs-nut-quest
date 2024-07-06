@@ -16,11 +16,10 @@
 
 IMPORT_MAP (level5map);
 
-UINT16 level5counter = 0;
-UINT8 anim_rain_counter5 = 0;
-UINT8 endlevel_counter5 = 0;
-UINT8 lightningstrikecounter1 = 0;
-UINT8 lightningstrikecounter2 = 0;
+static UINT8 anim_rain_counter5 = 0;
+
+static UINT8 lightningstrikecounter1 = 0;
+static UINT8 lightningstrikecounter2 = 0;
 
 static const UINT8 collision_tiles_level5[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
 static const UINT8 collision_tiles_down_level5[] = {29,30,31,32,0};
@@ -144,7 +143,8 @@ static const unsigned char rainsplash2_pt4[] = {
 
 void Start_StateLevel5 (void) 
 {
-	level5counter = 0;
+	levelStartCounter = 0;
+
 	levelorientation = horizontal;
 	SPRITES_8x16;
 
@@ -165,7 +165,7 @@ void Start_StateLevel5 (void)
 	FlagPole_Init();
 	LevelStart_Init(7,5);
 
-	endlevel_counter5 = 0;
+	levelEndCounter = 0;
 
 	lightningstrikecounter1 = 0;
 	lightningstrikecounter2 = 0;
@@ -215,10 +215,10 @@ void Update_StateLevel5 (void)
 	
 	if (cutscenemode == enabled) {	
 		//Level Start!
-		if (level5counter == 0) {
+		if (levelStartCounter == 0) {
 			cutscenewalkright = false;
 		}
-		else if (level5counter == 100) {
+		else if (levelStartCounter == 100) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
@@ -226,7 +226,7 @@ void Update_StateLevel5 (void)
 			}
 		}
 
-		if (level5counter < 105) level5counter++;
+		if (levelStartCounter < 105) levelStartCounter++;
 	}
 
 	if (spr_nutmeg->x < 1936) {
@@ -362,8 +362,8 @@ void Update_StateLevel5 (void)
 			cutscenewalkleft = false;
 		}
 
-		if (endlevel_counter5 >= 100) {
-			//endlevel_counter5 = 0;
+		if (levelEndCounter >= 100) {
+			//levelEndCounter = 0;
 			//cutscenewalkleft = false;
 			//cutscenewalkright = false;
 			//cutscenemode = disabled;
@@ -371,7 +371,7 @@ void Update_StateLevel5 (void)
 			SetState(StateOverworld);
 		}
 
-		if (endlevel_counter5 < 250) endlevel_counter5++;
+		if (levelEndCounter < 250) levelEndCounter++;
 
 
 	}
@@ -379,7 +379,7 @@ void Update_StateLevel5 (void)
 	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg_death == false) {
 		FlagPole_Activate(244, 13);
 		levelbeat = true;
-		endlevel_counter5 = 0;
+		levelEndCounter = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 	}

@@ -17,9 +17,6 @@
 
 IMPORT_MAP (level2_glidefallmap);
 
-static UINT8 levelStartCount = 0;
-static UINT8 endlevel_counter = 0;
-
 static const UINT8 collision_tiles_level[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18, 0};
 
 DECLARE_MUSIC (quickstart);
@@ -109,7 +106,8 @@ void Start_StateLevel2_glidefall(void)
 
 	levelorientation = vertical;
 	levelbeat = false;
-	levelStartCount = 0;
+	levelStartCounter = 0;
+	levelEndCounter = 0;
 	SPRITES_8x16;
 
 	pitdeathactive = false;
@@ -145,7 +143,6 @@ void Start_StateLevel2_glidefall(void)
 	cutscenemode = false;
 
 	FlagPole_Init();
-	endlevel_counter = 0;
 	LevelStart_Init(7,7);
 
 	SHOW_SPRITES;
@@ -187,15 +184,15 @@ void Update_StateLevel2_glidefall(void)
 		nutmegdeathtimer++;
 	}
 	
-	if (levelStartCount < 105) {
+	if (levelStartCounter < 105) {
 		//Level Start!
 		
-		if (levelStartCount == 100) {
+		if (levelStartCounter == 100) {
 			__critical { PlayMusic(mushrooms, 1); }
 		}
 
 		LevelStart_Update();
-		levelStartCount++;
+		levelStartCounter++;
 	}
 
 	//animate flagpole
@@ -218,13 +215,13 @@ void Update_StateLevel2_glidefall(void)
 		}
 
 	
-		if (endlevel_counter >= 100) {
+		if (levelEndCounter >= 100) {
 			isSpikeLevel = false;
 			isHorizontalGoalpost = false;
 			SetState(StateOverworld);
 		}
 
-		if (endlevel_counter < 250) endlevel_counter++;
+		if (levelEndCounter < 250) levelEndCounter++;
 	}
 
 	// invisible walls left and right
@@ -246,7 +243,7 @@ void Update_StateLevel2_glidefall(void)
 			FlagPole_Activate(10, 256);
 
 			levelbeat = true;
-			endlevel_counter = 0;
+			levelEndCounter = 0;
 			cutscenemode = enabled;
 			cutscenewalkright = true;
 		}

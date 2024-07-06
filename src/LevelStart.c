@@ -116,6 +116,7 @@ static void drawBlank(void)
 	set_vram_byte (t, 1);
 
 }
+
 void LevelStart_Update(void) BANKED
 {
 	if (!showLevelStart)

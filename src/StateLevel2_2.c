@@ -17,9 +17,6 @@
 
 IMPORT_MAP (level2_2map);
 
-static UINT16 levelCounter = 0;
-static UINT8 endlevel_counter = 0;
-
 static const UINT8 collision_tiles_level[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18, 0};
 
 DECLARE_MUSIC (quickstart);
@@ -45,7 +42,7 @@ static void AddNut (UINT16 x, UINT16 y)
 
 void Start_StateLevel2_2(void) 
 {
-	levelCounter = 0;
+	levelStartCounter = 0;
 	levelorientation = horizontal;
 
 	SPRITES_8x16;
@@ -82,7 +79,7 @@ void Start_StateLevel2_2(void)
 	cutscenemode = enabled;
 
 	FlagPole_Init();
-	endlevel_counter = 0;
+	levelEndCounter = 0;
 	LevelStart_Init(7,4);
 
 	SHOW_SPRITES;
@@ -123,14 +120,14 @@ void Update_StateLevel2_2(void)
 	if (cutscenemode == enabled) {
 		//Level Start!
 		//Make Nutmeg Walk In
-		if (levelCounter == 0) {
+		if (levelStartCounter == 0) {
 			cutscenewalkright = true;
 		}
-		else if (levelCounter == 36) {
+		else if (levelStartCounter == 36) {
 			cutscenewalkright = false;
 			//but leave cutscene mode enabled still until Level Start! goes away
 		}
-		else if (levelCounter == 100) {
+		else if (levelStartCounter == 100) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
@@ -139,7 +136,7 @@ void Update_StateLevel2_2(void)
 		}
 
 		LevelStart_Update();
-		levelCounter++;
+		levelStartCounter++;
 	}
 
 	//animate flagpole
@@ -162,11 +159,11 @@ void Update_StateLevel2_2(void)
 		}
 
 	
-		if (endlevel_counter >= 100) {
+		if (levelEndCounter >= 100) {
 			SetState(StateOverworld);
 		}
 
-		if (endlevel_counter < 250) endlevel_counter++;
+		if (levelEndCounter < 250) levelEndCounter++;
 	}
 
 	if (nutmeg_death == false)
@@ -177,7 +174,7 @@ void Update_StateLevel2_2(void)
 			FlagPole_Activate(58, 59);
 
 			levelbeat = true;
-			endlevel_counter = 0;
+			levelEndCounter = 0;
 			cutscenemode = enabled;
 			cutscenewalkright = true;
 		}

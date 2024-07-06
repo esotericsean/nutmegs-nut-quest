@@ -13,7 +13,7 @@
 
 IMPORT_MAP (w1bossmap);
 
-UINT16 w1bosscounter = 0;
+static UINT16 w1bosscounter = 0;
 
 UINT8 handpos;
 UINT8 handphase;
@@ -284,7 +284,6 @@ void Update_StateW1Boss (void)
 
 			//flagpole_activated = 1;
 			levelbeat = true;
-			//endlevel_counter = 0;
 			cutscenemode = enabled;
 		}
 	}

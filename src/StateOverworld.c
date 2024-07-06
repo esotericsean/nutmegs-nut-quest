@@ -29,6 +29,12 @@ UINT8 W1LevelSelection; 		// nutmeg starts at level 1
 								// mushroom is level 4
 bool levelbeat;
 
+/// @brief track frame count during start of level
+UINT16 levelStartCounter;
+
+/// @brief track frame count during end of level
+UINT8 levelEndCounter;
+
 // local
 static UINT8 waterAnimCounter = 0; // water animation counter
 

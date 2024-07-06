@@ -61,8 +61,7 @@ extern UINT8 level_max;
 extern UINT8 acorncounter;
 extern UINT8 nutmeglives;
 extern bool GameOver;
-extern bool deathmusicplayed;
-extern bool pitdeathactive;
+
 
 // level timer countdown - controlled by Hud.c
 extern UINT16 timerlevel;
@@ -104,15 +103,8 @@ extern bool gordonjump;
 extern bool levelbeat;
 extern UINT8 W1LevelSelection;
 
-
-//nutmeg sprite region
-extern UINT8 nut_region;
-
-//Nutmeg Stop Moving After Dying
-extern UINT8 nutmegdeathmove;
-
-//Sprite Limits if Vertical or Horizontal Level
-extern orientation levelorientation;
+extern UINT16 levelStartCounter;
+extern UINT8 levelEndCounter;
 
 //EnemyHand
 extern UINT8 handpos;
@@ -121,9 +113,26 @@ extern bool abletohurthand;
 extern UINT8 handhurt;
 extern UINT8 handhealth;
 
+
+// LEVEL SPECIFIC VARIABLES
+
 // if it is a spike level, and collision hurts nutmeg
 extern bool isSpikeLevel;
 extern bool isHorizontalGoalpost;
+
+//Sprite Limits if Vertical or Horizontal Level
+extern orientation levelorientation;
+
+//nutmeg sprite region
+extern UINT8 nut_region;
+
+//Nutmeg Stop Moving After Dying
+extern UINT8 nutmegdeathmove;
+
+extern bool deathmusicplayed;
+extern bool pitdeathactive;
+
+// END OF LEVEL SPECIFIC VARIABLES
 
 typedef struct {
 	UINT8 x;

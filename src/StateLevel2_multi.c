@@ -19,9 +19,6 @@ IMPORT_MAP (level2_multi_1_map);
 IMPORT_MAP (level2_multi_2_map);
 IMPORT_MAP (level2_multi_3_map);
 
-static UINT16 levelCounter = 0;
-static UINT8 endlevel_counter = 0;
-
 static const UINT8 collision_tiles_level[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18, 0};
 
 DECLARE_MUSIC (quickstart);
@@ -47,13 +44,13 @@ void InitGeneralRoomVars(void)
 	SpriteManagerReset();
 	levelbeat = false;
 
-	levelCounter = 0;
+	levelStartCounter = 0;
 	levelorientation = horizontal;
 	pitdeathactive = false;
 	deathmusicplayed = false;
 	nutmegdeathtimer = 0;
 	cutscenemode = enabled;
-	endlevel_counter = 0;
+	levelEndCounter = 0;
 	SPRITES_8x16;
 
 
@@ -249,24 +246,24 @@ void Update_StateLevel2_multi (void) {
 	if (cutscenemode == enabled) {
 		
 		if (levelbeat == true) {
-			if (endlevel_counter >= 100) {
+			if (levelEndCounter >= 100) {
 				NextRoom();
 				return;
 			}
-		 	endlevel_counter++;
+		 	levelEndCounter++;
 		}	
 		else
 		{
 			//Level Start!
 			//Make Nutmeg Walk In
-			if (levelCounter == 0) {
+			if (levelStartCounter == 0) {
 				cutscenewalkright = true;
 			}
-			else if (levelCounter == 36) {
+			else if (levelStartCounter == 36) {
 				cutscenewalkright = false;
 				//but leave cutscene mode enabled still until Level Start! goes away
 			}
-			else if (levelCounter == 100) {
+			else if (levelStartCounter == 100) {
 				cutscenemode = disabled;
 				if ((levelbeat == false) && (roomNumber == 1)) {
 					__critical { PlayMusic(mushrooms, 1); }
@@ -275,7 +272,7 @@ void Update_StateLevel2_multi (void) {
 
 			LevelStart_Update();
 
-			levelCounter++;
+			levelStartCounter++;
 		}
 	}
 	else
@@ -303,12 +300,12 @@ void Update_StateLevel2_multi (void) {
 	{
 		if (nutmeg_isInsideXY(exitTopX,exitTopY,exitBottomX,exitBottomY) && levelbeat == false)
 		{
-			endlevel_counter = 100;
+			levelEndCounter = 100;
 			if (roomNumber == maxRoomNumber)
 			{
 				FlagPole_Activate(14,38);
 				// this one gets a full end cutscene
-				endlevel_counter = 0;
+				levelEndCounter = 0;
 			}
 			levelbeat = true;
 			cutscenemode = enabled;

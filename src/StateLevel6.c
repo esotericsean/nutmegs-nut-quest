@@ -15,10 +15,7 @@
 
 IMPORT_MAP (level6map);
 
-
-UINT16 level6counter = 0;
-UINT8 level6cameracount = 0;
-UINT8 endlevel_counter6 = 0;
+static UINT8 level6cameracount = 0;
 
 // BACKGROUND TILE COLOR PALETTES
 
@@ -107,7 +104,7 @@ extern Sprite * spr_camera;
 
 void Start_StateLevel6 (void) 
 {
-	level6counter = 0;
+	levelStartCounter = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
 
@@ -132,7 +129,7 @@ void Start_StateLevel6 (void)
 	FlagPole_Init();
 	LevelStart_Init(7,5);
 
-	endlevel_counter6 = 0;
+	levelEndCounter = 0;
 
 	level6cameracount = 0;
 
@@ -172,14 +169,14 @@ void Update_StateLevel6 (void)
 	if (cutscenemode == enabled) {
 		//Level Start!
 		//Make Nutmeg Walk In
-		if (level6counter == 0) {
+		if (levelStartCounter == 0) {
 			cutscenewalkright = true;
 		}
-		else if (level6counter == 36) {
+		else if (levelStartCounter == 36) {
 			cutscenewalkright = false;
 			//but leave cutscene mode enabled still until Level Start! goes away
 		}
-		else if (level6counter == 100) {
+		else if (levelStartCounter == 100) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
@@ -188,7 +185,7 @@ void Update_StateLevel6 (void)
 		}
 
 		LevelStart_Update();
-		if (level6counter < 105) level6counter++;
+		if (levelStartCounter < 105) levelStartCounter++;
 	}
 
 	if (cutscenemode == disabled) {
@@ -231,18 +228,18 @@ void Update_StateLevel6 (void)
 			cutscenewalkleft = false;
 		}
 
-		if (endlevel_counter6 >= 100) {
+		if (levelEndCounter >= 100) {
 			SetState(StateOverworld);
 		}
 
-		if (endlevel_counter6 < 250) endlevel_counter6++;
+		if (levelEndCounter < 250) levelEndCounter++;
 
 	}
 
 	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg_death == false) {
 		FlagPole_Activate(244,13);
 		levelbeat = true;
-		endlevel_counter6 = 0;
+		levelEndCounter = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 	}

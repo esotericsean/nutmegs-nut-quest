@@ -16,9 +16,6 @@
 
 IMPORT_MAP (level3map);
 
-static UINT16 level3counter = 0;
-static UINT8 endlevel_counter3 = 0;
-
 static const UINT8 collision_tiles_level3[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
 static const UINT8 collision_tiles_down_level3[] = {29,30,31,32,0};
 
@@ -34,10 +31,9 @@ extern Sprite * spr_camera;
 
 void Start_StateLevel3 (void)
 {
-
-	level3counter = 0;
+	levelStartCounter = 0;
+	levelEndCounter = 0;
 	levelorientation = vertical;
-	SPRITES_8x16;
 
 	nut_region = 0;
 	pitdeathactive = false;
@@ -53,10 +49,11 @@ void Start_StateLevel3 (void)
 	Hud_Init(false);
 
 	cutscenemode = enabled;
-	endlevel_counter3 = 0;
+	
 	FlagPole_Init();
 	LevelStart_Init(7,5);
 
+	SPRITES_8x16;
 	SHOW_SPRITES;
 	SHOW_BKG;
 }
@@ -93,14 +90,14 @@ void Update_StateLevel3 (void)
 	if (cutscenemode == enabled) {
 		//Level Start!
 		//Make Nutmeg Walk In
-		if (level3counter == 0) {
+		if (levelStartCounter == 0) {
 			cutscenewalkright = true;
 		}
-		else if (level3counter == 36) {
+		else if (levelStartCounter == 36) {
 			cutscenewalkright = false;
 			//but leave cutscene mode enabled still until Level Start! goes away
 		}
-		else if (level3counter == 100) {
+		else if (levelStartCounter == 100) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
@@ -109,7 +106,7 @@ void Update_StateLevel3 (void)
 		}
 
 		LevelStart_Update();			
-		if (level3counter < 105) level3counter++;
+		if (levelStartCounter < 105) levelStartCounter++;
 	}
 
 	Water_Animate();
@@ -133,8 +130,8 @@ void Update_StateLevel3 (void)
 			cutscenewalkleft = false;
 		}
 
-		if (endlevel_counter3 >= 100) {
-			//endlevel_counter3 = 0;
+		if (levelEndCounter >= 100) {
+			//levelEndCounter = 0;
 			//cutscenewalkleft = false;
 			//cutscenewalkright = false;
 			//cutscenemode = disabled;
@@ -142,14 +139,14 @@ void Update_StateLevel3 (void)
 			SetState(StateOverworld);
 		}
 
-		if (endlevel_counter3 < 250) endlevel_counter3++;
+		if (levelEndCounter < 250) levelEndCounter++;
 
 	}
 
 	if (spr_nutmeg->x >= 256 && spr_nutmeg->x < 280 && spr_nutmeg->y > 904 && spr_nutmeg->y < 968 && levelbeat == false && nutmeg_death == false) {
 		FlagPole_Activate(32,120);
 		levelbeat = true;
-		endlevel_counter3 = 0;
+		levelEndCounter = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 	}
