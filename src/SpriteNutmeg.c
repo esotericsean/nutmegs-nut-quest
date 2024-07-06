@@ -446,9 +446,9 @@ void update_aliveInControl (void)
     // Otherwise drag
     if (collisionX != 0) {
         accelX = 0;
-        if (isSpikeLevel == true)
+        if ((isSpikeLevel == true) && (collisionX ==2))
         {
-            // just assume for now we have died
+            // Get hit!
             nutmeg_hit();
             if (nutmeg_death == false)
             {
@@ -479,20 +479,20 @@ void update_aliveInControl (void)
             movestate = inair;
         }
         else {
+            if ((isSpikeLevel == true) && (collisionY == 2))
+            {
+                // Get hit!
+                nutmeg_hit();
+                if (nutmeg_death == false)
+                {
+                    accelY = -300;
+                }
+            }
             if (movestate == inair) {
                 //PlayFx(CHANNEL_4, 4, 0x32, 0x71, 0x73, 0x80);
                 movestate = grounded;
             }
             accelY = 100;
-            if (isSpikeLevel == true)
-            {
-                // just assume for now we have died
-                nutmeg_hit();
-                if (nutmeg_death == false)
-                {
-                     accelY = -300;
-                }
-            }
         }
     }
     else {

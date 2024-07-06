@@ -10,16 +10,17 @@ extern Sprite * spr_nutmeg;
 UINT8 balloonjump;
 bool balloonpop;
 
-const UINT8 anim_balloon_empty[]  = {1, 0};
-const UINT8 anim_balloon_static[] = {1, 1};
-const UINT8 anim_balloon_jumped[] = {1, 2};
-const UINT8 anim_balloon_popped[] = {9, 2, 2, 3, 4, 0, 0, 0, 0, 0};
+static const UINT8 anim_balloon_empty[]  = {1, 0};
+static const UINT8 anim_balloon_static[] = {1, 1};
+static const UINT8 anim_balloon_jumped[] = {1, 2};
+static const UINT8 anim_balloon_popped[] = {9, 2, 2, 3, 4, 0, 0, 0, 0, 0};
 
 UINT8 ballooncounter;
 UINT8 balloonspring;
 UINT8 balloonpopcount;
 
-void Start_SpriteBalloon() {
+void Start_SpriteBalloon(void) 
+{
 	if (levelorientation == horizontal) {
 		THIS->lim_x = 160; //350
 		THIS->lim_y = 144;
@@ -38,7 +39,8 @@ void Start_SpriteBalloon() {
 	balloonpopcount = 0;
 }
 
-void Update_SpriteBalloon() {
+void Update_SpriteBalloon(void) 
+{
 	// if balloon hasn't been popped, move it up and right
 	if (balloonpop == false) {
 		ballooncounter++;
@@ -87,5 +89,6 @@ void Update_SpriteBalloon() {
 	}
 }
 
-void Destroy_SpriteBalloon() {
+void Destroy_SpriteBalloon(void) 
+{
 }

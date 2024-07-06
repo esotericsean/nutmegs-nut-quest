@@ -57,7 +57,9 @@ void Update_SpriteCinnamon(void) {
 			// nutmeg can bounce as many times as they want
 		}
 	}
-	else {THIS->y -=7;}
+	else {
+		THIS->y -=7;
+	}
 }
 
 void Destroy_SpriteCinnamon(void) {

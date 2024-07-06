@@ -50,7 +50,8 @@ bool lostbow;
 // 11 = glide right
 // 12 = glide left
 
-void Start_SpriteNutmegBow() {
+void Start_SpriteNutmegBow(void) 
+{
 	THIS->lim_x = 500;
 	THIS->lim_y = 144;
 
@@ -63,7 +64,7 @@ void Start_SpriteNutmegBow() {
 }
 
 // the falling speed of the box at each bow_counter frame
-const INT8 Y_OFFSET_AT_COUNTER [] = {
+static const INT8 Y_OFFSET_AT_COUNTER [] = {
 	0,
 	-5,
 	-4,
@@ -106,7 +107,7 @@ const INT8 Y_OFFSET_AT_COUNTER [] = {
 
 // returns false if the bow sprite has been destroyed
 // can't use THIS, because it is called fromthe spr_nutmeg update fn
-void nutmegBow_update(void ) BANKED 
+void nutmegBow_update(void) BANKED 
 {
 	if (lostbow == false) {
 		spr_nutmegbow->y = spr_nutmeg->y-24;
@@ -187,11 +188,13 @@ void nutmegBow_update(void ) BANKED
 	}
 }
 
-void Update_SpriteNutmegBow() {
+void Update_SpriteNutmegBow(void) 
+{
 	// updates are done from the spr_nutmeg
 }
 
 
-void Destroy_SpriteNutmegBow() {
+void Destroy_SpriteNutmegBow(void) 
+{
 	spr_nutmegbow = 0;
 }

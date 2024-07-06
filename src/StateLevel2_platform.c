@@ -17,7 +17,7 @@
 
 IMPORT_MAP (level2_platformmap);
 
-static const UINT8 collision_tiles[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,0};
+static const UINT8 collision_tiles[] = {2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,0};
 static const UINT8 collision_tiles_down[] = {29,30,31,32,0};
 
 DECLARE_MUSIC (quickstart);
@@ -107,7 +107,7 @@ void Start_StateLevel2_platform (void) {
 	levelStartCounter = 0;
 	levelorientation = horizontal;
 	SPRITES_8x16;
-
+	isSpikeLevel = true;
 	pitdeathactive = true;
 	nut_region = 0;
 	deathmusicplayed = false;
