@@ -54,7 +54,6 @@ void InitGeneralRoomVars(void)
 	deathmusicplayed = false;
 	nutmegdeathtimer = 0;
 	cutscenemode = enabled;
-	isAcornMoving = true; //yes, it is moving
 	endlevel_counter = 0;
 	SPRITES_8x16;
 

@@ -150,7 +150,6 @@ void Start_StateLevel2_glidefall(void)
 	Hud_Init(false);
 	
 	cutscenemode = false;
-	isAcornMoving = true; //yes, it is moving
 
 	FlagPole_Init();
 	endlevel_counter = 0;

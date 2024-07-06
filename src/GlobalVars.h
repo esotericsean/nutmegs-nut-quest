@@ -66,9 +66,6 @@ extern bool pitdeathactive;
 // level timer countdown - controlled by Hud.c
 extern UINT16 timerlevel;
 
-//acorn animation
-extern bool isAcornMoving;
-
 //which direction is nutmeg facing
 extern direction nutmeg_direction;
 
@@ -140,5 +137,6 @@ typedef struct {
 #define PLATFORM_TYPE_DROPPING (4)
 
 void Platform_Setup (Sprite *s, INT8 x, INT8 y, UINT8 type, UINT8 steps) BANKED;
+void SpriteAcornFreeze(Sprite *acorn) BANKED;
 
 #endif

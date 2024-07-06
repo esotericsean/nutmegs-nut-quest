@@ -51,7 +51,6 @@ void START(void) {
 	InitScrollTiles (0, &creditstiles);
 	InitScroll (BANK(creditsmap), &creditsmap, collision_tiles_levelc, collision_tiles_down_levelc);
 
-	isAcornMoving = true;
 	SpriteManagerAdd (SpriteAcorn, 5*8, 6*8);
 
 	PlayMusic(credits, 1);

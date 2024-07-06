@@ -40,8 +40,7 @@ void Start_StateCutsceneGordon(void) {
     spr_gordon2position = SpriteManagerAdd(SpriteGordon2, 196+16, 96);
 
     spr_acorn = SpriteManagerAdd(SpriteAcorn, 50, 16);
-
-    isAcornMoving = false;
+    SpriteAcornFreeze (spr_acorn);
 
     InitScrollTiles(0, &cutscenegordontiles);
     InitScroll(BANK(cutscenegordonmap), &cutscenegordonmap, collision_tiles_cutscenegordon, 0);

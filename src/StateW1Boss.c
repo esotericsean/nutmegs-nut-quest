@@ -62,7 +62,6 @@ void Start_StateW1Boss (void)
 	Hud_Init(true);
 
 	cutscenemode = enabled;
-	isAcornMoving = true; //yes, it is moving
 
 	handpos = 0; //start on right side
 

@@ -129,9 +129,7 @@ void Start_StateLevel6 (void)
 	InitScroll(BANK(level6map), &level6map, collision_tiles_level6, collision_tiles_down_level6);
 	Hud_Init(false);
 
-
 	cutscenemode = enabled;
-	isAcornMoving = true;
 	FlagPole_Init();
 	LevelStart_Init(7,5);
 

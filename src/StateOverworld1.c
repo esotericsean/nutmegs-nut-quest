@@ -447,8 +447,6 @@ static void startAutoMoveTowards (UINT8 towards)
 void Start_StateOverworld1 (void) {
 	SPRITES_8x16;
 
-	isAcornMoving = false;
-
 	// Setup the map steps for the current overworld;
 	if ((level_current < 10) || (level_current == ENTERING_WORLD_1))
 	{
@@ -520,9 +518,9 @@ void Start_StateOverworld1 (void) {
 	// sprites
 	SetTinyNutmegAtCurrentLevel();
 	SpriteManagerAdd(SpriteNutHead, 16, 7);
-	SpriteManagerAdd(SpriteAcorn, 14*8, 7);
-
-	isAcornMoving = false;
+	
+	Sprite * spr_acorn = SpriteManagerAdd(SpriteAcorn, 14*8, 7);
+	SpriteAcornFreeze (spr_acorn);
 
 	waterAnimCounter = 0;
 

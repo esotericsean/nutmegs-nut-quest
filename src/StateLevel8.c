@@ -53,7 +53,6 @@ void Start_StateLevel8 (void)
 	Hud_Init(false);
 
 	cutscenemode = enabled;
-	isAcornMoving = true; //yes, it is moving
 	FlagPole_Init();
 	LevelStart_Init(7, 13);
 	endlevel_counter8 = 0;

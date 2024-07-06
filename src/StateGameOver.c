@@ -49,7 +49,6 @@ void Start_StateGameOver() {
 	InitScroll(BANK(gameovermap), &gameovermap, collision_tiles_gameover, 0);
 
 	cutscenemode = disabled;
-	isAcornMoving = true; //yes, it is moving
 
 	SHOW_SPRITES;
 	SHOW_BKG;

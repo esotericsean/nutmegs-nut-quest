@@ -130,7 +130,6 @@ void Start_StateLevel2_platform (void) {
 	
 	Hud_Init(false);
 	cutscenemode = enabled;
-	isAcornMoving = false; //yes, it is moving
 	FlagPole_Init();
 	endlevel_counter = 0;
 	LevelStart_Init(6,4);

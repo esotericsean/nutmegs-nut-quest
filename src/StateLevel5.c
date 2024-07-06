@@ -163,7 +163,6 @@ void Start_StateLevel5 (void)
 	Hud_Init(false);
 
 	cutscenemode = enabled;
-	isAcornMoving = true; //yes, it is moving
 	FlagPole_Init();
 	LevelStart_Init(7,5);
 
