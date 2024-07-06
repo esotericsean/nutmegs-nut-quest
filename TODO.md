@@ -6,7 +6,6 @@ TODO
 * Add sliding on ice
 * Add swimming in water
 * Level 2-3 - Add spikes, and have them kill you
-* Some messed up actor in Level 1-7 at stat in the top left corner of the screen
 
 Refactoring
 * Change all levels to use the same system for rooms and creating actors
@@ -16,3 +15,4 @@ Refactoring
 Done
 * Change all maps and tile sets to use only 2 tiles for flagpoles, and put them next to each other
 * Level 2-5 - falling - fix final cloud, and goalpost is not animating
+* Some messed up actor in Level 1-7 at stat in the top left corner of the screen (scene was adding a star and puff at start for some reason)
