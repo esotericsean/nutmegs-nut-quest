@@ -23,7 +23,8 @@ const UWORD pal_gamespalest[] = { 0, RGB(30, 28, 28), RGB(30, 25, 26), 0 };
 
 DECLARE_MUSIC (incube8);
 
-void Start_StateIncube8() {
+void Start_StateIncube8(void) 
+{
     SPRITES_8x8;
 
     PlayMusic(incube8, 1);
@@ -44,7 +45,8 @@ void Start_StateIncube8() {
     incube8counter = 0;
 }
 
-void Update_StateIncube8() {
+void Update_StateIncube8(void) 
+{
     if (incube8counter >= 5 && incube8counter < 10) {
         SetPalette(SPRITES_PALETTE, 0, 1, pal_gamespalest, _current_bank);
     }

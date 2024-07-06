@@ -83,6 +83,8 @@ switcher powerupstar; //enabled or disabled
 bool isSpikeLevel = false;
 UINT8 nutmegdeathmove = 0;
 
+bool isHorizontalGoalpost = false;
+
 //if nutmeg loses her bow, add some kickback
 UINT8 kickbackcounter;
 

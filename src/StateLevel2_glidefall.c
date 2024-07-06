@@ -105,7 +105,8 @@ static void AddNuts (void)
 void Start_StateLevel2_glidefall(void) 
 {
 	isSpikeLevel = true;
-	
+	isHorizontalGoalpost = true;
+
 	levelorientation = vertical;
 	levelbeat = false;
 	levelStartCount = 0;
@@ -169,6 +170,7 @@ void Update_StateLevel2_glidefall(void)
 			deathmusicplayed = true;
 		}
 
+		isHorizontalGoalpost = false;
 		isSpikeLevel = false;
 
 		if (nutmegdeathtimer >= 125) {
@@ -218,6 +220,7 @@ void Update_StateLevel2_glidefall(void)
 	
 		if (endlevel_counter >= 100) {
 			isSpikeLevel = false;
+			isHorizontalGoalpost = false;
 			SetState(StateOverworld);
 		}
 

@@ -120,8 +120,7 @@ static const unsigned char pink_48[] = {
 };
 
 #define FLAGPOLE_TILE_1 (0x21)
-#define FLAGPOLE_TILE_2 (0x29)
-#define FLAGPOLE_TILE_3 (0x2A)
+#define FLAGPOLE_TILE_2 (0x22)
 
 static UINT8 anim_flag_counter = 0;
 static UINT8 flagpole_activated = 0;
@@ -169,23 +168,23 @@ void FlagPole_Activate(int tilex, int tiley) BANKED
 
 void FlagPole_Animate (void) BANKED
 {
-	if (isSpikeLevel == true)
+	if (isHorizontalGoalpost == true)
 	{
 		if (anim_flag_counter == 12)
 		{
-			set_bkg_data (FLAGPOLE_TILE_2, 1, sideways_1);
+			set_bkg_data (FLAGPOLE_TILE_1, 1, sideways_1);
 		}
 		else if (anim_flag_counter == 24)
 		{
-			set_bkg_data (FLAGPOLE_TILE_2, 1, sideways_2);
+			set_bkg_data (FLAGPOLE_TILE_1, 1, sideways_2);
 		}
 		else if (anim_flag_counter == 36)
 		{
-			set_bkg_data (FLAGPOLE_TILE_2, 1, sideways_3);
+			set_bkg_data (FLAGPOLE_TILE_1, 1, sideways_3);
 		}
 		else if (anim_flag_counter == 48)
 		{
-			set_bkg_data (FLAGPOLE_TILE_2, 1, sideways_4);
+			set_bkg_data (FLAGPOLE_TILE_1, 1, sideways_4);
 		}
 
 		anim_flag_counter++;
@@ -196,22 +195,18 @@ void FlagPole_Animate (void) BANKED
 		if (anim_flag_counter == 12) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_33);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, grey_41);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, grey_41);
 		}
 		else if (anim_flag_counter == 24) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_34);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, grey_42);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, grey_42);
 		}
 		else if (anim_flag_counter == 36) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_35);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, grey_43);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, grey_43);
 		}
 		else if (anim_flag_counter == 48) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_36);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, grey_44);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, grey_44);
 		}
 		anim_flag_counter++;
 		if (anim_flag_counter == 49) anim_flag_counter = 0;
@@ -222,22 +217,18 @@ void FlagPole_Animate (void) BANKED
         if (anim_flag_counter < 5) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, pink_37);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, pink_45);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, pink_45);
 		}
 		else if (anim_flag_counter >= 5 && anim_flag_counter < 10) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, pink_38);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, pink_46);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, pink_46);
 		}
 		else if (anim_flag_counter >= 10 && anim_flag_counter < 15) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, pink_39);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, pink_47);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, pink_47);
 		}
 		else if (anim_flag_counter >= 15 && anim_flag_counter < 20) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, pink_40);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, pink_48);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, pink_48);
 		}
 		anim_flag_counter++;
 		if (anim_flag_counter >= 20) anim_flag_counter = 0;

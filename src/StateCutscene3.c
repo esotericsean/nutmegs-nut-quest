@@ -18,7 +18,8 @@ static UINT16 cutscene3counter;
 
 static UINT8 collision_tiles_cutscene3[] = {0};
 
-void Start_StateCutscene3() {
+void Start_StateCutscene3(void) 
+{
     SPRITES_8x16;
 
     //PlayMusic (oaktree, 1);
@@ -31,7 +32,8 @@ void Start_StateCutscene3() {
     cutscene3counter = 0;
 }
 
-void Update_StateCutscene3() {
+void Update_StateCutscene3(void) 
+{
 
     if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
         SetState(StateCutsceneGordon);

@@ -41,7 +41,7 @@ static const unsigned char levelc_water_anim1[] = { 0x1A };
 static const unsigned char levelc_water_anim2[] = { 0x1B };
 static const unsigned char levelc_water_anim3[] = { 0x1C };
 
-void START(void) {
+void Start_StateCredits(void) {
 	levelorientation = vertical;
 
 	//PlayMusic(quickstart, 1);
@@ -56,7 +56,8 @@ void START(void) {
 	PlayMusic(credits, 1);
 }
 
-void UPDATE(void) {
+void Update_StateCredits(void) 
+{
 	if (KEY_PRESSED (J_DOWN) && spr_camera->y < 800) { TranslateSprite (spr_camera, 0, 1); }
 	else if (KEY_PRESSED (J_UP) && spr_camera->y > 0) { TranslateSprite (spr_camera, 0, -1); }
 
@@ -82,4 +83,5 @@ void UPDATE(void) {
 	if (anim_water_counterc >= 30) anim_water_counterc = 0;
 }
 
-void DESTROY(void) { }
+void Destroy_StateCredits(void) 
+{ }

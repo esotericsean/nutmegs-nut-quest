@@ -123,6 +123,7 @@ extern UINT8 handhealth;
 
 // if it is a spike level, and collision hurts nutmeg
 extern bool isSpikeLevel;
+extern bool isHorizontalGoalpost;
 
 typedef struct {
 	UINT8 x;

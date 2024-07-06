@@ -3,10 +3,8 @@
 
 const UINT8 anim_star_1[] = {6, 2, 2, 1, 0, 0, 0};
 
-//UINT8 deathtimer = 0;
-//THIS->custom_data[0] = 0;
-
-void Start_SpriteStarLeft() {
+void Start_SpriteStarLeft(void) 
+{
 	THIS->lim_x = 200;
 	THIS->lim_y = 144;
 
@@ -15,12 +13,14 @@ void Start_SpriteStarLeft() {
 	THIS->custom_data[0] = 0;
 }
 
-void Update_SpriteStarLeft() {
+void Update_SpriteStarLeft(void) 
+{
 	if (THIS->custom_data[0] >= 35) SpriteManagerRemoveSprite(THIS);
 	else THIS->custom_data[0]++;
 
 	THIS->x--;
 }
 
-void Destroy_SpriteStarLeft() {
+void Destroy_SpriteStarLeft(void) 
+{
 }
