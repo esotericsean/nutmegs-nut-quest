@@ -35,21 +35,20 @@ void Update_SpriteCinnamon(void) {
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false)
 	{
 		THIS->y -=7;
-		if (movestate == inair && accelY > 0)
+		if (nutmeg.movestate == inair && nutmeg.accelY > 0)
 		{
 			PlayFx(CHANNEL_4, 60, 0x3a, 0xf2, 0x62, 0x80);
-			accelY = -400;
-			jumpPeak = 0;
-			movestate = inair;
+			nutmeg.accelY = -400;
+			nutmeg.jumpPeak = 0;
 			
 			SetSpriteAnim(THIS, anim_cinnamon_idle, 10);
 			cinnamon_counter = 0;
 
-			if (nutmeg_direction == right) {
+			if (nutmeg.direction == right) {
 				SpriteManagerAdd(SpritePuffLeft, THIS->x+8, THIS->y+2);
 				SpriteManagerAdd(SpritePuffRight, THIS->x+16, THIS->y+2);
 			}
-			else if (nutmeg_direction == left) {
+			else if (nutmeg.direction == left) {
 				SpriteManagerAdd(SpritePuffLeft, THIS->x+8, THIS->y+2);
 				SpriteManagerAdd(SpritePuffRight, THIS->x+16, THIS->y+2);
 			}

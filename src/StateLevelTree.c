@@ -47,7 +47,7 @@ void Start_StateLevelTree(void)
 	//SpriteManagerLoad(28); 	//ruby
 
 	scroll_target = nutmeg_Add(36+28, 104);
-	nutmeg_direction = right;
+	nutmeg.direction = right;
 	
 	SpriteManagerAdd(SpriteCinnamon, 8, 96);
 	

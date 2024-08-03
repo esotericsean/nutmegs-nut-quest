@@ -81,11 +81,11 @@ void Update_SpriteBalloon(void)
 
 	if (CheckCollision(THIS, spr_nutmeg)) {
 		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-		jumpPeak = 0;
-		movestate = inair;
+		nutmeg.jumpPeak = 0;
+		nutmeg.movestate = inair;
 
-		if (balloonjump == 0) { accelY = -300; balloonjump = 1; }
-		else if (balloonjump == 1) { accelY = -600; balloonjump = 2; }
+		if (balloonjump == 0) { nutmeg.accelY = -300; balloonjump = 1; }
+		else if (balloonjump == 1) { nutmeg.accelY = -600; balloonjump = 2; }
 	}
 }
 

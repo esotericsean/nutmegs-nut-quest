@@ -67,7 +67,7 @@ _SPRITE_DMG(SpriteMushroom, mushroom)\
 _SPRITE_DMG(SpriteNutmegBow, nutmegbow)\
 _SPRITE_DMG(EnemyRockith, rockith)\
 _SPRITE_DMG(EnemyTopSpike, topspike)\
-_SPRITE_DMG(SpriteNutmeg, nutmeg)\
+_SPRITE_DMG(SpriteNutmeg, nutmegSpr)\
 _SPRITE_DMG(EnemyBatty, batty)\
 _SPRITE_DMG(EnemyLightning, lightning)\
 _SPRITE_DMG(EnemyLightningSpot, lightningspot)\

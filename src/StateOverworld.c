@@ -407,8 +407,8 @@ void Setup_HUD(void)
 	//level display
 	set_tile_xy (11, 1, level);	
 
-	twoDigitsAt (4, 1, nutmeglives);
-	twoDigitsAt (16, 1, acorncounter);
+	twoDigitsAt (4, 1, nutmeg.lives);
+	twoDigitsAt (16, 1, nutmeg.acorns);
 }
 
 #define TINY_NUTMEG_OFFSET_X (0)

@@ -78,11 +78,11 @@ void Update_StateLevel1(void)
 	if (timerlevel == 0) {
 		nutmeg_death = true;
 	
-		if (health == full) {
-			lostbow = true;
-			bow_counter = 0;
-			if (nutmeg_direction == right) { bowanim = 8; }
-			else if (nutmeg_direction == left) { bowanim = 9; }
+		if (nutmeg.health == full) {
+			nutmeg.lostbow = true;
+			nutmeg.bow_counter = 0;
+			if (nutmeg.direction == right) { nutmeg.bowanim = 8; }
+			else if (nutmeg.direction == left) { nutmeg.bowanim = 9; }
 		}
 	}
 

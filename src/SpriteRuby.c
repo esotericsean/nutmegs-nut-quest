@@ -18,19 +18,18 @@ void Update_SpriteRuby(void) {
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false)
 	{
 		THIS->y -=7;
-		if (movestate == inair && accelY > 0)
+		if (nutmeg.movestate == inair && nutmeg.accelY > 0)
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
 			
-			accelY = -400;
-			jumpPeak = 0;
-			movestate = inair;
+			nutmeg.accelY = -400;
+			nutmeg.jumpPeak = 0;
 			
-			if (nutmeg_direction == right) {
+			if (nutmeg.direction == right) {
 				SpriteManagerAdd(SpritePuffLeft, THIS->x+8, THIS->y+2);
 				SpriteManagerAdd(SpritePuffRight, THIS->x+16, THIS->y+2);
 			}
-			else if (nutmeg_direction == left) {
+			else if (nutmeg.direction == left) {
 				SpriteManagerAdd(SpritePuffLeft, THIS->x+8, THIS->y+2);
 				SpriteManagerAdd(SpritePuffRight, THIS->x+16, THIS->y+2);
 			}

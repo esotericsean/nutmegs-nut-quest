@@ -27,7 +27,7 @@ void Start_EnemyTopSpike (void)
 void Update_EnemyTopSpike (void) 
 {
 	//die if touch topspike
-	if (CheckCollision(THIS, spr_nutmeg) && accelY < 0 && nutmeg_death == false) {
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.accelY < 0 && nutmeg_death == false) {
 		nutmeg_hit();
 	}
 }

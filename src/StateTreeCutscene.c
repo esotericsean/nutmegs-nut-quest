@@ -57,7 +57,7 @@ void Start_StateTreeCutscene (void)
 
 	cutscenetimer = 0;
 
-	//nutmeg_direction = left;
+	//nutmeg.direction = left;
 
 	stop_music_on_new_state = 0;
 	PlayMusic(oaktree, 1); //name, BANK, volume or speed?
@@ -68,12 +68,12 @@ void Start_StateTreeCutscene (void)
 	cutscenemode = enabled;
 
 	//RESET SO NUTMEG DOESN'T FLY OFF SCREEN
-    accelY = 0;
-    accelX = 0;
-    jumpPeak = 0;
-    runJump = 0;
-    nutmeg_direction = right;
-    movestate = grounded;
+    nutmeg.accelY = 0;
+    nutmeg.accelX = 0;
+    nutmeg.jumpPeak = 0;
+    nutmeg.runJump = 0;
+    nutmeg.direction = right;
+    nutmeg.movestate = grounded;
 
 	SpriteManagerAdd(SpriteNutmeg, 12*8, 104);
 	SpriteManagerAdd(SpriteCinnamon, 36, 96);

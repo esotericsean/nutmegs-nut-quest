@@ -35,18 +35,17 @@ void Update_SpriteMaple(void) {
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false)
 	{
 		THIS->y -=7;
-		if (movestate == inair && accelY > 0)
+		if (nutmeg.movestate == inair && nutmeg.accelY > 0)
 		{
 			PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
-			accelY = -400;
-			jumpPeak = 0;
-			movestate = inair;
+			nutmeg.accelY = -400;
+			nutmeg.jumpPeak = 0;
 			
-			if (nutmeg_direction == right) {
+			if (nutmeg.direction == right) {
 				SpriteManagerAdd(SpritePuffLeft, THIS->x+0, THIS->y+2);
 				SpriteManagerAdd(SpritePuffRight, THIS->x+8, THIS->y+2);
 			}
-			else if (nutmeg_direction == left) {
+			else if (nutmeg.direction == left) {
 				SpriteManagerAdd(SpritePuffLeft, THIS->x+0, THIS->y+2);
 				SpriteManagerAdd(SpritePuffRight, THIS->x+8, THIS->y+2);
 			}

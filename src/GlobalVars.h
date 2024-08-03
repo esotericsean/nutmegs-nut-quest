@@ -1,6 +1,15 @@
 #ifndef GLOBALVARS_H_
 #define GLOBALVARS_H_
 
+//random typedefs
+
+typedef enum { false, true } bool;
+typedef enum { grounded, inair } move_state;
+typedef enum { disabled, enabled  } switcher;
+typedef enum { right, left } direction;
+typedef enum { full, low } amount;
+typedef enum { vertical, horizontal } orientation;
+
 // Nutmeg Physics Old
 //#define walkSpeed 100
 //#define runSpeed 200
@@ -17,32 +26,40 @@
 #define slowDownSpeed 10 //lower number for ice level
 //#define respawnMoveSpeed 3 //unused
 
-//player movement physics
-extern INT16 accelY;
-extern INT16 accelX;
-extern UINT8 jumpPeak;
-extern UINT8 runJump;
+typedef struct Nutmeg {
+    UINT8 lives;
+	UINT8 acorns;
+	
+	amount health;
 
-//random typedefs
+	//which direction is nutmeg facing
+	direction direction;
+	move_state movestate;
+	
+	//powerups
+	switcher powerupleaf; //enabled or disabled
+	switcher powerupstar; //enabled or disabled
 
-typedef enum { false, true } bool;
-typedef enum { grounded, inair } move_state;
-typedef enum { disabled, enabled  } switcher;
-typedef enum { right, left } direction;
-typedef enum { full, low } amount;
-typedef enum { vertical, horizontal } orientation;
+	//player movement physics
+	INT16 accelX;
+	INT16 accelY;
+	UINT8 jumpPeak;
+	UINT8 runJump;
+	// dealing with the bow
+
+	// does nutmeg have a bow?
+	bool hasbow;
+	UINT8 bowanim;
+	bool lostbow;
+	UINT8 bow_counter;
+
+} NutmegT;
+
+extern NutmegT nutmeg;
 
 //powerups
-extern amount health;
 
-extern bool hasbow;
 
-extern UINT8 bowanim;
-extern bool lostbow;
-
-extern UINT8 bow_counter;
-extern switcher powerupleaf;
-extern switcher powerupstar;
 
 extern bool firstplay;
 
@@ -57,22 +74,19 @@ extern UINT8 level_next;
 extern UINT8 level_max;
 
 //health system - reset to 0 in StateCutscene1
-//start with 0 acorns and 3 lives
-extern UINT8 acorncounter;
-extern UINT8 nutmeglives;
+
 extern bool GameOver;
 
 
 // level timer countdown - controlled by Hud.c
 extern UINT16 timerlevel;
 
-//which direction is nutmeg facing
-extern direction nutmeg_direction;
+
 
 //which direction is gordon facing
 extern direction gordon_direction;
 
-extern move_state movestate;
+
 
 /* * * * * * * * * * * * * * */
 /*      c u t s c e n e      */

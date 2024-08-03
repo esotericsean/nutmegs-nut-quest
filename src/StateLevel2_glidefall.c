@@ -122,11 +122,11 @@ void Start_StateLevel2_glidefall(void)
 	nutmeg_Add (startx, starty);
 
 	// clear some nutmeg 
-	accelX = 0;
-	accelY = 0;
-	movestate = inair;
+	nutmeg.accelX = 0;
+	nutmeg.accelY = 0;
+	nutmeg.movestate = inair;
 	// stop nutmeg from being able to jump in mid air at the start of the level
-	jumpPeak = 1; 
+	nutmeg.jumpPeak = 1; 
 
 	scroll_target = spr_camera = SpriteManagerAdd(SpriteCamera, startx, starty);
 	camera_delta_y = 0;

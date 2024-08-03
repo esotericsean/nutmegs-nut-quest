@@ -230,7 +230,7 @@ void Update_StateLevel5 (void)
 	}
 
 	if (spr_nutmeg->x < 1936) {
-		if (movestate == inair) { TranslateSprite (spr_nutmeg, -1, 0); }
+		if (nutmeg.movestate == inair) { TranslateSprite (spr_nutmeg, -1, 0); }
 	}
 	else if (spr_nutmeg->x >= 1936) {
 		TranslateSprite (spr_nutmeg, 0, 0);

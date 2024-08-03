@@ -161,7 +161,7 @@ void main(void) {
 	level_max = 1;
 	level_current = 0;
 	level_next = 1;
-	nutmeglives = 99;
+	nutmeg.lives = 99;
 	add_LCD (LCD_NoSpritesOnHUD_isr);
 	// END TESTING
 	

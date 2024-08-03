@@ -127,13 +127,13 @@ void Start_StateCutscene1(void) {
     nutmeg_SetupGame();
 
     //RESET SO NUTMEG DOESN'T FLY OFF SCREEN
-    accelY = 0;
-    accelX = 0;
-    jumpPeak = 0;
-    runJump = 0;
-    nutmeg_direction = right;
+    nutmeg.accelY = 0;
+    nutmeg.accelX = 0;
+    nutmeg.jumpPeak = 0;
+    nutmeg.runJump = 0;
+    nutmeg.direction = right;
 
-    movestate = grounded;
+    nutmeg.movestate = grounded;
 }
 
 void Update_StateCutscene1(void) {

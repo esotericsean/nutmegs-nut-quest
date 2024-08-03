@@ -24,10 +24,6 @@ static const UINT8 anim_nutmegbow_fall_left[]  = {1, 10};
 // 2 = jump/fall (1)
 // 3 = static (1)
 
-UINT8 bowanim;
-UINT8 bow_y;
-UINT8 bow_counter;
-bool lostbow;
 
 /* * * * * * * * * * * * */
 /*        bowanim        */
@@ -56,10 +52,9 @@ void Start_SpriteNutmegBow(void)
 	THIS->lim_y = 144;
 
 	SetSpriteAnim(THIS, anim_nutmegbow_idle_right, 5);
-	bowanim = 0;
-	bow_y = 0;
+	nutmeg.bowanim = 0;
 
-	bow_counter = 0;
+	nutmeg.bow_counter = 0;
 	spr_nutmegbow = THIS;
 }
 
@@ -109,10 +104,10 @@ static const INT8 Y_OFFSET_AT_COUNTER [] = {
 // can't use THIS, because it is called fromthe spr_nutmeg update fn
 void nutmegBow_update(void) BANKED 
 {
-	if (lostbow == false) {
+	if (nutmeg.lostbow == false) {
 		spr_nutmegbow->y = spr_nutmeg->y-24;
 
-		switch (bowanim) {
+		switch (nutmeg.bowanim) {
 			case 0:
 				spr_nutmegbow->x = spr_nutmeg->x-8;
 				SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_idle_right, 5);
@@ -169,20 +164,19 @@ void nutmegBow_update(void) BANKED
 				break;
 		}
 	}
-	else if (health == full && lostbow == true) {
+	else if (nutmeg.health == full && nutmeg.lostbow == true) {
 		SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_static, 1);
 	
-		if (bowanim == 8) { spr_nutmegbow->mirror = NO_MIRROR; }
+		if (nutmeg.bowanim == 8) { spr_nutmegbow->mirror = NO_MIRROR; }
 		else { spr_nutmegbow->mirror = V_MIRROR; }
 
-		bow_y = Y_OFFSET_AT_COUNTER[bow_counter];
-		TranslateSprite (spr_nutmegbow, 0, bow_y);
+		TranslateSprite (spr_nutmegbow, 0, Y_OFFSET_AT_COUNTER[nutmeg.bow_counter]);
 
-		bow_counter++;
+		nutmeg.bow_counter++;
 
-		if (bow_counter >= 37) {
-			health = low;
-			bowanim = 10;
+		if (nutmeg.bow_counter >= 37) {
+			nutmeg.health = low;
+			nutmeg.bowanim = 10;
 			SpriteManagerRemoveSprite(spr_nutmegbow);
 		}
 	}

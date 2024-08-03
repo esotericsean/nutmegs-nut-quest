@@ -49,8 +49,8 @@ void Hud_Init(bool isBoss) BANKED
     timerclock = 0;
 
     // prime the last values so they all get updated
-    lastLives = nutmeglives + 1;
-    lastAcorn = acorncounter + 1;
+    lastLives = nutmeg.lives + 1;
+    lastAcorn = nutmeg.acorns + 1;
     lastTimer = 0;
 }
 
@@ -141,21 +141,21 @@ void Hud_Update(void) BANKED
     return;
 #endif
 
-    if (lastLives != nutmeglives)
+    if (lastLives != nutmeg.lives)
     {
         // update HUD lives
-        lastLives = nutmeglives;
-        tens = getTens (nutmeglives);
-        ones = nutmeglives - (tens * 10);
+        lastLives = nutmeg.lives;
+        tens = getTens (nutmeg.lives);
+        ones = nutmeg.lives - (tens * 10);
         UPDATE_HUD_TILE (3,0, 6 + tens);
         UPDATE_HUD_TILE (4,0, 6 + ones);
     }
     
-    if (lastAcorn != acorncounter)
+    if (lastAcorn != nutmeg.acorns)
     {
-        lastAcorn = acorncounter;
-        tens = getTens(acorncounter);
-        ones = acorncounter - (tens * 10);
+        lastAcorn = nutmeg.acorns;
+        tens = getTens(nutmeg.acorns);
+        ones = nutmeg.acorns - (tens * 10);
         UPDATE_HUD_TILE (17, 0, 6 + tens);
         UPDATE_HUD_TILE (18, 0, 6 + ones);
     }
