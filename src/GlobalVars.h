@@ -96,8 +96,7 @@ extern direction gordon_direction;
 extern switcher cutscenemode;
 extern bool cutscenewalkleft;
 extern bool cutscenewalkright;
-extern bool cutscenerun;
-extern bool cutscenejump;
+
 extern bool nutmeg_death;
 extern bool nutmeg_pitdeath;
 extern UINT8 nutmegdeathtimer;

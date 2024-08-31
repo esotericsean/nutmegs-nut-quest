@@ -49,8 +49,7 @@ bool GameOver = false;
 switcher cutscenemode;
 bool cutscenewalkleft;
 bool cutscenewalkright;
-bool cutscenerun;
-bool cutscenejump;
+
 
 bool nutmegGliding = false;
 
@@ -84,8 +83,6 @@ void ResetState(void) {
 
     cutscenewalkleft = false;
     cutscenewalkright = false;
-    cutscenejump = false;
-    cutscenerun = false;
 
     nutmegdeathtimer = 0;
     nutmeg_death = false;
@@ -176,33 +173,20 @@ static void update_inCutscene(void)
         nutmeg.direction = right;
         THIS->mirror = NO_MIRROR;
 
-        if (cutscenerun == true) {
-            nutmeg.accelX += runIncrease;
-            if (nutmeg.accelX > runSpeed && nutmeg.movestate == grounded)
-                nutmeg.accelX = runSpeed;
-        }
-        else {
             nutmeg.accelX += walkIncrease;
             if (nutmeg.accelX > 100 && nutmeg.movestate == grounded)
                 nutmeg.accelX = 100;
-        }
+
     }
 
     if (cutscenewalkleft == true) {
         nutmeg.direction = left;
         THIS->mirror = V_MIRROR;
 
-        if (cutscenerun == true) {
-            nutmeg.accelX -= runIncrease;
-            if (nutmeg.accelX < -runSpeed && nutmeg.movestate == grounded)
-                nutmeg.accelX = -runSpeed;
-        }
-        else {
             nutmeg.accelX -= walkIncrease;
             if (nutmeg.accelX < -100 && nutmeg.movestate == grounded)
                 nutmeg.accelX = -100;
         }
-    }
   
     if (nutmeg.movestate == inair) {
 
