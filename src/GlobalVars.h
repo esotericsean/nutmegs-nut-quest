@@ -10,27 +10,55 @@ typedef enum { right, left } direction;
 typedef enum { full, low } amount;
 typedef enum { vertical, horizontal } orientation;
 
-// Nutmeg Physics Old
-//#define walkSpeed 100
-//#define runSpeed 200
-//#define walkIncrease 50
-//#define runIncrease 60
-//#define slowDownSpeed 10
-//#define respawnMoveSpeed 3
 
-// Nutmeg Physics New
-#define walkSpeed 200   // accelX = 200 as a max speed. This gets divided by 100, which is 2 pixels at a time movement speed.
-#define runSpeed 200    // if you do any number between 100 and 199, it gives you 1 pixel at a time.
-#define walkIncrease 50 //50
-#define runIncrease 60
-#define slowDownSpeed 10 //lower number for ice level
-//#define respawnMoveSpeed 3 //unused
+typedef struct NutmegSpeed {
+	// left right friction when 
+	INT16 frictionX;
+	
+	// single increase while running
+	INT16 runIncX;
+
+	// max X while running
+	INT16 runMaxX;
+
+	INT16 walkIncX;
+	INT16 walkMaxX;
+
+	// MAX x in a cutscene
+	INT16 cutsceneMaxX;
+
+	// inital jump force (negative)
+	INT16 initJumpY;
+	
+	// single extra jump power while holding jump button (positive)
+	INT16 jumpY;
+	
+	// Minimum Y upwards speed (negative)
+	INT16 jumpYMin;
+
+	// initial fall speed, if nutmeg walks off an edge (positive)
+	INT16 fallInitY;
+
+	// single extra fall speed per frame
+	INT16 fallIncY;
+
+	// maximum fall speed
+	INT16 fallMaxY;
+
+	// maximum fall speed while gliding
+	INT16 fallGlideMaxY;
+
+} NutmegSpeedT;
 
 typedef struct Nutmeg {
-    UINT8 lives;
+    NutmegSpeedT *speeds;
+	UINT8 lives;
 	UINT8 acorns;
 	
 	amount health;
+
+	// Set to true if nutmeg is currently swimming
+	bool isSwimming;
 
 	//which direction is nutmeg facing
 	direction direction;

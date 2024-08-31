@@ -51,6 +51,9 @@ void Start_StateLevel1(void)
 
 	nut_region = 0;
 
+	
+	nutmeg.isSwimming = true;
+
 	deathmusicplayed = false;
 
 	PlayMusic(quickstart, 1);
