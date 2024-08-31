@@ -50,7 +50,7 @@ void Update_EnemyBatty(void) {
 		if (nutmeg.movestate == inair && nutmeg.accelY > 0)
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-			nutmeg.accelY = -600;
+			nutmeg.accelY = -nutmeg.speeds->enemyBounceY;
 			nutmeg.jumpPeak = 0;
 			
 			if (nutmeg.direction == right) {

@@ -22,7 +22,9 @@ void Update_SpriteRuby(void) {
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
 			
-			nutmeg.accelY = -400;
+			INT16 accly = (nutmeg.speeds->enemyBounceY >> 1);
+			accly += (nutmeg.speeds->enemyBounceY >> 2);
+			nutmeg.accelY = -accly;
 			nutmeg.jumpPeak = 0;
 			
 			if (nutmeg.direction == right) {

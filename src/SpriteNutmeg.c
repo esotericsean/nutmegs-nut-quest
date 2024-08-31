@@ -14,14 +14,33 @@ NutmegSpeedT groundSpeed = {
 	.runMaxX = 200,
 	.walkIncX = 50,
 	.walkMaxX = 200,
+    .enemyBounceY = 600,
     .cutsceneMaxX = 100,
-	.initJumpY = -150,
+	.initJumpY = 150,
 	.jumpY = 20,
-	.jumpYMin = -350,
+	.jumpYMax = 350,
 	.fallInitY = 100,
 	.fallIncY = 20,
 	.fallMaxY = 300,
 	.fallGlideMaxY = 190
+};
+
+// all the speed parameters for nutmeg while she is underwater
+NutmegSpeedT waterSpeed = {
+	.frictionX = 15,
+	.runIncX = 50,
+	.runMaxX = 160,
+	.walkIncX = 40,
+	.walkMaxX = 160,
+    .cutsceneMaxX = 100,
+    .enemyBounceY = 250,
+	.initJumpY = 100,
+	.jumpY = 20,
+	.jumpYMax = 200,
+	.fallInitY = 100,
+	.fallIncY = 5,
+	.fallMaxY = 150,
+	.fallGlideMaxY = 100
 };
 
 
@@ -109,7 +128,11 @@ void ResetState(void) {
     nutmegdeathmove = 0;
 
     kickbackcounter = 0;
-    nutmeg.speeds = &groundSpeed;
+
+    // TESTING
+    nutmeg.isSwimming = true;
+    nutmeg.speeds = &waterSpeed;
+    //nutmeg.speeds = &groundSpeed;
 }
 
 
@@ -372,7 +395,7 @@ void update_aliveInControl (void)
     // but we can keep the running speed if we start the jump from run
     if (nutmeg.movestate == grounded) {
         if (KEY_TICKED(J_A)) {
-            nutmeg.accelY = nutmeg.speeds->initJumpY;
+            nutmeg.accelY = -nutmeg.speeds->initJumpY;
             nutmeg.jumpPeak = 0;
             nutmeg.movestate = inair;
             nutmeg.runJump = KEY_PRESSED(J_B) ? 1 : 0;
@@ -394,7 +417,7 @@ void update_aliveInControl (void)
             nutmeg.jumpPeak = 1;
         }
 
-        if (nutmeg.jumpPeak == 0 && KEY_PRESSED(J_A) && nutmeg.accelY > nutmeg.speeds->jumpYMin) {
+        if (nutmeg.jumpPeak == 0 && KEY_PRESSED(J_A) && nutmeg.accelY > -nutmeg.speeds->jumpYMax) {
             nutmeg.accelY -= nutmeg.speeds->jumpY;
         }
         else if (nutmeg.accelY < nutmeg.speeds->fallMaxY) {
@@ -402,6 +425,25 @@ void update_aliveInControl (void)
             nutmeg.jumpPeak = 1;
         }
         
+        // if nutmeg is swimming, she can "jump" again once she starts falling
+        if ((nutmeg.isSwimming == true) && (nutmeg.jumpPeak == 1) && (KEY_TICKED(J_A))) {
+            nutmeg.accelY = -nutmeg.speeds->initJumpY;
+            nutmeg.jumpPeak = 0;
+            nutmeg.movestate = inair;
+            nutmeg.runJump = KEY_PRESSED(J_B) ? 1 : 0;
+            
+            //PlayFx(CHANNEL_1, 5, 0x71, 0x03, 0x44, 0xc8, 0x80);
+            PlayFx(CHANNEL_1, 5, 0x17, 0x9f, 0xf3, 0xc9, 0xc4);
+
+            //display a puff when jumping
+            if (nutmeg.direction == right) {
+                SpriteManagerAdd(SpritePuffLeft, THIS->x-2, THIS->y-2);
+            }
+            else {
+                SpriteManagerAdd(SpritePuffRight, THIS->x+10, THIS->y-2);
+            }
+        }
+
         nutmegGliding = false;
         if (KEY_PRESSED(J_B) && nutmeg.accelY > 0)
         {

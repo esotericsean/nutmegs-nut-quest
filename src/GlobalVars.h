@@ -27,14 +27,17 @@ typedef struct NutmegSpeed {
 	// MAX x in a cutscene
 	INT16 cutsceneMaxX;
 
-	// inital jump force (negative)
+	// initial jump force off an enemy (positive)
+	INT16 enemyBounceY;
+
+	// inital jump force (positive)
 	INT16 initJumpY;
 	
 	// single extra jump power while holding jump button (positive)
 	INT16 jumpY;
 	
-	// Minimum Y upwards speed (negative)
-	INT16 jumpYMin;
+	// Minimum Y upwards speed (positive)
+	INT16 jumpYMax;
 
 	// initial fall speed, if nutmeg walks off an edge (positive)
 	INT16 fallInitY;

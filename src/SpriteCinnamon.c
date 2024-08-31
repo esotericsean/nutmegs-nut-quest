@@ -38,7 +38,11 @@ void Update_SpriteCinnamon(void) {
 		if (nutmeg.movestate == inair && nutmeg.accelY > 0)
 		{
 			PlayFx(CHANNEL_4, 60, 0x3a, 0xf2, 0x62, 0x80);
-			nutmeg.accelY = -400;
+			
+			INT16 accly = (nutmeg.speeds->enemyBounceY >> 1);
+			accly += (nutmeg.speeds->enemyBounceY >> 2);
+			nutmeg.accelY = -accly;
+	
 			nutmeg.jumpPeak = 0;
 			
 			SetSpriteAnim(THIS, anim_cinnamon_idle, 10);
