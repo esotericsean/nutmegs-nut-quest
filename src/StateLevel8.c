@@ -118,26 +118,8 @@ void Update_StateLevel8 (void)
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 		cutscenewalkleft = false;
-		
-		if (spr_nutmeg->x > 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x < 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x == 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-
+	
 		if (levelEndCounter >= 100) {
-			//levelEndCounter = 0;
-			//cutscenewalkleft = false;
-			//cutscenewalkright = false;
-			//cutscenemode = disabled;
-
 			SetState(StateOverworld);
 		}
 

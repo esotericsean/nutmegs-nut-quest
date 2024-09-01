@@ -133,11 +133,6 @@ void Update_StateLevel3 (void)
 		}
 
 		if (levelEndCounter >= 100) {
-			//levelEndCounter = 0;
-			//cutscenewalkleft = false;
-			//cutscenewalkright = false;
-			//cutscenemode = disabled;
-
 			SetState(StateOverworld);
 		}
 

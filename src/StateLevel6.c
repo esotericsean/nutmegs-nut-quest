@@ -217,19 +217,6 @@ void Update_StateLevel6 (void)
 		cutscenewalkright = true;
 		cutscenewalkleft = false;
 		
-		if (spr_nutmeg->x > 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x < 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x == 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-
 		if (levelEndCounter >= 100) {
 			SetState(StateOverworld);
 		}

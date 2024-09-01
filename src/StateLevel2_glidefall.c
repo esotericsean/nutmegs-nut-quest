@@ -201,20 +201,8 @@ void Update_StateLevel2_glidefall(void)
 	
 	if (levelbeat == true) {
 		cutscenemode = enabled;
-		
-		if (spr_nutmeg->x > 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x < 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x == 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-
+		cutscenewalkright = true;
+		cutscenewalkleft = false;
 	
 		if (levelEndCounter >= 100) {
 			isSpikeLevel = false;
