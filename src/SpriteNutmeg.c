@@ -89,11 +89,6 @@ UINT8 collisionX;
 UINT8 collisionY;
 
 
-
-
-
-bool isSpikeLevel = false;
-
 bool isHorizontalGoalpost = false;
 
 //if nutmeg loses her bow, add some kickback
@@ -142,6 +137,17 @@ void Start_SpriteNutmeg(void) {
     THIS->lim_x = 500;
 	THIS->lim_y = 144;
     SetSpriteAnim(spr_nutmeg, anim_nutmeg_idle_left, 5);
+
+    if (level.isWaterLevel)
+    {
+         nutmeg.speeds = &waterSpeed;
+         nutmeg.isSwimming = true;
+    }
+    else
+    {
+         nutmeg.speeds = &groundSpeed;
+         nutmeg.isSwimming = false;
+    }
 }
 
 // Create nutmeg sprite at x,y (and her bow if required)
@@ -442,8 +448,9 @@ void update_aliveInControl (void)
             nutmeg.jumpPeak = 1;
         }
         
-        // if nutmeg is swimming, she can "jump" again once she starts falling
-        if ((nutmeg.isSwimming == true) && (nutmeg.jumpPeak == 1) && (KEY_TICKED(J_A))) {
+        // if nutmeg is swimming, she can "jump" again once she starts falling a little bit
+        if ((nutmeg.isSwimming == true) && (nutmeg.jumpPeak == 1) 
+            && (nutmeg.speedY > 50) && (KEY_TICKED(J_A))) {
             nutmeg.speedY = -nutmeg.speeds->initJumpY;
             nutmeg.jumpPeak = 0;
             nutmeg.movestate = inair;
@@ -504,7 +511,7 @@ void update_aliveInControl (void)
     // Otherwise drag
     if (collisionX != 0) {
         nutmeg.speedX = 0;
-        if ((isSpikeLevel == true) && (collisionX ==2))
+        if ((level.isSpikeLevel == true) && (collisionX == 2))
         {
             // Get hit!
             nutmeg_hit();
@@ -538,16 +545,6 @@ void update_aliveInControl (void)
             nutmeg.movestate = inair;
         }
         else {
-            if ((isSpikeLevel == true) && (collisionY == 2))
-            {
-                // Get hit!
-                nutmeg_hit();
-                if (nutmeg.isDying == false)
-                {
-                    // bounce upwards on hit
-                    nutmeg.speedY = - nutmeg.speeds->fallMaxY;
-                }
-            }
             if (nutmeg.movestate == inair) {
                 //PlayFx(CHANNEL_4, 4, 0x32, 0x71, 0x73, 0x80);
                 nutmeg.movestate = grounded;
@@ -559,6 +556,19 @@ void update_aliveInControl (void)
     else {
         nutmeg.movestate = inair;
     }
+
+    // check for up/down spike collisions
+    if ((level.isSpikeLevel == true) && (collisionY == 2))
+    {
+        // Get hit!
+        nutmeg_hit();
+        if (nutmeg.isDying == false)
+        {
+            // bounce upwards on hit
+            nutmeg.speedY = - nutmeg.speeds->fallMaxY;
+        }
+    }
+
 
     /* * * * * * * * * * * * * * * * * * * */
     /*      kickback from losing bow       */
@@ -578,6 +588,8 @@ void update_aliveInControl (void)
         }
     }
 }
+
+
 
 void Update_SpriteNutmeg(void) {
     

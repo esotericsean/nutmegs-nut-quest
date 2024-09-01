@@ -101,11 +101,13 @@ static void AddNuts (void)
 
 void Start_StateLevel2_glidefall(void) 
 {
-	isSpikeLevel = true;
+	
 	isHorizontalGoalpost = true;
 
 	level.orientation = vertical;
 	level.isWaterLevel = false;
+	level.isSpikeLevel = true;
+
 	levelbeat = false;
 	levelStartCounter = 0;
 	levelEndCounter = 0;
@@ -169,7 +171,7 @@ void Update_StateLevel2_glidefall(void)
 		}
 
 		isHorizontalGoalpost = false;
-		isSpikeLevel = false;
+		level.isSpikeLevel = false;
 
 		if (nutmeg.deathtimer >= 125) {
 			if (GameOver == true) {
@@ -205,7 +207,7 @@ void Update_StateLevel2_glidefall(void)
 		cutscenewalkleft = false;
 	
 		if (levelEndCounter >= 100) {
-			isSpikeLevel = false;
+			level.isSpikeLevel = false;
 			isHorizontalGoalpost = false;
 			SetState(StateOverworld);
 		}

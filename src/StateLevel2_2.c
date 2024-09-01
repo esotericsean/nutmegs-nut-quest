@@ -145,19 +145,8 @@ void Update_StateLevel2_2(void)
 	
 	if (levelbeat == true) {
 		cutscenemode = enabled;
-		
-		if (spr_nutmeg->x > 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x < 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x == 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
+		cutscenewalkright = true;
+		cutscenewalkleft = false;
 
 	
 		if (levelEndCounter >= 100) {

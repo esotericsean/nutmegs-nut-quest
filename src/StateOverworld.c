@@ -698,7 +698,7 @@ void Update_StateOverworld (void) {
 		
 		if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
 			if (level_current == 0) SetState(StateLevelTree);
-			if (level_current == 1) SetState(StateLevel1);
+			if (level_current == 1) SetState (StateWaterLevel1); // SetState(StateLevel1);
 			else if (level_current == 2) SetState(StateLevel2);
 			else if (level_current == 3) SetState(StateLevel3);
 			else if (level_current == 4) SetState(StateLevel4);

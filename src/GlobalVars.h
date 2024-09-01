@@ -120,6 +120,9 @@ typedef struct {
 	// Is the level a water level?
 	bool isWaterLevel;
 
+	// if it is a spike level, and collision hurts nutmeg
+	bool isSpikeLevel;
+
 	//Sprite Limits if Vertical or Horizontal Level
 	orientation orientation;
 } LevelT;
@@ -188,8 +191,7 @@ extern UINT8 handhealth;
 
 // LEVEL SPECIFIC VARIABLES
 
-// if it is a spike level, and collision hurts nutmeg
-extern bool isSpikeLevel;
+
 extern bool isHorizontalGoalpost;
 
 
