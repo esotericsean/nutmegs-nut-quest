@@ -23,7 +23,7 @@ void UPDATE (void)
 	THIS->x = THIS->x+1;
 
 	//die if touch popsicle
-	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
 		nutmeg_hit();
 	}
 }

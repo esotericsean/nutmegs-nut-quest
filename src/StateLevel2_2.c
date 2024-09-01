@@ -91,19 +91,19 @@ void Update_StateLevel2_2(void)
 	Hud_Update();
 
 	if (timerlevel == 0) {
-		while (nutmeg_death == false)
+		while (nutmeg.isDying == false)
 		{
 			nutmeg_hit();
 		}
 	}
 
-	if (nutmeg_death == true) {
+	if (nutmeg.isDying == true) {
 		if (deathmusicplayed == false) {
 			__critical { PlayMusic(quickdeath, 1); }
 			deathmusicplayed = true;
 		}
 
-		if (nutmegdeathtimer >= 125) {
+		if (nutmeg.deathtimer >= 125) {
 			if (GameOver == true) {
 				SetState(StateGameOver);
 			}
@@ -114,7 +114,7 @@ void Update_StateLevel2_2(void)
 			return;
 		}
 
-		nutmegdeathtimer++;
+		nutmeg.deathtimer++;
 	}
 	
 	if (cutscenemode == enabled) {
@@ -166,7 +166,7 @@ void Update_StateLevel2_2(void)
 		if (levelEndCounter < 250) levelEndCounter++;
 	}
 
-	if (nutmeg_death == false)
+	if (nutmeg.isDying == false)
 	{
 		if (spr_nutmeg->x >= 456 && spr_nutmeg->x <= 464 
 				&& spr_nutmeg->y >= 456 && spr_nutmeg->y <=472

@@ -48,7 +48,7 @@ void InitGeneralRoomVars(void)
 	levelorientation = horizontal;
 	pitdeathactive = false;
 	deathmusicplayed = false;
-	nutmegdeathtimer = 0;
+	nutmeg.deathtimer = 0;
 	cutscenemode = enabled;
 	levelEndCounter = 0;
 	SPRITES_8x16;
@@ -217,19 +217,19 @@ void Update_StateLevel2_multi (void) {
 	Hud_Update();
 
 	if (timerlevel == 0) {
-		while (nutmeg_death == false)
+		while (nutmeg.isDying == false)
 		{
 			nutmeg_hit();
 		}
 	}
 
-	if (nutmeg_death == true) {
+	if (nutmeg.isDying == true) {
 		if (deathmusicplayed == false) {
 			__critical { PlayMusic(quickdeath, 1); }
 			deathmusicplayed = true;
 		}
 
-		if (nutmegdeathtimer >= 125) {
+		if (nutmeg.deathtimer >= 125) {
 			if (GameOver == true) {
 				SetState(StateGameOver);
 			}
@@ -240,7 +240,7 @@ void Update_StateLevel2_multi (void) {
 			return;
 		}
 
-		nutmegdeathtimer++;
+		nutmeg.deathtimer++;
 	}
 	
 	if (cutscenemode == enabled) {
@@ -296,7 +296,7 @@ void Update_StateLevel2_multi (void) {
 		FlagPole_Animate();
 	}
 
-	if (nutmeg_death == false)
+	if (nutmeg.isDying == false)
 	{
 		if (nutmeg_isInsideXY(exitTopX,exitTopY,exitBottomX,exitBottomY) && levelbeat == false)
 		{

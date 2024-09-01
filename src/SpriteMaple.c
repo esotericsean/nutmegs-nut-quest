@@ -19,7 +19,7 @@ void Start_SpriteMaple(void) {
 }
 
 void Update_SpriteMaple(void) {
-	if (maple_counter >= 0 && maple_counter < 80) {
+	if (maple_counter < 80) {
 		SetSpriteAnim(THIS, anim_maple_idle, 10);
 	}
 	else if (maple_counter >= 80 && maple_counter < 100) {
@@ -32,7 +32,7 @@ void Update_SpriteMaple(void) {
 		maple_counter = 0;
 
 	THIS->y +=7;
-	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false)
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false)
 	{
 		THIS->y -=7;
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
@@ -40,6 +40,7 @@ void Update_SpriteMaple(void) {
 			PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
 			INT16 accly = (nutmeg.speeds->enemyBounceY >> 1);
 			accly += (nutmeg.speeds->enemyBounceY >> 2);
+			accly += (nutmeg.speeds->enemyBounceY >> 3);
 			nutmeg.speedY = -accly;
 			nutmeg.jumpPeak = 0;
 			

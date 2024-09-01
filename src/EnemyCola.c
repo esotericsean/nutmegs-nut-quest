@@ -84,7 +84,7 @@ void UPDATE(void) {
 	}
 
 	//die if touch cola
-	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
 		nutmeg_hit();
 	}
 }

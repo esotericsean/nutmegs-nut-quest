@@ -97,7 +97,7 @@ void Update_EnemyLightning (void)
 	}
 
 	//die if get struck by lightning
-	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
 		nutmeg_hit();
 	}
 }

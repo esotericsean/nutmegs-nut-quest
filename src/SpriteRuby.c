@@ -15,7 +15,7 @@ void Start_SpriteRuby(void) {
 
 void Update_SpriteRuby(void) {
 	THIS->y +=7;
-	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false)
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false)
 	{
 		THIS->y -=7;
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
@@ -24,6 +24,7 @@ void Update_SpriteRuby(void) {
 			
 			INT16 accly = (nutmeg.speeds->enemyBounceY >> 1);
 			accly += (nutmeg.speeds->enemyBounceY >> 2);
+			accly += (nutmeg.speeds->enemyBounceY >> 3);
 			nutmeg.speedY = -accly;
 			nutmeg.jumpPeak = 0;
 			

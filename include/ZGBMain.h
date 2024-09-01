@@ -5,6 +5,7 @@
 _STATE(StateIncube8)\
 _STATE(StateLogo)\
 _STATE(StateTitle)\
+_STATE(StateInitGame)\
 _STATE(StateTreeCutscene)\
 _STATE(StateLevel1)\
 _STATE(StateOverworld)\

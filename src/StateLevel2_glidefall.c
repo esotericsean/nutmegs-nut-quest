@@ -155,13 +155,13 @@ void Update_StateLevel2_glidefall(void)
 	AddNuts ();
 	
 	if (timerlevel == 0) {
-		while (nutmeg_death == false)
+		while (nutmeg.isDying == false)
 		{
 			nutmeg_hit();
 		}
 	}
 
-	if (nutmeg_death == true) {
+	if (nutmeg.isDying == true) {
 		if (deathmusicplayed == false) {
 			__critical { PlayMusic(quickdeath, 1); }
 			deathmusicplayed = true;
@@ -170,7 +170,7 @@ void Update_StateLevel2_glidefall(void)
 		isHorizontalGoalpost = false;
 		isSpikeLevel = false;
 
-		if (nutmegdeathtimer >= 125) {
+		if (nutmeg.deathtimer >= 125) {
 			if (GameOver == true) {
 				SetState(StateGameOver);
 			}
@@ -181,7 +181,7 @@ void Update_StateLevel2_glidefall(void)
 			return;
 		}
 
-		nutmegdeathtimer++;
+		nutmeg.deathtimer++;
 	}
 	
 	if (levelStartCounter < 105) {
@@ -237,7 +237,7 @@ void Update_StateLevel2_glidefall(void)
 
 	scroll_target->y = spr_nutmeg->y + camera_delta_y;
 
-	if (nutmeg_death == false)
+	if (nutmeg.isDying == false)
 	{
 		if (spr_nutmeg->y >= 1950 && spr_nutmeg-> y < 2500 && levelbeat == false ) {
 			FlagPole_Activate(10, 256);

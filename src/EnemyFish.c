@@ -59,7 +59,7 @@ void Update_EnemyFish (void)
 	if (c >= 156) c = 0;
 	THIS->custom_data[0] = c;
 
-	if (CheckCollision(THIS, spr_nutmeg) && (nutmeg_death == false)){
+	if (CheckCollision(THIS, spr_nutmeg) && (nutmeg.isDying == false)){
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0) 
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);

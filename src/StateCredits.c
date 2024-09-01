@@ -1,13 +1,14 @@
 #include "Banks/SetAutoBank.h"
 #include <gbdk/platform.h>
 #include "ZGBMain.h"
+
 #include "Music.h"
 #include "Scroll.h"
 #include "Sound.h"
 #include "Keys.h"
 #include "SpriteManager.h"
 #include "Palette.h"
-#include "../src/GlobalVars.h"
+#include "GlobalVars.h"
 
 IMPORT_MAP (creditsmap);
 DECLARE_MUSIC (credits);
@@ -64,7 +65,7 @@ void Update_StateCredits(void)
 	if (KEY_PRESSED (J_START)) { SetState (StateTitle); }
 
 	//animate water
-	if (anim_water_counterc >= 0 && anim_water_counterc < 10) {
+	if (anim_water_counterc < 10) {
 		set_bkg_data (0x1A, 1, levelc_water1);
 		set_bkg_data (0x1B, 1, levelc_water2);
 		set_bkg_data (0x1C, 1, levelc_water3);

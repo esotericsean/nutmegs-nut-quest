@@ -92,6 +92,18 @@ typedef struct Nutmeg {
 	bool lostbow;
 	UINT8 bow_counter;
 
+	// DEATH vars
+	// is nutmeg dying
+	bool isDying;
+	
+	// is dying from falling in a pit?
+	bool isPitDeath;
+
+	// a counter to moving nutmeg a bit while dying
+	UINT8 deathmove;
+
+	// a death countdown timer
+	UINT8 deathtimer;
 } NutmegT;
 
 extern NutmegT nutmeg;
@@ -136,9 +148,6 @@ extern switcher cutscenemode;
 extern bool cutscenewalkleft;
 extern bool cutscenewalkright;
 
-extern bool nutmeg_death;
-extern bool nutmeg_pitdeath;
-extern UINT8 nutmegdeathtimer;
 
 /* * * * * * * * * * * * * * */
 /*      c u t s c e n e      */
@@ -177,9 +186,6 @@ extern orientation levelorientation;
 
 //nutmeg sprite region
 extern UINT8 nut_region;
-
-//Nutmeg Stop Moving After Dying
-extern UINT8 nutmegdeathmove;
 
 extern bool deathmusicplayed;
 extern bool pitdeathactive;

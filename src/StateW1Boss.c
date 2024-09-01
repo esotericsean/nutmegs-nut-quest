@@ -97,13 +97,13 @@ void Update_StateW1Boss (void)
 {
 	Hud_Update();
 
-	if (nutmeg_death == true) {
+	if (nutmeg.isDying == true) {
 		if (deathmusicplayed == false) {
 			__critical { PlayMusic(quickdeath, 1); }
 			deathmusicplayed = true;
 		}
 
-		if (nutmegdeathtimer >= 125) {
+		if (nutmeg.deathtimer >= 125) {
 			if (GameOver == true) {
 				SetState(StateGameOver);
 			}
@@ -114,7 +114,7 @@ void Update_StateW1Boss (void)
 			return;
 		}
 
-		nutmegdeathtimer++;
+		nutmeg.deathtimer++;
 	}
 
 	if (spr_spatula->x < 0) { SpriteManagerRemoveSprite (spr_spatula); }

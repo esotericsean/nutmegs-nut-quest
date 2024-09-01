@@ -137,7 +137,7 @@ void Update_StateLevel2_platform (void) {
 	AddActors();
 
 	if (timerlevel == 0) {
-		nutmeg_death = true;
+		nutmeg.isDying = true;
 	
 		if (nutmeg.health == full) {
 			nutmeg.lostbow = true;
@@ -147,13 +147,13 @@ void Update_StateLevel2_platform (void) {
 		}
 	}
 
-	if (nutmeg_death == true) {
+	if (nutmeg.isDying == true) {
 		if (deathmusicplayed == false) {
 			__critical { PlayMusic(quickdeath, 1); }
 			deathmusicplayed = true;
 		}
 
-		if (nutmegdeathtimer >= 125) {
+		if (nutmeg.deathtimer >= 125) {
 			if (GameOver == true) {
 				SetState(StateGameOver);
 			}
@@ -164,7 +164,7 @@ void Update_StateLevel2_platform (void) {
 			return;
 		}
 
-		nutmegdeathtimer++;
+		nutmeg.deathtimer++;
 	}
 	
 	if (cutscenemode == enabled) {
@@ -216,7 +216,7 @@ void Update_StateLevel2_platform (void) {
 		levelEndCounter++;
 	}
 
-	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg_death == false) {
+	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg.isDying == false) {
 		FlagPole_Activate(244,13);
 
 		levelbeat = true;

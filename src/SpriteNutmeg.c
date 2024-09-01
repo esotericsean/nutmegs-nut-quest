@@ -18,7 +18,7 @@ NutmegSpeedT groundSpeed = {
     .cutsceneMaxX = 100,
 	.initJumpY = 150,
 	.jumpY = 20,
-	.jumpYMax = 300,
+	.jumpYMax = 330,
 	.fallInitY = 100,
 	.fallIncY = 20,
 	.fallMaxY = 300,
@@ -76,9 +76,6 @@ Sprite * spr_nutmeg;
 
 NutmegT nutmeg;
 
-bool nutmeg_death = false;
-bool nutmeg_pitdeath = false;
-UINT8 nutmegdeathtimer = 0;
 bool GameOver = false;
 
 //cutscene mode!
@@ -96,7 +93,6 @@ UINT8 collisionY;
 
 
 bool isSpikeLevel = false;
-UINT8 nutmegdeathmove = 0;
 
 bool isHorizontalGoalpost = false;
 
@@ -122,16 +118,16 @@ void ResetState(void) {
     cutscenewalkleft = false;
     cutscenewalkright = false;
 
-    nutmegdeathtimer = 0;
-    nutmeg_death = false;
-    nutmeg_pitdeath = false;
+    nutmeg.deathtimer = 0;
+    nutmeg.isDying = false;
+    nutmeg.isPitDeath = false;
     GameOver = false;
 
-    nutmegdeathmove = 0;
+    nutmeg.deathmove = 0;
 
     kickbackcounter = 0;
 
-    // FOR TEST
+    // TESTING
     //nutmeg.isSwimming = true;
     //nutmeg.speeds = &waterSpeed;
     nutmeg.speeds = &groundSpeed;
@@ -199,22 +195,22 @@ static void update_whileDead(void)
 {
     cutscenemode = enabled;
 
-    nutmegdeathmove++;
+    nutmeg.deathmove++;
 
     if (nutmeg.direction == left) {
         SetSpriteAnim(THIS, anim_nutmeg_hurt_left, 10);
         
-        if (nutmegdeathmove < 10) nutmeg.speedX = nutmeg.speeds->cutsceneMaxX;
+        if (nutmeg.deathmove < 10) nutmeg.speedX = nutmeg.speeds->cutsceneMaxX;
         else nutmeg.speedX = 0;
     }
     else if (nutmeg.direction == right) {
         SetSpriteAnim(THIS, anim_nutmeg_hurt_right, 10);
 
-        if (nutmegdeathmove < 10) nutmeg.speedX = -nutmeg.speeds->cutsceneMaxX;
+        if (nutmeg.deathmove < 10) nutmeg.speedX = -nutmeg.speeds->cutsceneMaxX;
         else nutmeg.speedX = 0;
     }
 
-    if (nutmeg_pitdeath == true) {
+    if (nutmeg.isPitDeath == true) {
         SpriteManagerRemoveSprite(THIS);
     }
 }
@@ -302,7 +298,7 @@ static void update_inCutscene(void)
         nutmeg.movestate = inair;
     }
 
-    if (nutmeg_death == false)
+    if (nutmeg.isDying == false)
     {
         if (nutmeg.movestate == grounded) {
             if (nutmeg.speedX < nutmeg.speeds->cutsceneMaxX && nutmeg.speedX > -nutmeg.speeds->cutsceneMaxX) {
@@ -356,9 +352,9 @@ void update_aliveInControl (void)
     // death from falling into pit/water
     // normally set to 126 and 200, testing 176 and 200
     if (THIS->y >= 176 && THIS->y <= 200 && pitdeathactive == true) {
-        nutmeg_death = true;
-        nutmeg_pitdeath = true;
-        nutmegdeathtimer = 0;
+        nutmeg.isDying = true;
+        nutmeg.isPitDeath = true;
+        nutmeg.deathtimer = 0;
 
         if (nutmeg.lives <= 0) { GameOver = true; }
         else { nutmeg.lives--; }
@@ -512,7 +508,7 @@ void update_aliveInControl (void)
         {
             // Get hit!
             nutmeg_hit();
-            if (nutmeg_death == false)
+            if (nutmeg.isDying == false)
             {
                 // bounce upwards on hit
                 nutmeg.speedY = - nutmeg.speeds->fallMaxY;
@@ -546,7 +542,7 @@ void update_aliveInControl (void)
             {
                 // Get hit!
                 nutmeg_hit();
-                if (nutmeg_death == false)
+                if (nutmeg.isDying == false)
                 {
                     // bounce upwards on hit
                     nutmeg.speedY = - nutmeg.speeds->fallMaxY;
@@ -597,14 +593,14 @@ void Update_SpriteNutmeg(void) {
     }
 
     // death
-    if (nutmeg_death == true) {
+    if (nutmeg.isDying == true) {
         update_whileDead();
     }
 
     /* * * * * * * * * * * * * * * * * * * */
     /*           normal mode               */
     /* * * * * * * * * * * * * * * * * * * */
-    if ((cutscenemode == disabled) && (nutmeg_death == false))
+    if ((cutscenemode == disabled) && (nutmeg.isDying == false))
     {
         update_aliveInControl ();
     }
@@ -622,8 +618,7 @@ void Destroy_SpriteNutmeg(void) {
 void nutmeg_SetupGame(void) BANKED
 {
     //health system
-   
-    
+       
     // TESTING - Should be 3 lives
     nutmeg.lives = 99; 
     nutmeg.acorns = 0;
@@ -664,8 +659,8 @@ void nutmeg_hit(void) BANKED
         // health gets set low after bow loss I guess (this provides some invincibility)
     }
     else if (nutmeg.health == low) {
-        nutmeg_death = true;
-        nutmegdeathtimer = 0;
+        nutmeg.isDying = true;
+        nutmeg.deathtimer = 0;
         
         if (nutmeg.lives <= 0) { GameOver = true; }
         else { nutmeg.lives--; }
@@ -687,7 +682,7 @@ bool nutmeg_isInsideXY(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) BANKE
 // WARNING - Not called with THIS pointing to spr_nutmeg
 void nutmeg_Animate(void) BANKED
 {
-    if (nutmeg_death == true) {
+    if (nutmeg.isDying == true) {
         return;
     }
     

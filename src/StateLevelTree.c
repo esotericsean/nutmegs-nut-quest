@@ -8,7 +8,6 @@
 #include "SpriteManager.h"
 #include "Palette.h"
 
-#include "../src/GlobalVars.h"
 #include "FlagPole.h"
 #include "Water.h"
 #include "Hud.h"
@@ -28,31 +27,22 @@ DECLARE_MUSIC(oaktree);
 extern Sprite * spr_nutmeg;
 extern Sprite * spr_camera;
 
-void nutmegBow_update (void) BANKED;
-
 void Start_StateLevelTree(void)
 {
 	SPRITES_8x16;
 
-	pitdeathactive = true;
+	pitdeathactive = false;
 
 	nut_region = 0;
-
 	deathmusicplayed = false;
 
 	PlayMusic(oaktree, 1);
-
-	//SpriteManagerLoad(14); 	//cinnamon
-	//SpriteManagerLoad(15); 	//maple
-	//SpriteManagerLoad(28); 	//ruby
 
 	scroll_target = nutmeg_Add(36+28, 104);
 	nutmeg.direction = right;
 	
 	SpriteManagerAdd(SpriteCinnamon, 8, 96);
-	
 	SpriteManagerAdd(SpriteRuby, 32, 60);
-	
 	Sprite *s = SpriteManagerAdd(SpriteMaple, 90, 96);
 	s->mirror = V_MIRROR
 

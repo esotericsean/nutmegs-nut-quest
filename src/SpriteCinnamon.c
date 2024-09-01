@@ -32,7 +32,7 @@ void Update_SpriteCinnamon(void) {
 		cinnamon_counter = 0;
 
 	THIS->y +=7;
-	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false)
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false)
 	{
 		THIS->y -=7;
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
@@ -41,6 +41,7 @@ void Update_SpriteCinnamon(void) {
 			
 			INT16 accly = (nutmeg.speeds->enemyBounceY >> 1);
 			accly += (nutmeg.speeds->enemyBounceY >> 2);
+			accly += (nutmeg.speeds->enemyBounceY >> 3);
 			nutmeg.speedY = -accly;
 	
 			nutmeg.jumpPeak = 0;
