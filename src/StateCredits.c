@@ -43,7 +43,7 @@ static const unsigned char levelc_water_anim2[] = { 0x1B };
 static const unsigned char levelc_water_anim3[] = { 0x1C };
 
 void Start_StateCredits(void) {
-	levelorientation = vertical;
+	level.orientation = vertical;
 
 	//PlayMusic(quickstart, 1);
 	

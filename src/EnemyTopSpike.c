@@ -11,11 +11,11 @@ static const UINT8 anim_topspike_idle[] = {1, 0};
 
 void Start_EnemyTopSpike (void) 
 {
-	if (levelorientation == horizontal) {
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}

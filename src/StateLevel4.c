@@ -31,7 +31,9 @@ extern Sprite * spr_camera;
 void Start_StateLevel4 (void) 
 {
 	levelStartCounter = 0;
-	levelorientation = horizontal;
+	level.orientation = horizontal;
+	level.isWaterLevel = false;
+	
 	SPRITES_8x16;
 
 	nut_region = 0;

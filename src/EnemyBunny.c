@@ -13,11 +13,11 @@ static const UINT8 anim_bunny_jump[] = {6, 0, 1, 2, 3, 4, 5};
 static const UINT8 anim_bunny_die[] = {1, 6};
 
 void Start_EnemyBunny(void) {
-	if (levelorientation == horizontal) {
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}

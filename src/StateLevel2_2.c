@@ -43,8 +43,9 @@ static void AddNut (UINT16 x, UINT16 y)
 void Start_StateLevel2_2(void) 
 {
 	levelStartCounter = 0;
-	levelorientation = horizontal;
-
+	level.orientation = horizontal;
+	level.isWaterLevel = false;
+	
 	SPRITES_8x16;
 
 	pitdeathactive = false;

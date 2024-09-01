@@ -64,6 +64,10 @@ const unsigned char overworld1_boss2[] = {
 	0x5f,0x61,0x5f,0x61,0x2e,0x32,0x1c,0x1c
 };
 
+// extern declaration for level info - 
+// at stage setup this should be updated with all the new stage level info
+LevelT level;
+
 UINT8 level_current = 0;
 UINT8 level_next = 0;
 UINT8 level_max = 0;

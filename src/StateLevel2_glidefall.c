@@ -104,7 +104,8 @@ void Start_StateLevel2_glidefall(void)
 	isSpikeLevel = true;
 	isHorizontalGoalpost = true;
 
-	levelorientation = vertical;
+	level.orientation = vertical;
+	level.isWaterLevel = false;
 	levelbeat = false;
 	levelStartCounter = 0;
 	levelEndCounter = 0;

@@ -105,7 +105,8 @@ static void AddActors (void)
 
 void Start_StateLevel2_platform (void) {
 	levelStartCounter = 0;
-	levelorientation = horizontal;
+	level.orientation = horizontal;
+	level.isWaterLevel = false;
 	SPRITES_8x16;
 	isSpikeLevel = true;
 	pitdeathactive = true;

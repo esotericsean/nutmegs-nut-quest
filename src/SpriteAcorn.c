@@ -5,15 +5,15 @@
 
 extern Sprite * spr_nutmeg;
 
-const UINT8 anim_acorn_moving[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
-const UINT8 anim_acorn_static[] = {1, 0};
+static const UINT8 anim_acorn_moving[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
+static const UINT8 anim_acorn_static[] = {1, 0};
 
 void Start_SpriteAcorn(void) {
-	if (levelorientation == horizontal) {
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 350;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}

@@ -115,6 +115,17 @@ extern NutmegT nutmeg;
 extern bool firstplay;
 
 
+// Info about the current level
+typedef struct {
+	// Is the level a water level?
+	bool isWaterLevel;
+
+	//Sprite Limits if Vertical or Horizontal Level
+	orientation orientation;
+} LevelT;
+
+extern LevelT level;
+
 // the level we are currently at / playing
 extern UINT8 level_current;
 
@@ -181,8 +192,7 @@ extern UINT8 handhealth;
 extern bool isSpikeLevel;
 extern bool isHorizontalGoalpost;
 
-//Sprite Limits if Vertical or Horizontal Level
-extern orientation levelorientation;
+
 
 //nutmeg sprite region
 extern UINT8 nut_region;

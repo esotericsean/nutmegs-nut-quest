@@ -13,11 +13,11 @@ static const UINT8 anim_batty_fly[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
 static UINT8 battycounter;
 
 void Start_EnemyBatty(void) {
-	if (levelorientation == horizontal) {
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}

@@ -33,7 +33,9 @@ void Start_StateLevel3 (void)
 {
 	levelStartCounter = 0;
 	levelEndCounter = 0;
-	levelorientation = vertical;
+	level.orientation = vertical;
+	level.isWaterLevel = false;
+	
 
 	nut_region = 0;
 	pitdeathactive = false;

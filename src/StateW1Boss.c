@@ -39,7 +39,9 @@ static Sprite * spr_popsicle;
 void Start_StateW1Boss (void) 
 {
 	w1bosscounter = 0;
-	levelorientation = horizontal;
+	level.orientation = horizontal;
+	level.isWaterLevel = false;
+	
 	SPRITES_8x16;
 
 	nut_region = 0;

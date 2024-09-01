@@ -76,8 +76,11 @@ static void AddNuts (void)
 }
 
 void Start_StateLevel1_platform (void) {
+
+	level.isWaterLevel = false;
+
 	levelStartCounter = 0;
-	levelorientation = horizontal;
+	level.orientation = horizontal;
 	SPRITES_8x16;
 
 	pitdeathactive = true;
@@ -197,20 +200,8 @@ void Update_StateLevel1_platform (void) {
 
 	if (levelbeat == true) {
 		cutscenemode = enabled;
-		
-		if (spr_nutmeg->x > 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x < 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x == 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-
+		cutscenewalkright = true;
+		cutscenewalkleft = false;
 	
 		if (levelEndCounter >= 100) {
 			SetState(StateOverworld);

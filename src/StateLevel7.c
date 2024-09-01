@@ -37,7 +37,9 @@ void Start_StateLevel7 (void)
 {
 	levelStartCounter = 0;
 	levelEndCounter = 0;
-	levelorientation = horizontal;
+	level.orientation = horizontal;
+	level.isWaterLevel = false;
+	
 	SPRITES_8x16;
 
 	nut_region = 0;

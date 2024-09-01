@@ -28,11 +28,11 @@ static const UINT8 anim_rockith_death_alt[] = {16, 5, 5, 5, 5, 5, 6, 7, 8, 0, 0,
 
 void Start_EnemyRockith (void) 
 {
-	if (levelorientation == horizontal) {
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}

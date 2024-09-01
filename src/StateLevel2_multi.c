@@ -45,7 +45,9 @@ void InitGeneralRoomVars(void)
 	levelbeat = false;
 
 	levelStartCounter = 0;
-	levelorientation = horizontal;
+	level.orientation = horizontal;
+	level.isWaterLevel = false;
+
 	pitdeathactive = false;
 	deathmusicplayed = false;
 	nutmeg.deathtimer = 0;
@@ -156,7 +158,8 @@ void StartRoom2 (void)
 void StartRoom3 (void)
 {
 	InitGeneralRoomVars();
-	levelorientation = vertical;
+	level.orientation = vertical;
+	level.isWaterLevel = false;
 	cutscenemode = false;
 
 	mapRight = 19*8;
