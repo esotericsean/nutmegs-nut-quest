@@ -84,8 +84,8 @@ void Update_SpriteBalloon(void)
 		nutmeg.jumpPeak = 0;
 		nutmeg.movestate = inair;
 
-		if (balloonjump == 0) { nutmeg.accelY = -(nutmeg.speeds->enemyBounceY>>1); balloonjump = 1; }
-		else if (balloonjump == 1) { nutmeg.accelY = -nutmeg.speeds->enemyBounceY; balloonjump = 2; }
+		if (balloonjump == 0) { nutmeg.speedY = -(nutmeg.speeds->enemyBounceY>>1); balloonjump = 1; }
+		else if (balloonjump == 1) { nutmeg.speedY = -nutmeg.speeds->enemyBounceY; balloonjump = 2; }
 	}
 }
 

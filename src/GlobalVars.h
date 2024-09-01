@@ -62,6 +62,9 @@ typedef struct Nutmeg {
 
 	// Set to true if nutmeg is currently swimming
 	bool isSwimming;
+	
+	// set to true if nutmeg is gliding
+	bool isGliding;
 
 	//which direction is nutmeg facing
 	direction direction;
@@ -72,8 +75,13 @@ typedef struct Nutmeg {
 	switcher powerupstar; //enabled or disabled
 
 	//player movement physics
-	INT16 accelX;
-	INT16 accelY;
+	INT16 speedX;
+	INT16 speedY;
+
+	// player movement offsets - 100 here = 1 pixel movement
+	INT16 offsetX;
+	INT16 offsetY;
+
 	UINT8 jumpPeak;
 	UINT8 runJump;
 	// dealing with the bow

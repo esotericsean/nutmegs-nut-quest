@@ -60,10 +60,10 @@ void Update_EnemyFish (void)
 	THIS->custom_data[0] = c;
 
 	if (CheckCollision(THIS, spr_nutmeg) && (nutmeg_death == false)){
-		if (nutmeg.movestate == inair && nutmeg.accelY > 0) 
+		if (nutmeg.movestate == inair && nutmeg.speedY > 0) 
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-			nutmeg.accelY = -nutmeg.speeds->enemyBounceY;
+			nutmeg.speedY = -nutmeg.speeds->enemyBounceY;
 			nutmeg.jumpPeak = 0;
 
 			SpriteManagerAdd(SpriteStarLeft, THIS->x, THIS->y+2);

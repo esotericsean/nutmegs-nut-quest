@@ -48,13 +48,13 @@ void Update_SpritePlatform(void)
     // was 14
     if ((spr_nutmeg->x + 8 > THIS->x)
         && (spr_nutmeg->x < THIS->x + 22)
-        && (nutmeg.accelY >= 0)
+        && (nutmeg.speedY >= 0)
         && (spr_nutmeg->y + THIS->custom_data[PLATFORM_Y_GRAB] > THIS->y)
         && (spr_nutmeg->y < THIS->y)
         )
     {
         nutmeg.movestate = grounded;
-        nutmeg.accelY = 0;
+        nutmeg.speedY = 0;
         spr_nutmeg->y = THIS->y - 8;
 
         // nutmeg gets moved with the platform

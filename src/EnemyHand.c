@@ -96,10 +96,10 @@ void UPDATE(void)
 
 	//hurt hand if jump on it
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
-		if (nutmeg.movestate == inair && nutmeg.accelY > 0 )
+		if (nutmeg.movestate == inair && nutmeg.speedY > 0 )
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-			nutmeg.accelY = -400;
+			nutmeg.speedY = -400;
 			nutmeg.jumpPeak = 0;
 
 			if (abletohurthand == true) {

@@ -122,8 +122,8 @@ void Start_StateLevel2_glidefall(void)
 	nutmeg_Add (startx, starty);
 
 	// clear some nutmeg 
-	nutmeg.accelX = 0;
-	nutmeg.accelY = 0;
+	nutmeg.speedX = 0;
+	nutmeg.speedY = 0;
 	nutmeg.movestate = inair;
 	// stop nutmeg from being able to jump in mid air at the start of the level
 	nutmeg.jumpPeak = 1; 

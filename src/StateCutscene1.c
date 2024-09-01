@@ -127,8 +127,8 @@ void Start_StateCutscene1(void) {
     nutmeg_SetupGame();
 
     //RESET SO NUTMEG DOESN'T FLY OFF SCREEN
-    nutmeg.accelY = 0;
-    nutmeg.accelX = 0;
+    nutmeg.speedY = 0;
+    nutmeg.speedX = 0;
     nutmeg.jumpPeak = 0;
     nutmeg.runJump = 0;
     nutmeg.direction = right;

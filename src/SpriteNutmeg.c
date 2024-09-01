@@ -14,15 +14,15 @@ NutmegSpeedT groundSpeed = {
 	.runMaxX = 200,
 	.walkIncX = 50,
 	.walkMaxX = 200,
-    .enemyBounceY = 600,
+    .enemyBounceY = 500,
     .cutsceneMaxX = 100,
 	.initJumpY = 150,
 	.jumpY = 20,
-	.jumpYMax = 350,
+	.jumpYMax = 300,
 	.fallInitY = 100,
 	.fallIncY = 20,
 	.fallMaxY = 300,
-	.fallGlideMaxY = 190
+	.fallGlideMaxY = 130
 };
 
 // all the speed parameters for nutmeg while she is underwater
@@ -87,8 +87,6 @@ bool cutscenewalkleft;
 bool cutscenewalkright;
 
 
-bool nutmegGliding = false;
-
 //storing collisions around player after movement
 UINT8 collisionX;
 UINT8 collisionY;
@@ -107,8 +105,12 @@ UINT8 kickbackcounter;
 
 //reset nutmeg's state back to default
 void ResetState(void) {
-    nutmeg.accelY = 0;
-    nutmeg.accelX = 0;
+    nutmeg.speedY = 0;
+    nutmeg.speedX = 0;
+    
+    nutmeg.offsetX = 0;
+    nutmeg.offsetY = 0;
+
     collisionX = 0;
     collisionY = 0;
     nutmeg.jumpPeak = 0;
@@ -129,10 +131,10 @@ void ResetState(void) {
 
     kickbackcounter = 0;
 
-    // TESTING
-    nutmeg.isSwimming = true;
-    nutmeg.speeds = &waterSpeed;
-    //nutmeg.speeds = &groundSpeed;
+    // FOR TEST
+    //nutmeg.isSwimming = true;
+    //nutmeg.speeds = &waterSpeed;
+    nutmeg.speeds = &groundSpeed;
 }
 
 
@@ -157,28 +159,38 @@ Sprite *nutmeg_Add (uint16_t x, uint16_t y) BANKED
     return spr_nutmeg;
 }
 
-static INT8 Hundreds (INT16 v)
+static INT8 MoveX (void)
 {
     INT8 r = 0;
-    if (v < 0)
+    while (nutmeg.offsetX <= -100)
     {
-        while (v <= -100)
-        {
-            v += 100;
-            r--;
-        }
+        nutmeg.offsetX += 100;
+        r --;
     }
-    else if (v > 0)
+    while (nutmeg.offsetX >= 100)
     {
-        while (v >= 100)
-        {
-            v -= 100;
-            r++;
-        }
+        nutmeg.offsetX -= 100;
+        r ++;
     }
-
     return r;
 }
+
+static INT8 MoveY (void)
+{
+    INT8 r = 0;
+    while (nutmeg.offsetY <= -100)
+    {
+        nutmeg.offsetY += 100;
+        r --;
+    }
+    while (nutmeg.offsetY >= 100)
+    {
+        nutmeg.offsetY -= 100;
+        r ++;
+    }
+    return r;
+}
+
 
 void nutmegBow_update(void ) BANKED ;
 
@@ -192,14 +204,14 @@ static void update_whileDead(void)
     if (nutmeg.direction == left) {
         SetSpriteAnim(THIS, anim_nutmeg_hurt_left, 10);
         
-        if (nutmegdeathmove < 10) nutmeg.accelX = nutmeg.speeds->cutsceneMaxX;
-        else nutmeg.accelX = 0;
+        if (nutmegdeathmove < 10) nutmeg.speedX = nutmeg.speeds->cutsceneMaxX;
+        else nutmeg.speedX = 0;
     }
     else if (nutmeg.direction == right) {
         SetSpriteAnim(THIS, anim_nutmeg_hurt_right, 10);
 
-        if (nutmegdeathmove < 10) nutmeg.accelX = -nutmeg.speeds->cutsceneMaxX;
-        else nutmeg.accelX = 0;
+        if (nutmegdeathmove < 10) nutmeg.speedX = -nutmeg.speeds->cutsceneMaxX;
+        else nutmeg.speedX = 0;
     }
 
     if (nutmeg_pitdeath == true) {
@@ -214,9 +226,9 @@ static void update_inCutscene(void)
         nutmeg.direction = right;
         THIS->mirror = NO_MIRROR;
 
-        nutmeg.accelX += nutmeg.speeds->walkIncX;
-        if (nutmeg.accelX > nutmeg.speeds->cutsceneMaxX && nutmeg.movestate == grounded)
-            nutmeg.accelX = nutmeg.speeds->cutsceneMaxX;
+        nutmeg.speedX += nutmeg.speeds->walkIncX;
+        if (nutmeg.speedX > nutmeg.speeds->cutsceneMaxX && nutmeg.movestate == grounded)
+            nutmeg.speedX = nutmeg.speeds->cutsceneMaxX;
 
     }
 
@@ -224,9 +236,9 @@ static void update_inCutscene(void)
         nutmeg.direction = left;
         THIS->mirror = V_MIRROR;
 
-        nutmeg.accelX -= nutmeg.speeds->walkIncX;
-        if (nutmeg.accelX < -nutmeg.speeds->cutsceneMaxX && nutmeg.movestate == grounded)
-            nutmeg.accelX = -nutmeg.speeds->cutsceneMaxX;
+        nutmeg.speedX -= nutmeg.speeds->walkIncX;
+        if (nutmeg.speedX < -nutmeg.speeds->cutsceneMaxX && nutmeg.movestate == grounded)
+            nutmeg.speedX = -nutmeg.speeds->cutsceneMaxX;
     }
   
     if (nutmeg.movestate == inair) {
@@ -235,46 +247,55 @@ static void update_inCutscene(void)
             nutmeg.jumpPeak = 1;
         }
 
-        if (nutmeg.accelY < nutmeg.speeds->fallMaxY) {
-            nutmeg.accelY += nutmeg.speeds->fallIncY;
+        if (nutmeg.speedY < nutmeg.speeds->fallMaxY) {
+            nutmeg.speedY += nutmeg.speeds->fallIncY;
             nutmeg.jumpPeak = 1;
         }
 
-        if (nutmeg.accelX < -nutmeg.speeds->cutsceneMaxX) nutmeg.accelX = -nutmeg.speeds->cutsceneMaxX;
-        if (nutmeg.accelX > nutmeg.speeds->cutsceneMaxX) nutmeg.accelX = nutmeg.speeds->cutsceneMaxX;
+        if (nutmeg.speedX < -nutmeg.speeds->cutsceneMaxX) nutmeg.speedX = -nutmeg.speeds->cutsceneMaxX;
+        if (nutmeg.speedX > nutmeg.speeds->cutsceneMaxX) nutmeg.speedX = nutmeg.speeds->cutsceneMaxX;
     }
 
-    collisionX = TranslateSprite(THIS, Hundreds(nutmeg.accelX), 0);
-    collisionY = TranslateSprite(THIS, 0, Hundreds(nutmeg.accelY));
+    // apply speed to position
+    nutmeg.offsetX += nutmeg.speedX;
+    nutmeg.offsetY += nutmeg.speedY;
+
+    INT8 delta = MoveX();
+    collisionX = TranslateSprite(THIS, delta, 0);
+    
+    delta = MoveY();
+    collisionY = TranslateSprite(THIS, 0, delta);
 
     if (collisionX != 0) {
-        nutmeg.accelX = 0;
+        nutmeg.speedX = 0;
+        nutmeg.offsetX = 0;
     }
     else if (cutscenewalkleft == false && cutscenewalkright == false) {
-        if (nutmeg.accelX > 0) {
-            if (nutmeg.accelX > nutmeg.speeds->frictionX) 
+        if (nutmeg.speedX > 0) {
+            if (nutmeg.speedX > nutmeg.speeds->frictionX) 
             {
-                nutmeg.accelX -= nutmeg.speeds->frictionX;
+                nutmeg.speedX -= nutmeg.speeds->frictionX;
             }
-            else nutmeg.accelX = 0;
+            else nutmeg.speedX = 0;
         }
-        else if (nutmeg.accelX < 0) {
-            if (nutmeg.accelX < -nutmeg.speeds->frictionX) 
+        else if (nutmeg.speedX < 0) {
+            if (nutmeg.speedX < -nutmeg.speeds->frictionX) 
             {
-                nutmeg.accelX += nutmeg.speeds->frictionX;
+                nutmeg.speedX += nutmeg.speeds->frictionX;
             }
-            else nutmeg.accelX = 0;
+            else nutmeg.speedX = 0;
         }
     }
 
-    if (nutmeg.accelY > 0) {
+    if (nutmeg.speedY > 0) {
         if (collisionY == 0) {
             nutmeg.movestate = inair;
         }
         else {
-            // TODO - This looks strange
             nutmeg.movestate = grounded;
-            nutmeg.accelY = 100;
+            // We need to move down in order to hit the ground each turn
+            nutmeg.speedY = 100;
+            nutmeg.offsetY = 0;
         }
     }
     else {
@@ -284,7 +305,7 @@ static void update_inCutscene(void)
     if (nutmeg_death == false)
     {
         if (nutmeg.movestate == grounded) {
-            if (nutmeg.accelX < nutmeg.speeds->cutsceneMaxX && nutmeg.accelX > -nutmeg.speeds->cutsceneMaxX) {
+            if (nutmeg.speedX < nutmeg.speeds->cutsceneMaxX && nutmeg.speedX > -nutmeg.speeds->cutsceneMaxX) {
                 if (nutmeg.direction == right) {
                     SetSpriteAnim(THIS, anim_nutmeg_idle_right, 5);
                     nutmeg.bowanim = 0;
@@ -306,7 +327,7 @@ static void update_inCutscene(void)
             }
         }
         else if (nutmeg.movestate == inair) {
-            if (nutmeg.accelY > 60) {
+            if (nutmeg.speedY > 60) {
                 if (nutmeg.direction == right) {
                     SetSpriteAnim(THIS, anim_nutmeg_fall_right, 1);
                     nutmeg.bowanim = 6;
@@ -316,7 +337,7 @@ static void update_inCutscene(void)
                     nutmeg.bowanim = 7;
                 }
             }
-            else if (nutmeg.accelY < -60) {
+            else if (nutmeg.speedY < -60) {
                 if (nutmeg.direction == right) {
                     SetSpriteAnim(THIS, anim_nutmeg_jump_right, 1);
                     nutmeg.bowanim = 4;
@@ -354,14 +375,14 @@ void update_aliveInControl (void)
 
         //while moving if you press b then run, otherwise walk
         if (KEY_PRESSED(J_B)) {
-            nutmeg.accelX += nutmeg.speeds->runIncX;
-            if (nutmeg.accelX > nutmeg.speeds->runMaxX && nutmeg.movestate == grounded)
-                nutmeg.accelX = nutmeg.speeds->runMaxX;
+            nutmeg.speedX += nutmeg.speeds->runIncX;
+            if (nutmeg.speedX > nutmeg.speeds->runMaxX && nutmeg.movestate == grounded)
+                nutmeg.speedX = nutmeg.speeds->runMaxX;
         }
         else {
-            nutmeg.accelX += nutmeg.speeds->walkIncX;
-            if (nutmeg.accelX > nutmeg.speeds->walkMaxX && nutmeg.movestate == grounded)
-                nutmeg.accelX = nutmeg.speeds->walkMaxX;
+            nutmeg.speedX += nutmeg.speeds->walkIncX;
+            if (nutmeg.speedX > nutmeg.speeds->walkMaxX && nutmeg.movestate == grounded)
+                nutmeg.speedX = nutmeg.speeds->walkMaxX;
         }
     }
 
@@ -372,14 +393,14 @@ void update_aliveInControl (void)
 
         //run, otherwise walk
         if (KEY_PRESSED(J_B)) {
-            nutmeg.accelX -= nutmeg.speeds->runIncX;
-            if (nutmeg.accelX < -nutmeg.speeds->runMaxX && nutmeg.movestate == grounded)
-                nutmeg.accelX = -nutmeg.speeds->runMaxX;
+            nutmeg.speedX -= nutmeg.speeds->runIncX;
+            if (nutmeg.speedX < -nutmeg.speeds->runMaxX && nutmeg.movestate == grounded)
+                nutmeg.speedX = -nutmeg.speeds->runMaxX;
         }
         else {
-            nutmeg.accelX -= nutmeg.speeds->walkIncX;
-            if (nutmeg.accelX < -nutmeg.speeds->walkMaxX && nutmeg.movestate == grounded)
-                nutmeg.accelX = -nutmeg.speeds->walkMaxX;
+            nutmeg.speedX -= nutmeg.speeds->walkIncX;
+            if (nutmeg.speedX < -nutmeg.speeds->walkMaxX && nutmeg.movestate == grounded)
+                nutmeg.speedX = -nutmeg.speeds->walkMaxX;
         }
     }
     
@@ -395,7 +416,7 @@ void update_aliveInControl (void)
     // but we can keep the running speed if we start the jump from run
     if (nutmeg.movestate == grounded) {
         if (KEY_TICKED(J_A)) {
-            nutmeg.accelY = -nutmeg.speeds->initJumpY;
+            nutmeg.speedY = -nutmeg.speeds->initJumpY;
             nutmeg.jumpPeak = 0;
             nutmeg.movestate = inair;
             nutmeg.runJump = KEY_PRESSED(J_B) ? 1 : 0;
@@ -417,17 +438,17 @@ void update_aliveInControl (void)
             nutmeg.jumpPeak = 1;
         }
 
-        if (nutmeg.jumpPeak == 0 && KEY_PRESSED(J_A) && nutmeg.accelY > -nutmeg.speeds->jumpYMax) {
-            nutmeg.accelY -= nutmeg.speeds->jumpY;
+        if (nutmeg.jumpPeak == 0 && KEY_PRESSED(J_A) && nutmeg.speedY > -nutmeg.speeds->jumpYMax) {
+            nutmeg.speedY -= nutmeg.speeds->jumpY;
         }
-        else if (nutmeg.accelY < nutmeg.speeds->fallMaxY) {
-            nutmeg.accelY += nutmeg.speeds->fallIncY;
+        else if (nutmeg.speedY < nutmeg.speeds->fallMaxY) {
+            nutmeg.speedY += nutmeg.speeds->fallIncY;
             nutmeg.jumpPeak = 1;
         }
         
         // if nutmeg is swimming, she can "jump" again once she starts falling
         if ((nutmeg.isSwimming == true) && (nutmeg.jumpPeak == 1) && (KEY_TICKED(J_A))) {
-            nutmeg.accelY = -nutmeg.speeds->initJumpY;
+            nutmeg.speedY = -nutmeg.speeds->initJumpY;
             nutmeg.jumpPeak = 0;
             nutmeg.movestate = inair;
             nutmeg.runJump = KEY_PRESSED(J_B) ? 1 : 0;
@@ -444,23 +465,23 @@ void update_aliveInControl (void)
             }
         }
 
-        nutmegGliding = false;
-        if (KEY_PRESSED(J_B) && nutmeg.accelY > 0)
+        nutmeg.isGliding = false;
+        if (KEY_PRESSED(J_B) && nutmeg.speedY > 0)
         {
-            nutmegGliding = true;
+            nutmeg.isGliding = true;
             // this will slow nutmeg down to 1 pixel drop per second
-            if (nutmeg.accelY > nutmeg.speeds->fallGlideMaxY){
-                nutmeg.accelY = nutmeg.speeds->fallGlideMaxY;
+            if (nutmeg.speedY > nutmeg.speeds->fallGlideMaxY){
+                nutmeg.speedY = nutmeg.speeds->fallGlideMaxY;
             }
         }
 
         if (nutmeg.runJump) {
-            if (nutmeg.accelX < -nutmeg.speeds->runMaxX) nutmeg.accelX = -nutmeg.speeds->runMaxX;
-            if (nutmeg.accelX > nutmeg.speeds->runMaxX) nutmeg.accelX = nutmeg.speeds->runMaxX;
+            if (nutmeg.speedX < -nutmeg.speeds->runMaxX) nutmeg.speedX = -nutmeg.speeds->runMaxX;
+            if (nutmeg.speedX > nutmeg.speeds->runMaxX) nutmeg.speedX = nutmeg.speeds->runMaxX;
         }
         else {
-            if (nutmeg.accelX < -nutmeg.speeds->walkMaxX) nutmeg.accelX = -nutmeg.speeds->walkMaxX;
-            if (nutmeg.accelX > nutmeg.speeds->walkMaxX) nutmeg.accelX = nutmeg.speeds->walkMaxX;
+            if (nutmeg.speedX < -nutmeg.speeds->walkMaxX) nutmeg.speedX = -nutmeg.speeds->walkMaxX;
+            if (nutmeg.speedX > nutmeg.speeds->walkMaxX) nutmeg.speedX = nutmeg.speeds->walkMaxX;
         }
     }
 
@@ -468,9 +489,16 @@ void update_aliveInControl (void)
     /*                move                 */
     /* * * * * * * * * * * * * * * * * * * */
     // Move player and check for collisions
+
+        // apply speed to position
+    nutmeg.offsetX += nutmeg.speedX;
+    nutmeg.offsetY += nutmeg.speedY;
+
+    INT8 delta = MoveX();
     // Do two movements to get colliders from both directions
-    collisionX = TranslateSprite(THIS, Hundreds(nutmeg.accelX), 0);
-    collisionY = TranslateSprite(THIS, 0, Hundreds(nutmeg.accelY));
+    collisionX = TranslateSprite(THIS, delta, 0);
+    delta = MoveY();
+    collisionY = TranslateSprite(THIS, 0, delta);
 
     /* * * * * * * * * * * * * * * * * * * */
     /*             X physics               */
@@ -479,7 +507,7 @@ void update_aliveInControl (void)
     // Stop movement if we hit something
     // Otherwise drag
     if (collisionX != 0) {
-        nutmeg.accelX = 0;
+        nutmeg.speedX = 0;
         if ((isSpikeLevel == true) && (collisionX ==2))
         {
             // Get hit!
@@ -487,18 +515,18 @@ void update_aliveInControl (void)
             if (nutmeg_death == false)
             {
                 // bounce upwards on hit
-                nutmeg.accelY = - nutmeg.speeds->fallMaxY;
+                nutmeg.speedY = - nutmeg.speeds->fallMaxY;
             }
         }
     }
     else if (!KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT)) {
-        if (nutmeg.accelX > 0) {
-            if (nutmeg.accelX > nutmeg.speeds->frictionX) nutmeg.accelX -= nutmeg.speeds->frictionX;
-            else nutmeg.accelX = 0;
+        if (nutmeg.speedX > 0) {
+            if (nutmeg.speedX > nutmeg.speeds->frictionX) nutmeg.speedX -= nutmeg.speeds->frictionX;
+            else nutmeg.speedX = 0;
         }
-        else if (nutmeg.accelX < 0) {
-            if (nutmeg.accelX < -nutmeg.speeds->frictionX) nutmeg.accelX += nutmeg.speeds->frictionX;
-            else nutmeg.accelX = 0;
+        else if (nutmeg.speedX < 0) {
+            if (nutmeg.speedX < -nutmeg.speeds->frictionX) nutmeg.speedX += nutmeg.speeds->frictionX;
+            else nutmeg.speedX = 0;
         }
     }
 
@@ -509,7 +537,7 @@ void update_aliveInControl (void)
     // Drop down if we don't have ground under
     // Play audio on land
     // Start from step sound 6 on land to have start playing stepping audio when we walk quickly
-    if (nutmeg.accelY > 0) {
+    if (nutmeg.speedY > 0) {
         if (collisionY == 0) {
             nutmeg.movestate = inair;
         }
@@ -521,7 +549,7 @@ void update_aliveInControl (void)
                 if (nutmeg_death == false)
                 {
                     // bounce upwards on hit
-                    nutmeg.accelY = - nutmeg.speeds->fallMaxY;
+                    nutmeg.speedY = - nutmeg.speeds->fallMaxY;
                 }
             }
             if (nutmeg.movestate == inair) {
@@ -529,7 +557,7 @@ void update_aliveInControl (void)
                 nutmeg.movestate = grounded;
             }
 
-            nutmeg.accelY =  nutmeg.speeds->fallInitY;
+            nutmeg.speedY =  nutmeg.speeds->fallInitY;
         }
     }
     else {
@@ -668,7 +696,7 @@ void nutmeg_Animate(void) BANKED
     /* * * * * * * * * * * * * * * * * * * */
     //play correct animation based on current state & input
     if (nutmeg.movestate == grounded) {
-        if (nutmeg.accelX < 100 && nutmeg.accelX > -100) {
+        if (nutmeg.speedX < 100 && nutmeg.speedX > -100) {
             if (nutmeg.direction == right) {
                 SetSpriteAnim(spr_nutmeg, anim_nutmeg_idle_right, 5);
                 nutmeg.bowanim = 0;
@@ -700,7 +728,7 @@ void nutmeg_Animate(void) BANKED
         }
     }
     else if (nutmeg.movestate == inair) {
-        if (nutmegGliding)
+        if (nutmeg.isGliding)
         {
             if (nutmeg.direction == right)
             {
@@ -713,7 +741,7 @@ void nutmeg_Animate(void) BANKED
                 nutmeg.bowanim = 12;
             }
         }
-        else if (nutmeg.accelY > 60) {
+        else if (nutmeg.speedY > 60) {
             if (nutmeg.direction == right) {
                 SetSpriteAnim(spr_nutmeg, anim_nutmeg_fall_right, 1);
                 nutmeg.bowanim = 6;
@@ -723,7 +751,7 @@ void nutmeg_Animate(void) BANKED
                 nutmeg.bowanim = 7;
             }
         }
-        else if (nutmeg.accelY < -60) {
+        else if (nutmeg.speedY < -60) {
             if (nutmeg.direction == right) {
                 SetSpriteAnim(spr_nutmeg, anim_nutmeg_jump_right, 1);
                 nutmeg.bowanim = 4;
