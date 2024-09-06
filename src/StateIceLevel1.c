@@ -47,7 +47,7 @@ static const actorPosT levelActors [] =
 	{35, 10, SpriteAcorn, 0, 0, 0, 0, 0},
 	{44, 6, SpriteAcorn, 0, 0, 0, 0, 0},
 	{47, 7, SpriteAcorn, 0, 0, 0, 0, 0},
-	{59, 8, SpriteAcorn, 0, 0, 0, 0, 0},
+	{59, 6, SpriteAcorn, 0, 0, 0, 0, 0},
 	{64, 4, SpriteAcorn, 0, 0, 0, 0, 0},
 	{72, 4, SpriteAcorn, 0, 0, 0, 0, 0},
 	{81, 11, SpriteAcorn, 0, 0, 0, 0, 0},

@@ -71,7 +71,6 @@ void Start_StateTreeCutscene (void)
     nutmeg.speedY = 0;
     nutmeg.speedX = 0;
     nutmeg.jumpPeak = 0;
-    nutmeg.runJump = 0;
     nutmeg.direction = right;
     nutmeg.movestate = grounded;
 

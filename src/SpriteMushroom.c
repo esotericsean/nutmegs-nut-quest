@@ -23,8 +23,8 @@ void Update_SpriteMushroom(void)
 	if (CheckCollision(THIS, spr_nutmeg)) {
 		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
 		
-		INT16 acclY = nutmeg.speeds->enemyBounceY;
-		acclY += (nutmeg.speeds->enemyBounceY >> 2);
+		INT16 acclY = nutmeg.enemyBounceY;
+		acclY += (nutmeg.enemyBounceY >> 2);
 		nutmeg.speedY = -acclY;
 		nutmeg.jumpPeak = 0;
 		nutmeg.movestate = inair;

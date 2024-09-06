@@ -49,7 +49,7 @@ void Update_EnemyBirdy(void) {
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-			nutmeg.speedY = -nutmeg.speeds->enemyBounceY;
+			nutmeg.speedY = -nutmeg.enemyBounceY;
 			nutmeg.jumpPeak = 0;
 			
 			if (nutmeg.direction == right) {

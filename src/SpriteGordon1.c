@@ -50,8 +50,7 @@ void Start_SpriteGordon1(void) {
     GcollisionX = 0;
     GcollisionY = 0;
     GgroundCollision = 0;
-    //GjumpPeak = 0;
-    //GrunJump = 0;
+
 
     Gmovestate = inair;
 

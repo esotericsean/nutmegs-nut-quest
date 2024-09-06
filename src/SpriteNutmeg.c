@@ -11,8 +11,9 @@
 // so they need to live in ram (or in bank 0)
 
 // all the speed parameters for nutmeg while she is in a normal level
-NutmegSpeedT groundSpeed = {
+static const NutmegSpeedT groundSpeed = {
 	.frictionX = 30,
+    .airFrictionX = 3,
 	.runIncX = 60,
 	.runMaxX = 200,
 	.walkIncX = 50,
@@ -29,8 +30,9 @@ NutmegSpeedT groundSpeed = {
 };
 
 // all the speed parameters for nutmeg while she is in a normal level
-NutmegSpeedT iceGroundSpeed = {
+static const NutmegSpeedT iceGroundSpeed = {
 	.frictionX = 00,
+    .airFrictionX = 3,
 	.runIncX = 3,
 	.runMaxX = 200,
 	.walkIncX = 5,
@@ -47,8 +49,9 @@ NutmegSpeedT iceGroundSpeed = {
 };
 
 // all the speed parameters for nutmeg while she is underwater
-NutmegSpeedT waterSpeed = {
+static const NutmegSpeedT waterSpeed = {
 	.frictionX = 15,
+    .airFrictionX = 15,
 	.runIncX = 50,
 	.runMaxX = 160,
 	.walkIncX = 40,
@@ -126,7 +129,6 @@ void ResetState(void) {
     collisionX = 0;
     collisionY = 0;
     nutmeg.jumpPeak = 0;
-    nutmeg.runJump = 0;
     nutmeg.movestate = grounded;
 
     nutmeg.direction = right;
@@ -143,10 +145,8 @@ void ResetState(void) {
 
     kickbackcounter = 0;
 
-    // TESTING
-    //nutmeg.isSwimming = true;
-    //nutmeg.speeds = &waterSpeed;
     nutmeg.speeds = &groundSpeed;
+    nutmeg.enemyBounceY = nutmeg.speeds->enemyBounceY;
 }
 
 
@@ -169,6 +169,7 @@ void Start_SpriteNutmeg(void) {
          nutmeg.speeds = &groundSpeed;
          nutmeg.isSwimming = false;
     }
+    nutmeg.enemyBounceY = nutmeg.speeds->enemyBounceY;
 }
 
 // Create nutmeg sprite at x,y (and her bow if required)
@@ -227,14 +228,26 @@ static void update_whileDead(void)
     if (nutmeg.direction == left) {
         SetSpriteAnim(THIS, anim_nutmeg_hurt_left, 10);
         
-        if (nutmeg.deathmove < 10) nutmeg.speedX = nutmeg.speeds->cutsceneMaxX;
-        else nutmeg.speedX = 0;
+        if (nutmeg.deathmove < 10) 
+        {
+            nutmeg.speedX = nutmeg.speeds->cutsceneMaxX;
+        }
+        else 
+        {
+            nutmeg.speedX = 0;
+        }
     }
     else if (nutmeg.direction == right) {
         SetSpriteAnim(THIS, anim_nutmeg_hurt_right, 10);
 
-        if (nutmeg.deathmove < 10) nutmeg.speedX = -nutmeg.speeds->cutsceneMaxX;
-        else nutmeg.speedX = 0;
+        if (nutmeg.deathmove < 10) 
+        {
+            nutmeg.speedX = nutmeg.speeds->cutsceneMaxX;
+        }
+        else 
+        {
+            nutmeg.speedX = 0;
+        }
     }
 
     if (nutmeg.isPitDeath == true) {
@@ -275,8 +288,15 @@ static void update_inCutscene(void)
             nutmeg.jumpPeak = 1;
         }
 
-        if (nutmeg.speedX < -nutmeg.speeds->cutsceneMaxX) nutmeg.speedX = -nutmeg.speeds->cutsceneMaxX;
-        if (nutmeg.speedX > nutmeg.speeds->cutsceneMaxX) nutmeg.speedX = nutmeg.speeds->cutsceneMaxX;
+        if (nutmeg.speedX < -nutmeg.speeds->cutsceneMaxX) 
+        {  
+            nutmeg.speedX = -nutmeg.speeds->cutsceneMaxX;
+        }
+
+        if (nutmeg.speedX > nutmeg.speeds->cutsceneMaxX) 
+        {
+            nutmeg.speedX = nutmeg.speeds->cutsceneMaxX;
+        }
     }
 
     // apply speed to position
@@ -288,6 +308,22 @@ static void update_inCutscene(void)
     
     delta = MoveY();
     collisionY = TranslateSprite(THIS, 0, delta);
+
+    if (level.isWaterLevel)
+    {
+        nutmeg.speeds = &waterSpeed;
+    }
+    else
+    {
+        nutmeg.speeds = &groundSpeed;
+        nutmeg.isOnIce = false;
+        if ((collisionY >= level.iceTileMin) && (collisionY <= level.iceTileMax))
+        {
+            nutmeg.speeds = &iceGroundSpeed;
+            nutmeg.isOnIce = true;
+        }   
+    } 
+    nutmeg.enemyBounceY = nutmeg.speeds->enemyBounceY;
 
     if (collisionX != 0) {
         nutmeg.speedX = 0;
@@ -395,12 +431,12 @@ void update_aliveInControl (void)
         //while moving if you press b then run, otherwise walk
         if (KEY_PRESSED(J_B)) {
             nutmeg.speedX += nutmeg.speeds->runIncX;
-            if (nutmeg.speedX > nutmeg.speeds->runMaxX && nutmeg.movestate == grounded)
+            if (nutmeg.speedX > nutmeg.speeds->runMaxX)
                 nutmeg.speedX = nutmeg.speeds->runMaxX;
         }
         else {
             nutmeg.speedX += nutmeg.speeds->walkIncX;
-            if (nutmeg.speedX > nutmeg.speeds->walkMaxX && nutmeg.movestate == grounded)
+            if (nutmeg.speedX > nutmeg.speeds->walkMaxX)
                 nutmeg.speedX = nutmeg.speeds->walkMaxX;
         }
     }
@@ -413,12 +449,12 @@ void update_aliveInControl (void)
         //run, otherwise walk
         if (KEY_PRESSED(J_B)) {
             nutmeg.speedX -= nutmeg.speeds->runIncX;
-            if (nutmeg.speedX < -nutmeg.speeds->runMaxX && nutmeg.movestate == grounded)
+            if (nutmeg.speedX < -nutmeg.speeds->runMaxX)
                 nutmeg.speedX = -nutmeg.speeds->runMaxX;
         }
         else {
             nutmeg.speedX -= nutmeg.speeds->walkIncX;
-            if (nutmeg.speedX < -nutmeg.speeds->walkMaxX && nutmeg.movestate == grounded)
+            if (nutmeg.speedX < -nutmeg.speeds->walkMaxX)
                 nutmeg.speedX = -nutmeg.speeds->walkMaxX;
         }
     }
@@ -438,7 +474,6 @@ void update_aliveInControl (void)
             nutmeg.speedY = -nutmeg.speeds->initJumpY;
             nutmeg.jumpPeak = 0;
             nutmeg.movestate = inair;
-            nutmeg.runJump = KEY_PRESSED(J_B) ? 1 : 0;
             
             //PlayFx(CHANNEL_1, 5, 0x71, 0x03, 0x44, 0xc8, 0x80);
             PlayFx(CHANNEL_1, 5, 0x17, 0x9f, 0xf3, 0xc9, 0xc4);
@@ -471,7 +506,6 @@ void update_aliveInControl (void)
             nutmeg.speedY = -nutmeg.speeds->initJumpY;
             nutmeg.jumpPeak = 0;
             nutmeg.movestate = inair;
-            nutmeg.runJump = KEY_PRESSED(J_B) ? 1 : 0;
             
             //PlayFx(CHANNEL_1, 5, 0x71, 0x03, 0x44, 0xc8, 0x80);
             PlayFx(CHANNEL_1, 5, 0x17, 0x9f, 0xf3, 0xc9, 0xc4);
@@ -495,14 +529,6 @@ void update_aliveInControl (void)
             }
         }
 
-        if (nutmeg.runJump) {
-            if (nutmeg.speedX < -nutmeg.speeds->runMaxX) nutmeg.speedX = -nutmeg.speeds->runMaxX;
-            if (nutmeg.speedX > nutmeg.speeds->runMaxX) nutmeg.speedX = nutmeg.speeds->runMaxX;
-        }
-        else {
-            if (nutmeg.speedX < -nutmeg.speeds->walkMaxX) nutmeg.speedX = -nutmeg.speeds->walkMaxX;
-            if (nutmeg.speedX > nutmeg.speeds->walkMaxX) nutmeg.speedX = nutmeg.speeds->walkMaxX;
-        }
     }
 
     /* * * * * * * * * * * * * * * * * * * */
@@ -535,6 +561,7 @@ void update_aliveInControl (void)
         }   
     } 
    
+
     /* * * * * * * * * * * * * * * * * * * */
     /*             X physics               */
     /* * * * * * * * * * * * * * * * * * * */
@@ -556,24 +583,50 @@ void update_aliveInControl (void)
     }
     else if (!KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT)) 
     {
-        if (nutmeg.speedX > 0) {
-            if (nutmeg.speedX > nutmeg.speeds->frictionX)
-            {
-                 nutmeg.speedX -= nutmeg.speeds->frictionX;
+        if (nutmeg.movestate == grounded)
+        {
+            if (nutmeg.speedX > 0) {
+                if (nutmeg.speedX > nutmeg.speeds->frictionX)
+                {
+                    nutmeg.speedX -= nutmeg.speeds->frictionX;
+                }
+                else 
+                {
+                    nutmeg.speedX = 0;
+                }
             }
-            else 
-            {
-                nutmeg.speedX = 0;
+            else if (nutmeg.speedX < 0) {
+                if (nutmeg.speedX < -nutmeg.speeds->frictionX) 
+                {
+                    nutmeg.speedX += nutmeg.speeds->frictionX;
+                }
+                else 
+                {
+                    nutmeg.speedX = 0;
+                }
             }
         }
-        else if (nutmeg.speedX < 0) {
-            if (nutmeg.speedX < -nutmeg.speeds->frictionX) 
-            {
-                nutmeg.speedX += nutmeg.speeds->frictionX;
+        else
+        {
+            if (nutmeg.speedX > 0) {
+                if (nutmeg.speedX > nutmeg.speeds->airFrictionX)
+                {
+                    nutmeg.speedX -= nutmeg.speeds->airFrictionX;
+                }
+                else 
+                {
+                    nutmeg.speedX = 0;
+                }
             }
-            else 
-            {
-                nutmeg.speedX = 0;
+            else if (nutmeg.speedX < 0) {
+                if (nutmeg.speedX < -nutmeg.speeds->airFrictionX) 
+                {
+                    nutmeg.speedX += nutmeg.speeds->airFrictionX;
+                }
+                else 
+                {
+                    nutmeg.speedX = 0;
+                }
             }
         }
     }

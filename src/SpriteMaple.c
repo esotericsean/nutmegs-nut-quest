@@ -38,9 +38,9 @@ void Update_SpriteMaple(void) {
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
 		{
 			PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
-			INT16 accly = (nutmeg.speeds->enemyBounceY >> 1);
-			accly += (nutmeg.speeds->enemyBounceY >> 2);
-			accly += (nutmeg.speeds->enemyBounceY >> 3);
+			INT16 accly = (nutmeg.enemyBounceY >> 1);
+			accly += (nutmeg.enemyBounceY >> 2);
+			accly += (nutmeg.enemyBounceY >> 3);
 			nutmeg.speedY = -accly;
 			nutmeg.jumpPeak = 0;
 			

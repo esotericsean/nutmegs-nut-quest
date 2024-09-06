@@ -39,6 +39,9 @@ typedef struct NutmegSpeed {
 	// Minimum Y upwards speed (positive)
 	INT16 jumpYMax;
 
+	// X friction while not on the ground (positive)
+	INT16 airFrictionX;
+
 	// initial fall speed, if nutmeg walks off an edge (positive)
 	INT16 fallInitY;
 
@@ -54,7 +57,7 @@ typedef struct NutmegSpeed {
 } NutmegSpeedT;
 
 typedef struct Nutmeg {
-    NutmegSpeedT *speeds;
+    const NutmegSpeedT *speeds;
 	UINT8 lives;
 	UINT8 acorns;
 	
@@ -86,7 +89,10 @@ typedef struct Nutmeg {
 	INT16 offsetY;
 
 	UINT8 jumpPeak;
-	UINT8 runJump;
+
+	// initial jump force off an enemy (positive) (copies from current move speeds)
+	INT16 enemyBounceY;
+
 	// dealing with the bow
 
 	// does nutmeg have a bow?

@@ -39,9 +39,9 @@ void Update_SpriteCinnamon(void) {
 		{
 			PlayFx(CHANNEL_4, 60, 0x3a, 0xf2, 0x62, 0x80);
 			
-			INT16 accly = (nutmeg.speeds->enemyBounceY >> 1);
-			accly += (nutmeg.speeds->enemyBounceY >> 2);
-			accly += (nutmeg.speeds->enemyBounceY >> 3);
+			INT16 accly = (nutmeg.enemyBounceY >> 1);
+			accly += (nutmeg.enemyBounceY >> 2);
+			accly += (nutmeg.enemyBounceY >> 3);
 			nutmeg.speedY = -accly;
 	
 			nutmeg.jumpPeak = 0;
