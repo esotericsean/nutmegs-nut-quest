@@ -122,15 +122,16 @@ static const unsigned char pink_48[] = {
 #define FLAGPOLE_TILE_1 (0x21)
 #define FLAGPOLE_TILE_2 (0x22)
 
-static UINT8 anim_flag_counter = 0;
-static UINT8 flagpole_activated = 0;
+static UINT8 anim_flag_counter;
+static UINT8 flagpole_activated;
 
-static UINT8 finish_counter = 0;
-static int stars_x = 0;
-static int stars_y = 0;
+static UINT8 finish_counter;
+static int stars_x;
+static int stars_y;
 
 void FlagPole_Init (void) BANKED
 {
+	anim_flag_counter = 0;
     flagpole_activated = 0; 
     finish_counter = 0;
 

@@ -7,12 +7,33 @@
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
 
+// These speed structs are used by enemies fns, 
+// so they need to live in ram (or in bank 0)
+
 // all the speed parameters for nutmeg while she is in a normal level
 NutmegSpeedT groundSpeed = {
-	.frictionX = 10,
+	.frictionX = 30,
 	.runIncX = 60,
 	.runMaxX = 200,
 	.walkIncX = 50,
+	.walkMaxX = 200,
+    .enemyBounceY = 500,
+    .cutsceneMaxX = 100,
+	.initJumpY = 150,
+	.jumpY = 20,
+	.jumpYMax = 330,
+	.fallInitY = 100,
+	.fallIncY = 20,
+	.fallMaxY = 300,
+	.fallGlideMaxY = 130
+};
+
+// all the speed parameters for nutmeg while she is in a normal level
+NutmegSpeedT iceGroundSpeed = {
+	.frictionX = 00,
+	.runIncX = 3,
+	.runMaxX = 200,
+	.walkIncX = 5,
 	.walkMaxX = 200,
     .enemyBounceY = 500,
     .cutsceneMaxX = 100,
@@ -289,19 +310,16 @@ static void update_inCutscene(void)
         }
     }
 
-    if (nutmeg.speedY > 0) {
-        if (collisionY == 0) {
-            nutmeg.movestate = inair;
-        }
-        else {
-            nutmeg.movestate = grounded;
-            // We need to move down in order to hit the ground each turn
-            nutmeg.speedY = 100;
-            nutmeg.offsetY = 0;
-        }
+
+    if (collisionY == 0) {
+        nutmeg.movestate = inair;
     }
     else {
-        nutmeg.movestate = inair;
+        nutmeg.movestate = grounded;
+        
+        // We need to move down in order to hit the ground each turn
+        nutmeg.speedY = 100;
+        nutmeg.offsetY = 0;
     }
 
     if (nutmeg.isDying == false)
@@ -355,8 +373,7 @@ static void update_inCutscene(void)
 
 void update_aliveInControl (void)
 { 
-    // death from falling into pit/water
-    // normally set to 126 and 200, testing 176 and 200
+    // death from falling off the bottom of the screen
     if (THIS->y >= 176 && THIS->y <= 200 && pitdeathactive == true) {
         nutmeg.isDying = true;
         nutmeg.isPitDeath = true;
@@ -373,7 +390,7 @@ void update_aliveInControl (void)
         //sets it to the direction you pressed
         nutmeg.direction = right;
         //makes sure the sprites are facing the right way
-         THIS->mirror = NO_MIRROR;
+        THIS->mirror = NO_MIRROR;
 
         //while moving if you press b then run, otherwise walk
         if (KEY_PRESSED(J_B)) {
@@ -503,6 +520,21 @@ void update_aliveInControl (void)
     delta = MoveY();
     collisionY = TranslateSprite(THIS, 0, delta);
 
+    if (level.isWaterLevel)
+    {
+        nutmeg.speeds = &waterSpeed;
+    }
+    else
+    {
+        nutmeg.speeds = &groundSpeed;
+        nutmeg.isOnIce = false;
+        if ((collisionY >= level.iceTileMin) && (collisionY <= level.iceTileMax))
+        {
+            nutmeg.speeds = &iceGroundSpeed;
+            nutmeg.isOnIce = true;
+        }   
+    } 
+   
     /* * * * * * * * * * * * * * * * * * * */
     /*             X physics               */
     /* * * * * * * * * * * * * * * * * * * */
@@ -522,14 +554,27 @@ void update_aliveInControl (void)
             }
         }
     }
-    else if (!KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT)) {
+    else if (!KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT)) 
+    {
         if (nutmeg.speedX > 0) {
-            if (nutmeg.speedX > nutmeg.speeds->frictionX) nutmeg.speedX -= nutmeg.speeds->frictionX;
-            else nutmeg.speedX = 0;
+            if (nutmeg.speedX > nutmeg.speeds->frictionX)
+            {
+                 nutmeg.speedX -= nutmeg.speeds->frictionX;
+            }
+            else 
+            {
+                nutmeg.speedX = 0;
+            }
         }
         else if (nutmeg.speedX < 0) {
-            if (nutmeg.speedX < -nutmeg.speeds->frictionX) nutmeg.speedX += nutmeg.speeds->frictionX;
-            else nutmeg.speedX = 0;
+            if (nutmeg.speedX < -nutmeg.speeds->frictionX) 
+            {
+                nutmeg.speedX += nutmeg.speeds->frictionX;
+            }
+            else 
+            {
+                nutmeg.speedX = 0;
+            }
         }
     }
 
@@ -635,6 +680,7 @@ void nutmeg_SetupGame(void) BANKED
     nutmeg.lives = 99; 
     nutmeg.acorns = 0;
   
+    nutmeg.isOnIce = false;
 
     level_current = 0;
 	level_next = 0;
@@ -701,9 +747,12 @@ void nutmeg_Animate(void) BANKED
      /* * * * * * * * * * * * * * * * * * * */
     /*             animation               */
     /* * * * * * * * * * * * * * * * * * * */
-    //play correct animation based on current state & input
+    // play correct animation based on current state & input
+    // Idle if our movement is zero, or we are sliding and not pressing left or right
     if (nutmeg.movestate == grounded) {
-        if (nutmeg.speedX < 100 && nutmeg.speedX > -100) {
+        if (((nutmeg.isOnIce == true) && !KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT))
+           || (nutmeg.isOnIce == false && nutmeg.speedX < 100 && nutmeg.speedX > -100)) 
+        {
             if (nutmeg.direction == right) {
                 SetSpriteAnim(spr_nutmeg, anim_nutmeg_idle_right, 5);
                 nutmeg.bowanim = 0;
@@ -711,16 +760,6 @@ void nutmeg_Animate(void) BANKED
             if (nutmeg.direction == left) {
                 SetSpriteAnim(spr_nutmeg, anim_nutmeg_idle_left, 5);
                 nutmeg.bowanim = 1;
-            }
-        }
-        else if (KEY_PRESSED(J_B)) {
-            if (nutmeg.direction == right) {
-                SetSpriteAnim(spr_nutmeg, anim_nutmeg_walk_right, 15);
-                nutmeg.bowanim = 2;
-            }
-            if (nutmeg.direction == left) {
-                SetSpriteAnim(spr_nutmeg, anim_nutmeg_walk_left, 15);
-                nutmeg.bowanim = 3;
             }
         }
         else {

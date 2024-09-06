@@ -8,12 +8,15 @@
 
 extern Sprite * spr_nutmeg;
 
-static UINT16 earthycounter = 0;
-static UINT8 earthydirection = 0;
+static UINT16 earthycounter;
+static UINT8 earthydirection;
 
 static const UINT8 anim_earthy_walk[] = {6, 1, 1, 2, 3, 3, 2};
 
 void Start_EnemyEarthy(void) {
+	earthycounter = 0;
+	earthydirection = 0;
+	
 	if (level.orientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;

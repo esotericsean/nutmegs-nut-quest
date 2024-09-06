@@ -33,6 +33,7 @@ _STATE(StateLevel1_platform)\
 _STATE(StateLevel2_platform)\
 _STATE(StateLevel2_multi)\
 _STATE(StateWaterLevel1)\
+_STATE(StateIceLevel1)\
 STATE_DEF_END
 
 #define SPRITES \

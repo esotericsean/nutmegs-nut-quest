@@ -66,6 +66,9 @@ typedef struct Nutmeg {
 	// set to true if nutmeg is gliding
 	bool isGliding;
 
+	// set to true if nutmeg is standing on ice
+	bool isOnIce;
+
 	//which direction is nutmeg facing
 	direction direction;
 	move_state movestate;
@@ -122,6 +125,12 @@ typedef struct {
 
 	// if it is a spike level, and collision hurts nutmeg
 	bool isSpikeLevel;
+
+	// Min tile number for slippery ice tiles (set to 255 for no ice)
+	UINT8 iceTileMin;
+
+	// Max tile number for slippery ice tiles (set to 255 for no ice)
+	UINT8 iceTileMax;
 
 	//Sprite Limits if Vertical or Horizontal Level
 	orientation orientation;

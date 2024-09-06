@@ -681,6 +681,25 @@ static void moveTowardsNextLevel(void)
 	}
 }
 
+static const STATE levels [] = {
+	StateLevelTree, // level 0
+	StateWaterLevel1, // StateLevel1, // level 1-1
+	StateIceLevel1, // StateLevel2,
+	StateLevel3,
+	StateLevel4,
+	StateLevel5,
+	StateLevel6,
+	StateLevel7,
+	StateLevel8,
+	StateW1Boss,
+	StateLevel2_1,
+	StateLevel2_2,
+	StateLevel2_platform,
+	StateLevel1_platform,
+	StateLevel2_glidefall,
+	StateLevel2_multi
+};
+
 void Update_StateOverworld (void) {
 	animateWater ();
 
@@ -697,22 +716,15 @@ void Update_StateOverworld (void) {
 		}
 		
 		if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
-			if (level_current == 0) SetState(StateLevelTree);
-			if (level_current == 1) SetState (StateWaterLevel1); // SetState(StateLevel1);
-			else if (level_current == 2) SetState(StateLevel2);
-			else if (level_current == 3) SetState(StateLevel3);
-			else if (level_current == 4) SetState(StateLevel4);
-			else if (level_current == 5) SetState(StateLevel5);
-			else if (level_current == 6) SetState(StateLevel6);
-			else if (level_current == 7) SetState(StateLevel7);
-			else if (level_current == 8) SetState(StateLevel8);
-			else if (level_current == 9) SetState(StateW1Boss);
-			else if (level_current == 10) SetState(StateLevel2_1);
-			else if (level_current == 11) SetState(StateLevel2_2);
-			else if (level_current == 12) SetState(StateLevel2_platform);
-			else if (level_current == 13) SetState(StateLevel1_platform);
-			else if (level_current == 14) SetState(StateLevel2_glidefall);
-			else if (level_current >= 15) SetState(StateLevel2_multi);
+			if (level_current < 16)
+			{
+				SetState(levels[level_current]);
+			}
+			else
+			{
+				SetState(StateLevelTree);
+			}
+			
 			return;
 		}
 	}

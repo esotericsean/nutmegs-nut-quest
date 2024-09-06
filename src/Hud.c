@@ -23,9 +23,9 @@ UINT16 timerlevel;
 static UINT8 timerclock;
 
 // saved last drawn values, to work out what to update on hud
-static UINT8 lastLives = 0;
-static UINT8 lastAcorn = 0;
-static UINT16 lastTimer = 0;
+static UINT8 lastLives;
+static UINT8 lastAcorn;
+static UINT16 lastTimer;
 
 static bool _isBoss = false;
 

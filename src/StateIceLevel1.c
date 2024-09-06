@@ -15,9 +15,9 @@
 #include "LevelStart.h"
 #include "SpriteNutmeg.h"
 
-IMPORT_MAP (waterLevel1Map);
+IMPORT_MAP (level3_1map);
 
-static const UINT8 collision_tiles[] = {2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,0};
+static const UINT8 collision_tiles[] = {2,3,4,5,6,7,16,17,0};
 static const UINT8 collision_tiles_down[] = {0};
 
 DECLARE_MUSIC (quickstart);
@@ -43,18 +43,18 @@ typedef struct {
 
 static const actorPosT levelActors [] = 
 {
-	{14, 3, SpriteAcorn, 0, 0, 0, 0, 0},
-	{45, 7, SpriteAcorn, 0, 0, 0, 0, 0},
-	{47, 5, SpriteAcorn, 0, 0, 0, 0, 0},
-	{47, 9, SpriteAcorn, 0, 0, 0, 0, 0},
-	{51, 7, SpriteAcorn, 0, 0, 0, 0, 0},
-	{71, 10, SpriteAcorn, 0, 0, 0, 0, 0},
-	{100, 16, SpriteAcorn, 0, 0, 0, 0, 0},
-	{136, 12, SpriteAcorn, 0, 0, 0, 0, 0},
-	{138, 13, SpriteAcorn, 0, 0, 0, 0, 0},
-	{161, 15, SpriteAcorn, 0, 0, 0, 0, 0},
-	{194, 1, SpriteAcorn, 0, 0, 0, 0, 0},
-	{208, 13, SpriteAcorn, 0, 0, 0, 0, 0},
+	{28, 11, SpriteAcorn, 0, 0, 0, 0, 0},
+	{35, 10, SpriteAcorn, 0, 0, 0, 0, 0},
+	{44, 6, SpriteAcorn, 0, 0, 0, 0, 0},
+	{47, 7, SpriteAcorn, 0, 0, 0, 0, 0},
+	{59, 8, SpriteAcorn, 0, 0, 0, 0, 0},
+	{64, 4, SpriteAcorn, 0, 0, 0, 0, 0},
+	{72, 4, SpriteAcorn, 0, 0, 0, 0, 0},
+	{81, 11, SpriteAcorn, 0, 0, 0, 0, 0},
+	{84, 5, SpriteAcorn, 0, 0, 0, 0, 0},
+	{99, 8, SpriteAcorn, 0, 0, 0, 0, 0},
+	{115, 10, SpriteAcorn, 0, 0, 0, 0, 0},
+	{121, 2, SpriteAcorn, 0, 0, 0, 0, 0},
 };
 
 #define NUM_ACTORS (sizeof (levelActors) / sizeof(levelActors[0]))
@@ -89,14 +89,17 @@ static void AddActors (void)
 	}
 }
 
-void Start_StateWaterLevel1 (void) {
+void Start_StateIceLevel1 (void) {
 	levelStartCounter = 0;
 	
 	level.orientation = horizontal;
-	level.isWaterLevel = true;
-	level.isSpikeLevel = true;
+	level.isWaterLevel = false;
+	level.isSpikeLevel = false;
+	level.iceTileMin = 2;
+	level.iceTileMax = 7;
 
 	pitdeathactive = true;
+	nut_region = 0;
 	deathmusicplayed = false;
 	
 	SPRITES_8x16;
@@ -105,8 +108,8 @@ void Start_StateWaterLevel1 (void) {
 
 	scroll_target = nutmeg_Add(4, 49);
 
-	InitScrollTiles(0, &waterLevelTiles);
-	InitScroll(BANK(waterLevel1Map), &waterLevel1Map, collision_tiles, collision_tiles_down);
+	InitScrollTiles(0, &iceLevelTiles);
+	InitScroll(BANK(level3_1map), &level3_1map, collision_tiles, collision_tiles_down);
 	
 	Hud_Init(false);
 
@@ -122,7 +125,7 @@ void Start_StateWaterLevel1 (void) {
 	SHOW_BKG;
 }
 
-void Update_StateWaterLevel1 (void) 
+void Update_StateIceLevel1 (void) 
 {
 	Hud_Update();
 	AddActors();
@@ -180,7 +183,7 @@ void Update_StateWaterLevel1 (void)
 		if (levelStartCounter < 105) levelStartCounter++;
 	}
 
-	// Water_Animate();
+    Water_Animate();
 	FlagPole_Animate();
 
 	if (levelbeat == true) {
