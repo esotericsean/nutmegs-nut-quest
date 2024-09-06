@@ -107,7 +107,9 @@ void Start_StateLevel2_glidefall(void)
 	level.orientation = vertical;
 	level.isWaterLevel = false;
 	level.isSpikeLevel = true;
-
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;
+	
 	levelbeat = false;
 	levelStartCounter = 0;
 	levelEndCounter = 0;

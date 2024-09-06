@@ -204,15 +204,12 @@ void Update_StateIceLevel1 (void)
 		spr_nutmeg->y = 2;
 	}
 
-	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg.isDying == false) {
-		if (spr_nutmeg->y >= (13 *8))
-		{
-			FlagPole_Activate(244,13);
+	if (spr_nutmeg->x >= 984 && spr_nutmeg->x < 992 && levelbeat == false && nutmeg.isDying == false) {
+		FlagPole_Activate(123,8);
 
-			levelbeat = true;
-			levelEndCounter = 0;
-			cutscenemode = enabled;
-			cutscenewalkright = true;
-		}
+		levelbeat = true;
+		levelEndCounter = 0;
+		cutscenemode = enabled;
+		cutscenewalkright = true;
 	}
 }

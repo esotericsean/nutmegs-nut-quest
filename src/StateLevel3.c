@@ -35,7 +35,8 @@ void Start_StateLevel3 (void)
 	levelEndCounter = 0;
 	level.orientation = vertical;
 	level.isWaterLevel = false;
-	
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;	
 
 	nut_region = 0;
 	pitdeathactive = false;

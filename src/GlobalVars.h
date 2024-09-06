@@ -10,6 +10,8 @@ typedef enum { right, left } direction;
 typedef enum { full, low } amount;
 typedef enum { vertical, horizontal } orientation;
 
+// set level.iceTileMin and level.iceTileMax to this value for no ice tiles
+#define NO_ICE_TILES (255)
 
 typedef struct NutmegSpeed {
 	// left right friction when 

@@ -41,7 +41,10 @@ void Start_StateW1Boss (void)
 	w1bosscounter = 0;
 	level.orientation = horizontal;
 	level.isWaterLevel = false;
-	
+	level.isSpikeLevel = false;
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;
+
 	SPRITES_8x16;
 
 	nut_region = 0;

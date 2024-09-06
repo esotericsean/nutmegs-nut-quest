@@ -33,7 +33,9 @@ void Start_StateLevel4 (void)
 	levelStartCounter = 0;
 	level.orientation = horizontal;
 	level.isWaterLevel = false;
-	
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;
+		
 	SPRITES_8x16;
 
 	nut_region = 0;

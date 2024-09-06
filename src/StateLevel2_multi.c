@@ -160,6 +160,8 @@ void StartRoom3 (void)
 	InitGeneralRoomVars();
 	level.orientation = vertical;
 	level.isWaterLevel = false;
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;
 	cutscenemode = false;
 
 	mapRight = 19*8;

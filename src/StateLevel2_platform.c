@@ -108,7 +108,9 @@ void Start_StateLevel2_platform (void) {
 	level.orientation = horizontal;
 	level.isWaterLevel = false;
 	level.isSpikeLevel = true;
-	
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;
+		
 	SPRITES_8x16;
 	
 	pitdeathactive = true;

@@ -27,7 +27,9 @@ void Start_StateTree (void)
 	SPRITES_8x16;
 
 	treecounter = 0;
-
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;
+	
 	PlayMusic(oaktree, 1);
 
 	//SetPalette (BG_PALETTE, 0, 8, bg_palette_tree2, bank_StateTree);

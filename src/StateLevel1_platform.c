@@ -78,6 +78,8 @@ static void AddNuts (void)
 void Start_StateLevel1_platform (void) {
 
 	level.isWaterLevel = false;
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;
 
 	levelStartCounter = 0;
 	level.orientation = horizontal;
