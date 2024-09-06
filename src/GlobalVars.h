@@ -142,6 +142,15 @@ typedef struct {
 
 	//Sprite Limits if Vertical or Horizontal Level
 	orientation orientation;
+
+	// Does this level have a timer
+	bool hasTimer;
+
+	// level timer countdown 
+	UINT16 timer;
+
+	// frame counter for single timerlevel count
+	UINT8 timerclock;
 } LevelT;
 
 extern LevelT level;
@@ -158,12 +167,6 @@ extern UINT8 level_max;
 //health system - reset to 0 in StateCutscene1
 
 extern bool GameOver;
-
-
-// level timer countdown - controlled by Hud.c
-extern UINT16 timerlevel;
-
-
 
 //which direction is gordon facing
 extern direction gordon_direction;

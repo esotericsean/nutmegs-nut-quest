@@ -21,7 +21,6 @@ static const UINT8 collision_tiles_down_level3[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(quickstart);
 DECLARE_MUSIC(mushrooms);
-DECLARE_MUSIC(quickdeath);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -31,6 +30,7 @@ extern Sprite * spr_camera;
 
 void Start_StateLevel3 (void)
 {
+	level.hasTimer = true;
 	levelStartCounter = 0;
 	levelEndCounter = 0;
 	level.orientation = vertical;
@@ -64,31 +64,6 @@ void Start_StateLevel3 (void)
 void Update_StateLevel3 (void) 
 {
 	Hud_Update();
-
-	if (timerlevel == 0) 
-	{ 
-		nutmeg.isDying = true;
-	}
-
-	if (nutmeg.isDying == true) {
-		if (deathmusicplayed == false) {
-			__critical { PlayMusic(quickdeath, 1); }
-			deathmusicplayed = true;
-		}
-
-		if (nutmeg.deathtimer >= 125) {
-			if (GameOver == true) {
-				SetState(StateGameOver);
-			}
-			else if (GameOver == false) {
-				nutmeg_setupNewLife();
-				SetState(StateOverworld); // change to correct world
-			}
-			return;
-		}
-
-		nutmeg.deathtimer++;
-	}
 	
 	if (cutscenemode == enabled) {
 		//Level Start!

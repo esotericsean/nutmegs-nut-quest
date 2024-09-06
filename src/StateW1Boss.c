@@ -25,8 +25,8 @@ static const UINT8 collision_tiles_levelw1b[] = {44,45,46,47,58,51,70,71,72,73,7
 static const UINT8 collision_tiles_down_levelw1b[] = {0};
 
 DECLARE_MUSIC(thehands2);
-DECLARE_MUSIC(quickdeath);
 DECLARE_MUSIC(boss1win);
+DECLARE_MUSIC(quickdeath);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -42,6 +42,8 @@ void Start_StateW1Boss (void)
 	level.orientation = horizontal;
 	level.isWaterLevel = false;
 	level.isSpikeLevel = false;
+	level.hasTimer = false;	
+	
 	level.iceTileMin = NO_ICE_TILES;
 	level.iceTileMax = NO_ICE_TILES;
 

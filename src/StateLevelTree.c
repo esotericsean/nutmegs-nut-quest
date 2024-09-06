@@ -30,10 +30,13 @@ extern Sprite * spr_camera;
 void Start_StateLevelTree(void)
 {
 	SPRITES_8x16;
+	
+	level.hasTimer = false;
+	level.isSpikeLevel = false;	
+	level.isWaterLevel = false;
 
 	level.iceTileMin = NO_ICE_TILES;
 	level.iceTileMax = NO_ICE_TILES;
-	level.isSpikeLevel = false;	
 	pitdeathactive = false;
 
 	nut_region = 0;

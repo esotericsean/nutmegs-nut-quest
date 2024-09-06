@@ -21,7 +21,6 @@ static const UINT8 collision_tiles_level[] = {2,3,4,5,6,7,8,9,10,11,12,13,14,15,
 
 DECLARE_MUSIC (quickstart);
 DECLARE_MUSIC (mushrooms);
-DECLARE_MUSIC (quickdeath);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -101,7 +100,7 @@ static void AddNuts (void)
 
 void Start_StateLevel2_glidefall(void) 
 {
-	
+	level.hasTimer = true;
 	isHorizontalGoalpost = true;
 
 	level.orientation = vertical;
@@ -158,36 +157,6 @@ void Update_StateLevel2_glidefall(void)
 {
 	Hud_Update();
 	AddNuts ();
-	
-	if (timerlevel == 0) {
-		while (nutmeg.isDying == false)
-		{
-			nutmeg_hit();
-		}
-	}
-
-	if (nutmeg.isDying == true) {
-		if (deathmusicplayed == false) {
-			__critical { PlayMusic(quickdeath, 1); }
-			deathmusicplayed = true;
-		}
-
-		isHorizontalGoalpost = false;
-		level.isSpikeLevel = false;
-
-		if (nutmeg.deathtimer >= 125) {
-			if (GameOver == true) {
-				SetState(StateGameOver);
-			}
-			else if (GameOver == false) {
-				nutmeg_setupNewLife();
-				SetState(StateOverworld); // change to correct world
-			}
-			return;
-		}
-
-		nutmeg.deathtimer++;
-	}
 	
 	if (levelStartCounter < 105) {
 		//Level Start!

@@ -16,11 +16,6 @@ IMPORT_MAP (hudDebug);
 
 // global variables for every level
 
-// level timer countdown 
-UINT16 timerlevel;
-
-// frame counter for single timerlevel count
-static UINT8 timerclock;
 
 // saved last drawn values, to work out what to update on hud
 static UINT8 lastLives;
@@ -45,8 +40,8 @@ void Hud_Init(bool isBoss) BANKED
     }
 
     _isBoss = isBoss;
-    timerlevel = 300;
-    timerclock = 0;
+    level.timer = 300;
+    level.timerclock = 0;
 
     // prime the last values so they all get updated
     lastLives = nutmeg.lives + 1;
@@ -95,30 +90,30 @@ void Hud_UpdateDebug(void)
     PutU16 (spr_nutmeg->x, 2);
     PutU16 (spr_nutmeg->y, 16 );
     
-    if (lastTimer != timerlevel)
+    if (lastTimer != level.timer)
     {
-        UINT16 working = timerlevel;
+        UINT16 working = level.timer;
 
         //timer 100s digit:
-        if (timerlevel == 300) 
+        if (level.timer == 300) 
         {
             UPDATE_HUD_TILE (10, 0, 9);
             working = 0;
         }
-        else if (timerlevel < 300 && timerlevel >= 200)
+        else if (level.timer < 300 && level.timer >= 200)
         { 
             UPDATE_HUD_TILE (10, 0, 8);
-            working = timerlevel - 200;
+            working = level.timer - 200;
         }
-        else if (timerlevel < 200 && timerlevel >= 100) 
+        else if (level.timer < 200 && level.timer >= 100) 
         {
             UPDATE_HUD_TILE (10, 0, 7);
-            working = timerlevel - 100;
+            working = level.timer - 100;
         }
         else 
         {
             UPDATE_HUD_TILE (10, 0, 6);
-            working = timerlevel;
+            working = level.timer;
         }
 
         UINT8 tens = getTens(working);
@@ -168,39 +163,39 @@ void Hud_Update(void) BANKED
 
 	if (cutscenemode == disabled) 
     { 
-        timerclock ++; 
+        level.timerclock ++; 
      
         //25 seems good
-        if (timerclock == 25) {
-            timerclock = 0;
-            timerlevel--;
+        if (level.timerclock == 25) {
+            level.timerclock = 0;
+            level.timer--;
 	    }
     }
 
-	if (lastTimer != timerlevel)
+	if (lastTimer != level.timer)
     {
-        UINT16 working = timerlevel;
+        UINT16 working = level.timer;
 
         //timer 100s digit:
-        if (timerlevel == 300) 
+        if (level.timer == 300) 
         {
             UPDATE_HUD_TILE (10, 0, 9);
             working = 0;
         }
-        else if (timerlevel < 300 && timerlevel >= 200)
+        else if (level.timer < 300 && level.timer >= 200)
         { 
             UPDATE_HUD_TILE (10, 0, 8);
-            working = timerlevel - 200;
+            working = level.timer - 200;
         }
-        else if (timerlevel < 200 && timerlevel >= 100) 
+        else if (level.timer < 200 && level.timer >= 100) 
         {
             UPDATE_HUD_TILE (10, 0, 7);
-            working = timerlevel - 100;
+            working = level.timer - 100;
         }
         else 
         {
             UPDATE_HUD_TILE (10, 0, 6);
-            working = timerlevel;
+            working = level.timer;
         }
 
         tens = getTens(working);

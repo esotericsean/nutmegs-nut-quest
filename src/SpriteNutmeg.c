@@ -3,9 +3,12 @@
 #include "Scroll.h"
 #include "Keys.h"
 #include "Sound.h"
+#include "Music.h"
 #include "SpriteManager.h"
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
+
+DECLARE_MUSIC (quickdeath);
 
 // These speed structs are used by enemies fns, 
 // so they need to live in ram (or in bank 0)
@@ -691,6 +694,7 @@ void update_aliveInControl (void)
 
 void Update_SpriteNutmeg(void) {
     
+
     // extra life from 100 acorns
     if (nutmeg.acorns == 100) {
         nutmeg.lives++;
@@ -702,8 +706,32 @@ void Update_SpriteNutmeg(void) {
         }
     }
 
-    // death
+    // if we run out of time
+	if ((level.hasTimer == true) &&(level.timer == 0) && (nutmeg.isDying == false))
+    {
+        // keep hitting until dead
+        nutmeg_hit();
+	}
+
+
     if (nutmeg.isDying == true) {
+        if (deathmusicplayed == false) {
+			__critical { PlayMusic(quickdeath, 1); }
+			deathmusicplayed = true;
+		}
+
+		if (nutmeg.deathtimer >= 125) {
+			if (GameOver == true) {
+				SetState(StateGameOver);
+			}
+			else if (GameOver == false) {
+				nutmeg_setupNewLife();
+				SetState(StateOverworld); // change to correct world
+			}
+			return;
+		}
+
+		nutmeg.deathtimer++;
         update_whileDead();
     }
 
@@ -796,7 +824,7 @@ void nutmeg_Animate(void) BANKED
     if (nutmeg.isDying == true) {
         return;
     }
-    
+   
      /* * * * * * * * * * * * * * * * * * * */
     /*             animation               */
     /* * * * * * * * * * * * * * * * * * * */

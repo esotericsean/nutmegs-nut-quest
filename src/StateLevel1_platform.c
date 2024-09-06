@@ -22,7 +22,6 @@ static const UINT8 collision_tiles_down[] = {29,30,31,32,0};
 
 DECLARE_MUSIC (quickstart);
 DECLARE_MUSIC (mushrooms);
-DECLARE_MUSIC (quickdeath);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -76,7 +75,7 @@ static void AddNuts (void)
 }
 
 void Start_StateLevel1_platform (void) {
-
+	level.hasTimer = true;
 	level.isWaterLevel = false;
 	level.iceTileMin = NO_ICE_TILES;
 	level.iceTileMax = NO_ICE_TILES;
@@ -143,37 +142,6 @@ void Start_StateLevel1_platform (void) {
 void Update_StateLevel1_platform (void) {
 	Hud_Update();
 	AddNuts();
-
-	if (timerlevel == 0) {
-		nutmeg.isDying = true;
-	
-		if (nutmeg.health == full) {
-			nutmeg.lostbow = true;
-			nutmeg.bow_counter = 0;
-			if (nutmeg.direction == right) { nutmeg.bowanim = 8; }
-			else if (nutmeg.direction == left) { nutmeg.bowanim = 9; }
-		}
-	}
-
-	if (nutmeg.isDying == true) {
-		if (deathmusicplayed == false) {
-			__critical { PlayMusic(quickdeath, 1); }
-			deathmusicplayed = true;
-		}
-
-		if (nutmeg.deathtimer >= 125) {
-			if (GameOver == true) {
-				SetState(StateGameOver);
-			}
-			else if (GameOver == false) {
-				nutmeg_setupNewLife();
-				SetState(StateOverworld); // change to correct world
-			}
-			return;
-		}
-
-		nutmeg.deathtimer++;
-	}
 	
 	if (cutscenemode == enabled) {
 		//Level Start!
