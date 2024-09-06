@@ -18,6 +18,26 @@ static const UWORD pal_pink5[] = { RGB(31, 31, 31), RGB(7,  8,  9), RGB(28, 19, 
 
 static const UWORD pal_pink3[] = { RGB(31, 31, 31), RGB(19, 26, 30), RGB(28, 19, 30), RGB(0,  0,  0) };
 
+// Sideways pole - just 1 tile meant to run the full screen or between 2 walls
+static const UINT8 sideways_1[] = {
+ 	0xFF,0xFF,0x00,0x38,0x00,0x38,0x00,0x70,
+  	0x00,0x70,0x00,0xE0,0x00,0xE0,0xFF,0xFF
+};
+
+static const UINT8 sideways_2[] = {
+	0xFF,0xFF,0x00,0xE0,0x00,0xE0,0x00,0xC1,
+	0x00,0xC1,0x00,0x83,0x00,0x83,0xFF,0xFF
+};
+
+static const UINT8 sideways_3[] = {
+  	0xFF,0xFF,0x00,0x83,0x00,0x83,0x00,0x07,
+  	0x00,0x07,0x00,0x0E,0x00,0x0E,0xFF,0xFF
+};
+static const UINT8 sideways_4[] = {
+	0xFF,0xFF,0x00,0x0E,0x00,0x0E,0x00,0x1C,
+  	0x00,0x1C,0x00,0x38,0x00,0x38,0xFF,0xFF
+};
+
 //grey top
 static const unsigned char grey_33[] = {
 	0xff,0x3c,0xc3,0x46,0x81,0x81,0x81,0x81,
@@ -100,18 +120,18 @@ static const unsigned char pink_48[] = {
 };
 
 #define FLAGPOLE_TILE_1 (0x21)
-#define FLAGPOLE_TILE_2 (0x29)
-#define FLAGPOLE_TILE_3 (0x2A)
+#define FLAGPOLE_TILE_2 (0x22)
 
-static UINT8 anim_flag_counter = 0;
-static UINT8 flagpole_activated = 0;
+static UINT8 anim_flag_counter;
+static UINT8 flagpole_activated;
 
-static UINT8 finish_counter = 0;
-static int stars_x = 0;
-static int stars_y = 0;
+static UINT8 finish_counter;
+static int stars_x;
+static int stars_y;
 
 void FlagPole_Init (void) BANKED
 {
+	anim_flag_counter = 0;
     flagpole_activated = 0; 
     finish_counter = 0;
 
@@ -132,11 +152,11 @@ void FlagPole_Activate(int tilex, int tiley) BANKED
 	stars_y -= 26;
 
     //change flagpole color palette to pink
-	if (W1LevelSelection == 7) // level 5
+	if (level_current == 5) 
 	{
 		SetPalette(BG_PALETTE, 5, 1, pal_pink5, _current_bank);
 	}
-	else if (W1LevelSelection == 5) // level 3
+	else if (level_current == 3) 
 	{
 		SetPalette(BG_PALETTE, 1, 1, pal_pink3, _current_bank);
 	}
@@ -149,27 +169,45 @@ void FlagPole_Activate(int tilex, int tiley) BANKED
 
 void FlagPole_Animate (void) BANKED
 {
-	if (flagpole_activated == 0) {
+	if (isHorizontalGoalpost == true)
+	{
+		if (anim_flag_counter == 12)
+		{
+			set_bkg_data (FLAGPOLE_TILE_1, 1, sideways_1);
+		}
+		else if (anim_flag_counter == 24)
+		{
+			set_bkg_data (FLAGPOLE_TILE_1, 1, sideways_2);
+		}
+		else if (anim_flag_counter == 36)
+		{
+			set_bkg_data (FLAGPOLE_TILE_1, 1, sideways_3);
+		}
+		else if (anim_flag_counter == 48)
+		{
+			set_bkg_data (FLAGPOLE_TILE_1, 1, sideways_4);
+		}
+
+		anim_flag_counter++;
+		if (anim_flag_counter == 49) anim_flag_counter = 0;
+	}
+	else if (flagpole_activated == 0) {
         //animate grey flagpole
 		if (anim_flag_counter == 12) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_33);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, grey_41);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, grey_41);
 		}
 		else if (anim_flag_counter == 24) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_34);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, grey_42);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, grey_42);
 		}
 		else if (anim_flag_counter == 36) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_35);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, grey_43);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, grey_43);
 		}
 		else if (anim_flag_counter == 48) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, grey_36);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, grey_44);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, grey_44);
 		}
 		anim_flag_counter++;
 		if (anim_flag_counter == 49) anim_flag_counter = 0;
@@ -180,39 +218,56 @@ void FlagPole_Animate (void) BANKED
         if (anim_flag_counter < 5) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, pink_37);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, pink_45);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, pink_45);
 		}
 		else if (anim_flag_counter >= 5 && anim_flag_counter < 10) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, pink_38);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, pink_46);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, pink_46);
 		}
 		else if (anim_flag_counter >= 10 && anim_flag_counter < 15) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, pink_39);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, pink_47);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, pink_47);
 		}
 		else if (anim_flag_counter >= 15 && anim_flag_counter < 20) {
 			set_bkg_data (FLAGPOLE_TILE_1, 1, pink_40);
 			set_bkg_data (FLAGPOLE_TILE_2, 1, pink_48);
-			set_bkg_data (FLAGPOLE_TILE_3, 1, pink_48);
 		}
 		anim_flag_counter++;
 		if (anim_flag_counter >= 20) anim_flag_counter = 0;
 
         finish_counter++;
 
-        if (finish_counter == 10) {
-			SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y);
-			SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y);
+
+		if (level_current == 11)
+		{
+			if (finish_counter == 10) {
+				// these stars are all crampt into 3 tiles high
+				stars_y += 26;
+				SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y);
+				SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y);
+			}
+			else if (finish_counter == 30) {
+				SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y-8);
+				SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y-8);
+			}
+			else if (finish_counter == 50) {
+				SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y-16);
+				SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y-16);
+			}
 		}
-		else if (finish_counter == 30) {
-			SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y-16);
-			SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y-16);
-		}
-		else if (finish_counter == 50) {
-			SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y-32);
-			SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y-32);
+		else
+		{
+			if (finish_counter == 10) {
+				SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y);
+				SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y);
+			}
+			else if (finish_counter == 30) {
+				SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y-16);
+				SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y-16);
+			}
+			else if (finish_counter == 50) {
+				SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y-32);
+				SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y-32);
+			}
 		}
     }
 }

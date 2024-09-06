@@ -1,9 +1,5 @@
 #include "Banks/SetAutoBank.h"
 
-#include "..\res\src\esologotiles.h"
-#include "..\res\src\esologomap.h"
-#include "..\res\src\esofire.h"
-
 #include "ZGBMain.h"
 #include "Music.h"
 #include "Scroll.h"
@@ -30,7 +26,8 @@ UINT8 collision_tiles_logo[] = {1, 0};
 //extern UINT8* esogames_mod_Data[];
 DECLARE_MUSIC(esogames);
 
-void Start_StateLogo() {
+void Start_StateLogo (void) 
+{
     UINT8 i = 0;
 	SPRITES_8x8;
 
@@ -52,7 +49,8 @@ void Start_StateLogo() {
     counter = 0;
 }
 
-void Update_StateLogo() {
+void Update_StateLogo (void) 
+{
     counter++;
 
     if (counter >= 250 || KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) SetState(StateTitle);

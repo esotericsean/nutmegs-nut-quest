@@ -3,33 +3,38 @@
 #include "SpriteManager.h"
 #include "GlobalVars.h"
 
-bool isAcornMoving;
 extern Sprite * spr_nutmeg;
 
-const UINT8 anim_acorn_moving[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
-const UINT8 anim_acorn_static[] = {1, 0};
+static const UINT8 anim_acorn_moving[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
+static const UINT8 anim_acorn_static[] = {1, 0};
 
-void Start_SpriteAcorn() {
-	if (levelorientation == horizontal) {
+void Start_SpriteAcorn(void) {
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 350;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}
 
-	if (isAcornMoving == true) SetSpriteAnim(THIS, anim_acorn_moving, 10);
-	else if (isAcornMoving == false) SetSpriteAnim(THIS, anim_acorn_static, 1);
+	SetSpriteAnim(THIS, anim_acorn_moving, 10);
 }
 
-void Update_SpriteAcorn() {
+void Update_SpriteAcorn(void) 
+{
 	if (CheckCollision(THIS, spr_nutmeg)) {
 		PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
-		acorncounter++;
+		nutmeg.acorns++;
 		SpriteManagerRemoveSprite (THIS);
 	}
 }
 
-void Destroy_SpriteAcorn() {
+void Destroy_SpriteAcorn(void) 
+{
+}
+
+void SpriteAcornFreeze(Sprite *acorn) BANKED 
+{
+	SetSpriteAnim(acorn, anim_acorn_static, 1);
 }

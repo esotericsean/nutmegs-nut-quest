@@ -2,9 +2,6 @@
 
 #include <gbdk/platform.h>
 
-#include "..\res\src\gameovertiles.h"
-#include "..\res\src\gameovermap.h"
-
 #include "ZGBMain.h"
 #include "Music.h"
 #include "Scroll.h"
@@ -12,9 +9,6 @@
 #include "Keys.h"
 #include "SpriteManager.h"
 
-//#include "../res/src/nutmeg.h"
-//#include "../res/src/acorn.h"
-//#include "../res/src/puff.h"
 #include "Palette.h"
 
 #include "../src/GlobalVars.h"
@@ -42,7 +36,8 @@ DECLARE_MUSIC(gameover);
 extern Sprite * spr_nutmeg;
 extern Sprite * spr_camera;
 
-void Start_StateGameOver() {
+void Start_StateGameOver(void) 
+{
 	SPRITES_8x16;
 
 	PlayMusic(gameover, 1);
@@ -55,14 +50,14 @@ void Start_StateGameOver() {
 	InitScroll(BANK(gameovermap), &gameovermap, collision_tiles_gameover, 0);
 
 	cutscenemode = disabled;
-	isAcornMoving = true; //yes, it is moving
 
 	SHOW_SPRITES;
 	SHOW_BKG;
 	HIDE_WIN;
 }
 
-void Update_StateGameOver() {
+void Update_StateGameOver(void) 
+{
 
 	SetPalette(SPRITES_PALETTE, 0, 1, pal_nutmegdark, _current_bank);
 

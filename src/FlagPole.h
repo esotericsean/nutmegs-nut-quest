@@ -9,4 +9,5 @@ void FlagPole_Animate (void) BANKED;
 // y = tile y of bottom of flagpole
 void FlagPole_Activate(int tilex, int tiley) BANKED;
 
+
 #endif // FLAGPOLE_H

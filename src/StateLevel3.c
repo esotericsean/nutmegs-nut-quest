@@ -12,18 +12,15 @@
 #include "Water.h"
 #include "Hud.h"
 #include "LevelStart.h"
+#include "SpriteNutmeg.h"
 
 IMPORT_MAP (level3map);
 
-UINT16 level3counter = 0;
-UINT8 endlevel_counter3 = 0;
-
-const UINT8 collision_tiles_level3[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
-const UINT8 collision_tiles_down_level3[] = {29,30,31,32,0};
+static const UINT8 collision_tiles_level3[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
+static const UINT8 collision_tiles_down_level3[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(quickstart);
 DECLARE_MUSIC(mushrooms);
-DECLARE_MUSIC(quickdeath);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -31,11 +28,15 @@ extern Sprite * spr_nutmeg;
 extern Sprite * spr_camera;
 
 
-void Start_StateLevel3() {
-
-	level3counter = 0;
-	levelorientation = vertical;
-	SPRITES_8x16;
+void Start_StateLevel3 (void)
+{
+	level.hasTimer = true;
+	levelStartCounter = 0;
+	levelEndCounter = 0;
+	level.orientation = vertical;
+	level.isWaterLevel = false;
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;	
 
 	nut_region = 0;
 	pitdeathactive = false;
@@ -44,61 +45,37 @@ void Start_StateLevel3() {
 
 	PlayMusic(quickstart, 1);
 
-	//if health is full, add the bow
-	if (hasbow == true) { SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49); //36
+	scroll_target = nutmeg_Add(4, 49);
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level3map), &level3map, collision_tiles_level3, collision_tiles_down_level3);
 	Hud_Init(false);
 
 	cutscenemode = enabled;
-	isAcornMoving = true; //yes, it is moving
-	endlevel_counter3 = 0;
+	
 	FlagPole_Init();
 	LevelStart_Init(7,5);
 
+	SPRITES_8x16;
 	SHOW_SPRITES;
 	SHOW_BKG;
 }
 
-void Update_StateLevel3() {
+void Update_StateLevel3 (void) 
+{
 	Hud_Update();
-
-	if (timerlevel == 0) 
-	{ 
-		nutmeg_death = true;
-	}
-
-	if (nutmeg_death == true) {
-		if (deathmusicplayed == false) {
-			__critical { PlayMusic(quickdeath, 1); }
-			deathmusicplayed = true;
-		}
-
-		if (nutmegdeathtimer >= 125) {
-			if (GameOver == true) {
-				SetState(StateGameOver);
-			}
-			else if (GameOver == false) {
-				SetState(StateOverworld1); // change to correct world
-			}
-		}
-
-		nutmegdeathtimer++;
-	}
 	
 	if (cutscenemode == enabled) {
 		//Level Start!
 		//Make Nutmeg Walk In
-		if (level3counter == 0) {
+		if (levelStartCounter == 0) {
 			cutscenewalkright = true;
 		}
-		else if (level3counter == 36) {
+		else if (levelStartCounter == 36) {
 			cutscenewalkright = false;
 			//but leave cutscene mode enabled still until Level Start! goes away
 		}
-		else if (level3counter == 100) {
+		else if (levelStartCounter == 100) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
@@ -107,7 +84,7 @@ void Update_StateLevel3() {
 		}
 
 		LevelStart_Update();			
-		if (level3counter < 105) level3counter++;
+		if (levelStartCounter < 105) levelStartCounter++;
 	}
 
 	Water_Animate();
@@ -131,23 +108,18 @@ void Update_StateLevel3() {
 			cutscenewalkleft = false;
 		}
 
-		if (endlevel_counter3 >= 100) {
-			//endlevel_counter3 = 0;
-			//cutscenewalkleft = false;
-			//cutscenewalkright = false;
-			//cutscenemode = disabled;
-
-			SetState(StateOverworld1);
+		if (levelEndCounter >= 100) {
+			SetState(StateOverworld);
 		}
 
-		if (endlevel_counter3 < 250) endlevel_counter3++;
+		if (levelEndCounter < 250) levelEndCounter++;
 
 	}
 
-	if (spr_nutmeg->x >= 256 && spr_nutmeg->x < 280 && spr_nutmeg->y > 904 && spr_nutmeg->y < 968 && levelbeat == false && nutmeg_death == false) {
+	if (spr_nutmeg->x >= 256 && spr_nutmeg->x < 280 && spr_nutmeg->y > 904 && spr_nutmeg->y < 968 && levelbeat == false && nutmeg.isDying == false) {
 		FlagPole_Activate(32,120);
 		levelbeat = true;
-		endlevel_counter3 = 0;
+		levelEndCounter = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 	}
@@ -166,7 +138,7 @@ void Update_StateLevel3() {
 	
 	/*
 	if (KEY_PRESSED(J_START)) {
-        SetState(StateOverworld1);
+        SetState(StateOverworld);
     }
 	*/
 
@@ -215,11 +187,8 @@ void Update_StateLevel3() {
 	// Up to 125:
 	else if (spr_nutmeg->y > 250 && spr_nutmeg->y <= 375 && nut_region <= 2) {
 		SpriteManagerAdd(EnemyRockith, 20*8, 33*8);
-		//SpriteManagerAdd(SpriteRock, 20*8, 32*8);
-		//SpriteManagerAdd(SpriteRock, 26*8, 32*8);
 		SpriteManagerAdd(EnemyTopSpike, 12*8, 38*8);
 		SpriteManagerAdd(EnemyBatty, 26*8, 40*8);
-		//SpriteManagerAdd(SpriteRock, 10*8, 41*8);
 	    nut_region = 3;
 	}
 	// Up to 156:
@@ -238,10 +207,7 @@ void Update_StateLevel3() {
 	}
 	// Up to 219:
 	else if (spr_nutmeg->y > 625 && spr_nutmeg->y <= 750 && nut_region <= 5) {
-		//SpriteManagerAdd(SpriteRock, 22*8, 82*8);
 		SpriteManagerAdd(EnemyRockith, 20*8, 92*8);
-		//SpriteManagerAdd(SpriteRock, 26*8, 91*8);
-		//SpriteManagerAdd(SpriteRock, 10*8, 91*8);
 		SpriteManagerAdd(SpriteAcorn, 4*8, 79*8);
 		SpriteManagerAdd(SpriteAcorn, 4*8, 83*8);
 		SpriteManagerAdd(SpriteAcorn, 4*8, 87*8);

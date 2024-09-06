@@ -5,9 +5,10 @@
 _STATE(StateIncube8)\
 _STATE(StateLogo)\
 _STATE(StateTitle)\
+_STATE(StateInitGame)\
 _STATE(StateTreeCutscene)\
 _STATE(StateLevel1)\
-_STATE(StateOverworld1)\
+_STATE(StateOverworld)\
 _STATE(StateCutscene1)\
 _STATE(StateCutscene2)\
 _STATE(StateCutscene3)\
@@ -20,12 +21,19 @@ _STATE(StateLevel4)\
 _STATE(StateLevel5)\
 _STATE(StateLevel6)\
 _STATE(StateLevel7)\
-_STATE(StateScroll)\
 _STATE(StateLevel8)\
 _STATE(StateW1Boss)\
 _STATE(StateLevel2_1)\
 _STATE(StateOverworldChange)\
 _STATE(StateCredits)\
+_STATE(StateLevelTree)\
+_STATE(StateLevel2_2)\
+_STATE(StateLevel2_glidefall)\
+_STATE(StateLevel1_platform)\
+_STATE(StateLevel2_platform)\
+_STATE(StateLevel2_multi)\
+_STATE(StateWaterLevel1)\
+_STATE(StateIceLevel1)\
 STATE_DEF_END
 
 #define SPRITES \
@@ -62,8 +70,7 @@ _SPRITE_DMG(SpriteMushroom, mushroom)\
 _SPRITE_DMG(SpriteNutmegBow, nutmegbow)\
 _SPRITE_DMG(EnemyRockith, rockith)\
 _SPRITE_DMG(EnemyTopSpike, topspike)\
-_SPRITE_DMG(SpriteNutmeg, nutmeg)\
-_SPRITE_DMG(SpriteRock, rock)\
+_SPRITE_DMG(SpriteNutmeg, nutmegSpr)\
 _SPRITE_DMG(EnemyBatty, batty)\
 _SPRITE_DMG(EnemyLightning, lightning)\
 _SPRITE_DMG(EnemyLightningSpot, lightningspot)\
@@ -77,6 +84,7 @@ _SPRITE_DMG(EnemyCola, cola)\
 _SPRITE_DMG(SpriteShockline1, shockline1)\
 _SPRITE_DMG(SpriteShockline2, shockline2)\
 _SPRITE_DMG(SpriteShockline3, shockline3)\
+_SPRITE_DMG(SpritePlatform, platform)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

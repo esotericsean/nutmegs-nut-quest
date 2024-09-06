@@ -40,7 +40,7 @@ bool Gisjumping = true;
 
 UINT8 gordoncounter;
 
-void Start_SpriteGordon1() {
+void Start_SpriteGordon1(void) {
     SetSpriteAnim(THIS, anim_gordon_idle_left, 1);
 
     gordoncounter = 0;
@@ -50,8 +50,7 @@ void Start_SpriteGordon1() {
     GcollisionX = 0;
     GcollisionY = 0;
     GgroundCollision = 0;
-    //GjumpPeak = 0;
-    //GrunJump = 0;
+
 
     Gmovestate = inair;
 
@@ -68,7 +67,7 @@ void Start_SpriteGordon1() {
 	THIS->lim_y = 144;
 }
 
-void Update_SpriteGordon1() {
+void Update_SpriteGordon1(void) {
     if (gordonwalkright == true) {
         if (gordon_direction == left) {
             TranslateSprite(THIS, 16, 0);
@@ -115,5 +114,5 @@ void Update_SpriteGordon1() {
     if (gordoncounter >= 6) gordoncounter = 0;
 }
 
-void Destroy_SpriteGordon1() {
+void Destroy_SpriteGordon1(void) {
 }

@@ -2,16 +2,19 @@
 
 #include "SpriteManager.h"
 
-const UINT8 anim_blinkruby[] = {16,
+static const UINT8 anim_blinkruby[] = {16,
 									0, 0, 0, 0, 1, 0, 0, 0,1, 0,
                                     0, 0, 0, 0, 0, 0};
 
-void Start_SpriteBlinkRuby() {
+void Start_SpriteBlinkRuby(void) 
+{
     SetSpriteAnim(THIS, anim_blinkruby, 4);
 }
 
-void Update_SpriteBlinkRuby() {
+void Update_SpriteBlinkRuby(void) 
+{
 }
 
-void Destroy_SpriteBlinkRuby() {
+void Destroy_SpriteBlinkRuby(void) 
+{
 }

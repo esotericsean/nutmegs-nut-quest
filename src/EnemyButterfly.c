@@ -10,12 +10,12 @@ extern Sprite * spr_nutmeg;
 
 static const UINT8 anim_butterfly_fly[] = {4, 1, 2, 3, 2};
 
-void Start_EnemyButterfly() {
-	if (levelorientation == horizontal) {
+void Start_EnemyButterfly(void) {
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}
@@ -29,7 +29,7 @@ void Start_EnemyButterfly() {
 }
 
 
-void Update_EnemyButterfly() {
+void Update_EnemyButterfly(void) {
 	//up and down
 	UINT8 ystep = THIS->custom_data[2];
 	UINT8 xstep = THIS->custom_data[3];
@@ -77,20 +77,18 @@ void Update_EnemyButterfly() {
 	THIS->custom_data[3] = xstep;
 
 	//kill butterfly if jump on it
-	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
-		if (movestate == inair && accelY > 0)
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
+		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
 		{
-			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-			isjumping = true; 
-			accelY = -600;
-			jumpPeak = 0;
-			movestate = inair;
-			
-			if (nutmeg_direction == right) {
+			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86); 
+			nutmeg.speedY = -nutmeg.enemyBounceY;
+			nutmeg.jumpPeak = 0;
+
+			if (nutmeg.direction == right) {
 				SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y);
 				SpriteManagerAdd(SpriteStarRight, THIS->x+4, THIS->y);
 			}
-			else if (nutmeg_direction == left) {
+			else if (nutmeg.direction == left) {
 				SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y);
 				SpriteManagerAdd(SpriteStarRight, THIS->x+4, THIS->y);
 			}
@@ -104,5 +102,5 @@ void Update_EnemyButterfly() {
 	}
 }
 
-void Destroy_EnemyButterfly() {
+void Destroy_EnemyButterfly(void) {
 }

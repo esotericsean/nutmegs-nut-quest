@@ -7,11 +7,14 @@
 
 #include "../src/GlobalVars.h"
 
-void Start_SpriteCamera() {
+void Start_SpriteCamera(void) 
+{
 }
 
-void Update_SpriteCamera() {
+void Update_SpriteCamera(void) 
+{
 }
 
-void Destroy_SpriteCamera() {
+void Destroy_SpriteCamera(void) 
+{
 }

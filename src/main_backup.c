@@ -28,7 +28,6 @@ UINT8 current_state;
 UINT8 state_running = 0;
 
 UINT8 backgroundoffsetmain = 0;
-UINT8 maintimer = 0;
 
 void SetState(UINT8 state) {
 	state_running = 0;
@@ -37,7 +36,7 @@ void SetState(UINT8 state) {
 
 UINT8 vbl_count = 0;
 UINT8 music_mute_frames = 0;
-void vbl_update() {
+void vbl_update(void) {
 	vbl_count ++;
 	
 	SCX_REG = scroll_x_vblank + (scroll_offset_x << 3);
@@ -51,8 +50,8 @@ void vbl_update() {
 	}
 }
 
-void InitStates();
-void InitSprites();
+void InitStates(void);
+void InitSprites(void);
 
 extern UWORD ZGB_Fading_BPal[32];
 extern UWORD ZGB_Fading_SPal[32];
@@ -69,13 +68,12 @@ void SetPalette(PALETTE_TYPE t, UINT8 first_palette, UINT8 nb_palettes, UINT16 *
 		set_sprite_palette(first_palette, nb_palettes, rgb_data);
 	}
 	memcpy(&pal_ptr[first_palette << 2], rgb_data, nb_palettes << 3);
-	POP_BANK;
+	POP_BANK();
 }
 #endif
 
-void LCD_isr() NONBANKED {
-	if (current_state == 2) {
-		switch (LYC_REG)
+void LCD_Title_isr(void) NONBANKED{
+	switch (LYC_REG)
 		{
         case 0x00:
             LYC_REG = 0x48;
@@ -89,39 +87,28 @@ void LCD_isr() NONBANKED {
             LYC_REG = 0x00;
             break;            
 		}
-	}
-	else {
-		// turn sprites off over the window
-		if (LYC_REG == 0) {
-			if (WY_REG == 0) {
-				HIDE_SPRITES;
-			} else {
-				SHOW_SPRITES;
-				LYC_REG = WY_REG - 1;
-			}
-		} else {
-			HIDE_SPRITES;
-			LYC_REG = 0;
-		}
-	}
 }
 
-void SetWindowY(UINT8 y) {
-	WY_REG = y;
-	LYC_REG = y - 1;
-	if (y < 144u) {
-		SHOW_WIN; 
-	} else { 
-		HIDE_WIN; 
-		LYC_REG = 160u; 
-	} 
+void LCD_NoSpritesOnHUD_isr(void) NONBANKED {
+	// turn sprites off over the window
+	if (LYC_REG == 0) {
+		if (WY_REG == 0) {
+			HIDE_SPRITES;
+		} else {
+			SHOW_SPRITES;
+			LYC_REG = WY_REG; // was  - 1;
+		}
+	} else {
+		HIDE_SPRITES;
+		LYC_REG = 0;
+	}
 }
 
 extern UINT8 last_bg_pal_loaded;
 extern UINT8 last_tile_loaded;
 UINT16 default_palette[] = {RGB(31, 31, 31), RGB(20, 20, 20), RGB(10, 10, 10), RGB(0, 0, 0)};
 
-void main() {
+void main(void) {
 	// this delay is required for PAL SNES SGB border commands to work
 	for (UINT8 i = 4; i != 0; i--) {
 		wait_vbl_done();
@@ -140,7 +127,7 @@ void main() {
 	PUSH_BANK(1);
 	InitStates();
 	InitSprites();
-	POP_BANK;
+	POP_BANK();
 	
 	CRITICAL {
 #ifdef CGB
@@ -159,22 +146,24 @@ void main() {
 	}
 
 	set_interrupts(VBL_IFLAG | TIM_IFLAG | LCD_IFLAG);
-
+	
+	STAT_REG |= 0x40; 
 	LCDC_REG |= LCDCF_OBJDEFAULT | LCDCF_OBJON | LCDCF_BGON;
 	WY_REG = 145;
 
-	// TESTING - Skip past the start stuff
+	// FOR TEST - Skip past the start stuff
 	
 	// 6 = force scroll
 	// w1 = 10 - stage 8
 	W1LevelSelection = 0;
-	next_state = StateOverworld1;
+	next_state = StateInitGame;
 	levelbeat = true;
-	level_max = 20;
+	level_max = 1;
 	level_current = 0;
 	level_next = 1;
-	nutmeglives = 99;
-	// END TESTING
+	nutmeg.lives = 99;
+	add_LCD (LCD_NoSpritesOnHUD_isr);
+	// END FOR TEST
 	
 
 	while(1) {
@@ -182,8 +171,8 @@ void main() {
 
 		if (current_state == 2)	
 		{
-			STAT_REG -= 0x40; 
-			remove_LCD(LCD_isr);
+			remove_LCD(LCD_Title_isr);
+			add_LCD (LCD_NoSpritesOnHUD_isr);
 		}
 
 		if(stop_music_on_new_state)
@@ -211,16 +200,17 @@ void main() {
 
 		PUSH_BANK(stateBanks[current_state]);
 			(startFuncs[current_state])();
-		POP_BANK;
+		POP_BANK();
 		scroll_x_vblank = scroll_x;
 		scroll_y_vblank = scroll_y;
 
 		if(state_running) {
 			if (current_state == 2)	
 			{
-				STAT_REG |= 0x40; 
-				add_LCD(LCD_isr);
+				remove_LCD (LCD_NoSpritesOnHUD_isr);
+				add_LCD (LCD_Title_isr);
 			}
+
 			// FadeOut (from white to our real colors)
 			// This takes a second, so update the sprite manager one time,
 			// so our starting sprites are on the screne during the fade
@@ -230,16 +220,7 @@ void main() {
 		}
 
 		while (state_running) {
-			if (current_state == 2) {
-				if (maintimer == 3) {
-					backgroundoffsetmain += 1;
-				}
-				
-				maintimer++;
-				
-				if (maintimer > 3) maintimer = 0;
-			}
-			
+		
 			if(!vbl_count)
 			{
 				wait_vbl_done();
@@ -252,7 +233,7 @@ void main() {
 			SpriteManagerUpdate();
 			PUSH_BANK(stateBanks[current_state]);
 				updateFuncs[current_state]();
-			POP_BANK;
+			POP_BANK();
 		}
 
 		FadeIn();

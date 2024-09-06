@@ -1,24 +1,25 @@
 #include "Banks/SetAutoBank.h"
-
+#include "ZGBMain.h"
+#include "Sound.h"
 #include "SpriteManager.h"
 
-UINT8 cinnamon_counter;
-const UINT8 anim_cinnamon_idle[] = {7, 0, 0, 0, 0, 0, 0, 1};
-const UINT8 anim_cinnamon_jump[] = {7, 0, 1, 2, 3, 4, 5, 6};
+#include "../src/GlobalVars.h"
 
-void Start_SpriteCinnamon() {
-	/*THIS->coll_x = 8;
-	THIS->coll_y = 8;
-	THIS->coll_w = 8;
-	THIS->coll_h = 8;*/
+extern Sprite * spr_nutmeg;
 
+static UINT8 cinnamon_counter;
+static const UINT8 anim_cinnamon_idle[] = {7, 0, 0, 0, 0, 0, 0, 1};
+static const UINT8 anim_cinnamon_jump[] = {7, 0, 1, 2, 3, 4, 5, 6};
+
+void Start_SpriteCinnamon(void) {
 	cinnamon_counter = 0;
 
 	SetSpriteAnim(THIS, anim_cinnamon_idle, 10);
 }
 
-void Update_SpriteCinnamon() {
-	if (cinnamon_counter >= 0 && cinnamon_counter < 128) {
+void Update_SpriteCinnamon(void) {
+
+	if (cinnamon_counter < 128) {
 		SetSpriteAnim(THIS, anim_cinnamon_idle, 10);
 	}
 	else if (cinnamon_counter >= 128 && cinnamon_counter < 208) {
@@ -29,7 +30,41 @@ void Update_SpriteCinnamon() {
 
 	if (cinnamon_counter >= 208)
 		cinnamon_counter = 0;
+
+	THIS->y +=7;
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false)
+	{
+		THIS->y -=7;
+		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
+		{
+			PlayFx(CHANNEL_4, 60, 0x3a, 0xf2, 0x62, 0x80);
+			
+			INT16 accly = (nutmeg.enemyBounceY >> 1);
+			accly += (nutmeg.enemyBounceY >> 2);
+			accly += (nutmeg.enemyBounceY >> 3);
+			nutmeg.speedY = -accly;
+	
+			nutmeg.jumpPeak = 0;
+			
+			SetSpriteAnim(THIS, anim_cinnamon_idle, 10);
+			cinnamon_counter = 0;
+
+			if (nutmeg.direction == right) {
+				SpriteManagerAdd(SpritePuffLeft, THIS->x+8, THIS->y+2);
+				SpriteManagerAdd(SpritePuffRight, THIS->x+16, THIS->y+2);
+			}
+			else if (nutmeg.direction == left) {
+				SpriteManagerAdd(SpritePuffLeft, THIS->x+8, THIS->y+2);
+				SpriteManagerAdd(SpritePuffRight, THIS->x+16, THIS->y+2);
+			}
+
+			// nutmeg can bounce as many times as they want
+		}
+	}
+	else {
+		THIS->y -=7;
+	}
 }
 
-void Destroy_SpriteCinnamon() {
+void Destroy_SpriteCinnamon(void) {
 }

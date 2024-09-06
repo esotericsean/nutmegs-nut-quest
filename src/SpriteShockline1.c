@@ -1,12 +1,13 @@
 #include "Banks/SetAutoBank.h"
 #include "SpriteManager.h"
 
-UINT8 shockline1counter;
+static UINT8 shockline1counter;
 
-const UINT8 anim_shock1_flash[] = {2, 0, 1};
-const UINT8 anim_shock1_static[] = {1, 1};
+static const UINT8 anim_shock1_flash[] = {2, 0, 1};
+static const UINT8 anim_shock1_static[] = {1, 1};
 
-void START() {
+void Start_SpriteShockline1(void) 
+{
 	THIS->lim_x = 350;
 	THIS->lim_y = 144;
 
@@ -15,11 +16,18 @@ void START() {
 	shockline1counter = 0;
 }
 
-void UPDATE() {
-	if (shockline1counter < 100) shockline1counter++;
-
-	if (shockline1counter >= 100) SetSpriteAnim(THIS, anim_shock1_static, 1);
+void Update_SpriteShockline1(void) 
+{
+	if (shockline1counter < 100) 
+	{
+		shockline1counter++;
+	}
+	else 
+	{
+		SetSpriteAnim(THIS, anim_shock1_static, 1);
+	}
 }
 
-void DESTROY() {
+void Destroy_SpriteShockline1(void) 
+{
 }

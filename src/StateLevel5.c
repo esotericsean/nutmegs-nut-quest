@@ -12,20 +12,19 @@
 #include "Water.h"
 #include "Hud.h"
 #include "LevelStart.h"
+#include "SpriteNutmeg.h"
 
 IMPORT_MAP (level5map);
 
-UINT16 level5counter = 0;
-UINT8 anim_rain_counter5 = 0;
-UINT8 endlevel_counter5 = 0;
-UINT8 lightningstrikecounter1 = 0;
-UINT8 lightningstrikecounter2 = 0;
+static UINT8 anim_rain_counter5 = 0;
+
+static UINT8 lightningstrikecounter1 = 0;
+static UINT8 lightningstrikecounter2 = 0;
 
 static const UINT8 collision_tiles_level5[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
 static const UINT8 collision_tiles_down_level5[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(raindrops);
-DECLARE_MUSIC(quickdeath);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -47,90 +46,109 @@ extern Sprite * spr_nutmeg;
 // Splash 2 data: 0x70, 0x71, 0x72
 
 // Blank
-const unsigned char rainblankwhite[] = {
+static const unsigned char rainblankwhite[] = {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
 };
-const unsigned char rainblankblue[] = {
+
+static const unsigned char rainblankblue[] = {
 	0xff,0x00,0xff,0x00,0xff,0x00,0xff,0x00,
 	0xff,0x00,0xff,0x00,0xff,0x00,0xff,0x00
 };
 
 // Set 1:
-const unsigned char rainset1_pt1[] = {
+static const unsigned char rainset1_pt1[] = {
 	0xff,0x00,0xff,0x00,0xdf,0x00,0xdf,0x00,
 	0xbf,0x00,0xbf,0x00,0xff,0x00,0xff,0x00
 };
-const unsigned char rainset1_pt2[] = {
+
+static const unsigned char rainset1_pt2[] = {
 	0xff,0x00,0xfe,0x00,0xfe,0x00,0xfd,0x00,
 	0xfd,0x00,0xfb,0x00,0xfb,0x00,0xff,0x00
 };
-const unsigned char rainset1_pt3[] = {
+
+static const unsigned char rainset1_pt3[] = {
 	0xff,0x00,0xfb,0x00,0xfb,0x00,0xf7,0x00,
 	0xb7,0x00,0xbf,0x00,0x7f,0x00,0x7f,0x00
 };
-const unsigned char rainset1_pt4[] = {
+
+static const unsigned char rainset1_pt4[] = {
 	0xff,0x00,0xff,0x00,0xff,0x00,0xff,0x00,
 	0xff,0x00,0xff,0x00,0xbf,0x00,0xbf,0x00
 };
 
 // Set 2:
-const unsigned char rainset2_pt1[] = {
+static const unsigned char rainset2_pt1[] = {
 	0xff,0x00,0xff,0x00,0xdf,0x00,0xdf,0x00,
 	0xbf,0x00,0xbf,0x00,0xff,0x00,0xff,0x00
 };
-const unsigned char rainset2_pt2[] = {
+
+static const unsigned char rainset2_pt2[] = {
 	0xff,0x00,0xfe,0x00,0xfe,0x00,0xfd,0x00,
 	0xfd,0x00,0xfb,0x00,0xfb,0x00,0xff,0x00
 };
-const unsigned char rainset2_pt3[] = {
+
+static const unsigned char rainset2_pt3[] = {
 	0xff,0x00,0xfb,0x00,0xfb,0x00,0xf7,0x00,
 	0xb7,0x00,0xbf,0x00,0x7f,0x00,0x7f,0x00
 };
-const unsigned char rainset2_pt4[] = {
+
+static const unsigned char rainset2_pt4[] = {
 	0xff,0x00,0xff,0x00,0xff,0x00,0xff,0x00,
 	0xff,0x00,0xff,0x00,0xbf,0x00,0xbf,0x00
 };
 
 // Splash 1:
-const unsigned char rainsplash1_pt1[] = {
+static const unsigned char rainsplash1_pt1[] = {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x10,0x00,0x10,0x00,0x20,0x00,0x20,0x00
 };
-const unsigned char rainsplash1_pt2[] = {
+
+static const unsigned char rainsplash1_pt2[] = {
 	0x00,0x00,0x00,0x00,0x02,0x00,0x02,0x00,
 	0x04,0x00,0x04,0x00,0x00,0x00,0x00,0x00
 };
-const unsigned char rainsplash1_pt3[] = {
+
+static const unsigned char rainsplash1_pt3[] = {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x00,0x00,0x40,0x00,0x08,0x00,0x10,0x00
 };
-const unsigned char rainsplash1_pt4[] = {
+
+static const unsigned char rainsplash1_pt4[] = {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x80,0x00,0x00,0x00,0x02,0x00,0x00,0x00
 };
 
 // Splash 2:
-const unsigned char rainsplash2_pt1[] = {
+static const unsigned char rainsplash2_pt1[] = {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x10,0x00,0x10,0x00,0x20,0x00,0x20,0x00
 };
-const unsigned char rainsplash2_pt2[] = {
+
+static const unsigned char rainsplash2_pt2[] = {
 	0x00,0x00,0x00,0x00,0x02,0x00,0x02,0x00,
 	0x04,0x00,0x04,0x00,0x00,0x00,0x00,0x00
 };
-const unsigned char rainsplash2_pt3[] = {
+
+static const unsigned char rainsplash2_pt3[] = {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x00,0x00,0x40,0x00,0x08,0x00,0x10,0x00
 };
-const unsigned char rainsplash2_pt4[] = {
+
+static const unsigned char rainsplash2_pt4[] = {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 	0x80,0x00,0x00,0x00,0x02,0x00,0x00,0x00
 };
 
-void Start_StateLevel5() {
-	level5counter = 0;
-	levelorientation = horizontal;
+void Start_StateLevel5 (void) 
+{
+	levelStartCounter = 0;
+	level.hasTimer = true;
+	level.orientation = horizontal;
+	level.isWaterLevel = false;
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;
+		
 	SPRITES_8x16;
 
 	nut_region = 0;
@@ -140,20 +158,17 @@ void Start_StateLevel5() {
 
 	PlayMusic(raindrops, 1);
 
-	//if health is full, add the bow
-	if (hasbow == true) { SpriteManagerAdd(SpriteNutmegBow, 3*8, 11*8); }
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 3*8, 11*8); //36
+	scroll_target = nutmeg_Add(3*8, 11*8); 
 
 	InitScrollTiles(0, &level5tiles);
 	InitScroll(BANK(level5map), &level5map, collision_tiles_level5, collision_tiles_down_level5);
 	Hud_Init(false);
 
 	cutscenemode = enabled;
-	isAcornMoving = true; //yes, it is moving
 	FlagPole_Init();
 	LevelStart_Init(7,5);
 
-	endlevel_counter5 = 0;
+	levelEndCounter = 0;
 
 	lightningstrikecounter1 = 0;
 	lightningstrikecounter2 = 0;
@@ -162,32 +177,10 @@ void Start_StateLevel5() {
 	SHOW_BKG;
 }
 
-void Update_StateLevel5() {
+void Update_StateLevel5 (void) 
+{
 	Hud_Update();
-
-	if (timerlevel == 0)
-	{
-		nutmeg_death = true;
-	}
-
-	if (nutmeg_death == true) {
-		if (deathmusicplayed == false) {
-			__critical { PlayMusic(quickdeath, 1); }
-			deathmusicplayed = true;
-		}
-
-		if (nutmegdeathtimer >= 125) {
-			if (GameOver == true) {
-				SetState(StateGameOver);
-			}
-			else if (GameOver == false) {
-				SetState(StateOverworld1); // change to correct world
-			}
-		}
-
-		nutmegdeathtimer++;
-	}
-
+	
 	if (lightningstrikecounter1 < 87)
 		lightningstrikecounter1++;
 	
@@ -200,10 +193,10 @@ void Update_StateLevel5() {
 	
 	if (cutscenemode == enabled) {	
 		//Level Start!
-		if (level5counter == 0) {
+		if (levelStartCounter == 0) {
 			cutscenewalkright = false;
 		}
-		else if (level5counter == 100) {
+		else if (levelStartCounter == 100) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
@@ -211,11 +204,11 @@ void Update_StateLevel5() {
 			}
 		}
 
-		if (level5counter < 105) level5counter++;
+		if (levelStartCounter < 105) levelStartCounter++;
 	}
 
 	if (spr_nutmeg->x < 1936) {
-		if (movestate == inair) { TranslateSprite (spr_nutmeg, -1, 0); }
+		if (nutmeg.movestate == inair) { TranslateSprite (spr_nutmeg, -1, 0); }
 	}
 	else if (spr_nutmeg->x >= 1936) {
 		TranslateSprite (spr_nutmeg, 0, 0);
@@ -333,38 +326,20 @@ void Update_StateLevel5() {
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 		cutscenewalkleft = false;
-		
-		if (spr_nutmeg->x > 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x < 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x == 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
+
+		if (levelEndCounter >= 100) {
+			SetState(StateOverworld);
 		}
 
-		if (endlevel_counter5 >= 100) {
-			//endlevel_counter5 = 0;
-			//cutscenewalkleft = false;
-			//cutscenewalkright = false;
-			//cutscenemode = disabled;
-
-			SetState(StateOverworld1);
-		}
-
-		if (endlevel_counter5 < 250) endlevel_counter5++;
+		if (levelEndCounter < 250) levelEndCounter++;
 
 
 	}
 
-	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg_death == false) {
+	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg.isDying == false) {
 		FlagPole_Activate(244, 13);
 		levelbeat = true;
-		endlevel_counter5 = 0;
+		levelEndCounter = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 	}
@@ -383,7 +358,7 @@ void Update_StateLevel5() {
 	
 	/*
 	if (KEY_PRESSED(J_START)) {
-        SetState(StateOverworld1);
+        SetState(StateOverworld);
     }
 	*/
 

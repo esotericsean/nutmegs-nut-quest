@@ -1,11 +1,5 @@
 #include "Banks/SetAutoBank.h"
 
-#include "..\res\src\cutscenegordontiles.h"
-#include "..\res\src\cutscenegordonmap.h"
-
-#include "..\res\src\gordon1.h"
-#include "..\res\src\nutmeg.h"
-#include "..\res\src\acorn.h"
 
 #include "ZGBMain.h"
 #include "Music.h"
@@ -24,20 +18,20 @@ IMPORT_MAP (cutscenegordonmap);
 DECLARE_MUSIC (gordoncutscene);
 DECLARE_MUSIC (nutmeghey);
 
-UINT16 cutscenegordoncounter;
-UINT8 cutscenegordonspeed;
-UINT8 cutscenegordonspeedlimit;
+static UINT16 cutscenegordoncounter;
+static UINT8 cutscenegordonspeed;
+static UINT8 cutscenegordonspeedlimit;
 
-const UINT8 collision_tiles_cutscenegordon[] = {3,4,0};
+static const UINT8 collision_tiles_cutscenegordon[] = {3,4,0};
 
 extern Sprite * spr_nutmeg;
 
-Sprite * spr_gordoncamera;
-Sprite * spr_gordonposition;
-Sprite * spr_gordon2position;
-Sprite * spr_acorn;
+static Sprite * spr_gordoncamera;
+static Sprite * spr_gordonposition;
+static Sprite * spr_gordon2position;
+static Sprite * spr_acorn;
 
-void Start_StateCutsceneGordon() {
+void Start_StateCutsceneGordon(void) {
     SPRITES_8x16;
 
     spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 8, 96);
@@ -46,8 +40,7 @@ void Start_StateCutsceneGordon() {
     spr_gordon2position = SpriteManagerAdd(SpriteGordon2, 196+16, 96);
 
     spr_acorn = SpriteManagerAdd(SpriteAcorn, 50, 16);
-
-    isAcornMoving = false;
+    SpriteAcornFreeze (spr_acorn);
 
     InitScrollTiles(0, &cutscenegordontiles);
     InitScroll(BANK(cutscenegordonmap), &cutscenegordonmap, collision_tiles_cutscenegordon, 0);
@@ -62,7 +55,7 @@ void Start_StateCutsceneGordon() {
     PlayMusic(gordoncutscene, 0);
 }
 
-void Update_StateCutsceneGordon() {
+void Update_StateCutsceneGordon(void) {
     //acorn shake
     switch (cutscenegordoncounter) {
         case 25: spr_acorn->x = spr_acorn->x - 2; spr_acorn->y = spr_acorn->y + 1; break;
@@ -205,7 +198,7 @@ void Update_StateCutsceneGordon() {
 
     //end
     if (cutscenegordoncounter >= 840) {
-        SetState(StateOverworld1);
+        SetState(StateOverworld);
     }
     
     cutscenegordoncounter++;
@@ -215,6 +208,6 @@ void Update_StateCutsceneGordon() {
     if (cutscenegordonspeed > cutscenegordonspeedlimit) cutscenegordonspeed = 0;
 
     if (KEY_PRESSED(J_START)) {
-        SetState(StateOverworld1);
+        SetState(StateOverworld);
     }
 }

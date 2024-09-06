@@ -1,8 +1,5 @@
 #include "Banks/SetAutoBank.h"
 
-#include "..\res\src\treetiles.h"
-#include "..\res\src\treemap2.h"
-
 #include "ZGBMain.h"
 #include "Music.h"
 #include "Scroll.h"
@@ -10,12 +7,6 @@
 #include "Keys.h"
 #include "SpriteManager.h"
 
-#include "../res/src/nutmeg.h"
-#include "../res/src/nutmeg2.h"
-#include "../res/src/cinnamon.h"
-#include "../res/src/ruby.h"
-#include "../res/src/maple.h"
-#include "../res/src/puff.h"
 #include "Palette.h"
 
 #include "../src/GlobalVars.h"
@@ -23,25 +14,28 @@
 
 IMPORT_MAP (treemap2);
 
-UINT8 collision_tiles_tree2[] = {2,3,4,5,7,8,9,10,12,49,50,51,52,53,54,55,56,57,58, 0};
+static const UINT8 collision_tiles_tree2[] = {2,3,4,5,7,8,9,10,12,49,50,51,52,53,54,55,56,57,58, 0};
 
 DECLARE_MUSIC(oaktree);
 
 extern Sprite * spr_nutmeg;
 
-UINT16 treecounter = 0;
+static UINT16 treecounter = 0;
 
-void Start_StateTree() {
+void Start_StateTree (void) 
+{
 	SPRITES_8x16;
 
 	treecounter = 0;
-
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;
+	
 	PlayMusic(oaktree, 1);
 
 	//SetPalette (BG_PALETTE, 0, 8, bg_palette_tree2, bank_StateTree);
 	//SetPalette (SPRITES_PALETTE, 0, 8, sprites_palette_tree2, bank_StateTree);
 
-	SpriteManagerLoad(35);  	//nutmeg
+	SpriteManagerLoad(35);  //nutmeg
 	SpriteManagerLoad(12); 	//puff1
 	SpriteManagerLoad(13); 	//puff2
 	SpriteManagerLoad(14); 	//cinnamon
@@ -63,9 +57,10 @@ void Start_StateTree() {
 	cutscenemode = enabled;
 }
 
-void Update_StateTree() {
+void Update_StateTree (void) 
+{
 	//if Nutmeg touches the Oak Tree Door, then leave
-	if (spr_nutmeg->x >= 110 && spr_nutmeg->x < 118) SetState(StateOverworld1);
+	if (spr_nutmeg->x >= 110 && spr_nutmeg->x < 118) SetState(StateOverworld);
 
 	if (treecounter == 0) {
 		cutscenewalkleft = true;

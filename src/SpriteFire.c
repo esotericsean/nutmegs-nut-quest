@@ -1,19 +1,20 @@
 #include "Banks/SetAutoBank.h"
-
 #include "SpriteManager.h"
 
-const UINT8 anim_fire[] = {3, 7, 8, 9}; //The first number indicates the number of frames
-const UINT8 anim_fireburst[] = {16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5};
+static const UINT8 anim_fire[] = {3, 7, 8, 9}; //The first number indicates the number of frames
+static const UINT8 anim_fireburst[] = {16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5};
 
 BYTE fireburst;
 UINT8 i;
 
-void Start_SpriteFire() {
+void Start_SpriteFire(void) 
+{
 	fireburst = 0;
 	i = 1;
 }
 
-void Update_SpriteFire() {
+void Update_SpriteFire(void) 
+{
 	if (fireburst == 0) {
 		SetSpriteAnim(THIS, anim_fireburst, 15);
 	} else {
@@ -27,5 +28,6 @@ void Update_SpriteFire() {
 	}
 }
 
-void Destroy_SpriteFire() {
+void Destroy_SpriteFire(void) 
+{
 }

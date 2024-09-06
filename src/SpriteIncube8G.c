@@ -4,11 +4,13 @@
 
 UINT8 moveG;
 
-void Start_SpriteIncube8G() {
+void Start_SpriteIncube8G (void) 
+{
     moveG = 0;
 }
 
-void Update_SpriteIncube8G() {
+void Update_SpriteIncube8G (void) 
+{
     if      (moveG == 10-5) TranslateSprite(THIS, 0, -1);
     else if (moveG == 15-5) TranslateSprite(THIS, 0, -1);
     else if (moveG == 20-5) TranslateSprite(THIS, 0, -1);
@@ -20,5 +22,6 @@ void Update_SpriteIncube8G() {
     moveG++;
 }
 
-void Destroy_SpriteIncube8G() {
+void Destroy_SpriteIncube8G (void) 
+{
 }

@@ -12,6 +12,7 @@
 
 IMPORT_MAP (overworld1map);
 IMPORT_MAP (overworld2map);
+IMPORT_MAP (overworld3map);
 
 // OVerworld map scene
 
@@ -22,18 +23,29 @@ IMPORT_MAP (overworld2map);
 //												   //
 /////////////////////////////////////////////////////
 
-static UINT8 waterAnimCounter = 0; // water animation counter
-
-UINT8 walkCounter = 0;
-UINT8 bossflash = 0;
+// globals
 UINT8 W1LevelSelection; 		// nutmeg starts at level 1
 								// level 0 is the tree
 								// mushroom is level 4
 bool levelbeat;
+
+/// @brief track frame count during start of level
+UINT16 levelStartCounter;
+
+/// @brief track frame count during end of level
+UINT8 levelEndCounter;
+
+// local
+static UINT8 waterAnimCounter = 0; // water animation counter
+
+static UINT8 walkCounter = 0;
+static UINT8 bossflash = 0;
 static UINT8 overworldNum = 0;
 
-#define ENTERING_WORLD_2 (0xfe)
+#define ENTERING_WORLD_2_FROM_1 (0xfe)
 #define ENTERING_WORLD_1 (0xfd)
+#define ENTERING_WORLD_3_FROM_2 (0xfc)
+#define ENTERING_WORLD_2_FROM_3 (0xfb)
 
 const unsigned char overworld1_tree[] = {
 	0x36,0x00,0x5b,0x00,0xff,0x00,0xbb,0x00,
@@ -51,6 +63,10 @@ const unsigned char overworld1_boss2[] = {
 	0x00,0x00,0x1c,0x1c,0x22,0x3e,0x4d,0x73,
 	0x5f,0x61,0x5f,0x61,0x2e,0x32,0x1c,0x1c
 };
+
+// extern declaration for level info - 
+// at stage setup this should be updated with all the new stage level info
+LevelT level;
 
 UINT8 level_current = 0;
 UINT8 level_next = 0;
@@ -105,7 +121,13 @@ static const mapLevelDirectionT levelDirections[] = {
 	{J_DOWN, J_RIGHT},
 	{J_LEFT, J_UP},
 	{J_LEFT, J_UP},
-	{J_DOWN, 0xff}, // 2-Boss
+	{J_DOWN, J_RIGHT}, // 2-Boss
+	{J_LEFT, J_RIGHT}, // 3-1
+	{J_LEFT, J_DOWN},
+	{J_RIGHT, J_LEFT},
+	{J_LEFT, J_RIGHT},
+	{J_UP, J_DOWN},
+	{J_UP, 0xff}, // 3-Boss
 };
 
 typedef struct mapStepT {
@@ -124,6 +146,8 @@ UINT8 moveCount = 0;
 // The map step the player is currently moving towards (if automove is on)
 static const mapStepT * movingToStep;
 
+static uint8_t unlockedPalette = 3;
+static uint8_t bossLevel = 9;
 #define TILE_0 (0x29)
 
 static const mapStepT steps_ow1 [] = {
@@ -164,6 +188,7 @@ static const mapStepT steps_ow1 [] = {
 
 
 static const mapStepT steps_ow2 [] = {
+	{254, 12, 9}, // 254 = special value to force off the left hand side of the map
 	{0, 12, 9},
 	{1, 12, 9},
 	{2, 12, 9},
@@ -202,6 +227,66 @@ static const mapStepT steps_ow2 [] = {
 	{17, 6, 18},
 	{17, 5, 18},
 	{17, 4, 19},
+	{18, 4, 19},
+	{19, 4, 19},
+	{20, 4, 20},
+	{0xff, 0xff, 0xff} // end of array
+};
+
+static const mapStepT steps_ow3 [] = {
+	{254, 4, 19}, // 254 = special value to force off the left hand side of the map
+	{0, 4, 19},
+	{1, 4, 19},
+	{2, 4, 19},
+	{3, 4, 19},
+	{4, 4, 20},
+	{5, 4, 20},
+	{6, 4, 20},
+	{7, 4, 20},
+	{8, 4, 20},
+	{9, 4, 20},
+	{9, 5, 20},
+	{10, 5, 20},
+	{11, 5, 20},
+	{12, 5, 20},
+	{12, 4, 20},
+	{13, 4, 20},
+	{14, 4, 21},
+	{14, 5, 21},
+	{14, 6, 21},
+	{14, 7, 21},
+	{14, 8, 21},
+	{14, 9, 21},
+	{13, 9, 21},
+	{12, 9, 22},
+	{11, 9, 22},
+	{10, 9, 22},
+	{9, 9, 22},
+	{8, 9, 22},
+	{7, 9, 22},
+	{7, 8, 22},
+	{7, 7, 22},
+	{8, 7, 22},
+	{9, 7, 23},
+	{10, 7, 23},
+	{11, 7, 23},
+	{12, 7, 23},
+	{13, 7, 23},
+	{14, 7, 23},
+	{15, 7, 23},
+	{16, 7, 23},
+	{16, 8, 24},
+	{16, 9, 24},
+	{16, 10, 24},
+	{16, 11, 24},
+	{16, 12, 24},
+	{16, 13, 24},
+	{16, 14, 24},
+	{16, 15, 25},
+	{16, 16, 25},
+	{16, 17, 25},
+	{16, 18, 25},
+	{16, 19, 26},
 	{0xff, 0xff, 0xff} // end of array
 };
 
@@ -217,27 +302,46 @@ static const mapStepT *mapStepForLevel (UINT8 l)
 	return p;
 }
 
-static void LightenPath (UINT8 topLevel)
+static void LightenPath (void)
 {
 	//change level dots color palettes when beating levels
-	VBK_REG = 1;
 	const mapStepT *p = currentMapSteps;
-
+	uint8_t lastStage = p->level;
+	bool done = false;
 	if (overworldNum == 1)
 	{
 		// skip highlighting the tree
 		p ++;
 	}
 
-	do
+	while ((done == false) && (p->level != 0xff))
 	{
-		set_tile_xy ( p->x, p->y, PAL_LIGHT_PATH);
-		p++;
-	} while ((p->level != topLevel) && (p->level != 0xff));
+		if (p->level == lastStage)
+		{	
+			set_tile_xy ( p->x, p->y, 37);
+		}
+		else if (p->level == bossLevel)
+		{
+			// change the boss tile instead of the attribute
+			set_tile_xy(p->x, p->y, 39);
+		}
+		else
+		{
+			// regular levels have a new tile and palette
+			set_tile_xy(p->x, p->y, 36);
+		}
+		
+		set_attribute_xy(p->x, p->y, unlockedPalette);
 
-	// color the current level as well
-	set_tile_xy ( p->x, p->y, PAL_LIGHT_PATH);
-	VBK_REG = 0;
+		lastStage = p->level;
+
+		if (p->level >= level_max) 
+		{
+			// if we have just adjusted the current top level, we are done
+			done = true;
+		}
+		p++;
+	} 
 }
 
 static UINT8 getTens (UINT8 full)
@@ -273,21 +377,32 @@ static void twoDigitsAt (UINT8 x, UINT8 y, UINT8 val)
 
 void Setup_HUD(void)
 {
-	UINT8 level = level_current;
+	UINT8 level = level_next;
 
 	if (overworldNum == 2)
 	{
-		level = level_current + 1 - (getTens(level_current) * 10);
+		level = level_next + 1 - (getTens(level_next) * 10);
+		if (level_next < 11)
+		{
+			level = 1;
+		}
 	} 
-
+	else if (overworldNum == 3)
+	{
+		level = level_next - 19;
+		if (level_next < 21)
+		{
+			level = 1;
+		}
+	}
 	level += TILE_0;
 
-	if (level_current == 0)
+	if (level_next == 0)
 	{
 		// show the tree icon?
 		level = 0x1e;
 	}
-	else if (level_current == 9)
+	else if ((level_next == 9) || (level_next == 19) || (level_next == 25))
 	{
 		// show the boss icon?
 		level = 0x27;
@@ -296,8 +411,8 @@ void Setup_HUD(void)
 	//level display
 	set_tile_xy (11, 1, level);	
 
-	twoDigitsAt (4, 1, nutmeglives);
-	twoDigitsAt (16, 1, acorncounter);
+	twoDigitsAt (4, 1, nutmeg.lives);
+	twoDigitsAt (16, 1, nutmeg.acorns);
 }
 
 #define TINY_NUTMEG_OFFSET_X (0)
@@ -316,7 +431,12 @@ static void SetTinyNutmegAtCurrentLevel(void)
 	if (overworldNum == 2 && level == 9)
 	{
 		// move nutmeg off the left side of the screen
-		TranslateSprite(spr_tinyNutmeg, -8, 0);
+		spr_tinyNutmeg->x = 65527;
+	}
+	if (overworldNum == 3 && level == 19)
+	{
+		// move nutmeg off the left side of the screen
+		spr_tinyNutmeg->x = 65527;
 	}
 }
 
@@ -337,23 +457,34 @@ static void startAutoMoveTowards (UINT8 towards)
 	}
 }
 
-void Start_StateOverworld1() {
+void Start_StateOverworld (void) {
 	SPRITES_8x16;
 
-	isAcornMoving = false;
-	
 	// Setup the map steps for the current overworld;
 	if ((level_current < 10) || (level_current == ENTERING_WORLD_1))
 	{
 		overworldNum = 1;
 		currentMapSteps = steps_ow1;
 		InitScroll(BANK(overworld1map), &overworld1map, collision_tiles_overworld1, 0);
+		unlockedPalette = 6;
+		bossLevel = 9;
 	}
-	else 
+	else if (((level_current >= 10) && (level_current < 20))
+		|| (level_current == ENTERING_WORLD_2_FROM_1)
+		|| (level_current == ENTERING_WORLD_2_FROM_3))
 	{
 		overworldNum = 2;
 		currentMapSteps = steps_ow2;
 		InitScroll(BANK(overworld2map), &overworld2map, collision_tiles_overworld1, 0);
+		unlockedPalette = 7;
+		bossLevel = 19;
+	} else
+	{
+		overworldNum = 3;
+		currentMapSteps = steps_ow3;
+		InitScroll(BANK(overworld3map), &overworld3map, collision_tiles_overworld1, 0);
+		unlockedPalette = 3;
+		bossLevel = 25;
 	}
 
 	// on world transistions do some fiddling to make nutmeg walk to the correct level
@@ -362,20 +493,30 @@ void Start_StateOverworld1() {
 		level_current = 10;
 		level_next = 9;
 		startAutoMoveTowards(level_next);
-	} else if (level_current == ENTERING_WORLD_2)
+	} else if (level_current == ENTERING_WORLD_2_FROM_1)
 	{
 		level_current = 9;
 		level_next = 10;
+		startAutoMoveTowards(level_next);
+	} else if (level_current == ENTERING_WORLD_2_FROM_3)
+	{
+		level_current = 20;
+		level_next = 19;
+		startAutoMoveTowards(level_next);
+	} else if (level_current == ENTERING_WORLD_3_FROM_2)
+	{
+		level_current = 19;
+		level_next = 20;
 		startAutoMoveTowards(level_next);
 	}
 
 	if (levelbeat)
 	{	
 		// Did we beat a new level
-		if (level_current == level_max)
+		if (level_current >= level_max)
 		{
 			// update the max
-			level_max++;
+			level_max = level_current+1;
 
 			// start moving towads the new level
 			startAutoMoveTowards (level_max);
@@ -384,15 +525,15 @@ void Start_StateOverworld1() {
 		levelbeat = false;
 	}
 
-	LightenPath(level_max);
+	LightenPath();
 	Setup_HUD();
 
 	// sprites
 	SetTinyNutmegAtCurrentLevel();
 	SpriteManagerAdd(SpriteNutHead, 16, 7);
-	SpriteManagerAdd(SpriteAcorn, 14*8, 7);
-
-	isAcornMoving = false;
+	
+	Sprite * spr_acorn = SpriteManagerAdd(SpriteAcorn, 14*8, 7);
+	SpriteAcornFreeze (spr_acorn);
 
 	waterAnimCounter = 0;
 
@@ -429,7 +570,15 @@ static void moveTowardsNextLevel(void)
 		UINT16 y = spr_tinyNutmeg->y - TINY_NUTMEG_OFFSET_Y;
 
 		UINT16 tx = movingToStep->x;
-		tx <<= 3;
+		if (tx == 254)
+		{
+			// max - 8
+			tx = 65527;
+		}
+		else
+		{
+			tx <<= 3;
+		}
 		UINT16 ty = movingToStep->y;
 		ty <<= 3;
 
@@ -446,7 +595,12 @@ static void moveTowardsNextLevel(void)
 				level_current = level_next;
 				if ((overworldNum == 1) && (level_next == 10))
 				{
-					level_current = ENTERING_WORLD_2;
+					level_current = ENTERING_WORLD_2_FROM_1;
+					SetState (StateOverworldChange);
+				}
+				else if ((overworldNum == 2) && (level_next == 20))
+				{
+					level_current = ENTERING_WORLD_3_FROM_2;
 					SetState (StateOverworldChange);
 				}
 				else
@@ -462,6 +616,11 @@ static void moveTowardsNextLevel(void)
 				if ((overworldNum == 2) && (level_next == 9))
 				{
 					level_current = ENTERING_WORLD_1;
+					SetState (StateOverworldChange);
+				}
+				if ((overworldNum == 3) && (level_next == 19))
+				{
+					level_current = ENTERING_WORLD_2_FROM_3;
 					SetState (StateOverworldChange);
 				}
 				else
@@ -482,26 +641,66 @@ static void moveTowardsNextLevel(void)
 				}
 
 				tx = movingToStep->x;
-				tx <<= 3;
+				if (tx == 254)
+				{
+					// max - 8
+					tx = 65527;
+				}
+				else
+				{
+					tx <<= 3;
+				}
 				ty = movingToStep->y;
 				ty <<= 3;
 			}
 		}
 
 		// move 1 pixel towards the goal
-		if ((x > 60000) || (x < tx)) { TranslateSprite (spr_tinyNutmeg, 1, 0);}
-		else if (x > tx) { TranslateSprite (spr_tinyNutmeg, -1, 0);}
+		if (tx == 65527)
+		{
+			// this is the special case to move nutmeg off the left hand side of the map
+			TranslateSprite (spr_tinyNutmeg, -1, 0);
+			spr_tinyNutmeg->mirror = V_MIRROR;
+		}
+		else if ((x > 60000) || (x < tx)) { 
+			TranslateSprite (spr_tinyNutmeg, 1, 0);
+			spr_tinyNutmeg->mirror = NO_MIRROR;	
+		}
+		else if (x > tx) { 
+			TranslateSprite (spr_tinyNutmeg, -1, 0);
+			spr_tinyNutmeg->mirror = V_MIRROR;
+		}
 		else if (y < ty) { TranslateSprite (spr_tinyNutmeg, 0, 1);}
 		else if (y > ty) { TranslateSprite (spr_tinyNutmeg, 0, -1);}
 	}
 
 	moveCount++;
-	if (moveCount == 2)
+	if (moveCount == 1)
 	{
 		moveCount = 0;
 	}
 }
-void Update_StateOverworld1() {
+
+static const STATE levels [] = {
+	StateLevelTree, // level 0
+	StateWaterLevel1, // StateLevel1, // level 1-1
+	StateIceLevel1, // StateLevel2,
+	StateLevel3,
+	StateLevel4,
+	StateLevel5,
+	StateLevel6,
+	StateLevel7,
+	StateLevel8,
+	StateW1Boss,
+	StateLevel2_1,
+	StateLevel2_2,
+	StateLevel2_platform,
+	StateLevel1_platform,
+	StateLevel2_glidefall,
+	StateLevel2_multi
+};
+
+void Update_StateOverworld (void) {
 	animateWater ();
 
 	// level selection
@@ -511,23 +710,21 @@ void Update_StateOverworld1() {
 		{
 			startAutoMoveTowards (level_current-1);
 		}
-		else if ((levelDirections[level_current].next == j) && (level_current < 19))
+		else if ((levelDirections[level_current].next == j) && (level_current < 25))
 		{
 			startAutoMoveTowards (level_current+1);
 		}
 		
 		if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
-			if (level_current == 1) SetState(StateLevel1);
-			else if (level_current == 2) SetState(StateLevel2);
-			else if (level_current == 3) SetState(StateLevel3);
-			else if (level_current == 4) SetState(StateLevel4);
-			else if (level_current == 5) SetState(StateLevel5);
-			else if (level_current == 6) SetState(StateLevel6);
-			else if (level_current == 7) SetState(StateLevel7);
-			else if (level_current == 8) SetState(StateLevel8);
-			else if (level_current == 9) SetState(StateW1Boss);
-			else if (level_current >= 10) SetState(StateLevel2_1);
-
+			if (level_current < 16)
+			{
+				SetState(levels[level_current]);
+			}
+			else
+			{
+				SetState(StateLevelTree);
+			}
+			
 			return;
 		}
 	}

@@ -5,6 +5,8 @@
 
 #include "../src/GlobalVars.h"
 
+bool showLevelStart;
+
 static const unsigned char StrLevel[] = { 0x54, 0x55, 0x56, 0x57, 0x58};
 static const unsigned char StrStart[] = {0x59, 0x5a, 0x5b, 0x5c, 0x5d, 0x5e};
 
@@ -57,30 +59,85 @@ void LevelStart_Init (UINT8 xstart, UINT8 ystart) BANKED
     c = 0;
 	x = xstart;
 	y = ystart;
+	showLevelStart = true;
+}
+
+static void drawLevelStart(void)
+{
+	UINT8 *t = (UINT8 *) (0x9800 + x + (y<<5));
+
+	set_vram_byte (t, 0x54);
+	t++;
+	set_vram_byte (t, 0x55);
+	t++;
+	set_vram_byte (t, 0x56);
+	t++;
+	set_vram_byte (t, 0x57);
+	t++;
+	set_vram_byte (t, 0x58);
+	t += 32 - 4;
+	set_vram_byte (t, 0x59);
+	t++;
+	set_vram_byte (t, 0x5a);
+	t++;
+	set_vram_byte (t, 0x5b);
+	t++;
+	set_vram_byte (t, 0x5c);
+	t++;
+	set_vram_byte (t, 0x5d);
+	t++;
+	set_vram_byte (t, 0x5e);
+}
+
+static void drawBlank(void)
+{
+	UINT8 *t = (UINT8 *) (0x9800 + x + (y<<5));
+
+	set_vram_byte (t, 1);
+	t++;
+	set_vram_byte (t, 1);
+	t++;
+	set_vram_byte (t, 1);
+	t++;
+	set_vram_byte (t, 1);
+	t++;
+	set_vram_byte (t, 1);
+	t += 32 - 4;
+	set_vram_byte (t, 1);
+	t++;
+	set_vram_byte (t, 1);
+	t++;
+	set_vram_byte (t, 1);
+	t++;
+	set_vram_byte (t, 1);
+	t++;
+	set_vram_byte (t, 1);
+	t++;
+	set_vram_byte (t, 1);
+
 }
 
 void LevelStart_Update(void) BANKED
 {
+	if (!showLevelStart)
+	{
+		return;
+	}
     c++;
     
     if (c == 10) 
     {
-        set_bkg_tiles ( x, y, 5, 1, StrLevel); 
-        set_bkg_tiles ( x, y+1, 6, 1, StrStart); 
+		drawLevelStart();
     }
     else if (c == 40) {
-        // blank
-        set_bkg_tiles ( x, y, 5, 1, blank); 
-        set_bkg_tiles ( x, y+1, 6, 1, blank); 
+        drawBlank();
     }
     else if (c == 70) {
-        set_bkg_tiles ( x, y, 5, 1, StrLevel); 
-        set_bkg_tiles ( x, y+1, 6, 1, StrStart); 
+       	drawLevelStart();
     }
     else if (c == 100) {
-        // blank
-        set_bkg_tiles ( x, y, 5, 1, blank); 
-        set_bkg_tiles ( x, y+1, 6, 1, blank); 
+        drawBlank();
+		showLevelStart = false;
     }
     else {
         // don't advance past 101, if we get called more often 

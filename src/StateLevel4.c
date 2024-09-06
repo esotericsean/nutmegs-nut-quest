@@ -12,34 +12,31 @@
 #include "Water.h"
 #include "Hud.h"
 #include "LevelStart.h"
+#include "SpriteNutmeg.h"
 
 IMPORT_MAP (level4map);
-
-UINT16 level4counter = 0;
-UINT8 endlevel_counter4 = 0;
-
-UINT8 fish_pal_loc;
-
 
 const UINT8 collision_tiles_level4[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
 const UINT8 collision_tiles_down_level4[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(quickstart);
 DECLARE_MUSIC(mushrooms);
-DECLARE_MUSIC(quickdeath);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
 extern Sprite * spr_camera;
 
-void Start_StateLevel4() {
-	level4counter = 0;
-	levelorientation = horizontal;
+void Start_StateLevel4 (void) 
+{
+	level.hasTimer = true;
+	levelStartCounter = 0;
+	level.orientation = horizontal;
+	level.isWaterLevel = false;
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;
+		
 	SPRITES_8x16;
-
-	if (health == full) fish_pal_loc = 3;
-	else fish_pal_loc = 2;
 
 	nut_region = 0;
 	pitdeathactive = true;
@@ -48,61 +45,36 @@ void Start_StateLevel4() {
 
 	PlayMusic(quickstart, 1);
 
-	//if health is full, add the bow
-	if (hasbow == true) { SpriteManagerAdd(SpriteNutmegBow, 4, 49); }
-	scroll_target = spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 4, 49); //36
+	scroll_target = nutmeg_Add(4, 49); 
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level4map), &level4map, collision_tiles_level4, collision_tiles_down_level4);
 	Hud_Init(false);
 
 	cutscenemode = enabled;
-	isAcornMoving = true; //yes, it is moving
 	FlagPole_Init();
 	LevelStart_Init(7,5);
-	endlevel_counter4 = 0;
+	levelEndCounter = 0;
 
 	SHOW_SPRITES;
 	SHOW_BKG;
 }
 
-void Update_StateLevel4() {
+void Update_StateLevel4 (void) 
+{
 	Hud_Update();
-
-	if (timerlevel == 0) 
-	{
-		nutmeg_death = true;
-	}
-
-	if (nutmeg_death == true) {
-		if (deathmusicplayed == false) {
-			__critical { PlayMusic(quickdeath, 1); }
-			deathmusicplayed = true;
-		}
-
-		if (nutmegdeathtimer >= 125) {
-			if (GameOver == true) {
-				SetState(StateGameOver);
-			}
-			else if (GameOver == false) {
-				SetState(StateOverworld1); // change to correct world
-			}
-		}
-
-		nutmegdeathtimer++;
-	}
 	
 	if (cutscenemode == enabled) {
 		//Level Start!
 		//Make Nutmeg Walk In
-		if (level4counter == 0) {
+		if (levelStartCounter == 0) {
 			cutscenewalkright = true;
 		}
-		else if (level4counter == 36) {
+		else if (levelStartCounter == 36) {
 			cutscenewalkright = false;
 			//but leave cutscene mode enabled still until Level Start! goes away
 		}
-		else if (level4counter == 100) {
+		else if (levelStartCounter == 100) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
@@ -111,7 +83,7 @@ void Update_StateLevel4() {
 		}
 
 		LevelStart_Update();
-		if (level4counter < 105) level4counter++;
+		if (levelStartCounter < 105) levelStartCounter++;
 	}
 
 	Water_Animate();
@@ -122,36 +94,18 @@ void Update_StateLevel4() {
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 		cutscenewalkleft = false;
-		
-		if (spr_nutmeg->x > 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x < 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
-		}
-		else if (spr_nutmeg->x == 1956) {
-			cutscenewalkright = true;
-			cutscenewalkleft = false;
+
+		if (levelEndCounter >= 100) {
+			SetState(StateOverworld);
 		}
 
-		if (endlevel_counter4 >= 100) {
-			//endlevel_counter4 = 0;
-			//cutscenewalkleft = false;
-			//cutscenewalkright = false;
-			//cutscenemode = disabled;
-
-			SetState(StateOverworld1);
-		}
-
-		if (endlevel_counter4 < 250) endlevel_counter4++;
+		if (levelEndCounter < 250) levelEndCounter++;
 	}
 
-	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg_death == false) {
+	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg.isDying == false) {
 		FlagPole_Activate(244, 13);
 		levelbeat = true;
-		endlevel_counter4 = 0;
+		levelEndCounter = 0;
 		cutscenemode = enabled;
 		cutscenewalkright = true;
 	}
@@ -170,7 +124,7 @@ void Update_StateLevel4() {
 	
 	/*
 	if (KEY_PRESSED(J_START)) {
-        SetState(StateOverworld1);
+        SetState(StateOverworld);
     }
 	*/
 

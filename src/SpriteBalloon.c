@@ -10,21 +10,22 @@ extern Sprite * spr_nutmeg;
 UINT8 balloonjump;
 bool balloonpop;
 
-const UINT8 anim_balloon_empty[]  = {1, 0};
-const UINT8 anim_balloon_static[] = {1, 1};
-const UINT8 anim_balloon_jumped[] = {1, 2};
-const UINT8 anim_balloon_popped[] = {9, 2, 2, 3, 4, 0, 0, 0, 0, 0};
+static const UINT8 anim_balloon_empty[]  = {1, 0};
+static const UINT8 anim_balloon_static[] = {1, 1};
+static const UINT8 anim_balloon_jumped[] = {1, 2};
+static const UINT8 anim_balloon_popped[] = {9, 2, 2, 3, 4, 0, 0, 0, 0, 0};
 
 UINT8 ballooncounter;
 UINT8 balloonspring;
 UINT8 balloonpopcount;
 
-void Start_SpriteBalloon() {
-	if (levelorientation == horizontal) {
+void Start_SpriteBalloon(void) 
+{
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 160; //350
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}
@@ -38,7 +39,8 @@ void Start_SpriteBalloon() {
 	balloonpopcount = 0;
 }
 
-void Update_SpriteBalloon() {
+void Update_SpriteBalloon(void) 
+{
 	// if balloon hasn't been popped, move it up and right
 	if (balloonpop == false) {
 		ballooncounter++;
@@ -79,13 +81,14 @@ void Update_SpriteBalloon() {
 
 	if (CheckCollision(THIS, spr_nutmeg)) {
 		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-		isjumping = true;
-		if (balloonjump == 0) { accelY = -300; balloonjump = 1; }
-		else if (balloonjump == 1) { accelY = -600; balloonjump = 2; }
-		jumpPeak = 0;
-		movestate = inair;
+		nutmeg.jumpPeak = 0;
+		nutmeg.movestate = inair;
+
+		if (balloonjump == 0) { nutmeg.speedY = -(nutmeg.enemyBounceY>>1); balloonjump = 1; }
+		else if (balloonjump == 1) { nutmeg.speedY = -nutmeg.enemyBounceY; balloonjump = 2; }
 	}
 }
 
-void Destroy_SpriteBalloon() {
+void Destroy_SpriteBalloon(void) 
+{
 }

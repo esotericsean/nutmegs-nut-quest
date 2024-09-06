@@ -9,11 +9,11 @@
 #include "Palette.h"
 #include "../src/GlobalVars.h"
 #include "Hud.h"
+#include "SpriteNutmeg.h"
 
 IMPORT_MAP (w1bossmap);
 
-
-UINT16 w1bosscounter = 0;
+static UINT16 w1bosscounter = 0;
 
 UINT8 handpos;
 UINT8 handphase;
@@ -21,12 +21,12 @@ UINT8 handhurt;
 bool abletohurthand;
 UINT8 handhealth;
 
-const UINT8 collision_tiles_levelw1b[] = {44,45,46,47,58,51,70,71,72,73,74,75,76,77,78,79,80,81,0};
-const UINT8 collision_tiles_down_levelw1b[] = {0};
+static const UINT8 collision_tiles_levelw1b[] = {44,45,46,47,58,51,70,71,72,73,74,75,76,77,78,79,80,81,0};
+static const UINT8 collision_tiles_down_levelw1b[] = {0};
 
 DECLARE_MUSIC(thehands2);
-DECLARE_MUSIC(quickdeath);
 DECLARE_MUSIC(boss1win);
+DECLARE_MUSIC(quickdeath);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -36,9 +36,17 @@ extern Sprite * spr_hand;
 static Sprite * spr_spatula;
 static Sprite * spr_popsicle;
 
-void Start_StateW1Boss() {
+void Start_StateW1Boss (void) 
+{
 	w1bosscounter = 0;
-	levelorientation = horizontal;
+	level.orientation = horizontal;
+	level.isWaterLevel = false;
+	level.isSpikeLevel = false;
+	level.hasTimer = false;	
+	
+	level.iceTileMin = NO_ICE_TILES;
+	level.iceTileMax = NO_ICE_TILES;
+
 	SPRITES_8x16;
 
 	nut_region = 0;
@@ -48,9 +56,7 @@ void Start_StateW1Boss() {
 
 	PlayMusic(thehands2, 1);
 
-	if (hasbow == true) { SpriteManagerAdd(SpriteNutmegBow, 5*8, 1*8); }
-	
-	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 5*8, 1*8);
+	nutmeg_Add(5*8, 1*8);
 	spr_hand = SpriteManagerAdd(EnemyHand, 17*8+32, 11*8+6); //start on right side
 
 	SpriteManagerAdd(SpriteAcorn, 1*8+2, 14*8-4);
@@ -61,7 +67,6 @@ void Start_StateW1Boss() {
 	Hud_Init(true);
 
 	cutscenemode = enabled;
-	isAcornMoving = true; //yes, it is moving
 
 	handpos = 0; //start on right side
 
@@ -95,25 +100,28 @@ void Start_StateW1Boss() {
 	SHOW_BKG;
 }
 
-void Update_StateW1Boss() {
+void Update_StateW1Boss (void) 
+{
 	Hud_Update();
 
-	if (nutmeg_death == true) {
+	if (nutmeg.isDying == true) {
 		if (deathmusicplayed == false) {
 			__critical { PlayMusic(quickdeath, 1); }
 			deathmusicplayed = true;
 		}
 
-		if (nutmegdeathtimer >= 125) {
+		if (nutmeg.deathtimer >= 125) {
 			if (GameOver == true) {
 				SetState(StateGameOver);
 			}
 			else if (GameOver == false) {
-				SetState(StateOverworld1); // change to correct world
+				nutmeg_setupNewLife();
+				SetState(StateOverworld); // change to correct world
 			}
+			return;
 		}
 
-		nutmegdeathtimer++;
+		nutmeg.deathtimer++;
 	}
 
 	if (spr_spatula->x < 0) { SpriteManagerRemoveSprite (spr_spatula); }
@@ -279,11 +287,10 @@ void Update_StateW1Boss() {
 		}
 
 		if (w1bosscounter == 200) {
-			SetState (StateOverworld1);
+			SetState (StateOverworld);
 
 			//flagpole_activated = 1;
 			levelbeat = true;
-			//endlevel_counter = 0;
 			cutscenemode = enabled;
 		}
 	}

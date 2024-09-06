@@ -26,12 +26,13 @@ static const UINT8 anim_rockith_death[] 	 = {13, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0
 static const UINT8 anim_rockith_death_alt[] = {16, 5, 5, 5, 5, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
-void Start_EnemyRockith() {
-	if (levelorientation == horizontal) {
+void Start_EnemyRockith (void) 
+{
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}
@@ -43,7 +44,8 @@ void Start_EnemyRockith() {
 	rockithcounter = 0;
 }
 
-void Update_EnemyRockith() {
+void Update_EnemyRockith (void) 
+{
 	bool rockdamage = false;
 
 	//rock mode
@@ -93,20 +95,18 @@ void Update_EnemyRockith() {
 	}
 
 	//kill rockith if jump on it
-	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
-		if (movestate == inair && accelY > 0)
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
+		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-			isjumping = true;
-			accelY = -600;
-			jumpPeak = 0;
-			movestate = inair;
+			nutmeg.speedY = -nutmeg.enemyBounceY;
+			nutmeg.jumpPeak = 0;
 			
-			if (nutmeg_direction == right) {
+			if (nutmeg.direction == right) {
 				SpriteManagerAdd(SpriteStarLeft, THIS->x, THIS->y+1);
 				SpriteManagerAdd(SpriteStarRight, THIS->x, THIS->y+1);
 			}
-			else if (nutmeg_direction == left) {
+			else if (nutmeg.direction == left) {
 				SpriteManagerAdd(SpriteStarLeft, THIS->x-6, THIS->y+1);
 				SpriteManagerAdd(SpriteStarRight, THIS->x-6, THIS->y+1);
 			}
@@ -121,5 +121,6 @@ void Update_EnemyRockith() {
 	}
 }
 
-void Destroy_EnemyRockith() {
+void Destroy_EnemyRockith (void)
+{
 }

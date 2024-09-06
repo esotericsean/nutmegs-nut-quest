@@ -1,8 +1,5 @@
 #include "Banks/SetAutoBank.h"
 
-#include "..\res\src\treetiles.h"
-#include "..\res\src\treemap.h"
-
 #include "ZGBMain.h"
 #include "Music.h"
 #include "Scroll.h"
@@ -10,8 +7,6 @@
 #include "Keys.h"
 #include "SpriteManager.h"
 
-#include "../res/src/nutmeg.h"
-#include "../res/src/puff.h"
 #include "Palette.h"
 
 #include "../src/GlobalVars.h"
@@ -19,11 +14,11 @@
 
 IMPORT_MAP (treemap);
 
-UINT8 collision_tiles_tree[] = {2,3,4,5,7,8,9,10,12,49,50,51,52,53,54,55,56,57,58, 0};
+static const UINT8 collision_tiles_tree[] = {2,3,4,5,7,8,9,10,12,49,50,51,52,53,54,55,56,57,58, 0};
 
 DECLARE_MUSIC(oaktree);
 
-UINT8 cutscenetimer = 0;
+static UINT8 cutscenetimer = 0;
 
 static const unsigned char font_blank2[] = {
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -55,13 +50,14 @@ static const unsigned char font_arrow2[] = {
 0x00,0x00,0x7c,0x7c,0x38,0x38,0x10,0x10
 };
 
-void Start_StateTreeCutscene() {
+void Start_StateTreeCutscene (void) 
+{
 	//UINT8 i;
 	SPRITES_8x16;
 
 	cutscenetimer = 0;
 
-	//nutmeg_direction = left;
+	//nutmeg.direction = left;
 
 	stop_music_on_new_state = 0;
 	PlayMusic(oaktree, 1); //name, BANK, volume or speed?
@@ -72,13 +68,11 @@ void Start_StateTreeCutscene() {
 	cutscenemode = enabled;
 
 	//RESET SO NUTMEG DOESN'T FLY OFF SCREEN
-    accelY = 0;
-    accelX = 0;
-    jumpPeak = 0;
-    runJump = 0;
-    nutmeg_direction = right;
-    movestate = grounded;
-    isjumping = false;
+    nutmeg.speedY = 0;
+    nutmeg.speedX = 0;
+    nutmeg.jumpPeak = 0;
+    nutmeg.direction = right;
+    nutmeg.movestate = grounded;
 
 	SpriteManagerAdd(SpriteNutmeg, 12*8, 104);
 	SpriteManagerAdd(SpriteCinnamon, 36, 96);
@@ -90,7 +84,8 @@ void Start_StateTreeCutscene() {
 
 }
 
-void Update_StateTreeCutscene() {
+void Update_StateTreeCutscene (void) 
+{
 	//if you press START at any point of this opening cutscene it jumps to the next cutscene
 	if (KEY_PRESSED(J_START)) {
 		//set variable for first time entering overworld1

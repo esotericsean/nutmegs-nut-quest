@@ -15,7 +15,8 @@ IMPORT_MAP (cutscene2map);
 
 const UINT8 collision_tiles_cutscene2[] = {0};
 
-void Start_StateCutscene2() {
+void Start_StateCutscene2(void)
+{
     SPRITES_8x16;
 
     InitScrollTiles(0, &cutscene2tiles);
@@ -29,6 +30,7 @@ void Start_StateCutscene2() {
     SpriteManagerAdd (SpriteShockline3, 30, 50);
 }
 
-void Update_StateCutscene2() {
+void Update_StateCutscene2(void) 
+{
     if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) { SetState(StateCutscene3); }
 }

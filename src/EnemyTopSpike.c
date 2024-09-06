@@ -9,12 +9,13 @@ extern Sprite * spr_nutmeg;
 
 static const UINT8 anim_topspike_idle[] = {1, 0};
 
-void Start_EnemyTopSpike() {
-	if (levelorientation == horizontal) {
+void Start_EnemyTopSpike (void) 
+{
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}
@@ -23,12 +24,14 @@ void Start_EnemyTopSpike() {
 	THIS->mirror = NO_MIRROR;
 }
 
-void Update_EnemyTopSpike() {
+void Update_EnemyTopSpike (void) 
+{
 	//die if touch topspike
-	if (CheckCollision(THIS, spr_nutmeg) && accelY < 0 && nutmeg_death == false) {
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.speedY < 0 && nutmeg.isDying == false) {
 		nutmeg_hit();
 	}
 }
 
-void Destroy_EnemyTopSpike() {
+void Destroy_EnemyTopSpike (void) 
+{
 }

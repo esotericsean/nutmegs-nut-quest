@@ -8,58 +8,53 @@
 
 extern Sprite * spr_nutmeg;
 
-const UINT8 anim_batty_fly[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
+static const UINT8 anim_batty_fly[] = {8, 0, 0, 0, 1, 2, 2, 2, 1};
 
-UINT8 battycounter;
+#define COUNTER (0)
 
-void Start_EnemyBatty() {
-	if (levelorientation == horizontal) {
+void Start_EnemyBatty(void) {
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}
 
 	SetSpriteAnim(THIS, anim_batty_fly, 22);
 
-	battycounter = 0;
+	THIS->custom_data[COUNTER] = 0;
 }
 
-void Update_EnemyBatty() {
-	if (battycounter >= 0 && battycounter < 30) {
+void Update_EnemyBatty(void) {
+	if (THIS->custom_data[COUNTER] < 30) {
 		TranslateSprite(THIS, 0, 1);
 	}
-	//else if (battycounter >= 30 && battycounter < 90) {
-		//stay still
-	//}
-	else if (battycounter >= 90 && battycounter < 120) {
+	else if (THIS->custom_data[COUNTER] >= 90 && THIS->custom_data[COUNTER] < 120) {
 		TranslateSprite(THIS, 0, -1);
 	}
-	//else if (battycounter >= 120 && battycounter < 180) {
-		//stay still
-	//}
 
-	battycounter++;
+	THIS->custom_data[COUNTER]++;
 
-	if (battycounter >= 180) battycounter = 0;
+	if (THIS->custom_data[COUNTER] >= 180) 
+	{
+		THIS->custom_data[COUNTER] = 0;
+	}
 
 	//kill batty if jump on it
-	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
-		if (movestate == inair && accelY > 0)
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
+		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-			isjumping = true;
-			accelY = -600;
-			jumpPeak = 0;
-			movestate = inair;
+			nutmeg.speedY = -nutmeg.enemyBounceY;
+			nutmeg.jumpPeak = 0;
 			
-			if (nutmeg_direction == right) {
+			if (nutmeg.direction == right) {
 				SpriteManagerAdd(SpriteStarLeft, THIS->x, THIS->y+1);
 				SpriteManagerAdd(SpriteStarRight, THIS->x, THIS->y+1);
 			}
-			else if (nutmeg_direction == left) {
+			else if (nutmeg.direction == left) {
 				SpriteManagerAdd(SpriteStarLeft, THIS->x-6, THIS->y+1);
 				SpriteManagerAdd(SpriteStarRight, THIS->x-6, THIS->y+1);
 			}
@@ -74,5 +69,5 @@ void Update_EnemyBatty() {
 	}
 }
 
-void Destroy_EnemyBatty() {
+void Destroy_EnemyBatty(void) {
 }

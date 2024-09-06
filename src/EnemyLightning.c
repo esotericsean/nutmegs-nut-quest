@@ -33,12 +33,13 @@ static const UWORD pal_flag_flash2[] = {   RGB(31, 31, 31), RGB(23, 25, 26), RGB
 static UINT8 lightningcounter;
 
 
-void Start_EnemyLightning() {
-	if (levelorientation == horizontal) {
+void Start_EnemyLightning (void) 
+{
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}
@@ -48,8 +49,9 @@ void Start_EnemyLightning() {
 	lightningcounter = 0;
 }
 
-void Update_EnemyLightning() {
-	if (lightningcounter >= 0 && lightningcounter < 10) {
+void Update_EnemyLightning (void) 
+{
+	if (lightningcounter < 10) {
 		SetSpriteAnim(THIS, anim_lightning_fall1, 1);
 		TranslateSprite(THIS, 0, 6);
 	}
@@ -95,10 +97,11 @@ void Update_EnemyLightning() {
 	}
 
 	//die if get struck by lightning
-	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
 		nutmeg_hit();
 	}
 }
 
-void Destroy_EnemyLightning() {
+void Destroy_EnemyLightning (void) 
+{
 }

@@ -8,17 +8,20 @@
 
 extern Sprite * spr_nutmeg;
 
-UINT16 earthycounter = 0;
-UINT8 earthydirection = 0;
+static UINT16 earthycounter;
+static UINT8 earthydirection;
 
-const UINT8 anim_earthy_walk[] = {6, 1, 1, 2, 3, 3, 2};
+static const UINT8 anim_earthy_walk[] = {6, 1, 1, 2, 3, 3, 2};
 
-void Start_EnemyEarthy() {
-	if (levelorientation == horizontal) {
+void Start_EnemyEarthy(void) {
+	earthycounter = 0;
+	earthydirection = 0;
+	
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}
@@ -28,13 +31,13 @@ void Start_EnemyEarthy() {
 	earthydirection = 0;
 }
 
-void Update_EnemyEarthy() {
+void Update_EnemyEarthy(void) {
 	if (earthycounter % 5 == 0) {
 		if (earthydirection == 0) TranslateSprite (THIS, -1, 0);
 		else if (earthydirection == 1) TranslateSprite (THIS, 1, 0);
 	}
 
-	if (earthycounter >= 0 && earthycounter < 350) {
+	if (earthycounter < 350) {
 		if (earthydirection == 1) TranslateSprite (THIS, 4, 0);
 
 		earthydirection = 0; //left
@@ -52,20 +55,18 @@ void Update_EnemyEarthy() {
 	if (earthycounter >= 700) earthycounter = 0;
 
 	//kill earthy if jump on it
-	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
-		if (movestate == inair && accelY > 0)
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
+		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-			isjumping = true;
-			accelY = -600;
-			jumpPeak = 0;
-			movestate = inair;
-			
-			if (nutmeg_direction == right) {
+			nutmeg.speedY = -nutmeg.enemyBounceY;
+			nutmeg.jumpPeak = 0;
+
+			if (nutmeg.direction == right) {
 				SpriteManagerAdd(SpriteStarLeft, THIS->x, THIS->y+1);
 				SpriteManagerAdd(SpriteStarRight, THIS->x, THIS->y+1);
 			}
-			else if (nutmeg_direction == left) {
+			else if (nutmeg.direction == left) {
 				SpriteManagerAdd(SpriteStarLeft, THIS->x-6, THIS->y+1);
 				SpriteManagerAdd(SpriteStarRight, THIS->x-6, THIS->y+1);
 			}
@@ -80,5 +81,5 @@ void Update_EnemyEarthy() {
 	}
 }
 
-void Destroy_EnemyEarthy() {
+void Destroy_EnemyEarthy(void) {
 }

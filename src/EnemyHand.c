@@ -30,12 +30,13 @@ Sprite * spr_hand;
 	// 8 = start to close, facing right, left side
 	// 9 = hurt, facing right, left side
 
-void START() {
-	if (levelorientation == horizontal) {
+void START (void)
+{
+	if (level.orientation == horizontal) {
 		THIS->lim_x = 500;
 		THIS->lim_y = 144;
 	}
-	else if (levelorientation == vertical) {
+	else if (level.orientation == vertical) {
 		THIS->lim_x = 288;
 		THIS->lim_y = 250;
 	}
@@ -44,7 +45,8 @@ void START() {
 	THIS->mirror = NO_MIRROR;
 }
 
-void UPDATE() {
+void UPDATE(void) 
+{
 	//Jump on/hurt hand
 	if (handpos == 4 || handpos == 9) handhurt = 1;
 	else if (handpos == 0 || handpos == 5) handhurt = 0;
@@ -93,14 +95,12 @@ void UPDATE() {
 	}
 
 	//hurt hand if jump on it
-	if (CheckCollision(THIS, spr_nutmeg) && nutmeg_death == false) {
-		if ( movestate == inair && accelY > 0 )
+	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
+		if (nutmeg.movestate == inair && nutmeg.speedY > 0 )
 		{
 			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
-			isjumping = true;
-			accelY = -400;
-			jumpPeak = 0;
-			movestate = inair;
+			nutmeg.speedY = -400;
+			nutmeg.jumpPeak = 0;
 
 			if (abletohurthand == true) {
 				handhealth = handhealth + 1;
@@ -118,5 +118,6 @@ void UPDATE() {
 	}
 }
 
-void DESTROY() {
+void DESTROY(void) 
+{
 }
