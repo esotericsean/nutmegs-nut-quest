@@ -7,61 +7,34 @@
 
 #include "../src/GlobalVars.h"
 
-const UINT8 anim_gordon_idle_right[] = {2, 0, 2};
-const UINT8 anim_gordon_idle_left[]  = {2, 0, 2};
+static const UINT8 anim_gordon_idle_right[] = {2, 0, 2};
+static const UINT8 anim_gordon_idle_left[]  = {2, 0, 2};
 
-const UINT8 anim_gordon_walk_right[] = {4, 0, 1, 2, 3};
-const UINT8 anim_gordon_walk_left[]  = {4, 0, 1, 2, 3};
+static const UINT8 anim_gordon_walk_right[] = {4, 0, 1, 2, 3};
+static const UINT8 anim_gordon_walk_left[]  = {4, 0, 1, 2, 3};
 
-//Gordon is grounded or inair
-move_state Gmovestate;
-
-//player movement physics
-INT16 GaccelY;
-INT16 GaccelX;
-
-//storing collisions around player after movement
-UINT8 GcollisionX;
-UINT8 GcollisionY;
-UINT8 GgroundCollision;
 
 //cutscene mode!
-switcher gordonmode;
+
+// global variables
 bool gordonwalkleft;
 bool gordonwalkright;
-bool gordonrun;
-bool gordonjump;
+direction gordon_direction;
 
 // Declare a pointer to a sprite
 struct Sprite * spr_gordon2;
 
-direction gordon_direction;
-bool Gisjumping = true;
 
-UINT8 gordoncounter;
+static UINT8 gordoncounter;
 
 void Start_SpriteGordon1(void) {
     SetSpriteAnim(THIS, anim_gordon_idle_left, 1);
 
     gordoncounter = 0;
 
-    GaccelY = 0;
-    GaccelX = 0;
-    GcollisionX = 0;
-    GcollisionY = 0;
-    GgroundCollision = 0;
-
-
-    Gmovestate = inair;
-
-    gordonmode = disabled;
     gordonwalkleft = false;
     gordonwalkright = false;
-    gordonrun = false;
-    gordonjump = false;
-
     gordon_direction = left;
-    Gisjumping = false;
 
     THIS->lim_x = 500;
 	THIS->lim_y = 144;

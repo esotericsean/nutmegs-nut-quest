@@ -106,7 +106,7 @@ void LCD_NoSpritesOnHUD_isr(void) NONBANKED {
 
 extern UINT8 last_bg_pal_loaded;
 extern UINT8 last_tile_loaded;
-UINT16 default_palette[] = {RGB(31, 31, 31), RGB(20, 20, 20), RGB(10, 10, 10), RGB(0, 0, 0)};
+static const UINT16 default_palette[] = {RGB(31, 31, 31), RGB(20, 20, 20), RGB(10, 10, 10), RGB(0, 0, 0)};
 
 void main(void) {
 	// this delay is required for PAL SNES SGB border commands to work

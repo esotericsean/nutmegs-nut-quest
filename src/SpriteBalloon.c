@@ -7,17 +7,17 @@
 
 extern Sprite * spr_nutmeg;
 
-UINT8 balloonjump;
-bool balloonpop;
 
 static const UINT8 anim_balloon_empty[]  = {1, 0};
 static const UINT8 anim_balloon_static[] = {1, 1};
 static const UINT8 anim_balloon_jumped[] = {1, 2};
 static const UINT8 anim_balloon_popped[] = {9, 2, 2, 3, 4, 0, 0, 0, 0, 0};
 
-UINT8 ballooncounter;
-UINT8 balloonspring;
-UINT8 balloonpopcount;
+static UINT8 balloonjump;
+static bool balloonpop;
+static UINT8 ballooncounter;
+static UINT8 balloonspring;
+static UINT8 balloonpopcount;
 
 void Start_SpriteBalloon(void) 
 {

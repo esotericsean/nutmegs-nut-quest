@@ -188,11 +188,8 @@ extern bool cutscenewalkright;
 /*          m o d e          */
 /*        g o r d o n        */
 /* * * * * * * * * * * * * * */
-extern switcher gordonmode; //cutscene or boss fight
 extern bool gordonwalkleft;
 extern bool gordonwalkright;
-extern bool gordonrun;
-extern bool gordonjump;
 
 //level selection
 extern bool levelbeat;

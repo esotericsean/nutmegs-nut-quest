@@ -13,7 +13,7 @@
 
 IMPORT_MAP (cutscene2map);
 
-const UINT8 collision_tiles_cutscene2[] = {0};
+static const UINT8 collision_tiles_cutscene2[] = {0};
 
 void Start_StateCutscene2(void)
 {
