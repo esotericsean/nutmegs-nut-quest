@@ -21,6 +21,9 @@
 	#include "savegame.h"
 #endif
 
+// in scroll.h - used to adjust the window when we pause
+extern INT8 scroll_h_border;
+
 extern UINT8 next_state;
 
 UINT8 delta_time;
@@ -36,6 +39,7 @@ void SetState(UINT8 state) {
 
 UINT8 vbl_count = 0;
 UINT8 music_mute_frames = 0;
+
 void vbl_update(void) {
 	vbl_count ++;
 	
@@ -230,10 +234,21 @@ void main(void) {
 
 			UPDATE_KEYS();
 			
-			SpriteManagerUpdate();
-			PUSH_BANK(stateBanks[current_state]);
-				updateFuncs[current_state]();
-			POP_BANK();
+			if (isPaused == true)
+			{
+				if (KEY_TICKED(J_START))	
+				{
+					isPaused = false;
+					rWY = 144-8;
+				}
+			}
+			else
+			{
+				SpriteManagerUpdate();
+				PUSH_BANK(stateBanks[current_state]);
+					updateFuncs[current_state]();
+				POP_BANK();
+			}
 		}
 
 		FadeIn();

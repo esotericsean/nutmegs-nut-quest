@@ -59,6 +59,7 @@ typedef struct NutmegSpeed {
 } NutmegSpeedT;
 
 typedef struct Nutmeg {
+
     const NutmegSpeedT *speeds;
 	UINT8 lives;
 	UINT8 acorns;
@@ -121,7 +122,7 @@ extern NutmegT nutmeg;
 
 //powerups
 
-
+extern bool isPaused;
 
 extern bool firstplay;
 

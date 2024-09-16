@@ -1,4 +1,5 @@
 #include "Banks/SetAutoBank.h"
+#include <gbdk/platform.h>
 #include "ZGBMain.h"
 #include "Scroll.h"
 #include "Keys.h"
@@ -9,6 +10,8 @@
 #include "SpriteNutmeg.h"
 
 DECLARE_MUSIC (quickdeath);
+
+bool isPaused;
 
 // These speed structs are used by enemies fns, 
 // so they need to live in ram (or in bank 0)
@@ -143,6 +146,7 @@ void ResetState(void) {
     nutmeg.isDying = false;
     nutmeg.isPitDeath = false;
     GameOver = false;
+    isPaused = false;
 
     nutmeg.deathmove = 0;
 
@@ -349,7 +353,6 @@ static void update_inCutscene(void)
         }
     }
 
-
     if (collisionY == 0) {
         nutmeg.movestate = inair;
     }
@@ -412,6 +415,20 @@ static void update_inCutscene(void)
 
 void update_aliveInControl (void)
 { 
+    if (KEY_TICKED(J_START))	
+	{
+        if (level_current == 0)
+        {
+            // don't pause in the tree house
+        }
+        else
+        {
+    		isPaused = true;
+		    rWY = 144-24;
+            return;
+        }
+	}
+
     // death from falling off the bottom of the screen
     if (THIS->y >= 176 && THIS->y <= 200 && pitdeathactive == true) {
         nutmeg.isDying = true;

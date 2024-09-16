@@ -14,8 +14,11 @@ IMPORT_MAP (hudDebug);
 // Uncomment this next line for the debug HUD that shows nutmegs x and y position
 // #define IS_DEBUG (true)
 
-// global variables for every level
+// in scroll.h - used to adjust the window when we pause
+extern INT8 scroll_h_border;
 
+
+// global variables for every level
 
 // saved last drawn values, to work out what to update on hud
 static UINT8 lastLives;
@@ -38,6 +41,10 @@ void Hud_Init(bool isBoss) BANKED
         INIT_HUD(hud);
 #endif
     }
+
+    // hide the paused text
+    rWY = 144 - 8;
+    scroll_h_border = 8;
 
     _isBoss = isBoss;
     level.timer = 300;
