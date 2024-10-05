@@ -127,13 +127,6 @@ void Update_StateLevel7 (void)
 
 	// 0-31:
 	if (spr_nutmeg->x > 0 && spr_nutmeg->x <= 250 && nut_region <= 0) {
-		/*
-		//generate puff to add its color palette before others
-		SpriteManagerAdd(SpritePuffLeft, 0, 0);
-		//generate star to add its color palette before others
-		SpriteManagerAdd(SpriteStarLeft, 0, 0);
-		*/
-	
 		SpriteManagerAdd(SpriteAcorn, 25*8, 9*8);
 		SpriteManagerAdd(SpriteAcorn, 27*8, 7*8);
 		SpriteManagerAdd(SpriteAcorn, 30*8, 7*8);

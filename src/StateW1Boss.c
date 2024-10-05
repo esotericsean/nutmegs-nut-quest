@@ -255,18 +255,16 @@ void Update_StateW1Boss (void)
 		}
 
 		if (w1bosscounter == 15) {
-			SpriteManagerAdd (SpriteStarLeft, 9*8+4, 8*8);
-			SpriteManagerAdd (SpriteStarRight, 9*8+4, 8*8);
+			AddStarPair  ( 9*8+4, 8*8);
 		}
 
 		if (w1bosscounter == 45) {
-			SpriteManagerAdd (SpriteStarLeft, 9*8+4, 6*8);
-			SpriteManagerAdd (SpriteStarRight, 9*8+4, 6*8);
+			AddStarPair  ( 9*8+4, 6*8);
 		}
 
 		if (w1bosscounter == 75) {
-			SpriteManagerAdd (SpriteStarLeft, 9*8+4, 4*8);
-			SpriteManagerAdd (SpriteStarRight, 9*8+4, 4*8);
+			AddStarPair  ( 9*8+4, 4*8);
+
 		}
 
 		if (w1bosscounter == 100) {

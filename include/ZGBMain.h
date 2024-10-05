@@ -45,8 +45,7 @@ _SPRITE_COLOR(EnemyBunny, bunny)\
 _SPRITE_COLOR(SpriteCamera, camera)\
 _SPRITE_COLOR(SpriteNutmegTiny, nutmegtiny)\
 _SPRITE_COLOR(SpriteNutHead, nuthead)\
-_SPRITE_COLOR(SpriteStarLeft, star)\
-_SPRITE_COLOR(SpriteStarRight, star)\
+_SPRITE_COLOR(SpriteStar, star)\
 _SPRITE_COLOR(SpritePuffLeft, puff)\
 _SPRITE_COLOR(SpritePuffRight, puff)\
 _SPRITE_COLOR(SpriteCinnamon, cinnamon)\

@@ -102,13 +102,13 @@ void Update_EnemyRockith (void)
 			nutmeg.speedY = -nutmeg.enemyBounceY;
 			nutmeg.jumpPeak = 0;
 			
-			if (nutmeg.direction == right) {
-				SpriteManagerAdd(SpriteStarLeft, THIS->x, THIS->y+1);
-				SpriteManagerAdd(SpriteStarRight, THIS->x, THIS->y+1);
+			if (nutmeg.direction == right) 
+			{
+				AddStarPair (THIS->x, THIS->y+1);
 			}
-			else if (nutmeg.direction == left) {
-				SpriteManagerAdd(SpriteStarLeft, THIS->x-6, THIS->y+1);
-				SpriteManagerAdd(SpriteStarRight, THIS->x-6, THIS->y+1);
+			else
+			{
+				AddStarPair (THIS->x - 6, THIS->y+1);
 			}
 
 			SpriteManagerRemoveSprite (THIS);

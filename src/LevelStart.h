@@ -5,6 +5,5 @@
 #include "GlobalVars.h"
 
 void LevelStart_Init(UINT8 posx, UINT8 posy) BANKED;
-void LevelStart_Update (void) BANKED;
 
 #endif // LEVEL_START_H

@@ -130,24 +130,6 @@ void Update_StateLevel3 (void)
 		cutscenewalkright = true;
 	}
 
-	/*
-	//starshooter
-	if (KEY_PRESSED(J_A)) {
-		if (starshooter == 0) {
-			SpriteManagerAdd(SpriteStarLeft, spr_nutmeg->x, spr_nutmeg->y);
-			starshooter = 1;
-		}
-    }
-	if (starshooter > 0) starshooter++;
-	if (starshooter >= 5) starshooter = 0;
-	*/
-	
-	/*
-	if (KEY_PRESSED(J_START)) {
-        SetState(StateOverworld);
-    }
-	*/
-
 	/*  REGIONS  */
 	// 0 = 0-250
 	// 1 = 251-500

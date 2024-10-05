@@ -66,8 +66,7 @@ void Update_EnemyFish (void)
 			nutmeg.speedY = -nutmeg.enemyBounceY;
 			nutmeg.jumpPeak = 0;
 
-			SpriteManagerAdd(SpriteStarLeft, THIS->x, THIS->y+2);
-			SpriteManagerAdd(SpriteStarRight, THIS->x+8, THIS->y+2);
+			AddStarPairWide (THIS->x, THIS->y+2);
 
 			SpriteManagerRemoveSprite (THIS);
 		}

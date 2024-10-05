@@ -242,31 +242,25 @@ void FlagPole_Animate (void) BANKED
 			if (finish_counter == 10) {
 				// these stars are all crampt into 3 tiles high
 				stars_y += 26;
-				SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y);
-				SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y);
+				AddStarPairWide (stars_x-4, stars_y);
 			}
 			else if (finish_counter == 30) {
-				SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y-8);
-				SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y-8);
+				AddStarPairWide (stars_x-4, stars_y - 8);
 			}
 			else if (finish_counter == 50) {
-				SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y-16);
-				SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y-16);
+				AddStarPairWide (stars_x-4, stars_y - 16);
 			}
 		}
 		else
 		{
 			if (finish_counter == 10) {
-				SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y);
-				SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y);
+				AddStarPairWide (stars_x-4, stars_y);
 			}
 			else if (finish_counter == 30) {
-				SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y-16);
-				SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y-16);
+				AddStarPairWide (stars_x-4, stars_y - 16);
 			}
 			else if (finish_counter == 50) {
-				SpriteManagerAdd(SpriteStarLeft, stars_x-4, stars_y-32);
-				SpriteManagerAdd(SpriteStarRight, stars_x+4, stars_y-32);
+				AddStarPairWide (stars_x-4, stars_y - 32);
 			}
 		}
     }

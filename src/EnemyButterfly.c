@@ -84,14 +84,7 @@ void Update_EnemyButterfly(void) {
 			nutmeg.speedY = -nutmeg.enemyBounceY;
 			nutmeg.jumpPeak = 0;
 
-			if (nutmeg.direction == right) {
-				SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y);
-				SpriteManagerAdd(SpriteStarRight, THIS->x+4, THIS->y);
-			}
-			else if (nutmeg.direction == left) {
-				SpriteManagerAdd(SpriteStarLeft, THIS->x-4, THIS->y);
-				SpriteManagerAdd(SpriteStarRight, THIS->x+4, THIS->y);
-			}
+			AddStarPairWide (THIS->x-4, THIS->y);
 
 			SpriteManagerRemoveSprite (THIS);
 		}

@@ -225,4 +225,7 @@ typedef struct {
 void Platform_Setup (Sprite *s, INT8 x, INT8 y, UINT8 type, UINT8 steps) BANKED;
 void SpriteAcornFreeze(Sprite *acorn) BANKED;
 
+// in SpriteStar.c - Add a pair of left and right stars
+void AddStarPair (UINT16 x, UINT16 y) BANKED;
+void AddStarPairWide (UINT16 x, UINT16 y) BANKED;
 #endif
