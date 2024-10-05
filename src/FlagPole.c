@@ -169,7 +169,7 @@ void FlagPole_Activate(int tilex, int tiley) BANKED
 
 void FlagPole_Animate (void) BANKED
 {
-	if (isHorizontalGoalpost == true)
+	if (level.isHorizontalGoalpost == true)
 	{
 		if (anim_flag_counter == 12)
 		{

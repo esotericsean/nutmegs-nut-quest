@@ -31,21 +31,36 @@ DECLARE_MUSIC(mushrooms);
 extern Sprite * spr_nutmeg;
 
 
+static const LevelT levelInfo = {
+	.isWaterLevel = false,
+	.isSpikeLevel = false,
+	.isPitDeathActive = true,
+	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
+	.iceTileMin = NO_ICE_TILES,
+	.iceTileMax = NO_ICE_TILES,
+
+	// vertical or horizontal Level
+	.orientation = horizontal,
+	.isHorizontalGoalpost = false,
+
+	// level timer info
+	.hasTimer = true,
+	.timer = 300,
+	.timerclock = 0,
+};
+
 void Start_StateLevel7 (void) 
 {
+	level = levelInfo;
+
 	levelStartCounter = 0;
 	levelEndCounter = 0;
-	level.hasTimer = true;
-	level.orientation = horizontal;
-	level.isWaterLevel = false;
-	level.iceTileMin = NO_ICE_TILES;
-	level.iceTileMax = NO_ICE_TILES;
+	nut_region = 0;
+	deathmusicplayed = false;
+	cutscenemode = enabled;
+	levelEndCounter = 0;
 		
 	SPRITES_8x16;
-
-	nut_region = 0;
-	pitdeathactive = true;
-	deathmusicplayed = false;
 
 	PlayMusic(quickstart, 1);
 	
@@ -54,13 +69,10 @@ void Start_StateLevel7 (void)
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level7map), &level7map, collision_tiles_level7, collision_tiles_down_level7);
 	Hud_Init(false);
-
-	cutscenemode = enabled;
+	
 	FlagPole_Init();
 	LevelStart_Init(7,5);
-
-	levelEndCounter = 0;
-
+	
 	SHOW_SPRITES;
 	SHOW_BKG;
 }

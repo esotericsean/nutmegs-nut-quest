@@ -140,22 +140,36 @@ static const unsigned char rainsplash2_pt4[] = {
 	0x80,0x00,0x00,0x00,0x02,0x00,0x00,0x00
 };
 
+
+static const LevelT levelInfo = {
+	.isWaterLevel = false,
+	.isSpikeLevel = false,
+	.isPitDeathActive = true,
+	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
+	.iceTileMin = NO_ICE_TILES,
+	.iceTileMax = NO_ICE_TILES,
+
+	// vertical or horizontal Level
+	.orientation = horizontal,
+	.isHorizontalGoalpost = false,
+
+	// level timer info
+	.hasTimer = true,
+	.timer = 300,
+	.timerclock = 0,
+};
+
 void Start_StateLevel5 (void) 
 {
+	level = levelInfo;
+
 	levelStartCounter = 0;
-	level.hasTimer = true;
-	level.orientation = horizontal;
-	level.isWaterLevel = false;
-	level.iceTileMin = NO_ICE_TILES;
-	level.iceTileMax = NO_ICE_TILES;
-		
+	nut_region = 0;
+	deathmusicplayed = false;
+	
 	SPRITES_8x16;
 
-	nut_region = 0;
-	pitdeathactive = true;
-
-	deathmusicplayed = false;
-
+	
 	PlayMusic(raindrops, 1);
 
 	scroll_target = nutmeg_Add(3*8, 11*8); 

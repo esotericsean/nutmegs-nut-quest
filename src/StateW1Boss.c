@@ -36,23 +36,35 @@ extern Sprite * spr_hand;
 static Sprite * spr_spatula;
 static Sprite * spr_popsicle;
 
+static const LevelT levelInfo = {
+	.isWaterLevel = false,
+	.isSpikeLevel = false,
+	.isPitDeathActive = false,
+	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
+	.iceTileMin = NO_ICE_TILES,
+	.iceTileMax = NO_ICE_TILES,
+
+	// vertical or horizontal Level
+	.orientation = horizontal,
+	.isHorizontalGoalpost = false,
+
+	// level timer info
+	.hasTimer = false,
+	.timer = 300,
+	.timerclock = 0,
+};
+
 void Start_StateW1Boss (void) 
 {
-	w1bosscounter = 0;
-	level.orientation = horizontal;
-	level.isWaterLevel = false;
-	level.isSpikeLevel = false;
-	level.hasTimer = false;	
-	
-	level.iceTileMin = NO_ICE_TILES;
-	level.iceTileMax = NO_ICE_TILES;
+	level = levelInfo;
+
+	nut_region = 0;
+	deathmusicplayed = false;
+	cutscenemode = enabled;
+	cutscenemode = disabled;
 
 	SPRITES_8x16;
 
-	nut_region = 0;
-	pitdeathactive = true;
-
-	deathmusicplayed = false;
 
 	PlayMusic(thehands2, 1);
 
@@ -66,7 +78,8 @@ void Start_StateW1Boss (void)
 	InitScroll(BANK(w1bossmap), &w1bossmap, collision_tiles_levelw1b, collision_tiles_down_levelw1b);
 	Hud_Init(true);
 
-	cutscenemode = enabled;
+	
+	w1bosscounter = 0;
 
 	handpos = 0; //start on right side
 
@@ -94,7 +107,7 @@ void Start_StateW1Boss (void)
 	handhealth = 0; // start off hand with full health
 	abletohurthand = true; // start off being able to hurt the hand (disable after one jump per phase)
 
-	cutscenemode = disabled;
+	
 
 	SHOW_SPRITES;
 	SHOW_BKG;

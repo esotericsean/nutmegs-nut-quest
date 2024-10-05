@@ -8,7 +8,7 @@ typedef enum { grounded, inair } move_state;
 typedef enum { disabled, enabled  } switcher;
 typedef enum { right, left } direction;
 typedef enum { full, low } amount;
-typedef enum { vertical, horizontal } orientation;
+typedef enum { vertical, horizontal } orientationE;
 
 // set level.iceTileMin and level.iceTileMax to this value for no ice tiles
 #define NO_ICE_TILES (255)
@@ -135,6 +135,9 @@ typedef struct {
 	// if it is a spike level, and collision hurts nutmeg
 	bool isSpikeLevel;
 
+	// can you die by falling off the bottom of the map?
+	bool isPitDeathActive;
+
 	// Min tile number for slippery ice tiles (set to 255 for no ice)
 	UINT8 iceTileMin;
 
@@ -142,7 +145,10 @@ typedef struct {
 	UINT8 iceTileMax;
 
 	//Sprite Limits if Vertical or Horizontal Level
-	orientation orientation;
+	orientationE orientation;
+
+	// Is the goalpost in this level horizontal?
+	bool isHorizontalGoalpost;
 
 	// Does this level have a timer
 	bool hasTimer;
@@ -209,16 +215,10 @@ extern UINT8 handhealth;
 
 // LEVEL SPECIFIC VARIABLES
 
-
-extern bool isHorizontalGoalpost;
-
-
-
 //nutmeg sprite region
 extern UINT8 nut_region;
 
 extern bool deathmusicplayed;
-extern bool pitdeathactive;
 
 // END OF LEVEL SPECIFIC VARIABLES
 

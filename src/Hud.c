@@ -43,13 +43,11 @@ void Hud_Init(bool isBoss) BANKED
     }
 
     // hide the paused text
-    rWY = 144 - 8;
+    rWY = (INT8) (144 - 8);
     scroll_h_border = 8;
 
     _isBoss = isBoss;
-    level.timer = 300;
-    level.timerclock = 0;
-
+ 
     // prime the last values so they all get updated
     lastLives = nutmeg.lives + 1;
     lastAcorn = nutmeg.acorns + 1;

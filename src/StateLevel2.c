@@ -26,19 +26,34 @@ DECLARE_MUSIC(mushrooms);
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
 
+
+static const LevelT levelInfo = {
+	.isWaterLevel = false,
+	.isSpikeLevel = true,
+	.isPitDeathActive = true,
+
+	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
+	.iceTileMin = NO_ICE_TILES,
+	.iceTileMax = NO_ICE_TILES,
+
+	// vertical or horizontal Level
+	.orientation = horizontal,
+	.isHorizontalGoalpost = false,
+
+	// level timer info
+	.hasTimer = true,
+	.timer = 300,
+	.timerclock = 0,
+};
+
 void Start_StateLevel2 (void) 
 {
+	level = levelInfo;
 	levelStartCounter = 0;
-	level.hasTimer = true;
-	level.orientation = horizontal;
-	level.isWaterLevel = false;
-	level.iceTileMin = NO_ICE_TILES;
-	level.iceTileMax = NO_ICE_TILES;
+	
 	SPRITES_8x16;
 
 	nut_region = 0;
-	pitdeathactive = true;
-
 	deathmusicplayed = false;
 
 	PlayMusic(quickstart, 1);

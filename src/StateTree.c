@@ -22,13 +22,30 @@ extern Sprite * spr_nutmeg;
 
 static UINT16 treecounter = 0;
 
+static const LevelT levelInfo = {
+	.isWaterLevel = false,
+	.isSpikeLevel = false,
+	.isPitDeathActive = false,
+
+	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
+	.iceTileMin = NO_ICE_TILES,
+	.iceTileMax = NO_ICE_TILES,
+
+	// vertical or horizontal Level
+	.orientation = horizontal,
+	.isHorizontalGoalpost = false,
+
+	// level timer info
+	.hasTimer = false,
+	.timer = 300,
+	.timerclock = 0,
+};
+
 void Start_StateTree (void) 
 {
 	SPRITES_8x16;
 
 	treecounter = 0;
-	level.iceTileMin = NO_ICE_TILES;
-	level.iceTileMax = NO_ICE_TILES;
 	
 	PlayMusic(oaktree, 1);
 

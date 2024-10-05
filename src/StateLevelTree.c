@@ -26,20 +26,35 @@ DECLARE_MUSIC(oaktree);
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
 
+
+static const LevelT levelInfo = {
+	.isWaterLevel = false,
+	.isSpikeLevel = false,
+	.isPitDeathActive = false,
+
+	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
+	.iceTileMin = NO_ICE_TILES,
+	.iceTileMax = NO_ICE_TILES,
+
+	// vertical or horizontal Level
+	.orientation = horizontal,
+	.isHorizontalGoalpost = false,
+
+	// level timer info
+	.hasTimer = false,
+	.timer = 300,
+	.timerclock = 0,
+};
+
 void Start_StateLevelTree(void)
 {
-	SPRITES_8x16;
-	
-	level.hasTimer = false;
-	level.isSpikeLevel = false;	
-	level.isWaterLevel = false;
+	level = levelInfo;
 
-	level.iceTileMin = NO_ICE_TILES;
-	level.iceTileMax = NO_ICE_TILES;
-	pitdeathactive = false;
-
+	cutscenemode = disabled;
 	nut_region = 0;
 	deathmusicplayed = false;
+
+	SPRITES_8x16;
 
 	PlayMusic(oaktree, 1);
 
@@ -56,8 +71,6 @@ void Start_StateLevelTree(void)
 	InitScroll(BANK(treemap2), &treemap2, collision_tiles_level, 0);
 
 	LevelStart_Init(12,12);
-	
-	cutscenemode = disabled;
 
 	SHOW_SPRITES;
 	SHOW_BKG;

@@ -102,6 +102,7 @@ extern Sprite *spr_nutmegbow;
 
 // Declare a pointer to a sprite
 Sprite * spr_nutmeg;
+Sprite * spr_camera;
 
 NutmegT nutmeg;
 
@@ -116,9 +117,6 @@ bool cutscenewalkright;
 //storing collisions around player after movement
 UINT8 collisionX;
 UINT8 collisionY;
-
-
-bool isHorizontalGoalpost = false;
 
 //if nutmeg loses her bow, add some kickback
 UINT8 kickbackcounter;
@@ -429,7 +427,7 @@ void update_aliveInControl (void)
 	}
 
     // death from falling off the bottom of the screen
-    if (THIS->y >= 176 && THIS->y <= 200 && pitdeathactive == true) {
+    if (THIS->y >= 176 && THIS->y <= 200 && level.isPitDeathActive == true) {
         nutmeg.isDying = true;
         nutmeg.isPitDeath = true;
         nutmeg.deathtimer = 0;

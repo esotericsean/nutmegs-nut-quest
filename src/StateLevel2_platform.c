@@ -27,6 +27,24 @@ DECLARE_MUSIC (mushrooms);
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
 
+static const LevelT levelInfo = {
+	.isWaterLevel = false,
+	.isSpikeLevel = true,
+	.isPitDeathActive = true,
+
+	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
+	.iceTileMin = NO_ICE_TILES,
+	.iceTileMax = NO_ICE_TILES,
+
+	// vertical or horizontal Level
+	.orientation = horizontal,
+	.isHorizontalGoalpost = false,
+
+	// level timer info
+	.hasTimer = true,
+	.timer = 300,
+	.timerclock = 0,
+};
 
 typedef struct {
 	UINT8 x;
@@ -102,17 +120,13 @@ static void AddActors (void)
 }
 
 void Start_StateLevel2_platform (void) {
-	level.hasTimer = true;
+	
+	level = levelInfo;
+
 	levelStartCounter = 0;
-	level.orientation = horizontal;
-	level.isWaterLevel = false;
-	level.isSpikeLevel = true;
-	level.iceTileMin = NO_ICE_TILES;
-	level.iceTileMax = NO_ICE_TILES;
 		
 	SPRITES_8x16;
 	
-	pitdeathactive = true;
 	nut_region = 0;
 	deathmusicplayed = false;
 

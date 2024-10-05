@@ -17,6 +17,24 @@
 
 IMPORT_MAP (level3_1map);
 
+static const LevelT levelInfo = {
+	.isWaterLevel = false,
+	.isSpikeLevel = false,
+	.isPitDeathActive = true,
+
+	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
+	.iceTileMin = 2,
+	.iceTileMax = 7,
+
+	// vertical or horizontal Level
+	.orientation = horizontal,
+
+	// level timer info
+	.hasTimer = true,
+	.timer = 300,
+	.timerclock = 0,
+};
+
 static const UINT8 collision_tiles[] = {2,3,4,5,6,7,16,17,0};
 static const UINT8 collision_tiles_down[] = {0};
 
@@ -89,14 +107,9 @@ static void AddActors (void)
 
 void Start_StateIceLevel1 (void) {
 	levelStartCounter = 0;
-	level.hasTimer = true;		
-	level.orientation = horizontal;
-	level.isWaterLevel = false;
-	level.isSpikeLevel = false;
-	level.iceTileMin = 2;
-	level.iceTileMax = 7;
 
-	pitdeathactive = true;
+	level = levelInfo;
+
 	nut_region = 0;
 	deathmusicplayed = false;
 	

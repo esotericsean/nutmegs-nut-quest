@@ -86,16 +86,36 @@ static void AddActors (void)
 	}
 }
 
-void Start_StateWaterLevel1 (void) {
-	levelStartCounter = 0;
-	level.hasTimer = true;	
-	level.orientation = horizontal;
-	level.isWaterLevel = true;
-	level.isSpikeLevel = true;
 
-	pitdeathactive = true;
+static const LevelT levelInfo = {
+	.isWaterLevel = true,
+	.isSpikeLevel = true,
+	.isPitDeathActive = true,
+
+	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
+	.iceTileMin = NO_ICE_TILES,
+	.iceTileMax = NO_ICE_TILES,
+
+	// vertical or horizontal Level
+	.orientation = horizontal,
+	.isHorizontalGoalpost = false,
+
+	// level timer info
+	.hasTimer = true,
+	.timer = 300,
+	.timerclock = 0,
+};
+
+
+void Start_StateWaterLevel1 (void) {
+	level = levelInfo;
+
+	levelStartCounter = 0;
 	deathmusicplayed = false;
-	
+	cutscenemode = enabled;
+	levelEndCounter = 0;
+	levelActorPos = 0;	
+
 	SPRITES_8x16;
 	
 	PlayMusic(quickstart, 1);
@@ -107,12 +127,10 @@ void Start_StateWaterLevel1 (void) {
 	
 	Hud_Init(false);
 
-	cutscenemode = enabled;
+	
 	FlagPole_Init();
-	levelEndCounter = 0;
 	LevelStart_Init(6,4);
 
-	levelActorPos = 0;
 	AddActors();
 
 	SHOW_SPRITES;

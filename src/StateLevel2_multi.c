@@ -37,22 +37,40 @@ uint16_t mapRight;
 bool stopMapLeft;
 bool stopMapRight;
 
+
+static const LevelT levelInfo = {
+	.isWaterLevel = false,
+	.isSpikeLevel = true,
+	.isPitDeathActive = false,
+
+	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
+	.iceTileMin = NO_ICE_TILES,
+	.iceTileMax = NO_ICE_TILES,
+
+	// vertical or horizontal Level
+	.orientation = horizontal,
+	.isHorizontalGoalpost = false,
+
+	// level timer info
+	.hasTimer = true,
+	.timer = 300,
+	.timerclock = 0,
+};
+
 void InitGeneralRoomVars(void)
 {
 	SpriteManagerReset();
+
+	level = levelInfo;
+
 	levelbeat = false;
-
 	levelStartCounter = 0;
-	level.orientation = horizontal;
-	level.isWaterLevel = false;
 
-	pitdeathactive = false;
 	deathmusicplayed = false;
 	nutmeg.deathtimer = 0;
 	cutscenemode = enabled;
 	levelEndCounter = 0;
 	SPRITES_8x16;
-
 
 	stopMapLeft = true;
 	stopMapRight = true;
@@ -157,9 +175,6 @@ void StartRoom3 (void)
 {
 	InitGeneralRoomVars();
 	level.orientation = vertical;
-	level.isWaterLevel = false;
-	level.iceTileMin = NO_ICE_TILES;
-	level.iceTileMax = NO_ICE_TILES;
 	cutscenemode = false;
 
 	mapRight = 19*8;
@@ -184,13 +199,13 @@ void StartRoom3 (void)
 	DISPLAY_ON;
 }
 
-uint8_t maxRoomNumber = 3;
+#define MAX_ROOM_NUMBER (3)
 
 void NextRoom (void)
 {
 	display_off();
 	roomNumber ++;
-	if (roomNumber > maxRoomNumber)
+	if (roomNumber > MAX_ROOM_NUMBER)
 	{
 		SetState(StateOverworld);
 		return;
@@ -211,8 +226,6 @@ void NextRoom (void)
 }
 
 void Start_StateLevel2_multi (void) {
-	level.hasTimer = true;
-	level.timer = 300;
 	roomNumber = 0;
 	NextRoom();
 }
@@ -278,7 +291,7 @@ void Update_StateLevel2_multi (void) {
 		if (nutmeg_isInsideXY(exitTopX,exitTopY,exitBottomX,exitBottomY) && levelbeat == false)
 		{
 			levelEndCounter = 100;
-			if (roomNumber == maxRoomNumber)
+			if (roomNumber == MAX_ROOM_NUMBER)
 			{
 				FlagPole_Activate(14,38);
 				// this one gets a full end cutscene

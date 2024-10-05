@@ -30,6 +30,26 @@ extern Sprite * spr_camera;
 //nutmeg sprite region
 extern UINT8 nut_region;
 
+
+static const LevelT levelInfo = {
+	.isWaterLevel = false,
+	.isSpikeLevel = true,
+	.isPitDeathActive = false,
+
+	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
+	.iceTileMin = NO_ICE_TILES,
+	.iceTileMax = NO_ICE_TILES,
+
+	// vertical or horizontal Level
+	.orientation = vertical,
+	.isHorizontalGoalpost = true,
+
+	// level timer info
+	.hasTimer = true,
+	.timer = 300,
+	.timerclock = 0,
+};
+
 static UINT8 camera_delta_y;
 
 
@@ -100,21 +120,12 @@ static void AddNuts (void)
 
 void Start_StateLevel2_glidefall(void) 
 {
-	level.hasTimer = true;
-	isHorizontalGoalpost = true;
+	level = levelInfo;
 
-	level.orientation = vertical;
-	level.isWaterLevel = false;
-	level.isSpikeLevel = true;
-	level.iceTileMin = NO_ICE_TILES;
-	level.iceTileMax = NO_ICE_TILES;
-	
 	levelbeat = false;
 	levelStartCounter = 0;
 	levelEndCounter = 0;
 	SPRITES_8x16;
-
-	pitdeathactive = false;
 
 	nut_region = 0;
 	deathmusicplayed = false;
@@ -178,8 +189,6 @@ void Update_StateLevel2_glidefall(void)
 		cutscenewalkleft = false;
 	
 		if (levelEndCounter >= 100) {
-			level.isSpikeLevel = false;
-			isHorizontalGoalpost = false;
 			SetState(StateOverworld);
 		}
 
