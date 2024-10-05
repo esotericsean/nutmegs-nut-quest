@@ -34,7 +34,6 @@ static const UINT8 collision_tiles_gameover[] = {10,0};
 DECLARE_MUSIC(gameover);
 
 extern Sprite * spr_nutmeg;
-extern Sprite * spr_camera;
 
 void Start_StateGameOver(void) 
 {

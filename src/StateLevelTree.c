@@ -25,7 +25,6 @@ DECLARE_MUSIC(oaktree);
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
-extern Sprite * spr_camera;
 
 void Start_StateLevelTree(void)
 {

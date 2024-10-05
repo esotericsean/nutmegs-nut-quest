@@ -28,7 +28,6 @@ DECLARE_MUSIC (mushrooms);
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
 extern Sprite * spr_nutmeg;
-extern Sprite * spr_camera;
 
 //nutmeg sprite region
 UINT8 nut_region;

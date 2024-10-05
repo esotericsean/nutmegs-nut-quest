@@ -168,13 +168,19 @@ void Update_StateLevel6 (void)
 	}
 
 	if (cutscenemode == disabled) {
+		// move the camera forward every two frames
 		level6cameracount++;
 		if (level6cameracount > 2) level6cameracount = 0;
 
 		if (level6cameracount == 2) {
-			//TranslateSprite (spr_camera, 1, 0);
-			if (spr_camera->x < 237*8) { spr_camera->x++; } //stop moving at end
+			spr_camera->x++;
 		}
+
+		// stop the camera moving past the end of the level
+		if (spr_camera->x > 237*8) 
+		{  
+			spr_camera->x = 237*8;
+		} 
 	}
 
 	//tile 237 stop checking

@@ -101,7 +101,6 @@ static const UINT8 anim_nutmeg_lostbow[] = {2, 11, 0};
 extern Sprite *spr_nutmegbow;
 
 // Declare a pointer to a sprite
-Sprite * spr_camera;
 Sprite * spr_nutmeg;
 
 NutmegT nutmeg;

@@ -25,7 +25,6 @@ DECLARE_MUSIC (quickstart);
 DECLARE_MUSIC (mushrooms);
 
 extern Sprite * spr_nutmeg;
-extern Sprite * spr_camera;
 
 uint16_t exitTopX;
 uint16_t exitTopY;
