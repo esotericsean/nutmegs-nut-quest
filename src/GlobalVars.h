@@ -228,4 +228,6 @@ void SpriteAcornFreeze(Sprite *acorn) BANKED;
 // in SpriteStar.c - Add a pair of left and right stars
 void AddStarPair (UINT16 x, UINT16 y) BANKED;
 void AddStarPairWide (UINT16 x, UINT16 y) BANKED;
+
+void AddPuffPair (UINT16 x, UINT16 y) BANKED;
 #endif

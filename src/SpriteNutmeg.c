@@ -6,6 +6,7 @@
 #include "Sound.h"
 #include "Music.h"
 #include "SpriteManager.h"
+#include "Sprite.h"
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
 
@@ -487,10 +488,12 @@ void update_aliveInControl (void)
 
             //display a puff when jumping
             if (nutmeg.direction == right) {
-                SpriteManagerAdd(SpritePuffLeft, THIS->x-2, THIS->y-2);
+                SpriteManagerAdd(SpritePuff, THIS->x-2, THIS->y-2);
             }
             else {
-                SpriteManagerAdd(SpritePuffRight, THIS->x+10, THIS->y-2);
+                Sprite *r = SpriteManagerAdd(SpritePuff, THIS->x+10, THIS->y-2);
+                r->mirror = V_MIRROR;
+                r->custom_data[1] = 1;
             }
         }
     }
@@ -519,10 +522,12 @@ void update_aliveInControl (void)
 
             //display a puff when jumping
             if (nutmeg.direction == right) {
-                SpriteManagerAdd(SpritePuffLeft, THIS->x-2, THIS->y-2);
+                SpriteManagerAdd(SpritePuff, THIS->x-2, THIS->y-2);
             }
             else {
-                SpriteManagerAdd(SpritePuffRight, THIS->x+10, THIS->y-2);
+                Sprite *r = SpriteManagerAdd(SpritePuff, THIS->x+10, THIS->y-2);
+                r->mirror = V_MIRROR;
+                r->custom_data[1] = 1;
             }
         }
 

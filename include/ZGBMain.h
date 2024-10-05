@@ -46,8 +46,7 @@ _SPRITE_COLOR(SpriteCamera, camera)\
 _SPRITE_COLOR(SpriteNutmegTiny, nutmegtiny)\
 _SPRITE_COLOR(SpriteNutHead, nuthead)\
 _SPRITE_COLOR(SpriteStar, star)\
-_SPRITE_COLOR(SpritePuffLeft, puff)\
-_SPRITE_COLOR(SpritePuffRight, puff)\
+_SPRITE_COLOR(SpritePuff, puff)\
 _SPRITE_COLOR(SpriteCinnamon, cinnamon)\
 _SPRITE_COLOR(SpriteMaple, maple)\
 _SPRITE_COLOR(SpriteIncube8G, incube8G)\

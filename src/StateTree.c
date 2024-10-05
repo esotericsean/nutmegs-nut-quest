@@ -48,16 +48,6 @@ void Start_StateTree (void)
 	
 	PlayMusic(oaktree, 1);
 
-	//SetPalette (BG_PALETTE, 0, 8, bg_palette_tree2, bank_StateTree);
-	//SetPalette (SPRITES_PALETTE, 0, 8, sprites_palette_tree2, bank_StateTree);
-
-	SpriteManagerLoad(35);  //nutmeg
-	SpriteManagerLoad(12); 	//puff1
-	SpriteManagerLoad(13); 	//puff2
-	SpriteManagerLoad(14); 	//cinnamon
-	SpriteManagerLoad(15); 	//maple
-	SpriteManagerLoad(28); 	//ruby
-
 	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 36+48, 96);
 	
 	SpriteManagerAdd(SpriteCinnamon, 36, 96);

@@ -44,14 +44,7 @@ void Update_SpriteMaple(void) {
 			nutmeg.speedY = -accly;
 			nutmeg.jumpPeak = 0;
 			
-			if (nutmeg.direction == right) {
-				SpriteManagerAdd(SpritePuffLeft, THIS->x+0, THIS->y+2);
-				SpriteManagerAdd(SpritePuffRight, THIS->x+8, THIS->y+2);
-			}
-			else if (nutmeg.direction == left) {
-				SpriteManagerAdd(SpritePuffLeft, THIS->x+0, THIS->y+2);
-				SpriteManagerAdd(SpritePuffRight, THIS->x+8, THIS->y+2);
-			}
+			AddPuffPair (THIS->x, THIS->y+2);
 
 			// nutmeg can bounce as many times as they want
 		}

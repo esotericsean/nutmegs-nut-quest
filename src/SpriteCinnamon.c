@@ -49,15 +49,8 @@ void Update_SpriteCinnamon(void) {
 			SetSpriteAnim(THIS, anim_cinnamon_idle, 10);
 			cinnamon_counter = 0;
 
-			if (nutmeg.direction == right) {
-				SpriteManagerAdd(SpritePuffLeft, THIS->x+8, THIS->y+2);
-				SpriteManagerAdd(SpritePuffRight, THIS->x+16, THIS->y+2);
-			}
-			else if (nutmeg.direction == left) {
-				SpriteManagerAdd(SpritePuffLeft, THIS->x+8, THIS->y+2);
-				SpriteManagerAdd(SpritePuffRight, THIS->x+16, THIS->y+2);
-			}
-
+			AddPuffPair (THIS->x+8, THIS->y+2);
+			
 			// nutmeg can bounce as many times as they want
 		}
 	}

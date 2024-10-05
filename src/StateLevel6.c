@@ -295,7 +295,7 @@ void Update_StateLevel6 (void)
 	if (spr_camera->x > 0 && spr_camera->x <= 250 && nut_region <= 0) {
 		//SpriteManagerAdd(SpriteBalloon, 7*8, 7*8);
 		SpriteManagerAdd(SpriteBalloon, 13*8-2, 15*8);
-		SpriteManagerAdd(SpritePuffLeft, 0*8, 13*8);
+		SpriteManagerAdd(SpritePuff, 0*8, 13*8);
 		SpriteManagerAdd(SpriteAcorn, 34*8, 12*8);
 		SpriteManagerAdd(SpriteAcorn, 14*8, 10*8);
 		SpriteManagerAdd(EnemyBirdy, 17*8, 10*8);
