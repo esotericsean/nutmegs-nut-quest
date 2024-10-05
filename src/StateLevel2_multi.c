@@ -41,7 +41,6 @@ bool stopMapRight;
 static const LevelT levelInfo = {
 	.isWaterLevel = false,
 	.isSpikeLevel = true,
-	.isPitDeathActive = false,
 
 	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
 	.iceTileMin = NO_ICE_TILES,
@@ -65,11 +64,9 @@ void InitGeneralRoomVars(void)
 
 	levelbeat = false;
 	levelStartCounter = 0;
-
-	deathmusicplayed = false;
-	nutmeg.deathtimer = 0;
 	cutscenemode = enabled;
 	levelEndCounter = 0;
+
 	SPRITES_8x16;
 
 	stopMapLeft = true;
@@ -121,7 +118,7 @@ void StartRoom1 (void)
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level2_multi_1_map), &level2_multi_1_map, collision_tiles_level, 0);
 
-	Hud_Init(false);
+	Hud_Init();
 	FlagPole_Init();
 	
 	LevelStart_Init(7,4);
@@ -162,7 +159,7 @@ void StartRoom2 (void)
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level2_multi_2_map), &level2_multi_2_map, collision_tiles_level, 0);
 
-	Hud_Init(false);
+	Hud_Init();
 	FlagPole_Init();
 	
 	SHOW_SPRITES;
@@ -191,7 +188,7 @@ void StartRoom3 (void)
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level2_multi_3_map), &level2_multi_3_map, collision_tiles_level, 0);
 
-	Hud_Init(false);
+	Hud_Init();
 	FlagPole_Init();
 	
 	SHOW_SPRITES;

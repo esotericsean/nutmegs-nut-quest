@@ -144,7 +144,7 @@ static const unsigned char rainsplash2_pt4[] = {
 static const LevelT levelInfo = {
 	.isWaterLevel = false,
 	.isSpikeLevel = false,
-	.isPitDeathActive = true,
+
 	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
 	.iceTileMin = NO_ICE_TILES,
 	.iceTileMax = NO_ICE_TILES,
@@ -163,12 +163,10 @@ void Start_StateLevel5 (void)
 {
 	level = levelInfo;
 
+	levelEndCounter = 0;
+	cutscenemode = enabled;
 	levelStartCounter = 0;
 	nut_region = 0;
-	deathmusicplayed = false;
-	
-	SPRITES_8x16;
-
 	
 	PlayMusic(raindrops, 1);
 
@@ -176,17 +174,16 @@ void Start_StateLevel5 (void)
 
 	InitScrollTiles(0, &level5tiles);
 	InitScroll(BANK(level5map), &level5map, collision_tiles_level5, collision_tiles_down_level5);
-	Hud_Init(false);
-
-	cutscenemode = enabled;
+	Hud_Init();
 	FlagPole_Init();
 	LevelStart_Init(7,5);
 
-	levelEndCounter = 0;
 
 	lightningstrikecounter1 = 0;
 	lightningstrikecounter2 = 0;
 
+	
+	SPRITES_8x16;
 	SHOW_SPRITES;
 	SHOW_BKG;
 }

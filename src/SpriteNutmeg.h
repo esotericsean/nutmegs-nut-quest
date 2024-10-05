@@ -4,7 +4,7 @@
 #include "SpriteManager.h"
 #include "Banks/SetAutoBank.h"
 
-void nutmeg_setupNewLife (void) BANKED;
+void nutmeg_setupNextLife (void) BANKED;
 void nutmeg_SetupGame(void) BANKED;
 void nutmeg_hit(void) BANKED;
 void nutmeg_Animate(void) BANKED;

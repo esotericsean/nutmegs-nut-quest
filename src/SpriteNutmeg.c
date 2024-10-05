@@ -141,11 +141,9 @@ void ResetState(void) {
 
     nutmeg.deathtimer = 0;
     nutmeg.isDying = false;
-    nutmeg.isPitDeath = false;
+
     GameOver = false;
     isPaused = false;
-
-    nutmeg.deathmove = 0;
 
     kickbackcounter = 0;
 
@@ -222,17 +220,14 @@ static INT8 MoveY (void)
 
 void nutmegBow_update(void ) BANKED ;
 
-// returns true if removed
-static void update_whileDead(void)
+static void move_whileDead(void)
 {
     cutscenemode = enabled;
-
-    nutmeg.deathmove++;
 
     if (nutmeg.direction == left) {
         SetSpriteAnim(THIS, anim_nutmeg_hurt_left, 10);
         
-        if (nutmeg.deathmove < 10) 
+        if (nutmeg.deathtimer < 10) 
         {
             nutmeg.speedX = nutmeg.speeds->cutsceneMaxX;
         }
@@ -244,7 +239,7 @@ static void update_whileDead(void)
     else if (nutmeg.direction == right) {
         SetSpriteAnim(THIS, anim_nutmeg_hurt_right, 10);
 
-        if (nutmeg.deathmove < 10) 
+        if (nutmeg.deathtimer < 10) 
         {
             nutmeg.speedX = nutmeg.speeds->cutsceneMaxX;
         }
@@ -252,10 +247,6 @@ static void update_whileDead(void)
         {
             nutmeg.speedX = 0;
         }
-    }
-
-    if (nutmeg.isPitDeath == true) {
-        SpriteManagerRemoveSprite(THIS);
     }
 }
 
@@ -427,13 +418,12 @@ void update_aliveInControl (void)
 	}
 
     // death from falling off the bottom of the screen
-    if (THIS->y >= 176 && THIS->y <= 200 && level.isPitDeathActive == true) {
+    // need to leave some space after the bottom of the map 
+    // so nutmeg goes completely off screen, 
+    // and also so there is a space for a multi-room level to have an exit off the bottom of the map before nutmeg dies.
+    if (THIS->y >= scroll_h + 40 && THIS->y <= 60000) 
+    {
         nutmeg.isDying = true;
-        nutmeg.isPitDeath = true;
-        nutmeg.deathtimer = 0;
-
-        if (nutmeg.lives <= 0) { GameOver = true; }
-        else { nutmeg.lives--; }
     }
 
     /* * * * * * * * * * * * * * * * * * * */
@@ -706,9 +696,8 @@ void update_aliveInControl (void)
 
 
 
-void Update_SpriteNutmeg(void) {
-    
-
+void Update_SpriteNutmeg(void) 
+{
     // extra life from 100 acorns
     if (nutmeg.acorns == 100) {
         nutmeg.lives++;
@@ -721,43 +710,53 @@ void Update_SpriteNutmeg(void) {
     }
 
     // if we run out of time
-	if ((level.hasTimer == true) &&(level.timer == 0) && (nutmeg.isDying == false))
+	if ((level.hasTimer == true) && (level.timer == 0) && (nutmeg.isDying == false))
     {
         // keep hitting until dead
         nutmeg_hit();
 	}
 
 
-    if (nutmeg.isDying == true) {
-        if (deathmusicplayed == false) {
-			__critical { PlayMusic(quickdeath, 1); }
-			deathmusicplayed = true;
+    if (nutmeg.isDying == true) 
+    {
+        if (nutmeg.deathtimer == 0) 
+        {
+			__critical { PlayMusic(quickdeath, false); }
 		}
 
-		if (nutmeg.deathtimer >= 125) {
-			if (GameOver == true) {
-				SetState(StateGameOver);
-			}
-			else if (GameOver == false) {
-				nutmeg_setupNewLife();
-				SetState(StateOverworld); // change to correct world
-			}
-			return;
-		}
+		if (nutmeg.deathtimer > 125) 
+        {
+            levelbeat = false;
+            nutmeg.lives --;
 
-		nutmeg.deathtimer++;
-        update_whileDead();
+            if (nutmeg.lives == 0) 
+            { 
+                GameOver = true; 
+                SetState(StateGameOver);
+            }
+            else
+            {
+                // drop back to the overworld
+				SetState(StateOverworld); 
+			}
+		}
+        else
+        {
+		    nutmeg.deathtimer++;
+            move_whileDead();
+        }
+
+        return;
     }
 
     /* * * * * * * * * * * * * * * * * * * */
     /*           normal mode               */
     /* * * * * * * * * * * * * * * * * * * */
-    if ((cutscenemode == disabled) && (nutmeg.isDying == false))
+    if (cutscenemode == disabled)
     {
         update_aliveInControl ();
     }
-
-    else if (cutscenemode == enabled) 
+    else
     {
         update_inCutscene();
     }
@@ -786,11 +785,11 @@ void nutmeg_SetupGame(void) BANKED
 
     W1LevelSelection = 0;
 
-    nutmeg_setupNewLife();
+    nutmeg_setupNextLife();
 }
 
 // setup variables for the next life
-void nutmeg_setupNewLife (void) BANKED
+void nutmeg_setupNextLife (void) BANKED
 {
     // start each life with a bow
     nutmeg.health = full;
@@ -813,10 +812,6 @@ void nutmeg_hit(void) BANKED
     }
     else if (nutmeg.health == low) {
         nutmeg.isDying = true;
-        nutmeg.deathtimer = 0;
-        
-        if (nutmeg.lives <= 0) { GameOver = true; }
-        else { nutmeg.lives--; }
     }
 }
 

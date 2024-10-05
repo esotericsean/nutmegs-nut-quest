@@ -34,7 +34,6 @@ extern UINT8 nut_region;
 static const LevelT levelInfo = {
 	.isWaterLevel = false,
 	.isSpikeLevel = true,
-	.isPitDeathActive = false,
 
 	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
 	.iceTileMin = NO_ICE_TILES,
@@ -125,10 +124,10 @@ void Start_StateLevel2_glidefall(void)
 	levelbeat = false;
 	levelStartCounter = 0;
 	levelEndCounter = 0;
+	nut_region = 0;
+
 	SPRITES_8x16;
 
-	nut_region = 0;
-	deathmusicplayed = false;
 
 	__critical { PlayMusic(quickstart, 1); }
 
@@ -153,7 +152,7 @@ void Start_StateLevel2_glidefall(void)
 	InitScrollTiles(0, &levelFreeFallTiles);
 	InitScroll(BANK(level2_glidefallmap), &level2_glidefallmap, collision_tiles_level, 0);
 	
-	Hud_Init(false);
+	Hud_Init();
 	
 	cutscenemode = false;
 

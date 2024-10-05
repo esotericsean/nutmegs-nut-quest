@@ -23,13 +23,58 @@ extern INT8 scroll_h_border;
 // saved last drawn values, to work out what to update on hud
 static UINT8 lastLives;
 static UINT8 lastAcorn;
-static UINT16 lastTimer;
 
-static bool _isBoss = false;
+static UINT16 hudWorking;
+static UINT8 tens;
+static UINT8 ones;
 
-void Hud_Init(bool isBoss) BANKED
+static UINT8 getTens (UINT8 full)
 {
-    if (isBoss == true)
+    UINT8 t = 0 ;
+    while (full > 9)
+    {
+        full -= 10;
+        t ++;
+    }
+    return t;
+}
+
+static void updateTimeOnHud(void)
+{
+    hudWorking = level.timer;
+
+    //timer 100s digit:
+    if (level.timer == 300) 
+    {
+        UPDATE_HUD_TILE (10, 0, 9);
+        hudWorking = 0;
+    }
+    else if (level.timer < 300 && level.timer >= 200)
+    { 
+        UPDATE_HUD_TILE (10, 0, 8);
+        hudWorking = level.timer - 200;
+    }
+    else if (level.timer < 200 && level.timer >= 100) 
+    {
+        UPDATE_HUD_TILE (10, 0, 7);
+        hudWorking = level.timer - 100;
+    }
+    else 
+    {
+        UPDATE_HUD_TILE (10, 0, 6);
+        hudWorking = level.timer;
+    }
+
+    tens = getTens(hudWorking);
+    ones = hudWorking - (tens * 10);
+
+    UPDATE_HUD_TILE (11, 0, 6 + tens);
+    UPDATE_HUD_TILE (12, 0, 6 + ones);
+}
+
+void Hud_Init(void) BANKED
+{
+    if (level.hasTimer == false)
     {
         INIT_HUD(hudboss);
     }
@@ -45,24 +90,15 @@ void Hud_Init(bool isBoss) BANKED
     // hide the paused text
     rWY = (INT8) (144 - 8);
     scroll_h_border = 8;
-
-    _isBoss = isBoss;
  
     // prime the last values so they all get updated
     lastLives = nutmeg.lives + 1;
     lastAcorn = nutmeg.acorns + 1;
-    lastTimer = 0;
-}
 
-static UINT8 getTens (UINT8 full)
-{
-    UINT8 t = 0 ;
-    while (full > 9)
+    if (level.hasTimer)
     {
-        full -= 10;
-        t ++;
+        updateTimeOnHud();
     }
-    return t;
 }
 
 
@@ -74,8 +110,6 @@ static void PutU16 (UINT16 v, UINT8 at)
 {
     UINT8 thous;
     UINT8 hundreds;
-    UINT8 tens;
-    UINT8 ones;
 
     thous = v / 1000;
     v -= thous*1000;
@@ -92,50 +126,15 @@ static void PutU16 (UINT16 v, UINT8 at)
 
 void Hud_UpdateDebug(void)
 {
+    // debug mode doesn't bother to run the timer
     PutU16 (spr_nutmeg->x, 2);
     PutU16 (spr_nutmeg->y, 16 );
-    
-    if (lastTimer != level.timer)
-    {
-        UINT16 working = level.timer;
-
-        //timer 100s digit:
-        if (level.timer == 300) 
-        {
-            UPDATE_HUD_TILE (10, 0, 9);
-            working = 0;
-        }
-        else if (level.timer < 300 && level.timer >= 200)
-        { 
-            UPDATE_HUD_TILE (10, 0, 8);
-            working = level.timer - 200;
-        }
-        else if (level.timer < 200 && level.timer >= 100) 
-        {
-            UPDATE_HUD_TILE (10, 0, 7);
-            working = level.timer - 100;
-        }
-        else 
-        {
-            UPDATE_HUD_TILE (10, 0, 6);
-            working = level.timer;
-        }
-
-        UINT8 tens = getTens(working);
-        UINT8 ones = working - (tens * 10);
-
-        UPDATE_HUD_TILE (11, 0, 6 + tens);
-        UPDATE_HUD_TILE (12, 0, 6 + ones);
-    }
 }
 #endif 
 
 
 void Hud_Update(void) BANKED
 {
-    UINT8 tens;
-    UINT8 ones;
-
 #ifdef IS_DEBUG
     Hud_UpdateDebug();
     return;
@@ -160,9 +159,9 @@ void Hud_Update(void) BANKED
         UPDATE_HUD_TILE (18, 0, 6 + ones);
     }
     
-    if (_isBoss == true)
+    if (level.hasTimer == false)
     {
-        // boss levels we don't track time
+        // all done if we aren't tracking time
         return;
     }
 
@@ -170,44 +169,16 @@ void Hud_Update(void) BANKED
     { 
         level.timerclock ++; 
      
-        //25 seems good
+        // 25 seems good
         if (level.timerclock == 25) {
             level.timerclock = 0;
-            level.timer--;
+
+            if (level.timer > 0)
+            {
+                level.timer--;
+                updateTimeOnHud();
+            }
 	    }
-    }
-
-	if (lastTimer != level.timer)
-    {
-        UINT16 working = level.timer;
-
-        //timer 100s digit:
-        if (level.timer == 300) 
-        {
-            UPDATE_HUD_TILE (10, 0, 9);
-            working = 0;
-        }
-        else if (level.timer < 300 && level.timer >= 200)
-        { 
-            UPDATE_HUD_TILE (10, 0, 8);
-            working = level.timer - 200;
-        }
-        else if (level.timer < 200 && level.timer >= 100) 
-        {
-            UPDATE_HUD_TILE (10, 0, 7);
-            working = level.timer - 100;
-        }
-        else 
-        {
-            UPDATE_HUD_TILE (10, 0, 6);
-            working = level.timer;
-        }
-
-        tens = getTens(working);
-        ones = working - (tens * 10);
-
-        UPDATE_HUD_TILE (11, 0, 6 + tens);
-        UPDATE_HUD_TILE (12, 0, 6 + ones);
     }
 }
 

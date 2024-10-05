@@ -26,7 +26,6 @@ static const UINT8 collision_tiles_down_levelw1b[] = {0};
 
 DECLARE_MUSIC(thehands2);
 DECLARE_MUSIC(boss1win);
-DECLARE_MUSIC(quickdeath);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -39,7 +38,7 @@ static Sprite * spr_popsicle;
 static const LevelT levelInfo = {
 	.isWaterLevel = false,
 	.isSpikeLevel = false,
-	.isPitDeathActive = false,
+
 	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
 	.iceTileMin = NO_ICE_TILES,
 	.iceTileMax = NO_ICE_TILES,
@@ -59,12 +58,8 @@ void Start_StateW1Boss (void)
 	level = levelInfo;
 
 	nut_region = 0;
-	deathmusicplayed = false;
 	cutscenemode = enabled;
 	cutscenemode = disabled;
-
-	SPRITES_8x16;
-
 
 	PlayMusic(thehands2, 1);
 
@@ -76,7 +71,7 @@ void Start_StateW1Boss (void)
 
 	InitScrollTiles(0, &w1bosstiles);
 	InitScroll(BANK(w1bossmap), &w1bossmap, collision_tiles_levelw1b, collision_tiles_down_levelw1b);
-	Hud_Init(true);
+	Hud_Init();
 
 	
 	w1bosscounter = 0;
@@ -107,8 +102,7 @@ void Start_StateW1Boss (void)
 	handhealth = 0; // start off hand with full health
 	abletohurthand = true; // start off being able to hurt the hand (disable after one jump per phase)
 
-	
-
+	SPRITES_8x16;
 	SHOW_SPRITES;
 	SHOW_BKG;
 }
@@ -116,26 +110,6 @@ void Start_StateW1Boss (void)
 void Update_StateW1Boss (void) 
 {
 	Hud_Update();
-
-	if (nutmeg.isDying == true) {
-		if (deathmusicplayed == false) {
-			__critical { PlayMusic(quickdeath, 1); }
-			deathmusicplayed = true;
-		}
-
-		if (nutmeg.deathtimer >= 125) {
-			if (GameOver == true) {
-				SetState(StateGameOver);
-			}
-			else if (GameOver == false) {
-				nutmeg_setupNewLife();
-				SetState(StateOverworld); // change to correct world
-			}
-			return;
-		}
-
-		nutmeg.deathtimer++;
-	}
 
 	if (spr_spatula->x < 0) { SpriteManagerRemoveSprite (spr_spatula); }
 	if (spr_popsicle->x > 20*8) { SpriteManagerRemoveSprite (spr_popsicle); }

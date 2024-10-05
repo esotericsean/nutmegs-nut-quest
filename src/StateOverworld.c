@@ -458,7 +458,9 @@ static void startAutoMoveTowards (UINT8 towards)
 }
 
 void Start_StateOverworld (void) {
-	SPRITES_8x16;
+    // reset nutmegs death variables (in case we arrived here after dying)
+	nutmeg.isDying = false;
+    nutmeg.deathtimer = 0;
 
 	// Setup the map steps for the current overworld;
 	if ((level_current < 10) || (level_current == ENTERING_WORLD_1))
@@ -539,7 +541,7 @@ void Start_StateOverworld (void) {
 
 	PlayMusic(acornkingdom, 1);
 
-	
+	SPRITES_8x16;
 	SHOW_SPRITES;
 	SHOW_BKG;
 	HIDE_WIN;

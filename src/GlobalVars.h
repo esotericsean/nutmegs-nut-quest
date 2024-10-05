@@ -107,12 +107,6 @@ typedef struct Nutmeg {
 	// DEATH vars
 	// is nutmeg dying
 	bool isDying;
-	
-	// is dying from falling in a pit?
-	bool isPitDeath;
-
-	// a counter to moving nutmeg a bit while dying
-	UINT8 deathmove;
 
 	// a death countdown timer
 	UINT8 deathtimer;
@@ -124,8 +118,6 @@ extern NutmegT nutmeg;
 
 extern bool isPaused;
 
-extern bool firstplay;
-
 
 // Info about the current level
 typedef struct {
@@ -134,9 +126,6 @@ typedef struct {
 
 	// if it is a spike level, and collision hurts nutmeg
 	bool isSpikeLevel;
-
-	// can you die by falling off the bottom of the map?
-	bool isPitDeathActive;
 
 	// Min tile number for slippery ice tiles (set to 255 for no ice)
 	UINT8 iceTileMin;
@@ -217,8 +206,6 @@ extern UINT8 handhealth;
 
 //nutmeg sprite region
 extern UINT8 nut_region;
-
-extern bool deathmusicplayed;
 
 // END OF LEVEL SPECIFIC VARIABLES
 

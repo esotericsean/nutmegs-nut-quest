@@ -123,7 +123,7 @@ void Start_StateCutscene1(void) {
 	SHOW_BKG;
 
     cutscene1counter = 0;
-    firstplay = true;
+
     nutmeg_SetupGame();
 
     //RESET SO NUTMEG DOESN'T FLY OFF SCREEN

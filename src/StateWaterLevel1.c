@@ -90,7 +90,6 @@ static void AddActors (void)
 static const LevelT levelInfo = {
 	.isWaterLevel = true,
 	.isSpikeLevel = true,
-	.isPitDeathActive = true,
 
 	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
 	.iceTileMin = NO_ICE_TILES,
@@ -102,7 +101,7 @@ static const LevelT levelInfo = {
 
 	// level timer info
 	.hasTimer = true,
-	.timer = 300,
+	.timer = 20, // 300,
 	.timerclock = 0,
 };
 
@@ -111,7 +110,6 @@ void Start_StateWaterLevel1 (void) {
 	level = levelInfo;
 
 	levelStartCounter = 0;
-	deathmusicplayed = false;
 	cutscenemode = enabled;
 	levelEndCounter = 0;
 	levelActorPos = 0;	
@@ -125,7 +123,7 @@ void Start_StateWaterLevel1 (void) {
 	InitScrollTiles(0, &waterLevelTiles);
 	InitScroll(BANK(waterLevel1Map), &waterLevel1Map, collision_tiles, collision_tiles_down);
 	
-	Hud_Init(false);
+	Hud_Init();
 
 	
 	FlagPole_Init();

@@ -30,7 +30,6 @@ extern Sprite * spr_nutmeg;
 static const LevelT levelInfo = {
 	.isWaterLevel = false,
 	.isSpikeLevel = false,
-	.isPitDeathActive = true,
 
 	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
 	.iceTileMin = NO_ICE_TILES,
@@ -94,10 +93,11 @@ void Start_StateLevel1_platform (void) {
 	level = levelInfo;
 
 	levelStartCounter = 0;
-	SPRITES_8x16;
-
 	nut_region = 0;
-	deathmusicplayed = false;
+	cutscenemode = enabled;
+	levelEndCounter = 0;
+
+	SPRITES_8x16;
 
 	PlayMusic(quickstart, 1);
 
@@ -107,12 +107,9 @@ void Start_StateLevel1_platform (void) {
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level1_platformmap), &level1_platformmap, collision_tiles, collision_tiles_down);
 	
-	Hud_Init(false);
-	cutscenemode = enabled;
+	Hud_Init();
 	FlagPole_Init();
-	levelEndCounter = 0;
 	LevelStart_Init(6,4);
-
 
 	Sprite *s = SpriteManagerAdd(SpritePlatform, 16*8, 3*8);
 	Platform_Setup(s, -1, 1, PLATFORM_TYPE_BACK_AND_FORTH, 7*8);

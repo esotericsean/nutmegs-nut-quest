@@ -20,7 +20,6 @@ IMPORT_MAP (level3_1map);
 static const LevelT levelInfo = {
 	.isWaterLevel = false,
 	.isSpikeLevel = false,
-	.isPitDeathActive = true,
 
 	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
 	.iceTileMin = 2,
@@ -106,12 +105,13 @@ static void AddActors (void)
 }
 
 void Start_StateIceLevel1 (void) {
-	levelStartCounter = 0;
-
 	level = levelInfo;
 
+	levelStartCounter = 0;
 	nut_region = 0;
-	deathmusicplayed = false;
+	cutscenemode = enabled;
+	levelEndCounter = 0;
+	levelActorPos = 0;
 	
 	SPRITES_8x16;
 	
@@ -122,14 +122,10 @@ void Start_StateIceLevel1 (void) {
 	InitScrollTiles(0, &iceLevelTiles);
 	InitScroll(BANK(level3_1map), &level3_1map, collision_tiles, collision_tiles_down);
 	
-	Hud_Init(false);
-
-	cutscenemode = enabled;
+	Hud_Init();
 	FlagPole_Init();
-	levelEndCounter = 0;
 	LevelStart_Init(6,4);
 
-	levelActorPos = 0;
 	AddActors();
 
 	SHOW_SPRITES;
