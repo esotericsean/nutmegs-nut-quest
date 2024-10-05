@@ -101,7 +101,7 @@ static const LevelT levelInfo = {
 
 	// level timer info
 	.hasTimer = true,
-	.timer = 20, // 300,
+	.timer = 300,
 	.timerclock = 0,
 };
 
