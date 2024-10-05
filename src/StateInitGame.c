@@ -12,8 +12,7 @@ void Start_StateInitGame(void)
 
 void Update_StateInitGame (void) 
 {
-	//SetState(StateLevelTree);
-	SetState(StateWaterLevel1);
+	SetState(StateLevelTree);
 }
 
 void Destroy_StateInitGame(void)
