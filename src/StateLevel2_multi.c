@@ -257,8 +257,6 @@ void Update_StateLevel2_multi (void) {
 				}
 			}
 
-			LevelStart_Update();
-
 			levelStartCounter++;
 		}
 	}

@@ -169,7 +169,6 @@ void Update_StateLevel1_platform (void) {
 			}
 		}
 
-		LevelStart_Update();
 		if (levelStartCounter < 105) levelStartCounter++;
 	}
 

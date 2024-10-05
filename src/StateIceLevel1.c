@@ -155,7 +155,6 @@ void Update_StateIceLevel1 (void)
 			}
 		}
 
-		LevelStart_Update();
 		if (levelStartCounter < 105) levelStartCounter++;
 	}
 

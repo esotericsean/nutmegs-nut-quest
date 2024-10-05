@@ -5,8 +5,6 @@
 
 extern Sprite * spr_nutmeg;
 
-static const UINT8 anim_acorn_static[] = {1, 0};
-
 static const INT8 acornMoveYAtTime [] = {0,0,0,1,1,0,0,0,-1,-1};
 
 #define IS_STILL_POS (0)
@@ -26,8 +24,6 @@ void Start_SpriteAcorn(void) {
 		THIS->lim_y = 250;
 	}
 
-	SetSpriteAnim(THIS, anim_acorn_static, MOVE_SPEED);
-	
 	// setup these variables so the defaults are all 0
 	// because the actorPosT stuff is overriding all the custom data fields
 	THIS->custom_data[IS_STILL_POS] = false;

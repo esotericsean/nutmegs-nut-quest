@@ -66,7 +66,7 @@ void Start_StateLevelTree(void)
 	InitScrollTiles(0, &treetiles);
 	InitScroll(BANK(treemap2), &treemap2, collision_tiles_level, 0);
 
-	LevelStart_Init(12,12);
+	SpriteManagerAdd(SpriteLevelStart, 64, 24);
 
 	SPRITES_8x16;
 	SHOW_SPRITES;

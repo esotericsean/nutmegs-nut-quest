@@ -175,7 +175,6 @@ void Update_StateLevel2_glidefall(void)
 			__critical { PlayMusic(mushrooms, 1); }
 		}
 
-		LevelStart_Update();
 		levelStartCounter++;
 	}
 

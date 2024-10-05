@@ -89,8 +89,7 @@ void Update_StateLevel3 (void)
 				PlayMusic(mushrooms,  1);
 			}
 		}
-
-		LevelStart_Update();			
+				
 		if (levelStartCounter < 105) levelStartCounter++;
 	}
 

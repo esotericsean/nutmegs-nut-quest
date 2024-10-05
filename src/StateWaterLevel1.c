@@ -158,7 +158,6 @@ void Update_StateWaterLevel1 (void)
 			}
 		}
 
-		LevelStart_Update();
 		if (levelStartCounter < 105) levelStartCounter++;
 	}
 

@@ -95,7 +95,6 @@ void Update_StateLevel2_1 (void) {
 			}
 		}
 
-		LevelStart_Update();
 		levelStartCounter++;
 	}
 

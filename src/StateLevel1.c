@@ -98,7 +98,6 @@ void Update_StateLevel1(void)
 			}
 		}
 
-		LevelStart_Update();
 		if (levelStartCounter < 105) levelStartCounter++;
 	}
 
