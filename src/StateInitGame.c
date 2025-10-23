@@ -12,7 +12,7 @@ void Start_StateInitGame(void)
 
 void Update_StateInitGame (void) 
 {
-	SetState(StateLevelTree);
+	SetState(StateOverworld);
 }
 
 void Destroy_StateInitGame(void)

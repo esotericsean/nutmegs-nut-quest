@@ -27,7 +27,7 @@ DECLARE_MUSIC (mushrooms);
 extern Sprite * spr_nutmeg;
 
 static const LevelT levelInfo = {
-	.isWaterLevel = false,
+	.isWaterLevel = true,
 	.isSpikeLevel = false,
 	
 	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
@@ -109,8 +109,9 @@ void Update_StateLevel2_1 (void) {
 		cutscenewalkright = true;
 		cutscenewalkleft = false;
 	
-		if (levelEndCounter >= 100) {
-			SetState(StateOverworld);
+        if (levelEndCounter >= 100) {
+            StopMusic;
+            SetState(StateOverworld);
 		}
 
 		if (levelEndCounter < 250) levelEndCounter++;

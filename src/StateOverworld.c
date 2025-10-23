@@ -8,6 +8,7 @@
 #include "Keys.h"
 #include "SpriteManager.h"
 #include "Palette.h"
+#include "SpriteNutmeg.h"
 #include "../src/GlobalVars.h"
 
 IMPORT_MAP (overworld1map);
@@ -458,9 +459,12 @@ static void startAutoMoveTowards (UINT8 towards)
 }
 
 void Start_StateOverworld (void) {
-    // reset nutmegs death variables (in case we arrived here after dying)
+    // reset nutmeg's death variables (we are safely in overworld now)
 	nutmeg.isDying = false;
     nutmeg.deathtimer = 0;
+    // allow next quickdeath to play in a new life
+    nutmeg_allow_next_quickdeath();
+    stop_music_on_new_state = 1;
 
 	// Setup the map steps for the current overworld;
 	if ((level_current < 10) || (level_current == ENTERING_WORLD_1))
@@ -532,7 +536,12 @@ void Start_StateOverworld (void) {
 
 	// sprites
 	SetTinyNutmegAtCurrentLevel();
-	SpriteManagerAdd(SpriteNutHead, 16, 7);
+	// Add bow first so nuthead draws above it
+	if (nutmeg.hasbow) {
+		Sprite *spr_hudbow = SpriteManagerAdd(SpriteNutmegBow, 16-10, 7-17);
+		spr_hudbow->custom_data[0] = 1; // HUD mode
+	}
+	Sprite *spr_nuthead = SpriteManagerAdd(SpriteNutHead, 16, 7);
 	
 	Sprite * spr_acorn = SpriteManagerAdd(SpriteAcorn, 14*8, 7);
 	SpriteAcornFreeze (spr_acorn);
@@ -685,8 +694,8 @@ static void moveTowardsNextLevel(void)
 
 static const STATE levels [] = {
 	StateLevelTree, // level 0
-	StateWaterLevel1, // StateLevel1, // level 1-1
-	StateIceLevel1, // StateLevel2,
+	StateLevel1, // StateLevel1, // level 1-1
+	StateLevel2, // StateLevel2,
 	StateLevel3,
 	StateLevel4,
 	StateLevel5,
@@ -694,6 +703,8 @@ static const STATE levels [] = {
 	StateLevel7,
 	StateLevel8,
 	StateW1Boss,
+	StateWaterLevel1,
+	StateIceLevel1,
 	StateLevel2_1,
 	StateLevel2_2,
 	StateLevel2_platform,

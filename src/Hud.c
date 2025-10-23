@@ -126,9 +126,14 @@ static void PutU16 (UINT16 v, UINT8 at)
 
 void Hud_UpdateDebug(void)
 {
-    // debug mode doesn't bother to run the timer
+    // show X and Y
     PutU16 (spr_nutmeg->x, 2);
     PutU16 (spr_nutmeg->y, 16 );
+    // show death FSM state and timers
+    UPDATE_HUD_TILE (2, 1, 6 + 0); // 'D'
+    UPDATE_HUD_TILE (3, 1, 6 + nutmeg.deathState);
+    PutU16 (nutmeg.deathtimer, 6);
+    PutU16 (nutmeg.deathFrames, 12);
 }
 #endif 
 
@@ -148,6 +153,16 @@ void Hud_Update(void) BANKED
         ones = nutmeg.lives - (tens * 10);
         UPDATE_HUD_TILE (3,0, 6 + tens);
         UPDATE_HUD_TILE (4,0, 6 + ones);
+    }
+
+    // Overworld: show bow on tiny nutmeg head if possessed
+    if (level.hasTimer == false) // overworld HUD variant
+    {
+        // The HUD tileset packs the tiny head at a fixed tile; set an attribute tile next to it
+        // If your tiles for head-with-bow differ, replace indices below
+        UINT8 headTile = 4;      // base tiny head tile index
+        UINT8 headBowTile = 5;   // head-with-bow tile index
+        UPDATE_HUD_TILE (2,0, nutmeg.hasbow ? headBowTile : headTile);
     }
     
     if (lastAcorn != nutmeg.acorns)

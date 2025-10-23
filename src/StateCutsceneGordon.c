@@ -52,6 +52,7 @@ void Start_StateCutsceneGordon(void) {
     cutscenegordonspeed = 0;
     cutscenegordonspeedlimit = 3;
 
+    StopMusic;
     PlayMusic(gordoncutscene, 0);
 }
 
@@ -198,6 +199,7 @@ void Update_StateCutsceneGordon(void) {
 
     //end
     if (cutscenegordoncounter >= 840) {
+        StopMusic;
         SetState(StateOverworld);
     }
     
@@ -208,6 +210,7 @@ void Update_StateCutsceneGordon(void) {
     if (cutscenegordonspeed > cutscenegordonspeedlimit) cutscenegordonspeed = 0;
 
     if (KEY_PRESSED(J_START)) {
+        StopMusic;
         SetState(StateOverworld);
     }
 }

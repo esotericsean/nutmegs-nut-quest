@@ -78,7 +78,13 @@ void Start_StateLevel1(void)
 
 void Update_StateLevel1(void) 
 {
-	Hud_Update();
+    Hud_Update();
+
+    // If Nutmeg is in a death sequence, freeze level-specific logic to avoid
+    // re-triggering music or cutscene behaviors that could interfere with death FSM
+    if (nutmeg.isDying) {
+        return;
+    }
 
 	if (cutscenemode == enabled) {
 		//Level Start!

@@ -138,6 +138,11 @@ void Start_StateWaterLevel1 (void) {
 void Update_StateWaterLevel1 (void) 
 {
 	Hud_Update();
+	// Freeze level updates while Nutmeg is in a death sequence to avoid
+	// interfering music/state changes that can retrigger quickdeath
+	if (nutmeg.isDying) {
+		return;
+	}
 	AddActors();
 	
 	if (cutscenemode == enabled) {
@@ -176,21 +181,20 @@ void Update_StateWaterLevel1 (void)
 		levelEndCounter++;
 	}
 
-	// stop nutmeg from moving off the top of the screen
-    if ((spr_nutmeg->y < 2) || (spr_nutmeg->y > 65000))
-	{
-		spr_nutmeg->y = 2;
-	}
+    // stop nutmeg from moving off the top of the screen
+    if (spr_nutmeg->y < 2)
+    {
+        spr_nutmeg->y = 2;
+    }
 
-	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg.isDying == false) {
-		if (spr_nutmeg->y >= (13 *8))
-		{
-			FlagPole_Activate(244,13);
+    if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg.isDying == false)
+    {
+        // activate when crossing pole regardless of Y
+        FlagPole_Activate(244,13);
 
-			levelbeat = true;
-			levelEndCounter = 0;
-			cutscenemode = enabled;
-			cutscenewalkright = true;
-		}
-	}
+        levelbeat = true;
+        levelEndCounter = 0;
+        cutscenemode = enabled;
+        cutscenewalkright = true;
+    }
 }

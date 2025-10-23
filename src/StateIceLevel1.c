@@ -173,11 +173,11 @@ void Update_StateIceLevel1 (void)
 		levelEndCounter++;
 	}
 
-	// stop nutmeg from moving off the top of the screen
-    if ((spr_nutmeg->y < 2) || (spr_nutmeg->y > 65000))
-	{
-		spr_nutmeg->y = 2;
-	}
+    // stop nutmeg from moving off the top of the screen
+    if (spr_nutmeg->y < 2)
+    {
+        spr_nutmeg->y = 2;
+    }
 
 	if (spr_nutmeg->x >= 984 && spr_nutmeg->x < 992 && levelbeat == false && nutmeg.isDying == false) {
 		FlagPole_Activate(123,8);

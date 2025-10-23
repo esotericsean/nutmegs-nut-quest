@@ -104,6 +104,7 @@ void Update_StateLevel2 (void)
 		cutscenewalkleft = false;
 		
 		if (levelEndCounter >= 100) {
+			StopMusic;
 			SetState(StateOverworld);
 		}
 

@@ -110,6 +110,15 @@ typedef struct Nutmeg {
 
 	// a death countdown timer
 	UINT8 deathtimer;
+
+	// brief hurt flash / invincibility
+	UINT8 hurtFlashCounter;
+	bool isInvincible;
+
+    // death handling helpers
+    bool deathSoundPlayed;
+    UINT16 deathFrames;
+    UINT8 deathState; // 0=none,1=init,2=fall,3=done
 } NutmegT;
 
 extern NutmegT nutmeg;
@@ -132,6 +141,9 @@ typedef struct {
 
 	// Max tile number for slippery ice tiles (set to 255 for no ice)
 	UINT8 iceTileMax;
+
+	// Optional per-level solid water tile id (VRAM tile id for water fill). 0 uses default
+	UINT8 waterSolidTileId;
 
 	//Sprite Limits if Vertical or Horizontal Level
 	orientationE orientation;
@@ -208,6 +220,15 @@ extern UINT8 handhealth;
 extern UINT8 nut_region;
 
 // END OF LEVEL SPECIFIC VARIABLES
+
+// Wind system (used in windy levels like 1-5)
+extern bool windEnabled;
+extern INT8 windGroundIdle;
+extern INT8 windGroundRight;
+extern INT8 windGroundLeft;
+extern INT8 windAirNone;
+extern INT8 windAirRight;
+extern INT8 windAirLeft;
 
 typedef struct {
 	UINT8 x;

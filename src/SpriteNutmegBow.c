@@ -19,6 +19,11 @@ static const UINT8 anim_nutmegbow_jump_left[]  = {1, 9};
 static const UINT8 anim_nutmegbow_fall_right[] = {1, 10};
 static const UINT8 anim_nutmegbow_fall_left[]  = {1, 10};
 
+// Offsets for bow placement while swimming (tweak as needed)
+#define SWIM_BOW_OFFSET_Y   (-22)
+#define SWIM_BOW_OFFSET_X_R (-4)
+#define SWIM_BOW_OFFSET_X_L (4)
+
 // 0 = idle (5)
 // 1 = walking (15)
 // 2 = jump/fall (1)
@@ -104,8 +109,22 @@ static const INT8 Y_OFFSET_AT_COUNTER [] = {
 // can't use THIS, because it is called fromthe spr_nutmeg update fn
 void nutmegBow_update(void) BANKED 
 {
-	if (nutmeg.lostbow == false) {
-		spr_nutmegbow->y = spr_nutmeg->y-24;
+    if (nutmeg.lostbow == false) {
+        // In water (including pools), force a stable bow placement and static anim
+        if (level.isWaterLevel || nutmeg.isSwimming) {
+            spr_nutmegbow->y = spr_nutmeg->y + SWIM_BOW_OFFSET_Y;
+            if (nutmeg.direction == right) {
+                spr_nutmegbow->x = spr_nutmeg->x + SWIM_BOW_OFFSET_X_R;
+                spr_nutmegbow->mirror = NO_MIRROR;
+            } else {
+                spr_nutmegbow->x = spr_nutmeg->x + SWIM_BOW_OFFSET_X_L;
+                spr_nutmegbow->mirror = V_MIRROR;
+            }
+            SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_static, 1);
+            return;
+        }
+
+        spr_nutmegbow->y = spr_nutmeg->y-24;
 
 		switch (nutmeg.bowanim) {
 			case 0:
@@ -163,18 +182,33 @@ void nutmegBow_update(void) BANKED
 				spr_nutmegbow->mirror = V_MIRROR;
 				break;
 		}
-	}
-	else if (nutmeg.health == full && nutmeg.lostbow == true) {
+    }
+    else if (nutmeg.lostbow == true) {
 		SetSpriteAnim(spr_nutmegbow, anim_nutmegbow_static, 1);
 	
 		if (nutmeg.bowanim == 8) { spr_nutmegbow->mirror = NO_MIRROR; }
 		else { spr_nutmegbow->mirror = V_MIRROR; }
 
-		TranslateSprite (spr_nutmegbow, 0, Y_OFFSET_AT_COUNTER[nutmeg.bow_counter]);
+        // Ensure bow can fall offscreen during drop
+        spr_nutmegbow->lim_y = 300;
+        // Ensure starting height is anchored once at drop start
+        if (nutmeg.bow_counter == 0) {
+            spr_nutmegbow->y = spr_nutmeg->y - 24;
+            if (nutmeg.bowanim == 8) {
+                spr_nutmegbow->x = spr_nutmeg->x - 8;
+            } else {
+                spr_nutmegbow->x = spr_nutmeg->x + 8;
+            }
+            // freeze following Nutmeg; begin autonomous drop
+            spr_nutmegbow->custom_data[0] = 0;
+        }
+        // Apply falling offset each frame without collision blocking
+        spr_nutmegbow->y += (INT8)Y_OFFSET_AT_COUNTER[nutmeg.bow_counter];
 
 		nutmeg.bow_counter++;
 
-		if (nutmeg.bow_counter >= 37) {
+        // Despawn once sufficiently below the screen or after full drop frames
+        if ((spr_nutmegbow->y > 200) || (nutmeg.bow_counter >= 37)) {
 			nutmeg.health = low;
 			nutmeg.bowanim = 10;
 			SpriteManagerRemoveSprite(spr_nutmegbow);
@@ -184,7 +218,12 @@ void nutmegBow_update(void) BANKED
 
 void Update_SpriteNutmegBow(void) 
 {
-	// updates are done from the spr_nutmeg
+	// If used as HUD overlay on overworld nut head, freeze one frame and don't follow Nutmeg
+	if (THIS->custom_data[0] == 1) {
+		SetSpriteAnim(THIS, anim_nutmegbow_static, 1);
+		return;
+	}
+	// updates are done from the spr_nutmeg in levels
 }
 
 
