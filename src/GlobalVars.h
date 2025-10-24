@@ -119,6 +119,20 @@ typedef struct Nutmeg {
     bool deathSoundPlayed;
     UINT16 deathFrames;
     UINT8 deathState; // 0=none,1=init,2=fall,3=done
+
+	// --- Wall movement ---
+	// automatic wall slide when airborne and touching a wall
+	bool isWallSliding;
+	// side of the wall we are sliding on (right/left)
+	direction wallSide;
+	// last contacted wall side for coyote timing
+	direction lastWallSide;
+	// few frames after leaving wall where wall-jump remains allowed
+	UINT8 wallCoyoteFrames;
+	// cooldown before being able to re-grab a wall after a wall jump
+	UINT8 wallRegrabCooldown;
+	// short lock to prevent immediate glide right after wall jump
+	UINT8 wallJumpGlideLock;
 } NutmegT;
 
 extern NutmegT nutmeg;

@@ -159,6 +159,14 @@ static UINT8 playedQuickdeath = 0; // per-life guard to avoid music re-trigger l
 static UINT16 deathStartSysTime = 0; // vblank anchor for death duration
 static UINT8 pitDeathLock = 0; // prevent repeated pit-death triggers within the same life
 static UINT8 lastCutsceneMode = 0; // track transition out of level intro
+// --- Wall movement tunables ---
+static const INT16 wallSlideMaxFallY = 80;      // clamp downward speed while sliding
+static const INT16 wallJumpUpVel = 320;         // stronger vertical push on wall jump (positive; applied as -value)
+static const INT16 wallJumpHorizVel = 200;      // base horizontal push away from wall
+static const INT16 wallJumpHorizVelStrong = 240;// stronger push if pressing away direction
+static const UINT8 kWallCoyoteFrames = 4;       // grace frames after leaving wall
+static const UINT8 kWallRegrabCooldown = 10;    // frames before we can slide again after a wall jump
+static const UINT8 kWallJumpGlideLock = 6;      // frames to block glide after a wall jump
 static void nutmeg_begin_death(void) {
     if (nutmeg.isDying) return;
     nutmeg.isDying = true;
@@ -333,6 +341,14 @@ void ResetState(void) {
     // Ensure new levels start in a clean state
     nutmeg.isGliding = false;
     nutmeg.isSwimming = false;
+
+    // wall movement
+    nutmeg.isWallSliding = false;
+    nutmeg.wallSide = right;
+    nutmeg.lastWallSide = right;
+    nutmeg.wallCoyoteFrames = 0;
+    nutmeg.wallRegrabCooldown = 0;
+    nutmeg.wallJumpGlideLock = 0;
 }
 
 
@@ -668,11 +684,26 @@ void update_aliveInControl (void)
     /* * * * * * * * * * * * * * * * * * * */
     /* left and right directional movement */
     /* * * * * * * * * * * * * * * * * * * */
+    // Step-up smoothing: if blocked horizontally by a 1-tile ledge and there's space above, climb it
+    // Only on ground, not swimming, and while holding into the ledge
     if (KEY_PRESSED(J_RIGHT)) {
         //sets it to the direction you pressed
         nutmeg.direction = right;
         //makes sure the sprites are facing the right way
         THIS->mirror = NO_MIRROR;
+
+        // Attempt small step-up before applying accel
+        if (nutmeg.movestate == grounded && !(level.isWaterLevel || nutmeg.isSwimming)) {
+            if (collisionX != 0) {
+                // try to nudge up by 8px (1 tile) if space is free above head
+                UINT8 headTile = read_bg_tile_at_px(THIS->x + 8, THIS->y - 8);
+                UINT8 chestTile = read_bg_tile_at_px(THIS->x + 8, THIS->y);
+                if (headTile == 0 && chestTile == 0) {
+                    TranslateSprite(THIS, 0, -8);
+                    collisionY = 0;
+                }
+            }
+        }
 
         // reintroduce run: slight speedup over walk
         if (KEY_PRESSED(J_B) && !level.isWaterLevel) {
@@ -690,6 +721,18 @@ void update_aliveInControl (void)
         nutmeg.direction = left;
         //SPRITE_SET_VMIRROR(THIS);
         THIS->mirror = V_MIRROR;
+
+        // Attempt small step-up to the left
+        if (nutmeg.movestate == grounded && !(level.isWaterLevel || nutmeg.isSwimming)) {
+            if (collisionX != 0) {
+                UINT8 headTile = read_bg_tile_at_px(THIS->x - 1, THIS->y - 8);
+                UINT8 chestTile = read_bg_tile_at_px(THIS->x - 1, THIS->y);
+                if (headTile == 0 && chestTile == 0) {
+                    TranslateSprite(THIS, 0, -8);
+                    collisionY = 0;
+                }
+            }
+        }
 
         if (KEY_PRESSED(J_B) && !level.isWaterLevel) {
             nutmeg.speedX -= nutmeg.speeds->runIncX;
@@ -781,10 +824,92 @@ void update_aliveInControl (void)
             }
             swim_exit_boost_window = 0;
         }
+        // Wall jump: while sliding or within coyote frames, J_A triggers a jump away from the last wall side
+        else if (!(level.isWaterLevel || nutmeg.isSwimming) && KEY_TICKED(J_A) && (nutmeg.isWallSliding || nutmeg.wallCoyoteFrames > 0)) {
+            // set velocities; allow held-away input to increase horizontal push
+            nutmeg.speedY = -wallJumpUpVel;
+            if (nutmeg.lastWallSide == left) {
+                // jumping to the right
+                bool pressingAway = KEY_PRESSED(J_RIGHT);
+                nutmeg.speedX = pressingAway ? wallJumpHorizVelStrong : wallJumpHorizVel;
+                nutmeg.direction = right;
+                THIS->mirror = NO_MIRROR;
+            } else {
+                // jumping to the left
+                bool pressingAway = KEY_PRESSED(J_LEFT);
+                nutmeg.speedX = pressingAway ? -wallJumpHorizVelStrong : -wallJumpHorizVel;
+                nutmeg.direction = left;
+                THIS->mirror = V_MIRROR;
+            }
+            nutmeg.isWallSliding = false;
+            nutmeg.wallCoyoteFrames = 0;
+            nutmeg.wallRegrabCooldown = kWallRegrabCooldown;
+            nutmeg.wallJumpGlideLock = kWallJumpGlideLock;
+            // allow held A to extend jump height like a normal jump
+            nutmeg.jumpPeak = 0;
+            // FX
+            PlayFx(CHANNEL_1, 5, 0x17, 0x9f, 0xf3, 0xc9, 0xc4);
+            // dust at feet
+            if (nutmeg.direction == right) {
+                SpriteManagerAdd(SpritePuff, THIS->x-2, THIS->y-2);
+            } else {
+                Sprite *r = SpriteManagerAdd(SpritePuff, THIS->x+10, THIS->y-2);
+                r->mirror = V_MIRROR;
+                r->custom_data[1] = 1;
+            }
+        }
 
+        // Handle wall sliding: auto when airborne and pressed against a wall
+        // Disabled in water and during death/invincibility knockback effects do not change this logic
+        if (!(level.isWaterLevel || nutmeg.isSwimming)) {
+            // Detect wall adjacency even without horizontal input by probing +/-1 pixel
+            bool contactLeft = false;
+            bool contactRight = false;
+            UINT8 hit;
+            // probe left
+            hit = TranslateSprite(THIS, -1, 0);
+            if (hit != 0) {
+                contactLeft = true;
+            } else {
+                // revert probe
+                TranslateSprite(THIS, 1, 0);
+            }
+            // probe right
+            hit = TranslateSprite(THIS, 1, 0);
+            if (hit != 0) {
+                contactRight = true;
+            } else {
+                TranslateSprite(THIS, -1, 0);
+            }
+
+            bool touchingAny = contactLeft || contactRight || (collisionX != 0);
+
+            if (touchingAny && nutmeg.wallRegrabCooldown == 0) {
+                nutmeg.isWallSliding = true;
+                if (contactLeft) nutmeg.wallSide = left; else if (contactRight) nutmeg.wallSide = right; else {
+                    // fallback based on previous horizontal move
+                    if (nutmeg.speedX >= 0) nutmeg.wallSide = right; else nutmeg.wallSide = left;
+                }
+                nutmeg.lastWallSide = nutmeg.wallSide;
+                nutmeg.wallCoyoteFrames = kWallCoyoteFrames;
+            } else {
+                if (!touchingAny) {
+                    if (nutmeg.wallCoyoteFrames > 0) nutmeg.wallCoyoteFrames--; else nutmeg.isWallSliding = false;
+                }
+            }
+            // Clamp fall speed while sliding
+            if (nutmeg.isWallSliding && nutmeg.speedY > wallSlideMaxFallY) {
+                nutmeg.speedY = wallSlideMaxFallY;
+            }
+        } else {
+            nutmeg.isWallSliding = false;
+            nutmeg.wallCoyoteFrames = 0;
+        }
+
+        // Disallow glide while actively wall sliding or during brief post-wall-jump lock
         nutmeg.isGliding = false;
         // Glide while holding A (jump) during a fall
-        if (KEY_PRESSED(J_A) && nutmeg.speedY > 0)
+        if (KEY_PRESSED(J_A) && nutmeg.speedY > 0 && !nutmeg.isWallSliding && nutmeg.wallJumpGlideLock == 0)
         {
             nutmeg.isGliding = true;
             // this will slow nutmeg down to 1 pixel drop per second
@@ -792,6 +917,7 @@ void update_aliveInControl (void)
                 nutmeg.speedY = nutmeg.speeds->fallGlideMaxY;
             }
         }
+        if (nutmeg.wallJumpGlideLock > 0) nutmeg.wallJumpGlideLock--;
 
     }
 
@@ -827,8 +953,24 @@ void update_aliveInControl (void)
     nutmeg.offsetY += nutmeg.speedY;
 
     INT8 delta = MoveX();
+    INT8 deltaX_for_wall = delta;
     // Do two movements to get colliders from both directions
     collisionX = TranslateSprite(THIS, delta, 0);
+    // 1-tile step-up smoothing: if blocked horizontally and on ground (not swimming), try to climb 1 tile and retry X
+    if (collisionX != 0 && nutmeg.movestate == grounded && !(level.isWaterLevel || nutmeg.isSwimming)) {
+        UINT8 upCollide = TranslateSprite(THIS, 0, -8);
+        if (upCollide == 0) {
+            // retry horizontal move after stepping up
+            collisionX = TranslateSprite(THIS, delta, 0);
+            if (collisionX != 0) {
+                // failed to move horizontally; drop back down to original height
+                TranslateSprite(THIS, 0, 8);
+            } else {
+                // success; we are now on top of the 1-tile ledge
+                nutmeg.movestate = grounded;
+            }
+        }
+    }
     delta = MoveY();
     collisionY = TranslateSprite(THIS, 0, delta);
 
@@ -859,6 +1001,16 @@ void update_aliveInControl (void)
     // Otherwise drag
     if (collisionX != 0) {
         nutmeg.speedX = 0;
+        // If airborne and not swimming, update wall contact for slide detection
+        if (nutmeg.movestate == inair && !(level.isWaterLevel || nutmeg.isSwimming)) {
+            if (deltaX_for_wall > 0) { nutmeg.lastWallSide = right; }
+            else if (deltaX_for_wall < 0) { nutmeg.lastWallSide = left; }
+            if (nutmeg.wallRegrabCooldown == 0) {
+                nutmeg.isWallSliding = true;
+                nutmeg.wallSide = nutmeg.lastWallSide;
+                nutmeg.wallCoyoteFrames = kWallCoyoteFrames;
+            }
+        }
         if ((level.isSpikeLevel == true) && (collisionX == 2))
         {
             // Get hit!
@@ -954,6 +1106,9 @@ void update_aliveInControl (void)
             if (nutmeg.movestate == inair) {
                 //PlayFx(CHANNEL_4, 4, 0x32, 0x71, 0x73, 0x80);
                 nutmeg.movestate = grounded;
+                // On landing, clear wall slide state
+                nutmeg.isWallSliding = false;
+                nutmeg.wallCoyoteFrames = 0;
             }
 
             nutmeg.speedY =  nutmeg.speeds->fallInitY;
@@ -1000,6 +1155,11 @@ void update_aliveInControl (void)
 
             kickbackcounter++;
         }
+    }
+
+    // Per-frame cooldowns for wall mechanics
+    if (nutmeg.wallRegrabCooldown > 0) {
+        nutmeg.wallRegrabCooldown--;
     }
 }
 
