@@ -349,6 +349,7 @@ void ResetState(void) {
     nutmeg.wallCoyoteFrames = 0;
     nutmeg.wallRegrabCooldown = 0;
     nutmeg.wallJumpGlideLock = 0;
+    nutmeg.pickupPauseFrames = 0;
 }
 
 
@@ -382,10 +383,8 @@ void Start_SpriteNutmeg(void) {
     // Ensure fresh entry state for each level
     nutmeg.isGliding = false;
     pitDeathLock = 0; // allow pit detection again in new level
-    // If coming from a death, do not auto-grant the bow, but also do not trigger drop state
-    // Bow will be re-acquired via a power-up in-level
+    // If coming from a death, do not auto-grant the bow; keep existing hasbow state
     if (nutmeg.isDying) {
-        nutmeg.hasbow = false;
         nutmeg.lostbow = false;
         nutmeg.bow_counter = 0;
     }
@@ -394,11 +393,11 @@ void Start_SpriteNutmeg(void) {
 // Create nutmeg sprite at x,y (and her bow if required)
 Sprite *nutmeg_Add (uint16_t x, uint16_t y) BANKED
 {
+	// Add bow first, then Nutmeg so Nutmeg is layered above bow by ZGB order
 	if (nutmeg.hasbow == true) {
 		spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, x, y);
 	}
-	
-    spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, x, y);
+	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, x, y);
     return spr_nutmeg;
 }
 
@@ -654,6 +653,15 @@ static void update_inCutscene(void)
 
 void update_aliveInControl (void)
 { 
+    // Freeze controls/motion during pickup pause
+    if (nutmeg.pickupPauseFrames > 0) {
+        nutmeg.pickupPauseFrames--;
+        // zero out velocities and offsets; leave gravity neutral so she hangs in-air
+        nutmeg.speedX = 0;
+        nutmeg.speedY = 0;
+        return;
+    }
+
     if (KEY_TICKED(J_START))	
 	{
         if (level_current == 0)
@@ -909,7 +917,7 @@ void update_aliveInControl (void)
         // Disallow glide while actively wall sliding or during brief post-wall-jump lock
         nutmeg.isGliding = false;
         // Glide while holding A (jump) during a fall
-        if (KEY_PRESSED(J_A) && nutmeg.speedY > 0 && !nutmeg.isWallSliding && nutmeg.wallJumpGlideLock == 0)
+        if (nutmeg.hasbow && KEY_PRESSED(J_A) && nutmeg.speedY > 0 && !nutmeg.isWallSliding && nutmeg.wallJumpGlideLock == 0)
         {
             nutmeg.isGliding = true;
             // this will slow nutmeg down to 1 pixel drop per second
@@ -1130,6 +1138,42 @@ void update_aliveInControl (void)
         }
     }
 
+	/* * * * * * * * * * * * * * * * * * * */
+	/*    clamp to visible screen bounds     */
+	/* * * * * * * * * * * * * * * * * * * */
+	{
+		INT16 screenX = (INT16)THIS->x - (INT16)scroll_x;
+		INT16 screenY = (INT16)THIS->y - (INT16)scroll_y;
+		const INT16 leftBound = 4;
+		const INT16 rightBound = 156; // 160px wide screen
+		const INT16 topBound = 8;
+
+		if (screenX < leftBound) {
+			THIS->x = (UINT16)((INT16)scroll_x + leftBound);
+			nutmeg.offsetX = 0;
+			if (nutmeg.speedX < 0) nutmeg.speedX = 0;
+			// don't allow wall slide on screen edges
+			nutmeg.isWallSliding = false;
+			nutmeg.wallCoyoteFrames = 0;
+		}
+		if (screenX > rightBound) {
+			THIS->x = (UINT16)((INT16)scroll_x + rightBound);
+			nutmeg.offsetX = 0;
+			if (nutmeg.speedX > 0) nutmeg.speedX = 0;
+			nutmeg.isWallSliding = false;
+			nutmeg.wallCoyoteFrames = 0;
+		}
+		if (screenY < topBound) {
+			THIS->y = (UINT16)((INT16)scroll_y + topBound);
+			// start falling back down
+			nutmeg.speedY = nutmeg.speeds->fallInitY;
+			nutmeg.jumpPeak = 1;
+			nutmeg.movestate = inair;
+			nutmeg.isWallSliding = false;
+			nutmeg.wallCoyoteFrames = 0;
+		}
+	}
+
 
     /* * * * * * * * * * * * * * * * * * * */
     /*      kickback from losing bow       */
@@ -1267,6 +1311,7 @@ void Update_SpriteNutmeg(void)
             // restore normal bottom clamp
             spr_nutmeg->lim_y = 144;
             pitDeathLock = 0; // allow future pit deaths next life
+            gameStats.totalDeaths++;
             if (nutmeg.lives == 0) {
                 GameOver = true;
                 SetState(StateGameOver);
@@ -1353,10 +1398,17 @@ void nutmeg_SetupGame(void) BANKED
 
     W1LevelSelection = 0;
 
-    nutmeg_setupNextLife();
-    // Ensure new game starts with a bow
-    nutmeg.hasbow = true;
+    // Start new game without a bow; collect it as a powerup in Level 1
+    nutmeg.hasbow = false;
     nutmeg.lostbow = false;
+    // reset global stats for a new game
+    gameStats.totalAcorns = 0;
+    gameStats.totalEnemyKills = 0;
+    gameStats.totalDamageTaken = 0;
+    gameStats.totalDeaths = 0;
+    gameStats.totalLevelsCompleted = 0;
+    gameStats.totalPowerups = 0;
+    nutmeg_setupNextLife();
 }
 
 // setup variables for the next life
@@ -1425,6 +1477,7 @@ void nutmeg_hit(void) BANKED
         nutmeg.isInvincible = true;
         nutmeg.hurtFlashCounter = 45; // extend invincibility for clearer feedback
         kickbackcounter = 0;
+        gameStats.totalDamageTaken++;
     }
     else if (nutmeg.health == low) {
         // Route low-health death through unified death init (plays quickdeath + anim)

@@ -53,8 +53,9 @@ static const UINT8 anim_nutmegbow_fall_left[]  = {1, 10};
 
 void Start_SpriteNutmegBow(void) 
 {
-	THIS->lim_x = 500;
-	THIS->lim_y = 144;
+	// Large limits so we can park the preload fully off-screen
+	THIS->lim_x = 5000;
+	THIS->lim_y = 5000;
 
 	SetSpriteAnim(THIS, anim_nutmegbow_idle_right, 5);
 	nutmeg.bowanim = 0;
@@ -109,6 +110,13 @@ static const INT8 Y_OFFSET_AT_COUNTER [] = {
 // can't use THIS, because it is called fromthe spr_nutmeg update fn
 void nutmegBow_update(void) BANKED 
 {
+    // If hidden preload, do nothing (keeps bow off-screen until enabled by pickup)
+    if (spr_nutmegbow && spr_nutmegbow->custom_data[0] == 2) {
+        // keep off-screen
+        spr_nutmegbow->x = 65527;
+        spr_nutmegbow->y = 240;
+        return;
+    }
     if (nutmeg.lostbow == false) {
         // In water (including pools), force a stable bow placement and static anim
         if (level.isWaterLevel || nutmeg.isSwimming) {
@@ -221,6 +229,12 @@ void Update_SpriteNutmegBow(void)
 	// If used as HUD overlay on overworld nut head, freeze one frame and don't follow Nutmeg
 	if (THIS->custom_data[0] == 1) {
 		SetSpriteAnim(THIS, anim_nutmegbow_static, 1);
+		return;
+	}
+	// Hidden mode for in-level preloaded bow to control draw order; keep off-screen and do not draw or follow
+	if (THIS->custom_data[0] == 2) {
+		THIS->x = 65527; // far off left
+		THIS->y = 0;
 		return;
 	}
 	// updates are done from the spr_nutmeg in levels

@@ -523,6 +523,7 @@ void Start_StateOverworld (void) {
 		{
 			// update the max
 			level_max = level_current+1;
+			gameStats.totalLevelsCompleted++;
 
 			// start moving towads the new level
 			startAutoMoveTowards (level_max);

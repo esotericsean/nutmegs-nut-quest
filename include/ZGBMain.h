@@ -45,6 +45,7 @@ _SPRITE_COLOR(EnemyBunny, bunny)\
 _SPRITE_COLOR(SpriteCamera, camera)\
 _SPRITE_COLOR(SpriteNutmegTiny, nutmegtiny)\
 _SPRITE_COLOR(SpriteNutHead, nuthead)\
+_SPRITE_COLOR(SpriteOneUp, nuthead)\
 _SPRITE_COLOR(SpriteStar, star)\
 _SPRITE_COLOR(SpritePuff, puff)\
 _SPRITE_COLOR(SpriteCinnamon, cinnamon)\
@@ -67,6 +68,7 @@ _SPRITE_COLOR(SpriteGordonCamera, camera)\
 _SPRITE_COLOR(SpritePowerLeaf, powerleaf)\
 _SPRITE_COLOR(SpriteMushroom, mushroom)\
 _SPRITE_COLOR(SpriteNutmegBow, nutmegbow)\
+_SPRITE_COLOR(SpriteBowPickup, nutmegbow)\
 _SPRITE_COLOR(EnemyRockith, rockith)\
 _SPRITE_COLOR(EnemyTopSpike, topspike)\
 _SPRITE_COLOR(SpriteNutmeg, nutmegSpr)\

@@ -1,9 +1,16 @@
 #ifndef GLOBALVARS_H_
 #define GLOBALVARS_H_
 
+// Pull Sprite typedef/tag from engine for correct type matching
+#include "SpriteManager.h"
+
 //random typedefs
 
+// Avoid redefining bool if included elsewhere
+#ifndef __BOOLEAN_DEFINED
 typedef enum { false, true } bool;
+#define __BOOLEAN_DEFINED
+#endif
 typedef enum { grounded, inair } move_state;
 typedef enum { disabled, enabled  } switcher;
 typedef enum { right, left } direction;
@@ -133,6 +140,9 @@ typedef struct Nutmeg {
 	UINT8 wallRegrabCooldown;
 	// short lock to prevent immediate glide right after wall jump
 	UINT8 wallJumpGlideLock;
+
+	// pause frames when picking up a powerup (freezes movement even midair)
+	UINT8 pickupPauseFrames;
 } NutmegT;
 
 extern NutmegT nutmeg;
@@ -192,6 +202,24 @@ extern bool GameOver;
 
 //which direction is gordon facing
 extern direction gordon_direction;
+
+// Global game stats (persist across levels until new game)
+typedef struct GameStats {
+    // Total acorns collected across the whole game
+    UINT32 totalAcorns;
+    // Total enemies defeated (any kill source)
+    UINT32 totalEnemyKills;
+    // Number of times the player took damage (hit events)
+    UINT32 totalDamageTaken;
+    // Total deaths (life losses)
+    UINT32 totalDeaths;
+    // Total completed levels (incremented when returning to overworld after a clear)
+    UINT32 totalLevelsCompleted;
+    // Total powerups collected (bow, 1-ups, etc.)
+    UINT32 totalPowerups;
+} GameStatsT;
+
+extern GameStatsT gameStats;
 
 
 

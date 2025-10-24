@@ -59,7 +59,8 @@ void Update_EnemyBatty(void) {
 				AddStarPair (THIS->x - 6, THIS->y+1);
 			}
 
-			SpriteManagerRemoveSprite (THIS);
+            SpriteManagerRemoveSprite (THIS);
+            gameStats.totalEnemyKills++;
 		}
 		else
 		{

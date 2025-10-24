@@ -116,9 +116,11 @@ void Start_StateWaterLevel1 (void) {
 
 	SPRITES_8x16;
 	
-	PlayMusic(quickstart, 1);
+    PlayMusic(quickstart, 1);
+    // Preload hidden bow sprite to fix draw order, only if bow not owned (off-screen)
+    if (!nutmeg.hasbow) { Sprite* preload = SpriteManagerAdd(SpriteNutmegBow, 65527, 0); preload->custom_data[0] = 2; }
 
-	scroll_target = nutmeg_Add(4, 49);
+    scroll_target = nutmeg_Add(4, 49);
 
 	InitScrollTiles(0, &waterLevelTiles);
 	InitScroll(BANK(waterLevel1Map), &waterLevel1Map, collision_tiles, collision_tiles_down);
@@ -180,6 +182,33 @@ void Update_StateWaterLevel1 (void)
 
 		levelEndCounter++;
 	}
+
+    // Treat spike-ball background tile (ID 2) as damaging on contact
+    if (!nutmeg.isDying) {
+        UINT16 xLeft = spr_nutmeg->x + 2;
+        UINT16 xRight = spr_nutmeg->x + 10;
+        UINT16 yHead = (spr_nutmeg->y > 8) ? spr_nutmeg->y - 8 : 0;
+        UINT16 yWaist = spr_nutmeg->y;
+        UINT16 yFeet = spr_nutmeg->y + 12;
+
+        // Map to visible BG indices (wraps to 32x32 in VRAM)
+        UINT8 txL = (UINT8)((xLeft >> 3) & 31);
+        UINT8 txR = (UINT8)((xRight >> 3) & 31);
+        UINT8 tyH = (UINT8)((yHead >> 3) & 31);
+        UINT8 tyW = (UINT8)((yWaist >> 3) & 31);
+        UINT8 tyF = (UINT8)((yFeet >> 3) & 31);
+
+        UINT8 id = 0;
+        // head left/right
+        get_bkg_tiles(txL, tyH, 1, 1, &id); if (id == 2) { nutmeg_hit(); }
+        get_bkg_tiles(txR, tyH, 1, 1, &id); if (id == 2) { nutmeg_hit(); }
+        // waist
+        get_bkg_tiles(txL, tyW, 1, 1, &id); if (id == 2) { nutmeg_hit(); }
+        get_bkg_tiles(txR, tyW, 1, 1, &id); if (id == 2) { nutmeg_hit(); }
+        // feet
+        get_bkg_tiles(txL, tyF, 1, 1, &id); if (id == 2) { nutmeg_hit(); }
+        get_bkg_tiles(txR, tyF, 1, 1, &id); if (id == 2) { nutmeg_hit(); }
+    }
 
     // stop nutmeg from moving off the top of the screen
     if (spr_nutmeg->y < 2)

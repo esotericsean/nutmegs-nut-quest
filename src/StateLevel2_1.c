@@ -56,9 +56,10 @@ void Start_StateLevel2_1 (void) {
 
 	SPRITES_8x16;
 
-	__critical { PlayMusic(quickstart, 1); }
+    __critical { PlayMusic(quickstart, 1); }
+    if (!nutmeg.hasbow) { Sprite* preload = SpriteManagerAdd(SpriteNutmegBow, 65527, 0); preload->custom_data[0] = 2; }
 
-	scroll_target = nutmeg_Add (4, 49);
+    scroll_target = nutmeg_Add (4, 49);
 
 	// TEST OUT A PLATFORM
 	SpriteManagerAdd(SpritePlatform, 14*8, 18*8);

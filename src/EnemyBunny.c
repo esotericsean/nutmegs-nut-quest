@@ -84,6 +84,7 @@ void Update_EnemyBunny(void) {
 			}
 
 			SpriteManagerRemoveSprite (THIS);
+			gameStats.totalEnemyKills++;
 		}
 		else
 		{

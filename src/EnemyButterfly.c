@@ -87,6 +87,7 @@ void Update_EnemyButterfly(void) {
 			AddStarPairWide (THIS->x-4, THIS->y);
 
 			SpriteManagerRemoveSprite (THIS);
+			gameStats.totalEnemyKills++;
 		}
 		else
 		{

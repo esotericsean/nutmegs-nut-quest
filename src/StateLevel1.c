@@ -62,8 +62,9 @@ void Start_StateLevel1(void)
 
 	PlayMusic(quickstart, 1);
 
-	//start the game off with a bow (full health)
-	scroll_target = nutmeg_Add(4, 49);
+    // Preload a hidden bow sprite first (only if we don't already have the bow). Spawn far off-screen, below the view.
+    if (!nutmeg.hasbow) { Sprite* preload = SpriteManagerAdd(SpriteNutmegBow, 65527, 240); preload->custom_data[0] = 2; }
+    scroll_target = nutmeg_Add(4, 49);
 
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level1map), &level1map, collision_tiles_level1, collision_tiles_down_level1);
@@ -71,6 +72,14 @@ void Start_StateLevel1(void)
 	Hud_Init();
 	FlagPole_Init();
 	LevelStart_Init(7,5);
+
+    // Place bow powerup slightly left and higher to avoid wall overlap
+    // New approx tile (70, 2) => x=560, y=16
+    SpriteManagerAdd(SpriteBowPickup, (UINT16)560, (UINT16)16);
+
+    // Place a 1-UP (Nutmeg head) early in the level at a safe spot
+    // Approx tile (40, 3) => x=320, y=24
+    SpriteManagerAdd(SpriteOneUp, (UINT16)320, (UINT16)24);
 
 	SHOW_SPRITES;
 	SHOW_BKG;
