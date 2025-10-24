@@ -39,9 +39,10 @@ static const LevelT levelInfo = {
 	.isWaterLevel = false,
 	.isSpikeLevel = false,
 
-	// Min and max tile number for slippery ice tiles (set to NO_ICE_TILES for no ice)
+	// No ice tiles and no solid water tiles in this boss level
 	.iceTileMin = NO_ICE_TILES,
 	.iceTileMax = NO_ICE_TILES,
+	.waterSolidTileId = 0, // 0 means use default in code; we will override below at start
 
 	// vertical or horizontal Level
 	.orientation = horizontal,
@@ -55,11 +56,13 @@ static const LevelT levelInfo = {
 
 void Start_StateW1Boss (void) 
 {
-	level = levelInfo;
+    level = levelInfo;
+    // Explicitly disable solid water tile detection and overworld HUD in this level
+    level.isOverworld = false;
+    level.waterSolidTileId = NO_ICE_TILES;
 
-	nut_region = 0;
-	cutscenemode = enabled;
-	cutscenemode = disabled;
+    nut_region = 0;
+    cutscenemode = disabled;
 
 	PlayMusic(thehands2, 1);
 

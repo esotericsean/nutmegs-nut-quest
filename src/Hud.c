@@ -74,9 +74,11 @@ static void updateTimeOnHud(void)
 
 void Hud_Init(void) BANKED
 {
-    if (level.hasTimer == false)
+    if (level.isOverworld)
     {
         INIT_HUD(hudboss);
+        // Show tiny nut head and X/lives for overworld only
+        UPDATE_HUD_TILE (2, 0, 3); // 'X' tile index in HUD tileset
     }
     else
     {
@@ -156,7 +158,7 @@ void Hud_Update(void) BANKED
     }
 
     // Overworld: show bow on tiny nutmeg head if possessed
-    if (level.hasTimer == false) // overworld HUD variant
+    if (level.isOverworld) // overworld HUD variant
     {
         // The HUD tileset packs the tiny head at a fixed tile; set an attribute tile next to it
         // If your tiles for head-with-bow differ, replace indices below
@@ -174,7 +176,7 @@ void Hud_Update(void) BANKED
         UPDATE_HUD_TILE (18, 0, 6 + ones);
     }
     
-    if (level.hasTimer == false)
+    if (level.isOverworld)
     {
         // all done if we aren't tracking time
         return;

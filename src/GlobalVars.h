@@ -157,6 +157,9 @@ typedef struct {
 	// Is the level a water level?
 	bool isWaterLevel;
 
+	// Is this the overworld (map) state? Used for HUD behavior
+	bool isOverworld;
+
 	// if it is a spike level, and collision hurts nutmeg
 	bool isSpikeLevel;
 

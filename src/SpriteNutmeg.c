@@ -167,6 +167,8 @@ static const INT16 wallJumpHorizVelStrong = 240;// stronger push if pressing awa
 static const UINT8 kWallCoyoteFrames = 4;       // grace frames after leaving wall
 static const UINT8 kWallRegrabCooldown = 10;    // frames before we can slide again after a wall jump
 static const UINT8 kWallJumpGlideLock = 6;      // frames to block glide after a wall jump
+// Debounce Start button across state transitions to avoid starting paused
+static UINT8 pause_input_lock_frames = 0;
 static void nutmeg_begin_death(void) {
     if (nutmeg.isDying) return;
     nutmeg.isDying = true;
@@ -204,6 +206,11 @@ static void DetectSwimmingSolidWater(void) {
     // In dedicated water levels, always be in swim mode
     if (level.isWaterLevel) {
         nutmeg.isSwimming = true;
+        return;
+    }
+    // Allow per-level override: when set to NO_ICE_TILES (255), disable solid-water swim detection entirely
+    if (level.waterSolidTileId == NO_ICE_TILES) {
+        nutmeg.isSwimming = false;
         return;
     }
     // Sample deeper into the body and across width to detect solid water fill
@@ -350,6 +357,8 @@ void ResetState(void) {
     nutmeg.wallRegrabCooldown = 0;
     nutmeg.wallJumpGlideLock = 0;
     nutmeg.pickupPauseFrames = 0;
+    isPaused = false;
+    pause_input_lock_frames = 8; // small grace to ignore stale START during transitions
 }
 
 
@@ -662,7 +671,8 @@ void update_aliveInControl (void)
         return;
     }
 
-    if (KEY_TICKED(J_START))	
+    if (pause_input_lock_frames > 0) { pause_input_lock_frames--; }
+    if ((pause_input_lock_frames == 0) && KEY_TICKED(J_START)) 
 	{
         if (level_current == 0)
         {

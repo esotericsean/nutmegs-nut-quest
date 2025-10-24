@@ -472,6 +472,7 @@ void Start_StateOverworld (void) {
 		overworldNum = 1;
 		currentMapSteps = steps_ow1;
 		InitScroll(BANK(overworld1map), &overworld1map, collision_tiles_overworld1, 0);
+		level.isOverworld = true;
 		unlockedPalette = 6;
 		bossLevel = 9;
 	}
@@ -482,6 +483,7 @@ void Start_StateOverworld (void) {
 		overworldNum = 2;
 		currentMapSteps = steps_ow2;
 		InitScroll(BANK(overworld2map), &overworld2map, collision_tiles_overworld1, 0);
+		level.isOverworld = true;
 		unlockedPalette = 7;
 		bossLevel = 19;
 	} else
@@ -489,6 +491,7 @@ void Start_StateOverworld (void) {
 		overworldNum = 3;
 		currentMapSteps = steps_ow3;
 		InitScroll(BANK(overworld3map), &overworld3map, collision_tiles_overworld1, 0);
+		level.isOverworld = true;
 		unlockedPalette = 3;
 		bossLevel = 25;
 	}
