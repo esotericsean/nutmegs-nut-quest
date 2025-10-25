@@ -660,6 +660,17 @@ static void update_inCutscene(void)
     }
 }
 
+static void try_quit_to_overworld(void)
+{
+    if ((level.isOverworld == false) && (level_current < level_max) && (nutmeg.isDying == false))
+    {
+        StopMusic;
+        isPaused = false;
+        rWY = 144-8;
+        SetState(StateOverworld);
+    }
+}
+
 void update_aliveInControl (void)
 { 
     // Freeze controls/motion during pickup pause
@@ -672,6 +683,12 @@ void update_aliveInControl (void)
     }
 
     if (pause_input_lock_frames > 0) { pause_input_lock_frames--; }
+    // Start + Select held together: quick return to overworld on replayed levels
+    if (KEY_PRESSED(J_START) && KEY_PRESSED(J_SELECT))
+    {
+        try_quit_to_overworld();
+        return;
+    }
     if ((pause_input_lock_frames == 0) && KEY_TICKED(J_START)) 
 	{
         if (level_current == 0)

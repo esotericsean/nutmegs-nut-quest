@@ -236,6 +236,17 @@ void main(void) {
 			
 			if (isPaused == true)
 			{
+				// While paused, allow Select to return to overworld if replaying a beaten level
+				if (KEY_PRESSED(J_SELECT))
+				{
+					if ((level_current < level_max) && (state_running))
+					{
+						isPaused = false;
+						rWY = 144-8;
+						SetState(StateOverworld);
+						continue;
+					}
+				}
 				if (KEY_TICKED(J_START))	
 				{
 					isPaused = false;
