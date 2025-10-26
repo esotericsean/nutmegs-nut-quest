@@ -28,6 +28,7 @@ void Start_StateIncube8(void)
     SPRITES_8x8;
 
     PlayMusic(incube8, 1);
+    // SfxSeq_Init(); // temporarily disabled to isolate white screen
 
     SpriteManagerAdd(SpriteIncube8G, 97, 84+8);
     SpriteManagerAdd(SpriteIncube8A, 97+11, 84+8);

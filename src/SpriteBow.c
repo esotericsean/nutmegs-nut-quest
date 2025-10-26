@@ -3,6 +3,7 @@
 #include "ZGBMain.h"
 #include "SpriteManager.h"
 #include "GlobalVars.h"
+#include "Sfx.h"
 
 extern Sprite * spr_nutmeg;
 extern Sprite * spr_nutmegbow;
@@ -37,7 +38,7 @@ void Update_SpriteBow(void)
         }
 
         // SFX
-        PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
+        Sfx_Pickup();
 
         // Remove pickup sprite
         SpriteManagerRemoveSprite(THIS);

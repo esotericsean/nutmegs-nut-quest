@@ -144,6 +144,10 @@ void Start_StateLevel6 (void)
 	LevelStart_Init(7,5);
 
 	SPRITES_8x16;
+#ifdef CGB
+	// Make camera palette (slot 7) fully white so its pixels render transparent on CGB
+	{ static const UWORD pal_transparent_allwhite[] = { RGB(31,31,31), RGB(31,31,31), RGB(31,31,31), RGB(31,31,31) }; SetPalette(SPRITES_PALETTE, 7, 1, pal_transparent_allwhite, _current_bank); }
+#endif
 	SHOW_SPRITES;
 	SHOW_BKG;
 }
@@ -239,55 +243,56 @@ void Update_StateLevel6 (void)
 	if (spr_camera->x > 72*8 && spr_camera->x < 73*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_lighter6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 3, 1, pal_acorn_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 4, 1, pal_birdy_lighter6, _current_bank);
+		// Copy OBJ1 (nutmeg original) lightening to OBJ2 (nutmeg slot) for correct orange, not red
+		SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 4, 1, pal_balloon_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 5, 1, pal_acorn_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 6, 1, pal_birdy_lighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 0, 1, pal_yellow_lighter6, _current_bank);
 	}
 	else if (spr_camera->x > 74*8 && spr_camera->x < 75*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_evenlighter6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 3, 1, pal_acorn_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 4, 1, pal_birdy_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 4, 1, pal_balloon_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 5, 1, pal_acorn_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 6, 1, pal_birdy_evenlighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 0, 1, pal_yellow_evenlighter6, _current_bank);
 	}
 	else if (spr_camera->x > 76*8 && spr_camera->x < 77*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_lightest6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_lightest6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lightest6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_lightest6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 3, 1, pal_acorn_lightest6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 4, 1, pal_birdy_lightest6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_lightest6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 4, 1, pal_balloon_lightest6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 5, 1, pal_acorn_lightest6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 6, 1, pal_birdy_lightest6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 0, 1, pal_yellow_lightest6, _current_bank);
 	}
 	else if (spr_camera->x > 210*8 && spr_camera->x < 211*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_evenlighter6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 3, 1, pal_acorn_evenlighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 4, 1, pal_birdy_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 4, 1, pal_balloon_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 5, 1, pal_acorn_evenlighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 6, 1, pal_birdy_evenlighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 0, 1, pal_yellow_evenlighter6, _current_bank);
 	}
 	else if (spr_camera->x > 212*8 && spr_camera->x < 213*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_lighter6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 3, 1, pal_acorn_lighter6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 4, 1, pal_birdy_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 4, 1, pal_balloon_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 5, 1, pal_acorn_lighter6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 6, 1, pal_birdy_lighter6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 0, 1, pal_yellow_lighter6, _current_bank);
 	}
 	else if (spr_camera->x > 214*8 && spr_camera->x < 215*8) {
 		SetPalette(BG_PALETTE, 0, 1, pal_grass_original6, _current_bank);
 		SetPalette(BG_PALETTE, 5, 1, pal_wood_original6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 1, 1, pal_nutmeg_original6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 2, 1, pal_balloon_original6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 3, 1, pal_acorn_original6, _current_bank);
-		SetPalette(SPRITES_PALETTE, 4, 1, pal_birdy_original6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 2, 1, pal_nutmeg_original6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 4, 1, pal_balloon_original6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 5, 1, pal_acorn_original6, _current_bank);
+		SetPalette(SPRITES_PALETTE, 6, 1, pal_birdy_original6, _current_bank);
 		SetPalette(SPRITES_PALETTE, 0, 1, pal_yellow_original6, _current_bank);
 	}
 

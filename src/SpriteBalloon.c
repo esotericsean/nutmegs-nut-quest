@@ -3,6 +3,7 @@
 #include "Scroll.h"
 #include "SpriteManager.h"
 #include "Sound.h"
+#include "Sfx.h"
 #include "../src/GlobalVars.h"
 
 extern Sprite * spr_nutmeg;
@@ -68,19 +69,20 @@ void Update_SpriteBalloon(void)
 	}
 
 	// jumped twice
-	else if (balloonjump == 2) {
-		SetSpriteAnim(THIS, anim_balloon_popped, 20);
+    else if (balloonjump == 2) {
+        SetSpriteAnim(THIS, anim_balloon_popped, 20);
 
-		if (balloonpopcount < 25) balloonpopcount++;
+        if (balloonpopcount == 0) { Sfx_BalloonPop(); }
+        if (balloonpopcount < 25) balloonpopcount++;
 
-		if (balloonpopcount >= 20) {
-			SetSpriteAnim(THIS, anim_balloon_empty, 1);
-			SpriteManagerRemoveSprite (THIS);
-		}
-	}
+        if (balloonpopcount >= 20) {
+            SetSpriteAnim(THIS, anim_balloon_empty, 1);
+            SpriteManagerRemoveSprite (THIS);
+        }
+    }
 
-	if (CheckCollision(THIS, spr_nutmeg)) {
-		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+    if (CheckCollision(THIS, spr_nutmeg)) {
+        if (balloonjump < 2) { Sfx_Stomp(); }
 		nutmeg.jumpPeak = 0;
 		nutmeg.movestate = inair;
 

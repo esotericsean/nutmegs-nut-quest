@@ -1,6 +1,7 @@
 #include "Banks/SetAutoBank.h"
 #include "ZGBMain.h"
 #include "Scroll.h"
+#include "Sfx.h"
 #include "SpriteManager.h"
 #include "Sound.h"
 #include "../src/GlobalVars.h"
@@ -46,7 +47,7 @@ void Update_EnemyBatty(void) {
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
 		{
-			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+            PlayFx(CHANNEL_1, 6, 0x10, 0xC7, 0xE3, 0xAE, 0x86);
 			nutmeg.speedY = -nutmeg.enemyBounceY;
 			nutmeg.jumpPeak = 0;
 			

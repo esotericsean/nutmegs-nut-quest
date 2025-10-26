@@ -3,6 +3,8 @@
 #include "SpriteManager.h"
 #include "ZGBMain.h"
 #include "GlobalVars.h"
+#include "Sfx.h"
+#include "SfxChain.h"
 
 extern Sprite * spr_nutmeg;
 extern Sprite * spr_nutmegbow;
@@ -69,8 +71,8 @@ void Update_SpriteBowPickup(void) {
             spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, spr_nutmeg->x, spr_nutmeg->y);
         }
 
-        // SFX
-        PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
+        // SFX: magical 3-note twinkle
+        SfxChain_Start(4, 2);
         gameStats.totalPowerups++;
 
         // Remove pickup

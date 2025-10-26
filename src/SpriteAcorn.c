@@ -2,6 +2,7 @@
 #include "Sound.h"
 #include "SpriteManager.h"
 #include "GlobalVars.h"
+#include "Sfx.h"
 
 extern Sprite * spr_nutmeg;
 
@@ -52,7 +53,7 @@ void Update_SpriteAcorn(void)
 	}
 
 	if (CheckCollision(THIS, spr_nutmeg)) {
-		PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
+        Sfx_Pickup();
         nutmeg.acorns++;
         gameStats.totalAcorns++;
 		SpriteManagerRemoveSprite (THIS);

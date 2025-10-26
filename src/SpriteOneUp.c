@@ -3,6 +3,8 @@
 #include "SpriteManager.h"
 #include "ZGBMain.h"
 #include "GlobalVars.h"
+#include "Sfx.h"
+#include "SfxChain.h"
 
 extern Sprite * spr_nutmeg;
 
@@ -42,7 +44,8 @@ void Update_SpriteOneUp(void) {
         nutmeg.pickupPauseFrames = 16;
         nutmeg.isInvincible = true;
         nutmeg.hurtFlashCounter = 16;
-        PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
+        // Distinct 1-up jingle: C-E-G-C'
+        SfxChain_Start(3, 2);
         gameStats.totalPowerups++;
         SpriteManagerRemoveSprite(THIS);
         return;

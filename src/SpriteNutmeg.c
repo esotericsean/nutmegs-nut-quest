@@ -8,6 +8,8 @@
 #include "Palette.h"
 #include "SpriteManager.h"
 #include "Sprite.h"
+#include "Sfx.h"
+#include "SfxChain.h"
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
 
@@ -263,7 +265,7 @@ static void DetectSwimmingSolidWater(void) {
         SpriteManagerAdd(SpritePuff, spr_nutmeg->x-2, spr_nutmeg->y-6);
         SpriteManagerAdd(SpritePuff, spr_nutmeg->x+10, spr_nutmeg->y-6);
         // splash sfx (enter)
-        PlayFx(CHANNEL_4, 14, 0x30, 0xF2, 0x62, 0x80);
+        Sfx_WaterEnter();
         // switch to blue palette when entering swim
         SetPalette(SPRITES_PALETTE, SPRITE_GET_CGB_PALETTE(spr_nutmeg), 1, pal_nutmeg_blue, _current_bank);
         // allow falling out of deep water by removing bottom clamp while swimming
@@ -282,7 +284,7 @@ static void DetectSwimmingSolidWater(void) {
             swim_exit_boost_window = 6; // short grace to ensure boost if sampled next frame
             SpriteManagerAdd(SpritePuff, spr_nutmeg->x-2, spr_nutmeg->y-6);
             SpriteManagerAdd(SpritePuff, spr_nutmeg->x+10, spr_nutmeg->y-6);
-            PlayFx(CHANNEL_4, 10, 0x20, 0xF2, 0x72, 0x80);
+            Sfx_WaterExit();
         } else {
             // No grace boost window when exiting at bottom or while falling
             swim_exit_boost_window = 0;
@@ -697,8 +699,8 @@ void update_aliveInControl (void)
         }
         else
         {
-    		isPaused = true;
-		    rWY = 144-24;
+            isPaused = true;
+            rWY = 144-24;
             return;
         }
 	}
@@ -798,8 +800,12 @@ void update_aliveInControl (void)
             // Always carry momentum a bit longer in air after any jump (feels better)
             ice_air_brake_counter = 12; // ~12 frames of reduced air braking
             
-            //PlayFx(CHANNEL_1, 5, 0x71, 0x03, 0x44, 0xc8, 0x80);
-            PlayFx(CHANNEL_1, 5, 0x17, 0x9f, 0xf3, 0xc9, 0xc4);
+            // SFX: Use underwater stroke sound in water levels, else regular jump
+            if (level.isWaterLevel || nutmeg.isSwimming) {
+                Sfx_WaterStroke();
+            } else {
+                Sfx_Jump();
+            }
 
             //display a puff when jumping
             if (nutmeg.direction == right) {
@@ -838,8 +844,8 @@ void update_aliveInControl (void)
             nutmeg.jumpPeak = 0;
             nutmeg.movestate = inair;
             
-            //PlayFx(CHANNEL_1, 5, 0x71, 0x03, 0x44, 0xc8, 0x80);
-            PlayFx(CHANNEL_1, 5, 0x17, 0x9f, 0xf3, 0xc9, 0xc4);
+            // Underwater stroke SFX
+            Sfx_WaterStroke();
 
             //display a puff when jumping
             if (nutmeg.direction == right) {

@@ -11,6 +11,55 @@
 #include "BankManager.h"
 #include "Fade.h"
 #include "Palette.h"
+#include "Sfx.h"
+#include "SfxChain.h"
+
+// --- Minimal frame-gated SFX chain (no banks, no pointers) ---
+typedef struct {
+    UINT8 active;
+    UINT8 step;
+    UINT8 timer;
+    UINT8 period;
+    UINT8 which; // 1=pauseUp,2=pauseDown,3=oneUp,4=bow
+} SfxChainT;
+static SfxChainT sfxChain;
+
+void SfxChain_Start(UINT8 which, UINT8 period) {
+    sfxChain.active = 1; sfxChain.step = 0; sfxChain.timer = 0; sfxChain.period = period; sfxChain.which = which;
+}
+
+static void SfxChain_Tick(void) {
+    if (!sfxChain.active) return;
+    if (sfxChain.timer) { sfxChain.timer--; return; }
+    // sequences use CH1: len, sweep, duty, env, freq
+    if (sfxChain.which == 1) { // pause up: longer notes
+        switch (sfxChain.step++) {
+            case 0: PlayFx(CHANNEL_2, 10, 0x00, 0x1C, 0x96, 0xA0, 0x86); break;
+            case 1: PlayFx(CHANNEL_2, 10, 0x00, 0x1C, 0x96, 0xA8, 0x86); break;
+            case 2: PlayFx(CHANNEL_2, 12, 0x00, 0x1C, 0x96, 0xB0, 0x86); sfxChain.active = 0; break;
+        }
+    } else if (sfxChain.which == 2) { // pause down: longer notes
+        switch (sfxChain.step++) {
+            case 0: PlayFx(CHANNEL_2, 10, 0x00, 0x1C, 0x96, 0xB0, 0x86); break;
+            case 1: PlayFx(CHANNEL_2, 10, 0x00, 0x1C, 0x96, 0xA8, 0x86); break;
+            case 2: PlayFx(CHANNEL_2, 12, 0x00, 0x1C, 0x96, 0xA0, 0x86); sfxChain.active = 0; break;
+        }
+    } else if (sfxChain.which == 3) { // one-up: C-E-G-C'
+        switch (sfxChain.step++) {
+            case 0: PlayFx(CHANNEL_1, 10, 0x10, 0xC7, 0xE4, 0x9C, 0x86); break;
+            case 1: PlayFx(CHANNEL_1, 10, 0x10, 0xC7, 0xE4, 0xA6, 0x86); break;
+            case 2: PlayFx(CHANNEL_1, 10, 0x10, 0xC7, 0xE4, 0xB0, 0x86); break;
+            case 3: PlayFx(CHANNEL_1, 14, 0x10, 0xC7, 0xE4, 0xBC, 0x86); sfxChain.active = 0; break;
+        }
+    } else if (sfxChain.which == 4) { // bow: 3-note twinkle
+        switch (sfxChain.step++) {
+            case 0: PlayFx(CHANNEL_1, 10, 0x10, 0xC7, 0xE4, 0xA2, 0x86); break;
+            case 1: PlayFx(CHANNEL_1, 10, 0x10, 0xC7, 0xE4, 0xAC, 0x86); break;
+            case 2: PlayFx(CHANNEL_1, 14, 0x10, 0xC7, 0xE4, 0xB6, 0x86); sfxChain.active = 0; break;
+        }
+    }
+    sfxChain.timer = sfxChain.period;
+}
 #include <gb/cgb.h>
 
 #include "ZGBMain.h"
@@ -218,7 +267,8 @@ void main(void) {
 			// FadeOut (from white to our real colors)
 			// This takes a second, so update the sprite manager one time,
 			// so our starting sprites are on the screne during the fade
-			SpriteManagerUpdate();
+            SpriteManagerUpdate();
+            SfxChain_Tick();
 			DISPLAY_ON;
 			FadeOut();
 		}
@@ -232,7 +282,8 @@ void main(void) {
 			delta_time = vbl_count == 1u ? 0u : 1u;
 			vbl_count = 0;
 
-			UPDATE_KEYS();
+                UPDATE_KEYS();
+                SfxChain_Tick();
 			
 			if (isPaused == true)
 			{
@@ -255,6 +306,7 @@ void main(void) {
 			}
 			else
 			{
+				// Do not touch music here; states control PlayMusic on unpause. This prevents rogue tones during pause.
 				SpriteManagerUpdate();
 				PUSH_BANK(stateBanks[current_state]);
 					updateFuncs[current_state]();
