@@ -69,8 +69,7 @@ void Start_StateLevel1(void)
 	InitScrollTiles(0, &level1tiles);
 	InitScroll(BANK(level1map), &level1map, collision_tiles_level1, collision_tiles_down_level1);
 	
-	Hud_Init();
-	FlagPole_Init();
+    Hud_Init();
 	LevelStart_Init(7,5);
 
     // Place bow powerup slightly left and higher to avoid wall overlap
@@ -81,8 +80,8 @@ void Start_StateLevel1(void)
     // Approx tile (40, 3) => x=320, y=24
     SpriteManagerAdd(SpriteOneUp, (UINT16)320, (UINT16)24);
 
-	SHOW_SPRITES;
-	SHOW_BKG;
+    SHOW_SPRITES;
+    SHOW_BKG;
 }
 
 void Update_StateLevel1(void) 
@@ -116,32 +115,26 @@ void Update_StateLevel1(void)
 		if (levelStartCounter < 105) levelStartCounter++;
 	}
 
-	Water_Animate();
+    Water_Animate();
 
-	FlagPole_Animate();
-
-	//animate pink flagpole
-	if (levelbeat == true) {
-		cutscenemode = enabled;
-		cutscenewalkright = true;
-		cutscenewalkleft = false;
-	
-		if (levelEndCounter >= 100) {
-			SetState(StateOverworld);
-		}
-
-		if (levelEndCounter < 250) levelEndCounter++;
-
-	}
-
-	if (spr_nutmeg->x >= 1936 && spr_nutmeg->x < 1944 && levelbeat == false && nutmeg.isDying == false) {
-		FlagPole_Activate(244,13);
-
-		levelbeat = true;
-		levelEndCounter = 0;
-		cutscenemode = enabled;
-		cutscenewalkright = true;
-	}
+    // Door detection at end of level: 2x3 door made of tiles: top arc (115) and solid black (116)
+    // Trigger: press Up while overlapping bottom row of the door
+    {
+        UINT16 px = spr_nutmeg->x;
+        UINT16 py = spr_nutmeg->y;
+        UINT8 tx = (UINT8)(px >> 3);
+        UINT8 ty = (UINT8)((py + 8) >> 3); // feet row
+        UINT8 tBelow = GetScrollTile(tx, ty);
+        UINT8 tBelowR = GetScrollTile(tx + 1, ty);
+        UINT8 tMid = GetScrollTile(tx, ty - 1);
+        UINT8 tMidR = GetScrollTile(tx + 1, ty - 1);
+        bool onDoor = ((tBelow == 116) || (tBelowR == 116) || (tMid == 116) || (tMidR == 116));
+        if (onDoor && KEY_TICKED(J_UP)) { 
+            stop_music_on_new_state = 0; // keep music running across 1-1 -> 1-1b
+            SetState(StateLevel1b); 
+            return; 
+        }
+    }
 
 	/*  REGIONS  */
 	// 0 = 0-250

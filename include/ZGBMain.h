@@ -8,6 +8,7 @@ _STATE(StateTitle)\
 _STATE(StateInitGame)\
 _STATE(StateTreeCutscene)\
 _STATE(StateLevel1)\
+_STATE(StateLevel1b)\
 _STATE(StateOverworld)\
 _STATE(StateCutscene1)\
 _STATE(StateCutscene2)\
