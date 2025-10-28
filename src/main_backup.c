@@ -13,6 +13,9 @@
 #include "Palette.h"
 #include "Sfx.h"
 #include "SfxChain.h"
+#ifdef USE_CBT_FX
+#include "third_party/cbtfx/include/cbtfx.h"
+#endif
 
 // --- Minimal frame-gated SFX chain (no banks, no pointers) ---
 typedef struct {
@@ -269,6 +272,9 @@ void main(void) {
 			// so our starting sprites are on the screne during the fade
             SpriteManagerUpdate();
             SfxChain_Tick();
+#ifdef USE_CBT_FX
+            __critical { CBTFX_update(); }
+#endif
 			DISPLAY_ON;
 			FadeOut();
 		}
@@ -284,6 +290,9 @@ void main(void) {
 
                 UPDATE_KEYS();
                 SfxChain_Tick();
+#ifdef USE_CBT_FX
+                __critical { CBTFX_update(); }
+#endif
 			
 			if (isPaused == true)
 			{
