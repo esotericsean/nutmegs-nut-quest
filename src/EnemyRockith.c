@@ -4,6 +4,7 @@
 #include "SpriteManager.h"
 #include "Sfx.h"
 #include "Sound.h"
+/* do not disable PlayFx while diagnosing */
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
 

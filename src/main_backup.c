@@ -13,6 +13,7 @@
 #include "Palette.h"
 #include "Sfx.h"
 #include "SfxChain.h"
+/* do not disable PlayFx while diagnosing */
 #ifdef USE_CBT_FX
 #include "third_party/cbtfx/cbtfx.h"
 #endif
@@ -104,6 +105,9 @@ void vbl_update(void) {
 			UNMUTE_ALL_CHANNELS;
 		}
 	}
+//#ifdef USE_CBT_FX
+//    CBTFX_update(); // temporarily disabled to diagnose white screen
+//#endif
 }
 
 void InitStates(void);
@@ -287,9 +291,6 @@ void main(void) {
 
                 UPDATE_KEYS();
                 SfxChain_Tick();
-#ifdef USE_CBT_FX
-                CBTFX_update();
-#endif
 			
 			if (isPaused == true)
 			{

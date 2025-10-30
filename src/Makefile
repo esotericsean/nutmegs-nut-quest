@@ -12,8 +12,10 @@ MUSIC_PLAYER = HUGETRACKER
 # Usage: from build scripts or CLI pass USE_CBT_FX=1 to enable
 ifeq ($(USE_CBT_FX),1)
 CFLAGS += -DUSE_CBT_FX
-SRC += third_party/cbtfx/cbtfx.c
+CFLAGS += -Isrc/third_party/cbtfx
+# Temporarily exclude the driver to isolate white screen; we only build our shim and SFX data
 SRC += SfxCBTFX.c
+SRC += CBTFX_SFX_Jump.c
 endif
 
 # Default hardware sprites size: SPRITES_8x16(default) or SPRITES_8x8

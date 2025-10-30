@@ -889,7 +889,11 @@ void update_aliveInControl (void)
             // allow held A to extend jump height like a normal jump
             nutmeg.jumpPeak = 0;
             // FX
+#ifdef USE_CBT_FX
+            Sfx_Jump();
+#else
             PlayFx(CHANNEL_1, 5, 0x17, 0x9f, 0xf3, 0xc9, 0xc4);
+#endif
             // dust at feet
             if (nutmeg.direction == right) {
                 SpriteManagerAdd(SpritePuff, THIS->x-2, THIS->y-2);

@@ -3,6 +3,7 @@
 #include "Scroll.h"
 #include "SpriteManager.h"
 #include "Sound.h"
+/* do not disable PlayFx while diagnosing */
 #include "../src/GlobalVars.h"
 
 extern Sprite * spr_nutmeg;

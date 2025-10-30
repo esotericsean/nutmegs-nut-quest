@@ -2,6 +2,7 @@
 #include "Banks/SetAutoBank.h"
 #include <gbdk/platform.h>
 #include "Sound.h"
+/* do not disable PlayFx while diagnosing */
 
 // Extremely small step sequencer; uses CH1 only to avoid clashes
 // Steps advance every 3 frames by default

@@ -3,7 +3,7 @@
 #include "Banks/SetAutoBank.h"
 #include <gbdk/platform.h>
 #include "BankManager.h"
-#include "third_party/cbtfx/cbtfx.h"
+//#include "third_party/cbtfx/cbtfx.h"
 
 // Small HOME RAM buffer to stage CBT-FX SFX blobs copied from banked ROM
 static unsigned char s_cbtfx_buf[64];
@@ -16,11 +16,16 @@ void Sfx_Cbtfx_PlayFromBanked(const unsigned char *sfx_ptr, UINT8 sfx_len, UINT8
     for (UINT8 i = 0; i != copy_len; ++i) {
         s_cbtfx_buf[i] = sfx_ptr[i];
     }
-    POP_BANK;
+    POP_BANK();
 
-    CBTFX_init(s_cbtfx_buf);
+    // Driver temporarily disabled during white-screen diagnosis
+    //CBTFX_init(s_cbtfx_buf);
 }
 
+#endif
+
+#ifdef USE_CBT_FX
+// Driver link disabled for now
 #endif
 
 

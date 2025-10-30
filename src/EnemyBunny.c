@@ -72,7 +72,9 @@ void Update_EnemyBunny(void) {
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
 		{
             // descending note on stomp
+#ifndef USE_CBT_FX
             PlayFx(CHANNEL_1, 6, 0x10, 0xC7, 0xE3, 0xAE, 0x86);
+#endif
 			nutmeg.speedY = -nutmeg.enemyBounceY;
 			nutmeg.jumpPeak = 0;
 

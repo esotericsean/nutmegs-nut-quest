@@ -1,6 +1,7 @@
 #include "Banks/SetAutoBank.h"
 #include "ZGBMain.h"
 #include "Sound.h"
+/* do not disable PlayFx while diagnosing */
 #include "SpriteManager.h"
 
 #include "../src/GlobalVars.h"
