@@ -13,9 +13,11 @@
 #include "Palette.h"
 #include "Sfx.h"
 #include "SfxChain.h"
-/* do not disable PlayFx while diagnosing */
 #ifdef USE_CBT_FX
 #include "third_party/cbtfx/cbtfx.h"
+#include "Sound.h"
+#undef PlayFx
+#define PlayFx(...) do {} while(0)
 #endif
 
 // --- Minimal frame-gated SFX chain (no banks, no pointers) ---
@@ -99,15 +101,15 @@ void vbl_update(void) {
 	SCX_REG = scroll_x_vblank + (scroll_offset_x << 3);
 	SCY_REG = scroll_y_vblank + (scroll_offset_y << 3);
 
-	if(music_mute_frames != 0) {
+    if(music_mute_frames != 0) {
 		music_mute_frames --;
 		if(music_mute_frames == 0) {
 			UNMUTE_ALL_CHANNELS;
 		}
 	}
-//#ifdef USE_CBT_FX
-//    CBTFX_update(); // temporarily disabled to diagnose white screen
-//#endif
+#ifdef USE_CBT_FX
+    CBTFX_update();
+#endif
 }
 
 void InitStates(void);

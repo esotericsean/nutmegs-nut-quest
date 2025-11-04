@@ -1,4 +1,12 @@
 #include "Banks/SetAutoBank.h"
+#ifdef USE_CBT_FX
+#include "Sound.h"
+#undef PlayFx
+#define PlayFx(...) do {} while(0)
+#endif
+#ifdef USE_CBT_FX
+#include "third_party/cbtfx/cbtfx.h"
+#endif
 #include <gbdk/platform.h>
 #include "ZGBMain.h"
 #include "Scroll.h"
@@ -699,8 +707,8 @@ void update_aliveInControl (void)
         }
         else
         {
-            isPaused = true;
-            rWY = 144-24;
+    		isPaused = true;
+		    rWY = 144-24;
             return;
         }
 	}

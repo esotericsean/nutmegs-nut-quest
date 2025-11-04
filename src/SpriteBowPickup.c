@@ -71,8 +71,12 @@ void Update_SpriteBowPickup(void) {
             spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, spr_nutmeg->x, spr_nutmeg->y);
         }
 
-        // SFX: magical 3-note twinkle
+        // SFX: magical 3-note twinkle (legacy); when CBT-FX enabled, play pickup SFX instead
+#ifdef USE_CBT_FX
+        Sfx_Pickup();
+#else
         SfxChain_Start(4, 2);
+#endif
         gameStats.totalPowerups++;
 
         // Remove pickup

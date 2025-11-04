@@ -1,4 +1,9 @@
 #include "Banks/SetAutoBank.h"
+#ifdef USE_CBT_FX
+#include "Sound.h"
+#undef PlayFx
+#define PlayFx(...) do {} while(0)
+#endif
 #include "ZGBMain.h"
 #include "Scroll.h"
 #include "SpriteManager.h"
@@ -71,10 +76,8 @@ void Update_EnemyBunny(void) {
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
 		{
-            // descending note on stomp
-#ifndef USE_CBT_FX
-            PlayFx(CHANNEL_1, 6, 0x10, 0xC7, 0xE3, 0xAE, 0x86);
-#endif
+            // stomp SFX
+            Sfx_Stomp();
 			nutmeg.speedY = -nutmeg.enemyBounceY;
 			nutmeg.jumpPeak = 0;
 

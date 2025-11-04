@@ -1,4 +1,9 @@
 #include "Banks/SetAutoBank.h"
+#ifdef USE_CBT_FX
+#include "Sound.h"
+#undef PlayFx
+#define PlayFx(...) do {} while(0)
+#endif
 #include "ZGBMain.h"
 #include "Scroll.h"
 #include "SpriteManager.h"

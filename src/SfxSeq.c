@@ -1,5 +1,10 @@
 #pragma bank 0
 #include "Banks/SetAutoBank.h"
+#ifdef USE_CBT_FX
+#include "Sound.h"
+#undef PlayFx
+#define PlayFx(...) do {} while(0)
+#endif
 #include <gbdk/platform.h>
 #include "Sound.h"
 /* do not disable PlayFx while diagnosing */

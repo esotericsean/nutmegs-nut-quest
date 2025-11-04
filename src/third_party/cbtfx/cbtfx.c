@@ -8,9 +8,15 @@ Thanks to bbbbbr for getting my code to ACTUALLY work
 
 */
 
+#include "Banks/SetAutoBank.h"
 #include <gb/gb.h>
 #include <gb/sgb.h>
+#include "BankManager.h"
 #include "cbtfx.h"
+
+// Provide bank reference symbols for BANKED functions
+BANKREF(CBTFX_init)
+BANKREF(CBTFX_update)
 #include "hUGEDriver.h"
 #define MUSIC_DRIVER_CH2_ON hUGE_mute_channel(HT_CH2, 0);
 #define MUSIC_DRIVER_CH2_OFF hUGE_mute_channel(HT_CH2, 1);
@@ -27,7 +33,7 @@ uint8_t CBTFX_ch_used = 0;
 uint8_t CBTFX_SGB = 0;
 
 //Restart values and point to the new sfx
-void CBTFX_init(const unsigned char * SFX) NONBANKED {
+void CBTFX_init(const unsigned char * SFX) BANKED {
     if ((*SFX & 0x0f) < CBTFX_priority) return;
 
     // Check SGB

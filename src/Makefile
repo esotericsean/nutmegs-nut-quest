@@ -13,9 +13,12 @@ MUSIC_PLAYER = HUGETRACKER
 ifeq ($(USE_CBT_FX),1)
 CFLAGS += -DUSE_CBT_FX
 CFLAGS += -Isrc/third_party/cbtfx
-# Temporarily exclude the driver to isolate white screen; we only build our shim and SFX data
 SRC += SfxCBTFX.c
 SRC += CBTFX_SFX_Jump.c
+SRC += CBTFX_SFX_Pickup.c
+SRC += CBTFX_SFX_Stomp.c
+SRC += CBTFX_SFX_Water.c
+SRC += CBTFX_driver.c
 endif
 
 # Default hardware sprites size: SPRITES_8x16(default) or SPRITES_8x8

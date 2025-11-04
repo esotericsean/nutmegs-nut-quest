@@ -12,11 +12,29 @@ BANKREF(CBTFX_SFX_Jump)
 // Per frame:
 //  len, [pan?], VOL_NIBBLE, NR43
 const unsigned char CBTFX_SFX_Jump[] = {
-    0x21, // CH4 used + priority 1
-    0x01, // 1 frame
-    0x06, // frame length (no pan)
-    0x0F, // volume nibble (15), envelope 0
-    0x33  // NR43 noise (coarse, short)
+    0x81, // CH2 used + priority 1
+    0x03, // 3 frames
+    // Frame 1
+    0x8A, // len 10 | pan present
+    0x22, // pan: CH2 both L/R
+    0x9F, // NR21 duty/length (50% duty, short length)
+    0xF0, // shared -> NR22 = 0xF0 (max vol)
+    0xC9, // NR23
+    0xC4, // NR24 (hi freq + trigger)
+    // Frame 2 (repeat to prolong)
+    0x8A,
+    0x22,
+    0x9F,
+    0xF0,
+    0xC9,
+    0xC4,
+    // Frame 3
+    0x8A,
+    0x22,
+    0x9F,
+    0xF0,
+    0xC9,
+    0xC4
 };
 
 // Export length for use from headers without sizeof on incomplete type
