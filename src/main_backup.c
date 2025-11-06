@@ -185,6 +185,11 @@ void main(void) {
 	cpu_fast();
 #endif
 	INIT_MUSIC;
+#ifdef USE_CBT_FX
+	// Ensure sane initial audio state for CBT-FX
+	NR51_REG = 0xFF; // enable all pans L/R
+	extern UINT8 CBTFX_priority; CBTFX_priority = 0; // allow low-priority SFX at boot
+#endif
 
 	PUSH_BANK(1);
 	InitStates();
@@ -307,9 +312,12 @@ void main(void) {
 						continue;
 					}
 				}
-				if (KEY_TICKED(J_START))	
+                if (KEY_TICKED(J_START)) 	
 				{
-					isPaused = false;
+                    isPaused = false;
+#ifdef USE_CBT_FX
+                    Sfx_PauseClose();
+#endif
 					rWY = 144-8;
 				}
 			}

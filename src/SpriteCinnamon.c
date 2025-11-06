@@ -43,7 +43,9 @@ void Update_SpriteCinnamon(void) {
 		THIS->y -=7;
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
 		{
-			PlayFx(CHANNEL_4, 60, 0x3a, 0xf2, 0x62, 0x80);
+#ifdef USE_CBT_FX
+            Sfx_GemBounce();
+#endif
 			
 			INT16 accly = (nutmeg.enemyBounceY >> 1);
 			accly += (nutmeg.enemyBounceY >> 2);

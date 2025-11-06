@@ -1,0 +1,22 @@
+/*
+
+	SFX_11
+
+	Sound Effect File.
+	
+	Info:
+		Length		:	3
+		Priority		:	0
+		Channels used	:	Duty channel 2 & Noise channel
+		SGB Support		:	No
+*/
+
+#include "Banks/SetAutoBank.h"
+#include <gbdk/platform.h>
+BANKREF(SFX_11)
+const unsigned char SFX_11[] = {
+0xA0,0x03,0x9D,0xAA,0x80,0xDF,0x23,0x82,0x56,
+0x83,0x88,0x00,0x0A,0x39,0x87,0x44,0x02,0x00,
+0x05,0x39,0x87,0x44
+};
+const UINT16 SFX_11_Len = (UINT16)sizeof(SFX_11);

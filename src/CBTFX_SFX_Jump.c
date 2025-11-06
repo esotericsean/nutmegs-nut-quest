@@ -12,7 +12,7 @@ BANKREF(CBTFX_SFX_Jump)
 // Per frame:
 //  len, [pan?], VOL_NIBBLE, NR43
 const unsigned char CBTFX_SFX_Jump[] = {
-    0x81, // CH2 used + priority 1
+    0x80, // CH2 used + priority 0 (lowest)
     0x03, // 3 frames
     // Frame 1
     0x8A, // len 10 | pan present
@@ -38,7 +38,7 @@ const unsigned char CBTFX_SFX_Jump[] = {
 };
 
 // Export length for use from headers without sizeof on incomplete type
-const UINT8 CBTFX_SFX_Jump_Len = (UINT8)sizeof(CBTFX_SFX_Jump);
+const UINT16 CBTFX_SFX_Jump_Len = (UINT16)sizeof(CBTFX_SFX_Jump);
 
 #endif
 

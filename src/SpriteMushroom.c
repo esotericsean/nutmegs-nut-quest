@@ -26,8 +26,10 @@ void Start_SpriteMushroom(void)
 void Update_SpriteMushroom(void) 
 {
 	//mushroom bounce
-	if (CheckCollision(THIS, spr_nutmeg)) {
-		PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+    if (CheckCollision(THIS, spr_nutmeg)) {
+#ifdef USE_CBT_FX
+        Sfx_MushroomBounce();
+#endif
 		
 		INT16 acclY = nutmeg.enemyBounceY;
 		acclY += (nutmeg.enemyBounceY >> 2);

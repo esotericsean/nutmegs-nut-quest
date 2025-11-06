@@ -44,9 +44,9 @@ void Update_SpriteOneUp(void) {
         nutmeg.pickupPauseFrames = 16;
         nutmeg.isInvincible = true;
         nutmeg.hurtFlashCounter = 16;
-        // Distinct 1-up jingle (legacy chain); when CBT-FX enabled, play pickup SFX instead
+        // 1-Up SFX
 #ifdef USE_CBT_FX
-        Sfx_Pickup();
+        Sfx_OneUp();
 #else
         SfxChain_Start(3, 2);
 #endif

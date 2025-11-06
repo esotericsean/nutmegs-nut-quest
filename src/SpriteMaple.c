@@ -43,7 +43,9 @@ void Update_SpriteMaple(void) {
 		THIS->y -=7;
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
 		{
-			PlayFx(CHANNEL_1, 10, 0x00, 0x81, 0x83, 0xA3, 0x87);
+#ifdef USE_CBT_FX
+            Sfx_GemBounce();
+#endif
 			INT16 accly = (nutmeg.enemyBounceY >> 1);
 			accly += (nutmeg.enemyBounceY >> 2);
 			accly += (nutmeg.enemyBounceY >> 3);

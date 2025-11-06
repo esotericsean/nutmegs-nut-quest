@@ -85,10 +85,8 @@ void Update_EnemyButterfly(void) {
 	//kill butterfly if jump on it
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
-		{
-#ifndef USE_CBT_FX
-            PlayFx(CHANNEL_1, 6, 0x10, 0xC7, 0xE3, 0xAE, 0x86);
-#endif
+        {
+            Sfx_Stomp();
 			nutmeg.speedY = -nutmeg.enemyBounceY;
 			nutmeg.jumpPeak = 0;
 

@@ -34,7 +34,9 @@ void Start_EnemyLightningSpot (void)
 void Update_EnemyLightningSpot (void) 
 {
 	if (lightningspotcounter == 0) {
-		//PlayFx(CHANNEL_4, 60, 0x3f, 0x81, 0x28, 0xC0);
+#ifdef USE_CBT_FX
+        Sfx_Lightning();
+#endif
 	}
 
 	lightningspotcounter++;

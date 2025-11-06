@@ -18,6 +18,7 @@ SRC += CBTFX_SFX_Jump.c
 SRC += CBTFX_SFX_Pickup.c
 SRC += CBTFX_SFX_Stomp.c
 SRC += CBTFX_SFX_Water.c
+SRC += CBTFX_sfx_bundle.c
 SRC += CBTFX_driver.c
 endif
 

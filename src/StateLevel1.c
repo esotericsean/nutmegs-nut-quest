@@ -130,6 +130,9 @@ void Update_StateLevel1(void)
         UINT8 tMidR = GetScrollTile(tx + 1, ty - 1);
         bool onDoor = ((tBelow == 116) || (tBelowR == 116) || (tMid == 116) || (tMidR == 116));
         if (onDoor && KEY_TICKED(J_UP)) { 
+            #ifdef USE_CBT_FX
+            Sfx_DoorEnter();
+            #endif
             stop_music_on_new_state = 0; // keep music running across 1-1 -> 1-1b
             SetState(StateLevel1b); 
             return; 

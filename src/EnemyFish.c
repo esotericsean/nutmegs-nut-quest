@@ -1,6 +1,7 @@
 #include "Banks/SetAutoBank.h"
 #ifdef USE_CBT_FX
 #include "Sound.h"
+#include "Sfx.h"
 #undef PlayFx
 #define PlayFx(...) do {} while(0)
 #endif
@@ -68,7 +69,9 @@ void Update_EnemyFish (void)
 	if (CheckCollision(THIS, spr_nutmeg) && (nutmeg.isDying == false)){
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0) 
 		{
-			PlayFx(CHANNEL_1, 10, 0x4f, 0xC7, 0xF3, 0x73, 0x86);
+#ifdef USE_CBT_FX
+            Sfx_Stomp();
+#endif
 			nutmeg.speedY = -nutmeg.enemyBounceY;
 			nutmeg.jumpPeak = 0;
 

@@ -105,7 +105,9 @@ void Update_EnemyRockith (void)
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
 		{
-            PlayFx(CHANNEL_1, 6, 0x10, 0xC7, 0xE3, 0xAE, 0x86);
+#ifdef USE_CBT_FX
+            Sfx_Stomp();
+#endif
 			nutmeg.speedY = -nutmeg.enemyBounceY;
 			nutmeg.jumpPeak = 0;
 			

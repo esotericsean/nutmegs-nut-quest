@@ -72,7 +72,9 @@ void Update_EnemyLightning (void)
 		{
 			SetPalette(BG_PALETTE, 5, 1, pal_flag_flash1, _current_bank);
 		}
-		PlayFx(CHANNEL_4, 60, 0x3a, 0xf2, 0x62, 0x80);
+#ifdef USE_CBT_FX
+        Sfx_Lightning();
+#endif
 		SetSpriteAnim(THIS, anim_lightning_strike1, 1);
 	}
 	else if (lightningcounter >= 20 && lightningcounter < 25) {

@@ -699,7 +699,7 @@ void update_aliveInControl (void)
         try_quit_to_overworld();
         return;
     }
-    if ((pause_input_lock_frames == 0) && KEY_TICKED(J_START)) 
+        if ((pause_input_lock_frames == 0) && KEY_TICKED(J_START)) 
 	{
         if (level_current == 0)
         {
@@ -707,7 +707,10 @@ void update_aliveInControl (void)
         }
         else
         {
-    		isPaused = true;
+		isPaused = true;
+#ifdef USE_CBT_FX
+		Sfx_PauseOpen();
+#endif
 		    rWY = 144-24;
             return;
         }
@@ -1479,6 +1482,9 @@ void nutmeg_hit(void) BANKED
 
     if (nutmeg.hasbow == true)
     {
+        #ifdef USE_CBT_FX
+        Sfx_Hurt();
+        #endif
         nutmeg.hasbow = false;
         nutmeg.lostbow = true;
         nutmeg.bow_counter = 0;
