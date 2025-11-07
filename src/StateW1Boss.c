@@ -21,7 +21,7 @@ UINT8 handhurt;
 bool abletohurthand;
 UINT8 handhealth;
 
-static const UINT8 collision_tiles_levelw1b[] = {44,45,46,47,58,51,70,71,72,73,74,75,76,77,78,79,80,81,0};
+static const UINT8 collision_tiles_levelw1b[] = {44,45,46,47,58,51,75, 0};
 static const UINT8 collision_tiles_down_levelw1b[] = {0};
 
 DECLARE_MUSIC(thehands2);

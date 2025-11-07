@@ -40,10 +40,6 @@ void Update_SpriteOneUp(void) {
 
     if (spr_nutmeg && CheckCollision(THIS, spr_nutmeg)) {
         if (nutmeg.lives < 99) nutmeg.lives++;
-        // feedback
-        nutmeg.pickupPauseFrames = 16;
-        nutmeg.isInvincible = true;
-        nutmeg.hurtFlashCounter = 16;
         // 1-Up SFX
 #ifdef USE_CBT_FX
         Sfx_OneUp();

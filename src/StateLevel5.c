@@ -28,7 +28,7 @@ static UINT8 anim_rain_counter5 = 0;
 static UINT8 lightningstrikecounter1 = 0;
 static UINT8 lightningstrikecounter2 = 0;
 
-static const UINT8 collision_tiles_level5[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
+static const UINT8 collision_tiles_level5[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18, 0};
 static const UINT8 collision_tiles_down_level5[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(raindrops);

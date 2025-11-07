@@ -16,7 +16,7 @@
 
 IMPORT_MAP (level2map);
 
-static const UINT8 collision_tiles_level2[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
+static const UINT8 collision_tiles_level2[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18, 0};
 static const UINT8 collision_tiles_down_level2[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(quickstart);

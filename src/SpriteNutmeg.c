@@ -493,6 +493,19 @@ static void move_whileDead(void)
     collisionX = TranslateSprite(THIS, delta, 0);
     delta = MoveY();
     collisionY = TranslateSprite(THIS, 0, delta);
+    if ((nutmeg.speedY < 0) && (collisionY != 0)) {
+        // Hitting the ceiling: snap velocity to zero so we ease into the fall
+        nutmeg.speedY = 0;
+        nutmeg.offsetY = 0;
+        nutmeg.jumpPeak = 1;
+        // Bring Nutmeg back up against the ceiling to avoid a visible bounce
+        TranslateSprite(THIS, 0, -1);
+    }
+
+    // Small lift after stepping through doors so Nutmeg doesn't sink into tiles
+    if ((collisionY != 0) && (nutmeg.speedY >= 0) && (delta == 0)) {
+        TranslateSprite(THIS, 0, -2);
+    }
 
     if (collisionY == 0) {
         nutmeg.movestate = inair;
@@ -1211,15 +1224,16 @@ void update_aliveInControl (void)
 			nutmeg.isWallSliding = false;
 			nutmeg.wallCoyoteFrames = 0;
 		}
-		if (screenY < topBound) {
-			THIS->y = (UINT16)((INT16)scroll_y + topBound);
-			// start falling back down
-			nutmeg.speedY = nutmeg.speeds->fallInitY;
-			nutmeg.jumpPeak = 1;
-			nutmeg.movestate = inair;
-			nutmeg.isWallSliding = false;
-			nutmeg.wallCoyoteFrames = 0;
-		}
+        if (screenY < topBound) {
+            THIS->y = (UINT16)((INT16)scroll_y + topBound);
+            nutmeg.offsetY = 0;
+            nutmeg.speedY = 0;
+            nutmeg.jumpPeak = 1;
+            nutmeg.movestate = inair;
+            nutmeg.isWallSliding = false;
+            nutmeg.wallCoyoteFrames = 0;
+            collisionY = 1; // treat as ceiling contact for consistent fall behavior
+        }
 	}
 
 

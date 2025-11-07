@@ -3,7 +3,6 @@
 #include "Banks/SetAutoBank.h"
 #include <gbdk/platform.h>
 #include <gb/gb.h>
-#include <string.h>
 #include "BankManager.h"
 #include "third_party/cbtfx/cbtfx.h"
 extern UINT8 CBTFX_priority;

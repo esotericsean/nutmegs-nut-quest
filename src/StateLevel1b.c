@@ -55,8 +55,11 @@ void Start_StateLevel1b(void)
 
     // Keep whatever music is already playing from 1-1
 
-    // Spawn Nutmeg slightly right and grounded in front of door
-    scroll_target = nutmeg_Add(10, 15*8);
+    // Spawn Nutmeg exiting the door, slightly to the right and grounded
+    scroll_target = nutmeg_Add(32, (15 * 8) - 17);
+    spr_nutmeg->y -= 2;
+    nutmeg.offsetY = 0;
+    nutmeg.speedY = 0;
 
     InitScrollTiles(0, &level1tiles);
     // Load the intended 1-1b map

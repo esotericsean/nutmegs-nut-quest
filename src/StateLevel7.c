@@ -20,7 +20,7 @@ IMPORT_MAP (level7map);
 static const UWORD pal_nutmegnormal7[] = { RGB(31, 31, 31), RGB(5,  24, 14), RGB(5,  19, 12), RGB(0,  0,  0) };
 static const UWORD pal_nutmegblue7[] 	= { RGB(31, 31, 31), RGB(19, 22, 30), RGB(12, 13, 28), RGB(8,  8, 27) };
 
-static const UINT8 collision_tiles_level7[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,95,96,97,98, 0};
+static const UINT8 collision_tiles_level7[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18, 0};
 static const UINT8 collision_tiles_down_level7[] = {29,30,31,32,0};
 
 DECLARE_MUSIC(quickstart);
