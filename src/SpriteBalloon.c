@@ -19,6 +19,7 @@ static bool balloonpop;
 static UINT8 ballooncounter;
 static UINT8 balloonspring;
 static UINT8 balloonpopcount;
+static bool balloonAllowBounce;
 
 void Start_SpriteBalloon(void) 
 {
@@ -38,6 +39,7 @@ void Start_SpriteBalloon(void)
 	balloonpop = false;
 	balloonspring = 0;
 	balloonpopcount = 0;
+    balloonAllowBounce = true;
 }
 
 void Update_SpriteBalloon(void) 
@@ -82,13 +84,21 @@ void Update_SpriteBalloon(void)
     }
 
     if (CheckCollision(THIS, spr_nutmeg)) {
-        if (balloonjump < 2) { Sfx_Stomp(); }
-		nutmeg.jumpPeak = 0;
-		nutmeg.movestate = inair;
+        if (balloonAllowBounce) {
+            balloonAllowBounce = false;
+            if (balloonjump < 2) { Sfx_Stomp(); }
+            nutmeg.jumpPeak = 0;
+            nutmeg.movestate = inair;
 
-		if (balloonjump == 0) { nutmeg.speedY = -(nutmeg.enemyBounceY>>1); balloonjump = 1; }
-		else if (balloonjump == 1) { nutmeg.speedY = -nutmeg.enemyBounceY; balloonjump = 2; }
-	}
+            if (balloonjump == 0) { nutmeg.speedY = -(nutmeg.enemyBounceY>>1); balloonjump = 1; }
+            else if (balloonjump == 1) { nutmeg.speedY = -nutmeg.enemyBounceY; balloonjump = 2; }
+        }
+	} else {
+        // re-arm bounce once Nutmeg has cleared the balloon and is falling back down
+        if (nutmeg.speedY >= 0) {
+            balloonAllowBounce = true;
+        }
+    }
 }
 
 void Destroy_SpriteBalloon(void) 

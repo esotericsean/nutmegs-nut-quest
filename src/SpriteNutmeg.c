@@ -32,18 +32,18 @@ bool isPaused;
 static const NutmegSpeedT groundSpeed = {
 	.frictionX = 35,
     .airFrictionX = 12,
-	.runIncX = 46,        // stronger run acceleration
-	.runMaxX = 150,       // higher run top speed
-	.walkIncX = 30,
-	.walkMaxX = 110,
+	.runIncX = 52,        // slightly stronger run acceleration
+	.runMaxX = 168,       // slightly higher run top speed
+	.walkIncX = 36,
+	.walkMaxX = 122,
     .enemyBounceY = 500,
     .cutsceneMaxX = 100,
 	.initJumpY = 150,
 	.jumpY = 18,          // a touch less sustained rise
 	.jumpYMax = 310,      // cap for normal held jump height (reverted)
 	.fallInitY = 100,
-	.fallIncY = 17,       // slightly softer gravity
-	.fallMaxY = 260,      // slightly lower terminal velocity
+	.fallIncY = 19,       // slightly firmer gravity
+	.fallMaxY = 280,      // slightly higher terminal velocity
 	.fallGlideMaxY = 70   // much slower fall while gliding for long float
 };
 
@@ -685,7 +685,7 @@ static void update_inCutscene(void)
 
 static void try_quit_to_overworld(void)
 {
-    if ((level.isOverworld == false) && (level_current < level_max) && (nutmeg.isDying == false))
+    if ((level.isOverworld == false) && (nutmeg.isDying == false))
     {
         StopMusic;
         isPaused = false;
@@ -1273,15 +1273,17 @@ void update_aliveInControl (void)
 
 void Update_SpriteNutmeg(void) 
 {
-    // extra life from 100 acorns
-    if (nutmeg.acorns == 100) {
-        nutmeg.lives++;
-        // TODO - PLAY FUN SOUND HERE!
-        nutmeg.acorns = 0;
-        if (nutmeg.lives > 99) 
-        {
-            nutmeg.lives = 99;
+    // extra life from every 100 acorns collected
+    while (nutmeg.acorns >= 100) {
+        nutmeg.acorns -= 100;
+        if (nutmeg.lives < 99) {
+            nutmeg.lives++;
         }
+#ifdef USE_CBT_FX
+        Sfx_OneUp();
+#else
+        PlayFx(12, 12, 64, 12, 0, 0); // fallback legacy jingle
+#endif
     }
 
     // if we run out of time
@@ -1439,6 +1441,15 @@ void nutmeg_allow_next_quickdeath(void) BANKED {
     playedQuickdeath = 0;
     deathSongLock = 0;
     deathStartSysTime = 0;
+}
+
+void nutmeg_SetIdlePose(void) BANKED {
+    if (!spr_nutmeg) return;
+    if (nutmeg.direction == right) {
+        SetSpriteAnim(spr_nutmeg, anim_nutmeg_idle_right, 8);
+    } else {
+        SetSpriteAnim(spr_nutmeg, anim_nutmeg_idle_left, 8);
+    }
 }
 
 void nutmeg_SetupGame(void) BANKED

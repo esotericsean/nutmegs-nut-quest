@@ -84,9 +84,11 @@ void UPDATE(void) {
 		SpriteManagerRemoveSprite(THIS);
 	}
 
-	//die if touch cola
+	//die if touch cola (only while solid, before flashing warning)
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
-		nutmeg_hit();
+        if (THIS->custom_data[3] < 100) {
+		    nutmeg_hit();
+        }
 	}
 }
 

@@ -20,6 +20,7 @@ UINT8 handphase;
 UINT8 handhurt;
 bool abletohurthand;
 UINT8 handhealth;
+extern UINT8 collisionY;
 
 static const UINT8 collision_tiles_levelw1b[] = {44,45,46,47,58,51,75, 0};
 static const UINT8 collision_tiles_down_levelw1b[] = {0};
@@ -34,6 +35,28 @@ extern Sprite * spr_hand;
 
 static Sprite * spr_spatula;
 static Sprite * spr_popsicle;
+
+static UINT16 hand_defeat_x = (9 * 8) + 4;
+static UINT16 hand_defeat_y = (8 * 8);
+static const UINT16 nutmeg_center_x = (9 * 8) + 4;
+static UINT16 nutmeg_victory_x = (9 * 8) + 4;
+static UINT16 nutmeg_victory_y = (12 * 8);
+static UINT8 handVictoryStage = 0;
+bool handMegaReady = false;
+
+static void Hand_EnableDamage(void) {
+    abletohurthand = true;
+    handMegaReady = true;
+}
+
+static void Hand_DisableDamage(void) {
+    abletohurthand = false;
+    handMegaReady = false;
+}
+
+static UINT16 clamp_sub_u16(UINT16 value, UINT8 dec) {
+    return (value > dec) ? (value - dec) : value;
+}
 
 static const LevelT levelInfo = {
 	.isWaterLevel = false,
@@ -63,6 +86,7 @@ void Start_StateW1Boss (void)
 
     nut_region = 0;
     cutscenemode = disabled;
+    handVictoryStage = 0;
 
 	PlayMusic(thehands2, 1);
 
@@ -103,7 +127,7 @@ void Start_StateW1Boss (void)
 	// 1 = Phase 1b (hand enters from left side)
 
 	handhealth = 0; // start off hand with full health
-	abletohurthand = true; // start off being able to hurt the hand (disable after one jump per phase)
+	Hand_EnableDamage(); // start off being able to hurt the hand (disable after one jump per phase)
 
 	SPRITES_8x16;
 	SHOW_SPRITES;
@@ -114,8 +138,57 @@ void Update_StateW1Boss (void)
 {
 	Hud_Update();
 
-	if (spr_spatula->x < 0) { SpriteManagerRemoveSprite (spr_spatula); }
-	if (spr_popsicle->x > 20*8) { SpriteManagerRemoveSprite (spr_popsicle); }
+	if (spr_spatula && spr_spatula->x <= 8u) { SpriteManagerRemoveSprite (spr_spatula); spr_spatula = 0; }
+	if (spr_popsicle && spr_popsicle->x > 20*8) { SpriteManagerRemoveSprite (spr_popsicle); spr_popsicle = 0; }
+
+    // Final blow: immediately transition to win phase with FX at the hand location
+    if ((handhealth >= 6) && (handphase != 4)) {
+        handphase = 4;
+        w1bosscounter = 0;
+        Hand_DisableDamage();
+        handhurt = 1;
+
+        // Remember where the hand was defeated so we can play effects there
+        if (spr_hand) {
+            hand_defeat_x = spr_hand->x;
+            hand_defeat_y = spr_hand->y;
+            SpriteManagerRemoveSprite(spr_hand);
+            spr_hand = 0;
+        } else {
+            hand_defeat_x = nutmeg_victory_x;
+            hand_defeat_y = nutmeg_victory_y;
+        }
+
+        // Burst of stars exactly where the hand vanished
+        AddStarPair(hand_defeat_x, hand_defeat_y);
+        AddStarPair(hand_defeat_x, clamp_sub_u16(hand_defeat_y, 12));
+        AddStarPairWide(clamp_sub_u16(hand_defeat_x, 4), clamp_sub_u16(hand_defeat_y, 20));
+
+        // Prepare a victory bounce; lock controls via cutscene mode until she lands
+        cutscenemode = enabled;
+        cutscenewalkleft = false;
+        cutscenewalkright = false;
+        handVictoryStage = 0;
+        INT16 launchSpeedX = 120; // moderate horizontal shove toward center
+        INT16 shove = (hand_defeat_x > nutmeg_center_x) ? -launchSpeedX : launchSpeedX;
+        nutmeg.speedX = shove;
+        if (nutmeg.speedX > nutmeg.speeds->runMaxX) nutmeg.speedX = nutmeg.speeds->runMaxX;
+        if (nutmeg.speedX < -nutmeg.speeds->runMaxX) nutmeg.speedX = -nutmeg.speeds->runMaxX;
+        if (nutmeg.speedY > -260) nutmeg.speedY = -260; // ensure an upward arc without shooting too high
+        if (nutmeg.speedX > 0) {
+            cutscenewalkright = true;
+            cutscenewalkleft = false;
+        } else if (nutmeg.speedX < 0) {
+            cutscenewalkleft = true;
+            cutscenewalkright = false;
+        }
+        nutmeg.jumpPeak = 0;
+        nutmeg.movestate = inair;
+        nutmeg.wallCoyoteFrames = 0;
+        nutmeg.isGliding = false;
+        nutmeg.direction = (nutmeg.speedX >= 0) ? right : left;
+        collisionY = 0; // allow airborne arc
+    }
 
 	/* * * * * * * * * * * * * */
 	/*      P H A S E   1      */
@@ -128,7 +201,7 @@ void Update_StateW1Boss (void)
 				spr_hand->x = 17*8+32;
 				spr_hand->y = 11*8+6;
 				handpos = 0;
-				abletohurthand = true;
+				Hand_EnableDamage();
 				handphase = 0; //Phase 1a
 			}
 			// move in and animate opening hand
@@ -158,7 +231,7 @@ void Update_StateW1Boss (void)
 				spr_hand->x = 1*8-40;
 				spr_hand->y = 11*8+6;
 				handpos = 5;
-				abletohurthand = true;
+				Hand_EnableDamage();
 				handphase = 1; //Phase 1b
 			}
 			// move in and animate opening hand
@@ -204,7 +277,7 @@ void Update_StateW1Boss (void)
 				spr_hand->y = 1*8+6;
 				handpos = 2; //karate chop
 				handhurt = 0;
-				abletohurthand = true;
+				Hand_EnableDamage();
 				handphase = 2;
 			}
 			// move in
@@ -228,7 +301,7 @@ void Update_StateW1Boss (void)
 				spr_hand->y = 1*8+6;
 				handpos = 7;
 				handhurt = 0;
-				abletohurthand = true;
+				Hand_EnableDamage();
 				handphase = 3;
 			}
 			// move in
@@ -252,35 +325,74 @@ void Update_StateW1Boss (void)
 	/* * * * * * * * * * * * * * * */
 
 	else if (handphase == 4) {
-		if (w1bosscounter == 5) {
-			cutscenemode = enabled;
-			PlayMusic(boss1win, 0);
-		}
+        if (handVictoryStage == 0) {
+            // Wait for Nutmeg to land from the celebration bounce
+            if (nutmeg.movestate == grounded && nutmeg.speedY >= 0) {
+                handVictoryStage = 1;
+                w1bosscounter = 0; // start post-landing timeline
+                if (spr_nutmeg) {
+                    nutmeg_victory_x = spr_nutmeg->x;
+                    nutmeg_victory_y = (spr_nutmeg->y > 2u) ? (spr_nutmeg->y - 2u) : spr_nutmeg->y;
+                    spr_nutmeg->x = nutmeg_victory_x;
+                    spr_nutmeg->y = nutmeg_victory_y;
+                }
+                nutmeg_SetIdlePose();
+                nutmeg.speedX = 0;
+                nutmeg.speedY = 0;
+                nutmeg.offsetX = 0;
+                nutmeg.offsetY = 0;
+                nutmeg.movestate = grounded;
+                nutmeg.jumpPeak = 1;
+                nutmeg.wallCoyoteFrames = 0;
+                nutmeg.isGliding = false;
+                nutmeg.direction = right;
+                collisionY = 1;
+                cutscenewalkleft = false;
+                cutscenewalkright = false;
+            }
+        } else {
+            // Hold Nutmeg in place during the victory cutscene
+            if (spr_nutmeg) {
+                spr_nutmeg->x = nutmeg_victory_x;
+                spr_nutmeg->y = nutmeg_victory_y;
+            }
+            nutmeg.speedX = 0;
+            nutmeg.speedY = 0;
+            nutmeg.offsetX = 0;
+            nutmeg.offsetY = 0;
+            nutmeg.movestate = grounded;
+            nutmeg.jumpPeak = 1;
+            nutmeg.wallCoyoteFrames = 0;
+            nutmeg.isGliding = false;
+            nutmeg.direction = right;
+            collisionY = 1;
+        }
 
-		if (w1bosscounter == 15) {
-			AddStarPair  ( 9*8+4, 8*8);
-		}
+        if (handVictoryStage >= 1) {
+            if (w1bosscounter == 40) {
+                PlayMusic(boss1win, 0);
+            }
 
-		if (w1bosscounter == 45) {
-			AddStarPair  ( 9*8+4, 6*8);
-		}
+            if (w1bosscounter == 50) {
+                AddStarPair(hand_defeat_x, hand_defeat_y);
+            }
 
-		if (w1bosscounter == 75) {
-			AddStarPair  ( 9*8+4, 4*8);
+            if (w1bosscounter == 90) {
+                AddStarPair(hand_defeat_x, clamp_sub_u16(hand_defeat_y, 16));
+            }
 
-		}
+            if (w1bosscounter == 130) {
+                AddStarPairWide(clamp_sub_u16(hand_defeat_x, 4), clamp_sub_u16(hand_defeat_y, 28));
+            }
 
-		if (w1bosscounter == 100) {
-			cutscenemode = false;
-		}
+            if (w1bosscounter == 240) {
+                SetState (StateOverworld);
 
-		if (w1bosscounter == 200) {
-			SetState (StateOverworld);
-
-			//flagpole_activated = 1;
-			levelbeat = true;
-			cutscenemode = enabled;
-		}
+                //flagpole_activated = 1;
+                levelbeat = true;
+                cutscenemode = enabled;
+            }
+        }
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * */
@@ -291,25 +403,25 @@ void Update_StateW1Boss (void)
 
 	// if you hurt the hand 3 times in phase 1, advance to phase 2
 	if (handhealth >= 3 && handphase == 0) {
-		if (w1bosscounter >= 210) { handphase = 2; w1bosscounter = 0; abletohurthand = true; }
+		if (w1bosscounter >= 210) { handphase = 2; w1bosscounter = 0; Hand_EnableDamage(); }
 	}
 	else if (handhealth >= 3 && handphase == 1) {
-		if (w1bosscounter >= 420) { handphase = 2; w1bosscounter = 0; abletohurthand = true; }
+		if (w1bosscounter >= 420) { handphase = 2; w1bosscounter = 0; Hand_EnableDamage(); }
 	}
 
 	// if you're in phase 1 and you haven't hurt the hand, reset counter and start phase 1 again
 	if (w1bosscounter >= 420 && handhealth < 3) {
 		w1bosscounter = 0;
-		abletohurthand = true;
+		Hand_EnableDamage();
 	}
 
 	// if you're in phase 2 and you haven't hurt the hand, reset counter and start phase 1 again
 	if (w1bosscounter >= 635 && (handhealth >= 3 && handhealth < 6)) {
 		w1bosscounter = 0;
-		abletohurthand = true;
+		Hand_EnableDamage();
 		handhurt = false;
 		handphase = 0;
 	}
 
-	if (w1bosscounter >= 635 && handhealth >= 6) { w1bosscounter = 0; handphase = 4; }
+	if ((handphase != 4) && w1bosscounter >= 635 && handhealth >= 6) { w1bosscounter = 0; handphase = 4; }
 }

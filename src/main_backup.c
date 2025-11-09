@@ -301,10 +301,10 @@ void main(void) {
 			
 			if (isPaused == true)
 			{
-				// While paused, allow Select to return to overworld if replaying a beaten level
+				// While paused, allow Select to return to overworld
 				if (KEY_PRESSED(J_SELECT))
 				{
-					if ((level_current < level_max) && (state_running))
+					if (state_running)
 					{
 						isPaused = false;
 						rWY = 144-8;

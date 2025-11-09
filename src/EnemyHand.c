@@ -12,8 +12,10 @@
 /* do not disable PlayFx while diagnosing */
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
+#include <stdbool.h>
 
 extern Sprite * spr_nutmeg;
+extern bool handMegaReady;
 
 static const UINT8 anim_hand_idle[]  = {1, 0};
 static const UINT8 anim_hand_open[]  = {28, 0,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3};
@@ -103,20 +105,40 @@ void UPDATE(void)
 
 	//hurt hand if jump on it
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
-		if (nutmeg.movestate == inair && nutmeg.speedY > 0 )
+        INT16 nutmegBottom = (INT16)spr_nutmeg->y + 14;
+        INT16 nutmegTop = (INT16)spr_nutmeg->y + 2;
+        INT16 handTop = (INT16)THIS->y + 6; // buffer so near-top contact counts as stomp
+        bool descending = (nutmeg.speedY >= 0);
+        bool aboveHand = (nutmegTop <= handTop);
+        bool comingFromAbove = descending || aboveHand;
+
+		if (comingFromAbove)
 		{
+            bool didDamage = false;
+            if (abletohurthand == true) {
+                handhealth = handhealth + 1;
+                abletohurthand = false;
+                didDamage = true;
+            }
 #ifdef USE_CBT_FX
-            // Mega stomp for boss hand
-            Sfx_MegaStomp();
+            if (didDamage && handMegaReady) {
+                Sfx_MegaStomp();
+            } else {
+                Sfx_MushroomBounce();
+            }
+#else
+            if (didDamage) {
+                PlayFx(4, 12, 64, 12, 0, 0);
+            } else {
+                PlayFx(2, 8, 64, 8, 0, 0);
+            }
 #endif
+            handMegaReady = false;
+            if (nutmeg.speedY < 0) nutmeg.speedY = 0; // ensure we bounce downward only after contact
 			nutmeg.speedY = -400;
 			nutmeg.jumpPeak = 0;
+            nutmeg.movestate = inair;
 
-			if (abletohurthand == true) {
-				handhealth = handhealth + 1;
-				abletohurthand = false;
-			}
-			
 			if (handphase == 0 || handphase == 2) handpos = 4; //hand on the right side, facing left
 			else if (handphase == 1 || handphase == 3) handpos = 9; //hand on left side, facing right
 		}
@@ -124,6 +146,7 @@ void UPDATE(void)
 		{
 			//die if touch hand
 			nutmeg_hit();
+            nutmeg.movestate = inair;
 		}
 	}
 }
