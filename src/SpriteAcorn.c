@@ -3,10 +3,15 @@
 #include "SpriteManager.h"
 #include "GlobalVars.h"
 #include "Sfx.h"
+#include "StateLevel1b.h"
+#include "StateLevel1c.h"
 
 extern Sprite * spr_nutmeg;
 
 static const INT8 acornMoveYAtTime [] = {0,0,0,1,1,0,0,0,-1,-1};
+
+#define ACORN_SPAWN_NONE 0xFFu
+#define ACORN_META_STATE_MASK 0x80u
 
 #define IS_STILL_POS (0)
 #define MOVE_POS (1)
@@ -30,6 +35,7 @@ void Start_SpriteAcorn(void) {
 	THIS->custom_data[IS_STILL_POS] = false;
 	THIS->custom_data[MOVE_POS] = 0;
 	THIS->custom_data[TIMER_POS] = 0;
+    THIS->custom_data[3] = ACORN_SPAWN_NONE;
 }
 
 
@@ -53,6 +59,16 @@ void Update_SpriteAcorn(void)
 	}
 
 	if (CheckCollision(THIS, spr_nutmeg)) {
+        UINT8 meta = THIS->custom_data[3];
+        if (meta != ACORN_SPAWN_NONE) {
+            UINT8 slot = (UINT8)(meta & ~ACORN_META_STATE_MASK);
+            if (meta & ACORN_META_STATE_MASK) {
+                Level1c_MarkSpawnCollected(slot);
+            } else {
+                Level1b_MarkSpawnCollected(slot);
+            }
+            THIS->custom_data[3] = ACORN_SPAWN_NONE;
+        }
         Sfx_Pickup();
         nutmeg.acorns++;
         gameStats.totalAcorns++;

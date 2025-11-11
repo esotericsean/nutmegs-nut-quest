@@ -11,6 +11,7 @@
 #include "Sound.h"
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
+#include "StateLevel1b.h"
 
 extern Sprite * spr_nutmeg;
 
@@ -28,24 +29,25 @@ void Start_EnemyButterfly(void) {
 
 	SetSpriteAnim(THIS, anim_butterfly_fly, 6);
 	THIS->mirror = V_MIRROR;
-	THIS->custom_data[0] = 0;
-	THIS->custom_data[1] = 0;
-	THIS->custom_data[2] = 0;
-	THIS->custom_data[3] = 0;
+	THIS->custom_data[0] = 0xFF; // spawn index (set by spawner)
+	THIS->custom_data[1] = 0;    // vertical cycle counter
+	THIS->custom_data[2] = 0;    // horizontal cycle counter
+	THIS->custom_data[3] = 0;    // packed steps (low nibble = ystep, high nibble = xstep)
 }
 
 
 void Update_EnemyButterfly(void) {
 	//up and down
-	UINT8 ystep = THIS->custom_data[2];
-	UINT8 xstep = THIS->custom_data[3];
+	UINT8 stepPacked = THIS->custom_data[3];
+	UINT8 ystep = stepPacked & 0x0F;
+	UINT8 xstep = (stepPacked >> 4) & 0x0F;
 
 	ystep ++;
 	if (ystep == 5) 
 	{  
 		ystep = 0;
 
-		UINT8 ycnt = THIS->custom_data[0];
+		UINT8 ycnt = THIS->custom_data[1];
 		ycnt ++;
 		if (ycnt < 10)
 		{
@@ -58,15 +60,14 @@ void Update_EnemyButterfly(void) {
 		{
 			ycnt = 0;
 		}
-		THIS->custom_data[0] = ycnt;
+		THIS->custom_data[1] = ycnt;
 	}
-	THIS->custom_data[2] = ystep;
 
 	xstep ++;
 	if (xstep == 10) 
 	{ 
 		xstep = 0; 
-		UINT8 xcnt = THIS->custom_data[1];
+		UINT8 xcnt = THIS->custom_data[2];
 		xcnt ++;
 		//left and right
 		if (xcnt < 10) {
@@ -78,9 +79,9 @@ void Update_EnemyButterfly(void) {
 			TranslateSprite(THIS, -1, 0);
 		}
 		if (xcnt == 25) { xcnt = 0;}
-		THIS->custom_data[1] =  xcnt;
+		THIS->custom_data[2] =  xcnt;
 	}
-	THIS->custom_data[3] = xstep;
+	THIS->custom_data[3] = (UINT8)(((xstep & 0x0F) << 4) | (ystep & 0x0F));
 
 	//kill butterfly if jump on it
 	if (CheckCollision(THIS, spr_nutmeg) && nutmeg.isDying == false) {
@@ -92,6 +93,9 @@ void Update_EnemyButterfly(void) {
 
 			AddStarPairWide (THIS->x-4, THIS->y);
 
+            if (THIS->custom_data[0] != 0xFF) {
+                Level1b_MarkSpawnCollected(THIS->custom_data[0]);
+            }
 			SpriteManagerRemoveSprite (THIS);
 			gameStats.totalEnemyKills++;
 		}
@@ -103,4 +107,7 @@ void Update_EnemyButterfly(void) {
 }
 
 void Destroy_EnemyButterfly(void) {
+    if (THIS->custom_data[0] != 0xFF) {
+        Level1b_ReleaseSpawn(THIS->custom_data[0]);
+    }
 }

@@ -11,6 +11,7 @@
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
 #include "Sfx.h"
+#include "StateLevel1b.h"
 
 extern Sprite * spr_nutmeg;
 
@@ -32,6 +33,7 @@ void Start_EnemyBunny(void) {
 	THIS->mirror = V_MIRROR;
 
 	*((UINT16 *)THIS->custom_data) = 0;
+    THIS->custom_data[2] = 0xFF;
 }
 
 void Update_EnemyBunny(void) {
@@ -90,6 +92,9 @@ void Update_EnemyBunny(void) {
 				AddStarPair (THIS->x - 6, THIS->y+1);
 			}
 
+            if (THIS->custom_data[2] != 0xFF) {
+                Level1b_MarkSpawnCollected(THIS->custom_data[2]);
+            }
 			SpriteManagerRemoveSprite (THIS);
 			gameStats.totalEnemyKills++;
 		}
@@ -102,4 +107,7 @@ void Update_EnemyBunny(void) {
 }
 
 void Destroy_EnemyBunny(void) {
+    if (THIS->custom_data[2] != 0xFF) {
+        Level1b_ReleaseSpawn(THIS->custom_data[2]);
+    }
 }

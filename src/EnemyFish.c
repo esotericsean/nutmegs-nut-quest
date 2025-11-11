@@ -14,6 +14,7 @@
 #include "Palette.h"
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
+#include "StateLevel1b.h"
 
 extern Sprite * spr_nutmeg;
 
@@ -33,12 +34,13 @@ void Start_EnemyFish (void)
 	SetSpriteAnim(THIS, anim_fish_idle, 1);
 	THIS->mirror = V_MIRROR;
 
-	THIS->custom_data[0] = 0;
+	THIS->custom_data[0] = 0xFF; // spawn index (set by spawner)
+	THIS->custom_data[1] = 0;    // movement counter
 }
 
 void Update_EnemyFish (void) 
 {
-	UINT8 c = THIS->custom_data[0];
+	UINT8 c = THIS->custom_data[1];
 	if (c < 30) TranslateSprite(THIS, 0, -2);
 	if (c >= 30 && c < 40) TranslateSprite(THIS, 0, -1);
 	if (c >= 42 && c < 52) TranslateSprite(THIS, 0, 1);
@@ -64,7 +66,7 @@ void Update_EnemyFish (void)
 
 	c++;
 	if (c >= 156) c = 0;
-	THIS->custom_data[0] = c;
+	THIS->custom_data[1] = c;
 
 	if (CheckCollision(THIS, spr_nutmeg) && (nutmeg.isDying == false)){
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0) 
@@ -77,6 +79,9 @@ void Update_EnemyFish (void)
 
 			AddStarPairWide (THIS->x, THIS->y+2);
 
+            if (THIS->custom_data[0] != 0xFF) {
+                Level1b_MarkSpawnCollected(THIS->custom_data[0]);
+            }
 			SpriteManagerRemoveSprite (THIS);
 		}
 		else
@@ -89,4 +94,7 @@ void Update_EnemyFish (void)
 
 void Destroy_EnemyFish (void) 
 {
+	if (THIS->custom_data[0] != 0xFF) {
+        Level1b_ReleaseSpawn(THIS->custom_data[0]);
+    }
 }
