@@ -1499,8 +1499,8 @@ void nutmeg_SetupGame(void) BANKED
 {
     //health system
        
-    // TESTING - Should be 3 lives
-    nutmeg.lives = 99; 
+    // Starting lives
+    nutmeg.lives = 3; 
     nutmeg.acorns = 0;
     nutmeg.goldenAcorns = 0;
   
