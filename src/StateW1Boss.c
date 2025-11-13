@@ -42,16 +42,19 @@ static const UINT16 nutmeg_center_x = (9 * 8) + 4;
 static UINT16 nutmeg_victory_x = (9 * 8) + 4;
 static UINT16 nutmeg_victory_y = (12 * 8);
 static UINT8 handVictoryStage = 0;
-bool handMegaReady = false;
+static bool victoryBalloonsSpawned = false;
+
+#ifdef CGB
+static const UWORD pal_balloon_red[]  = { RGB(31, 31, 31), RGB(30, 27, 26), RGB(31, 7, 5), RGB(0, 0, 0) };
+static const UWORD pal_balloon_blue[] = { RGB(31, 31, 31), RGB(20, 26, 31), RGB(9, 15, 31), RGB(0, 0, 0) };
+#endif
 
 static void Hand_EnableDamage(void) {
     abletohurthand = true;
-    handMegaReady = true;
 }
 
 static void Hand_DisableDamage(void) {
     abletohurthand = false;
-    handMegaReady = false;
 }
 
 static UINT16 clamp_sub_u16(UINT16 value, UINT8 dec) {
@@ -104,6 +107,7 @@ void Start_StateW1Boss (void)
 	w1bosscounter = 0;
 
 	handpos = 0; //start on right side
+    victoryBalloonsSpawned = false;
 
 	// hand position chart //
 	
@@ -159,10 +163,8 @@ void Update_StateW1Boss (void)
             hand_defeat_y = nutmeg_victory_y;
         }
 
-        // Burst of stars exactly where the hand vanished
+        // Single celebratory star at hand location
         AddStarPair(hand_defeat_x, hand_defeat_y);
-        AddStarPair(hand_defeat_x, clamp_sub_u16(hand_defeat_y, 12));
-        AddStarPairWide(clamp_sub_u16(hand_defeat_x, 4), clamp_sub_u16(hand_defeat_y, 20));
 
         // Prepare a victory bounce; lock controls via cutscene mode until she lands
         cutscenemode = enabled;
@@ -373,16 +375,32 @@ void Update_StateW1Boss (void)
                 PlayMusic(boss1win, 0);
             }
 
-            if (w1bosscounter == 50) {
-                AddStarPair(hand_defeat_x, hand_defeat_y);
-            }
-
-            if (w1bosscounter == 90) {
-                AddStarPair(hand_defeat_x, clamp_sub_u16(hand_defeat_y, 16));
-            }
-
-            if (w1bosscounter == 130) {
-                AddStarPairWide(clamp_sub_u16(hand_defeat_x, 4), clamp_sub_u16(hand_defeat_y, 28));
+            if (!victoryBalloonsSpawned && w1bosscounter >= 30) {
+#ifdef CGB
+                SetPalette(SPRITES_PALETTE, 5, 1, pal_balloon_red, _current_bank);
+                SetPalette(SPRITES_PALETTE, 6, 1, pal_balloon_blue, _current_bank);
+#endif
+                UINT16 balloonY = clamp_sub_u16(nutmeg_victory_y, 8);
+                bool spawnedAny = false;
+                Sprite* balloonLeft = SpriteManagerAdd(SpriteBalloon, clamp_sub_u16(nutmeg_victory_x, 12), balloonY);
+                if (balloonLeft) {
+#ifdef CGB
+                    SPRITE_SET_CGB_PALETTE(balloonLeft, 5);
+#endif
+                    balloonLeft->custom_data[0] = 0; // slow drift
+                    spawnedAny = true;
+                }
+                Sprite* balloonRight = SpriteManagerAdd(SpriteBalloon, nutmeg_victory_x + 16u, clamp_sub_u16(balloonY, 4));
+#ifdef CGB
+                if (balloonRight) { SPRITE_SET_CGB_PALETTE(balloonRight, 6); }
+#endif
+                if (balloonRight) {
+                    balloonRight->custom_data[0] = 2; // slower drift
+                    spawnedAny = true;
+                }
+                if (spawnedAny) {
+                    victoryBalloonsSpawned = true;
+                }
             }
 
             if (w1bosscounter == 240) {

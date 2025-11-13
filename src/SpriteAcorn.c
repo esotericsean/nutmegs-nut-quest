@@ -10,9 +10,6 @@ extern Sprite * spr_nutmeg;
 
 static const INT8 acornMoveYAtTime [] = {0,0,0,1,1,0,0,0,-1,-1};
 
-#define ACORN_SPAWN_NONE 0xFFu
-#define ACORN_META_STATE_MASK 0x80u
-
 #define IS_STILL_POS (0)
 #define MOVE_POS (1)
 #define TIMER_POS (2)
@@ -35,7 +32,7 @@ void Start_SpriteAcorn(void) {
 	THIS->custom_data[IS_STILL_POS] = false;
 	THIS->custom_data[MOVE_POS] = 0;
 	THIS->custom_data[TIMER_POS] = 0;
-    THIS->custom_data[3] = ACORN_SPAWN_NONE;
+    THIS->custom_data[3] = 0;
 }
 
 
@@ -60,16 +57,33 @@ void Update_SpriteAcorn(void)
 
 	if (CheckCollision(THIS, spr_nutmeg)) {
         UINT8 meta = THIS->custom_data[3];
-        if (meta != ACORN_SPAWN_NONE) {
-            UINT8 slot = (UINT8)(meta & ~ACORN_META_STATE_MASK);
-            if (meta & ACORN_META_STATE_MASK) {
+        bool hasMeta = (meta & ACORN_META_ASSIGNED) != 0;
+        bool fromLevel1c = (meta & ACORN_META_LEVEL1C) != 0;
+        bool isGolden = (meta & ACORN_META_GOLDEN) != 0;
+        UINT8 slot = (UINT8)(meta & ACORN_META_INDEX_MASK);
+
+        if (hasMeta) {
+            if (fromLevel1c) {
                 Level1c_MarkSpawnCollected(slot);
             } else {
                 Level1b_MarkSpawnCollected(slot);
             }
-            THIS->custom_data[3] = ACORN_SPAWN_NONE;
+            THIS->custom_data[3] = 0;
         }
-        Sfx_Pickup();
+
+        if (isGolden) {
+            levelGoldenAcornFound = true;
+            if (nutmeg.goldenAcorns < 255u) {
+                nutmeg.goldenAcorns++;
+            }
+            if (gameStats.totalGoldenAcorns < 0xFFFFu) {
+                gameStats.totalGoldenAcorns++;
+            }
+            Sfx_OneUp();
+        } else {
+            Sfx_Pickup();
+        }
+
         nutmeg.acorns++;
         gameStats.totalAcorns++;
 		SpriteManagerRemoveSprite (THIS);

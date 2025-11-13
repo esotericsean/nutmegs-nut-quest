@@ -138,6 +138,7 @@ bool GameOver = false;
 switcher cutscenemode;
 bool cutscenewalkleft;
 bool cutscenewalkright;
+bool levelGoldenAcornFound = false;
 
 
 //storing collisions around player after movement
@@ -181,6 +182,8 @@ static const UINT8 kWallJumpGlideLock = 6;      // frames to block glide after a
 static UINT8 pause_input_lock_frames = 0;
 static void nutmeg_begin_death(void) {
     if (nutmeg.isDying) return;
+    nutmeg.pendingDeath = false;
+    nutmeg.pendingDeathTimer = 0;
     nutmeg.isDying = true;
     // initialize counters; let FSM state 1 handle music start and timing
     nutmeg.deathFrames = 0;
@@ -452,6 +455,27 @@ static INT8 MoveY (void)
     return r;
 }
 
+static void update_pending_death_motion(Sprite* sprite) {
+    UINT8 elapsed = 30u - nutmeg.pendingDeathTimer;
+    INT8 dir = (nutmeg.direction == left) ? 1 : -1;
+    INT8 dx = 0;
+
+    if (elapsed < 10u) {
+        dx = (INT8)(dir * 2);
+    } else if (elapsed < 25u) {
+        dx = dir;
+    }
+
+    if (dx != 0) {
+        TranslateSprite(sprite, dx, 0);
+    }
+    nutmeg.offsetX = 0;
+    nutmeg.offsetY = 0;
+    nutmeg.speedX = 0;
+    nutmeg.speedY = 0;
+    nutmeg.movestate = grounded;
+}
+
 
 void nutmegBow_update(void ) BANKED ;
 
@@ -702,6 +726,11 @@ void update_aliveInControl (void)
         // zero out velocities and offsets; leave gravity neutral so she hangs in-air
         nutmeg.speedX = 0;
         nutmeg.speedY = 0;
+        return;
+    }
+
+    if (nutmeg.pendingDeath) {
+        update_pending_death_motion(THIS);
         return;
     }
 
@@ -1388,6 +1417,35 @@ void Update_SpriteNutmeg(void)
         return;
     }
 
+    // palette flash while invincible (very rapid)
+    if (nutmeg.isInvincible) {
+        if ((nutmeg.hurtFlashCounter & 0x01) == 0) {
+            SetPalette(SPRITES_PALETTE, SPRITE_GET_CGB_PALETTE(spr_nutmeg), 1, pal_nutmeg_flash, _current_bank);
+        } else {
+            // choose appropriate base palette (blue if swimming)
+            const UWORD* base = (nutmeg.isSwimming || level.isWaterLevel) ? pal_nutmeg_blue : pal_nutmeg_normal;
+            SetPalette(SPRITES_PALETTE, SPRITE_GET_CGB_PALETTE(spr_nutmeg), 1, base, _current_bank);
+        }
+        if (nutmeg.hurtFlashCounter > 0) nutmeg.hurtFlashCounter--; else {
+            nutmeg.isInvincible = false;
+            const UWORD* base = (nutmeg.isSwimming || level.isWaterLevel) ? pal_nutmeg_blue : pal_nutmeg_normal;
+            SetPalette(SPRITES_PALETTE, SPRITE_GET_CGB_PALETTE(spr_nutmeg), 1, base, _current_bank);
+        }
+    }
+
+    if (nutmeg.pendingDeath) {
+        if (nutmeg.pendingDeathTimer > 0) {
+            nutmeg.pendingDeathTimer--;
+            update_pending_death_motion(THIS);
+            return;
+        } else {
+            nutmeg.pendingDeath = false;
+            nutmeg.isInvincible = false;
+            nutmeg_begin_death();
+            return;
+        }
+    }
+
     /* * * * * * * * * * * * * * * * * * * */
     /*           normal mode               */
     /* * * * * * * * * * * * * * * * * * * */
@@ -1399,21 +1457,6 @@ void Update_SpriteNutmeg(void)
             nutmeg.offsetX = 0;
             ice_air_brake_counter = 0;
             kickbackcounter = 0;
-        }
-        // palette flash while invincible (very rapid)
-        if (nutmeg.isInvincible) {
-            if ((nutmeg.hurtFlashCounter & 0x01) == 0) {
-                SetPalette(SPRITES_PALETTE, SPRITE_GET_CGB_PALETTE(spr_nutmeg), 1, pal_nutmeg_flash, _current_bank);
-            } else {
-                // choose appropriate base palette (blue if swimming)
-                const UWORD* base = (nutmeg.isSwimming || level.isWaterLevel) ? pal_nutmeg_blue : pal_nutmeg_normal;
-                SetPalette(SPRITES_PALETTE, SPRITE_GET_CGB_PALETTE(spr_nutmeg), 1, base, _current_bank);
-            }
-            if (nutmeg.hurtFlashCounter > 0) nutmeg.hurtFlashCounter--; else {
-                nutmeg.isInvincible = false;
-                const UWORD* base = (nutmeg.isSwimming || level.isWaterLevel) ? pal_nutmeg_blue : pal_nutmeg_normal;
-                SetPalette(SPRITES_PALETTE, SPRITE_GET_CGB_PALETTE(spr_nutmeg), 1, base, _current_bank);
-            }
         }
         update_aliveInControl ();
     }
@@ -1459,6 +1502,7 @@ void nutmeg_SetupGame(void) BANKED
     // TESTING - Should be 3 lives
     nutmeg.lives = 99; 
     nutmeg.acorns = 0;
+    nutmeg.goldenAcorns = 0;
   
     nutmeg.isOnIce = false;
 
@@ -1481,6 +1525,8 @@ void nutmeg_SetupGame(void) BANKED
     gameStats.totalDeaths = 0;
     gameStats.totalLevelsCompleted = 0;
     gameStats.totalPowerups = 0;
+    gameStats.totalGoldenAcorns = 0;
+    levelGoldenAcornFound = false;
     nutmeg_setupNextLife();
 }
 
@@ -1494,6 +1540,8 @@ void nutmeg_setupNextLife (void) BANKED
     } else {
         nutmeg.health = low;
     }
+    nutmeg.pendingDeath = false;
+    nutmeg.pendingDeathTimer = 0;
     // keep current bow state (lose on death handled at death exit)
 }
 
@@ -1556,8 +1604,31 @@ void nutmeg_hit(void) BANKED
         gameStats.totalDamageTaken++;
     }
     else if (nutmeg.health == low) {
-        // Route low-health death through unified death init (plays quickdeath + anim)
-        nutmeg_begin_death();
+        if (nutmeg.pendingDeath || nutmeg.isDying) {
+            return;
+        }
+#ifdef USE_CBT_FX
+        Sfx_Hurt();
+#endif
+        if (spr_nutmeg) {
+            static const UINT8 anim_hurt_single[] = {1, 11};
+            SetSpriteAnim(spr_nutmeg, anim_hurt_single, 1);
+        }
+        if (nutmeg.direction == left) {
+            nutmeg.speedX = 100;
+        } else {
+            nutmeg.speedX = -100;
+        }
+        ice_air_brake_counter = 6;
+
+        nutmeg.isInvincible = true;
+        nutmeg.hurtFlashCounter = 45;
+        kickbackcounter = 0;
+        gameStats.totalDamageTaken++;
+
+        nutmeg.pendingDeath = true;
+        nutmeg.pendingDeathTimer = 30;
+        nutmeg.speedY = 0;
     }
 }
 

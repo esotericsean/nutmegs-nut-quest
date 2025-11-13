@@ -35,6 +35,7 @@ void Start_SpriteBalloon(void)
 	SetSpriteAnim(THIS, anim_balloon_static, 1);
 
 	ballooncounter = 0;
+    THIS->custom_data[0] = 0;
 	balloonjump = 0;
 	balloonpop = false;
 	balloonspring = 0;
@@ -44,17 +45,21 @@ void Start_SpriteBalloon(void)
 
 void Update_SpriteBalloon(void) 
 {
-	// if balloon hasn't been popped, move it up and right
+	// if balloon hasn't been popped, move it upward (with optional horizontal drift)
 	if (balloonpop == false) {
 		ballooncounter++;
-
-		if (ballooncounter > 14) ballooncounter = 0;
-		
-		switch (ballooncounter) {
-			case  7: TranslateSprite (THIS, 0, -1); break;
-			case 14: TranslateSprite (THIS, 1, -1); break;
-			default: TranslateSprite (THIS, 0,  0); break;
-		}
+        if ((THIS->custom_data[0] & 2) != 0) {
+            if ((ballooncounter & 3) == 0) {
+                TranslateSprite(THIS, 0, -1);
+            }
+        } else {
+            if ((ballooncounter & 1) == 0) {
+                TranslateSprite(THIS, 0, -1);
+            }
+        }
+        if ((THIS->custom_data[0] & 1) && (ballooncounter & 3) == 0) {
+            TranslateSprite(THIS, 1, 0);
+        }
 	}
 
 	// haven't jumped on it yet

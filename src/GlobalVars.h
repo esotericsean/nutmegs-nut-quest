@@ -70,6 +70,7 @@ typedef struct Nutmeg {
     const NutmegSpeedT *speeds;
 	UINT8 lives;
 	UINT8 acorns;
+    UINT8 goldenAcorns;
 	
 	amount health;
 
@@ -114,9 +115,11 @@ typedef struct Nutmeg {
 	// DEATH vars
 	// is nutmeg dying
 	bool isDying;
+    bool pendingDeath;
 
 	// a death countdown timer
 	UINT8 deathtimer;
+    UINT8 pendingDeathTimer;
 
 	// brief hurt flash / invincibility
 	UINT8 hurtFlashCounter;
@@ -150,6 +153,8 @@ extern NutmegT nutmeg;
 //powerups
 
 extern bool isPaused;
+
+extern bool levelGoldenAcornFound;
 
 
 // Info about the current level
@@ -220,6 +225,7 @@ typedef struct GameStats {
     UINT32 totalLevelsCompleted;
     // Total powerups collected (bow, 1-ups, etc.)
     UINT32 totalPowerups;
+    UINT16 totalGoldenAcorns;
 } GameStatsT;
 
 extern GameStatsT gameStats;

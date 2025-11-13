@@ -18,8 +18,6 @@
 
 extern Sprite * spr_nutmeg;
 
-static UINT8 c = 0; // counter
-
 static const UINT8 anim_fish_idle[] = {1, 0};
 
 //fish color palettes

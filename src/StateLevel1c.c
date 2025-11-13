@@ -11,6 +11,7 @@
 #include "GlobalVars.h"
 #include "Hud.h"
 #include "SpriteNutmeg.h"
+#include "Sfx.h"
 #include "StateLevel1b.h"
 #include "StateLevel1c.h"
 
@@ -35,7 +36,6 @@ static const LevelT levelInfo = {
 };
 
 #define ARRAY_LEN(arr) ((UINT8)(sizeof(arr) / sizeof((arr)[0])))
-#define LEVEL1C_META_FLAG 0x80u
 
 typedef struct {
     UINT16 px;
@@ -95,10 +95,14 @@ static void Level1c_SpawnPending(void) {
         Sprite* spawned = SpriteManagerAdd(slot->type, slot->px, slot->py);
         spawned->lim_x = 9999;
         spawned->lim_y = 999;
-        spawned->custom_data[3] = (UINT8)(LEVEL1C_META_FLAG | i);
+        UINT8 meta = (UINT8)(ACORN_META_ASSIGNED | ACORN_META_LEVEL1C | (i & ACORN_META_INDEX_MASK));
         if (slot->flags & SPAWN_FLAG_GOLDEN) {
-            // Extra golden handling can be added here later
+            meta |= ACORN_META_GOLDEN;
+#ifdef CGB
+            SPRITE_SET_CGB_PALETTE(spawned, 0);
+#endif
         }
+        spawned->custom_data[3] = meta;
         level1cSpawnStatus[i] = SPAWN_STATUS_ACTIVE;
     }
 }
@@ -168,6 +172,7 @@ void Update_StateLevel1c(void)
             if (onDoor && KEY_TICKED(J_UP)) {
                 extern UINT8 stop_music_on_new_state;
                 stop_music_on_new_state = 0;
+                Sfx_DoorEnter();
                 level1b_entry_from = LEVEL1B_ENTRY_FROM_SECRET;
                 SetState(StateLevel1b);
                 return;

@@ -15,6 +15,7 @@
 #include "Hud.h"
 #include "LevelStart.h"
 #include "SpriteNutmeg.h"
+#include "Sfx.h"
 #include "StateLevel1b.h"
 #include "StateLevel1c.h"
 
@@ -124,14 +125,19 @@ static void Level1b_SpawnPending(void) {
         spawned->lim_x = 9999;
         spawned->lim_y = 999;
         switch (slot->type) {
-            case SpriteAcorn:
-                spawned->custom_data[3] = i;
+            case SpriteAcorn: {
+                UINT8 meta = (UINT8)(ACORN_META_ASSIGNED | (i & ACORN_META_INDEX_MASK));
+                spawned->custom_data[3] = meta;
                 break;
+            }
             case EnemyBunny:
                 spawned->custom_data[2] = i;
                 break;
             case EnemyButterfly:
                 spawned->custom_data[0] = i;
+                break;
+            case EnemyBeetle:
+                spawned->custom_data[2] = i;
                 break;
             case EnemyFish:
                 spawned->custom_data[0] = i;
@@ -232,6 +238,7 @@ void Update_StateLevel1b(void)
             if (onSecretDoor && KEY_TICKED(J_UP)) {
                 extern UINT8 stop_music_on_new_state;
                 stop_music_on_new_state = 0;
+                Sfx_DoorEnter();
                 SetState(StateLevel1c);
                 return;
             }

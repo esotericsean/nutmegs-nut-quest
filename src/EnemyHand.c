@@ -15,7 +15,6 @@
 #include <stdbool.h>
 
 extern Sprite * spr_nutmeg;
-extern bool handMegaReady;
 
 static const UINT8 anim_hand_idle[]  = {1, 0};
 static const UINT8 anim_hand_open[]  = {28, 0,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3};
@@ -110,9 +109,8 @@ void UPDATE(void)
         INT16 handTop = (INT16)THIS->y + 6; // buffer so near-top contact counts as stomp
         bool descending = (nutmeg.speedY >= 0);
         bool aboveHand = (nutmegTop <= handTop);
-        bool comingFromAbove = descending || aboveHand;
 
-		if (comingFromAbove)
+		if (descending && aboveHand)
 		{
             bool didDamage = false;
             if (abletohurthand == true) {
@@ -121,7 +119,7 @@ void UPDATE(void)
                 didDamage = true;
             }
 #ifdef USE_CBT_FX
-            if (didDamage && handMegaReady) {
+            if (didDamage) {
                 Sfx_MegaStomp();
             } else {
                 Sfx_MushroomBounce();
@@ -133,7 +131,6 @@ void UPDATE(void)
                 PlayFx(2, 8, 64, 8, 0, 0);
             }
 #endif
-            handMegaReady = false;
             if (nutmeg.speedY < 0) nutmeg.speedY = 0; // ensure we bounce downward only after contact
 			nutmeg.speedY = -400;
 			nutmeg.jumpPeak = 0;
@@ -142,12 +139,14 @@ void UPDATE(void)
 			if (handphase == 0 || handphase == 2) handpos = 4; //hand on the right side, facing left
 			else if (handphase == 1 || handphase == 3) handpos = 9; //hand on left side, facing right
 		}
-		else
-		{
-			//die if touch hand
+        else if ((!descending) && aboveHand) {
+            // Ignore overlap while Nutmeg is bouncing upward away from the hand
+            return;
+        }
+		else {
 			nutmeg_hit();
             nutmeg.movestate = inair;
-		}
+        }
 	}
 }
 

@@ -14,6 +14,7 @@
 #include "Hud.h"
 #include "LevelStart.h"
 #include "SpriteNutmeg.h"
+#include "Sfx.h"
 
 IMPORT_MAP (level1map);
 
@@ -57,6 +58,7 @@ void Start_StateLevel1(void)
 	nut_region = 0;
 	cutscenemode = enabled;
 	levelEndCounter = 0;
+    levelGoldenAcornFound = false;
 
 	SPRITES_8x16;
 
@@ -185,6 +187,7 @@ void Update_StateLevel1(void)
 	else if (spr_nutmeg->x > 500 && spr_nutmeg->x <= 750 && nut_region <= 2) {
 		//SpriteManagerAdd(SpriteAcorn, 984, 40);
 		SpriteManagerAdd(SpriteAcorn, 105*8, 5*8);
+		SpriteManagerAdd(EnemyBeetle, 117*8, 9*8);
 		SpriteManagerAdd(SpriteAcorn, 123*8, 5*8);
 	    nut_region = 3;
 	}

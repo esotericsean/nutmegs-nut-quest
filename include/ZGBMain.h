@@ -44,6 +44,7 @@ _SPRITE_COLOR(SpriteLeaf, leaf)\
 _SPRITE_COLOR(SpriteAcorn, acorn)\
 _SPRITE_COLOR(EnemyButterfly, butterfly)\
 _SPRITE_COLOR(EnemyBunny, bunny)\
+_SPRITE_COLOR(EnemyBeetle, beetle)\
 _SPRITE_COLOR(SpriteCamera, camera)\
 _SPRITE_COLOR(SpriteNutmegTiny, nutmegtiny)\
 _SPRITE_COLOR(SpriteNutHead, nuthead)\
