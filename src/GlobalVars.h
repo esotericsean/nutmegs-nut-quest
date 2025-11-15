@@ -20,6 +20,8 @@ typedef enum { vertical, horizontal } orientationE;
 // set level.iceTileMin and level.iceTileMax to this value for no ice tiles
 #define NO_ICE_TILES (255)
 
+#define MAX_LEVEL_TRACKING (32)
+
 typedef struct NutmegSpeed {
 	// left right friction when 
 	INT16 frictionX;
@@ -155,6 +157,14 @@ extern NutmegT nutmeg;
 extern bool isPaused;
 
 extern bool levelGoldenAcornFound;
+
+extern bool levelCompleted[MAX_LEVEL_TRACKING];
+extern bool levelGoldenCollected[MAX_LEVEL_TRACKING];
+
+extern UINT8 level_playing;
+extern UINT8 highest_level_completed;
+
+void GameProgress_InitIfNeeded(void) BANKED;
 
 
 // Info about the current level

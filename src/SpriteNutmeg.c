@@ -133,7 +133,6 @@ Sprite * spr_camera;
 NutmegT nutmeg;
 
 bool GameOver = false;
-
 //cutscene mode!
 switcher cutscenemode;
 bool cutscenewalkleft;
@@ -714,6 +713,9 @@ static void try_quit_to_overworld(void)
         StopMusic;
         isPaused = false;
         rWY = 144-8;
+        level_current = level_playing;
+        level_next = level_playing;
+        levelGoldenAcornFound = false;
         SetState(StateOverworld);
     }
 }
@@ -736,7 +738,11 @@ void update_aliveInControl (void)
 
     if (pause_input_lock_frames > 0) { pause_input_lock_frames--; }
     // Start + Select held together: quick return to overworld on replayed levels
-    if (KEY_PRESSED(J_START) && KEY_PRESSED(J_SELECT))
+    bool can_quick_exit = (level_playing > 0)
+                       && (level_playing < MAX_LEVEL_TRACKING)
+                       && levelCompleted[level_playing]
+                       && !levelbeat;
+    if (can_quick_exit && KEY_PRESSED(J_START) && KEY_PRESSED(J_SELECT))
     {
         try_quit_to_overworld();
         return;
@@ -1399,13 +1405,16 @@ void Update_SpriteNutmeg(void)
             // Losing a life also loses the bow
             nutmeg.hasbow = false;
             nutmeg.lostbow = true;
-            nutmeg.lives--;
+            bool had_spare_life = (nutmeg.lives > 0);
+            if (had_spare_life) {
+                nutmeg.lives--;
+            }
             StopMusic;
             // restore normal bottom clamp
             spr_nutmeg->lim_y = 144;
             pitDeathLock = 0; // allow future pit deaths next life
             gameStats.totalDeaths++;
-            if (nutmeg.lives == 0) {
+            if (!had_spare_life) {
                 GameOver = true;
                 SetState(StateGameOver);
             } else {
@@ -1505,6 +1514,13 @@ void nutmeg_SetupGame(void) BANKED
     nutmeg.goldenAcorns = 0;
   
     nutmeg.isOnIce = false;
+
+    level_playing = 0;
+    highest_level_completed = 0;
+    for (UINT8 i = 0; i < MAX_LEVEL_TRACKING; ++i) {
+        levelCompleted[i] = false;
+        levelGoldenCollected[i] = false;
+    }
 
     level_current = 0;
 	level_next = 0;

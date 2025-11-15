@@ -1,5 +1,7 @@
 #include "Banks/SetAutoBank.h"
 
+#include <gbdk/platform.h>
+
 #include "BankManager.h"
 #include "ZGBMain.h"
 #include "Music.h"
@@ -89,6 +91,8 @@ static const unsigned char overworld1_water2[] = {
 };
 
 static Sprite *spr_tinyNutmeg;
+static Sprite *spr_hudGolden = 0;
+static bool hud_bow_present = false;
 
 // index = level, value = stateEnum
 static UINT8 StageForLevel [] = {0, 1, 2, 5, 6, 7, 8, 9, 10, 11};
@@ -150,6 +154,19 @@ static const mapStepT * movingToStep;
 static uint8_t unlockedPalette = 3;
 static uint8_t bossLevel = 9;
 #define TILE_0 (0x29)
+
+static bool hud_golden_cached = false;
+static UINT8 hud_golden_tile = 0;
+static UINT8 hud_golden_attr = 0;
+static UINT8 hud_golden_blank = 0;
+static UINT8 hud_golden_blank_attr = 0;
+
+#define HUD_GOLDEN_TILE_X   (13u)
+#define HUD_GOLDEN_TILE_Y   (1u)
+
+// HUD window tile coordinates (from hudtiles.gbr)
+#define HUD_SOURCE_TILE_X   (12u)
+#define HUD_SOURCE_TILE_Y   (1u)
 
 static const mapStepT steps_ow1 [] = {
 	{3, 6, 0}, // home tree
@@ -376,6 +393,22 @@ static void twoDigitsAt (UINT8 x, UINT8 y, UINT8 val)
 	}
 }
 
+static void UpdateHudGoldenSprite(void) {
+	if(!spr_hudGolden) {
+		return;
+	}
+	UINT8 hud_level = automove ? level_next : level_current;
+	bool show = (hud_level > 0) && (hud_level < MAX_LEVEL_TRACKING) && levelGoldenCollected[hud_level];
+	if(show) {
+		spr_hudGolden->custom_data[0] = 1;
+#ifdef CGB
+		SPRITE_SET_CGB_PALETTE(spr_hudGolden, hud_bow_present ? 1 : 3);
+#endif
+	} else {
+		spr_hudGolden->custom_data[0] = 0;
+	}
+}
+
 void Setup_HUD(void)
 {
 	UINT8 level = level_next;
@@ -412,8 +445,41 @@ void Setup_HUD(void)
 	//level display
 	set_tile_xy (11, 1, level);	
 
+	if (!hud_golden_cached) {
+		hud_golden_cached = true;
+		VBK_REG = 0;
+		get_bkg_tiles(HUD_SOURCE_TILE_X, HUD_SOURCE_TILE_Y, 1, 1, &hud_golden_tile);
+#ifdef CGB
+		VBK_REG = 1;
+		get_bkg_tiles(HUD_SOURCE_TILE_X, HUD_SOURCE_TILE_Y, 1, 1, &hud_golden_attr);
+#endif
+		VBK_REG = 0;
+		get_bkg_tiles(HUD_GOLDEN_TILE_X, HUD_GOLDEN_TILE_Y, 1, 1, &hud_golden_blank);
+#ifdef CGB
+		VBK_REG = 1;
+		get_bkg_tiles(HUD_GOLDEN_TILE_X, HUD_GOLDEN_TILE_Y, 1, 1, &hud_golden_blank_attr);
+#endif
+		VBK_REG = 0;
+	}
+	if ((level_next > 0) && (level_next < MAX_LEVEL_TRACKING) && levelGoldenCollected[level_next]) {
+		set_bkg_tiles(HUD_GOLDEN_TILE_X, HUD_GOLDEN_TILE_Y, 1, 1, &hud_golden_tile);
+#ifdef CGB
+		VBK_REG = 1;
+		set_bkg_tiles(HUD_GOLDEN_TILE_X, HUD_GOLDEN_TILE_Y, 1, 1, &hud_golden_attr);
+#endif
+		VBK_REG = 0;
+	} else {
+		set_bkg_tiles(HUD_GOLDEN_TILE_X, HUD_GOLDEN_TILE_Y, 1, 1, &hud_golden_blank);
+#ifdef CGB
+		VBK_REG = 1;
+		set_bkg_tiles(HUD_GOLDEN_TILE_X, HUD_GOLDEN_TILE_Y, 1, 1, &hud_golden_blank_attr);
+#endif
+		VBK_REG = 0;
+	}
+
 	twoDigitsAt (4, 1, nutmeg.lives);
 	twoDigitsAt (16, 1, nutmeg.acorns);
+	UpdateHudGoldenSprite();
 }
 
 #define TINY_NUTMEG_OFFSET_X (0)
@@ -465,6 +531,10 @@ void Start_StateOverworld (void) {
     // allow next quickdeath to play in a new life
     nutmeg_allow_next_quickdeath();
     stop_music_on_new_state = 1;
+    GameProgress_InitIfNeeded();
+    if (highest_level_completed > level_max) {
+        highest_level_completed = level_max;
+    }
 
 	// Setup the map steps for the current overworld;
 	if ((level_current < 10) || (level_current == ENTERING_WORLD_1))
@@ -521,6 +591,20 @@ void Start_StateOverworld (void) {
 
 	if (levelbeat)
 	{	
+		level_current = level_playing;
+		level_next = level_playing;
+		UINT8 completed_level = level_playing;
+		if ((completed_level > 0) && (completed_level < MAX_LEVEL_TRACKING)) {
+			levelCompleted[completed_level] = true;
+			if (levelGoldenAcornFound) {
+				levelGoldenCollected[completed_level] = true;
+			}
+		}
+		if (completed_level > highest_level_completed) {
+			highest_level_completed = completed_level;
+		}
+		levelGoldenAcornFound = false;
+
 		// Did we beat a new level
 		if (level_current >= level_max)
 		{
@@ -535,20 +619,34 @@ void Start_StateOverworld (void) {
 		levelbeat = false;
 	}
 
+	spr_hudGolden = 0;
 	LightenPath();
 	Setup_HUD();
 
 	// sprites
 	SetTinyNutmegAtCurrentLevel();
-	// Add bow first so nuthead draws above it
+	Sprite *spr_hudbow = 0;
+	hud_bow_present = false;
 	if (nutmeg.hasbow) {
-		Sprite *spr_hudbow = SpriteManagerAdd(SpriteNutmegBow, 16-10, 7-17);
+		spr_hudbow = SpriteManagerAdd(SpriteNutmegBow, 16 - 2, 7 - 10);
 		spr_hudbow->custom_data[0] = 1; // HUD mode
+		hud_bow_present = true;
 	}
 	Sprite *spr_nuthead = SpriteManagerAdd(SpriteNutHead, 16, 7);
+	if (spr_hudbow) {
+		spr_hudbow->x = spr_nuthead->x - 2;
+		spr_hudbow->y = spr_nuthead->y - 10;
+	}
 	
 	Sprite * spr_acorn = SpriteManagerAdd(SpriteAcorn, 14*8, 7);
 	SpriteAcornFreeze (spr_acorn);
+	if(!spr_hudGolden) {
+		spr_hudGolden = SpriteManagerAdd(SpriteSmallGoldenAcorn, (13u * 8u), (1u * 8u));
+		if(spr_hudGolden) {
+			spr_hudGolden->custom_data[0] = 0;
+		}
+	}
+	UpdateHudGoldenSprite();
 
 	waterAnimCounter = 0;
 
@@ -735,10 +833,12 @@ void Update_StateOverworld (void) {
 		if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
 			if (level_current < 16)
 			{
+				level_playing = level_current;
 				SetState(levels[level_current]);
 			}
 			else
 			{
+				level_playing = 0;
 				SetState(StateLevelTree);
 			}
 			

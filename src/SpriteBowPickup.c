@@ -10,7 +10,7 @@ extern Sprite * spr_nutmeg;
 extern Sprite * spr_nutmegbow;
 
 // Simple idle frame from nutmegbow tileset (matches small yellow bow)
-static const UINT8 bow_pickup_static[] = {1, 1};
+static const UINT8 bow_pickup_static[] = {1, 0};
 
 // Up/down bob like the acorn collectible
 static const INT8 bowMoveYAtTime [] = {0,0,0,1,1,0,0,0,-1,-1};

@@ -7,6 +7,8 @@
 #include "StateLevel1c.h"
 
 extern Sprite * spr_nutmeg;
+extern UINT8 level_playing;
+extern bool levelGoldenCollected[MAX_LEVEL_TRACKING];
 
 static const INT8 acornMoveYAtTime [] = {0,0,0,1,1,0,0,0,-1,-1};
 
@@ -18,6 +20,17 @@ static const INT8 acornMoveYAtTime [] = {0,0,0,1,1,0,0,0,-1,-1};
 #define MOVE_SPEED (10)
 
 void Start_SpriteAcorn(void) {
+    UINT8 meta = THIS->custom_data[3];
+    bool hasMeta = (meta & ACORN_META_ASSIGNED) != 0;
+    bool isGolden = hasMeta && ((meta & ACORN_META_GOLDEN) != 0);
+    if (!hasMeta) {
+        THIS->custom_data[3] = 0;
+    }
+    if (isGolden && (level_playing < MAX_LEVEL_TRACKING) && levelGoldenCollected[level_playing]) {
+        SpriteManagerRemoveSprite(THIS);
+        return;
+    }
+
 	if (level.orientation == horizontal) {
 		THIS->lim_x = 350;
 		THIS->lim_y = 144;
@@ -32,7 +45,6 @@ void Start_SpriteAcorn(void) {
 	THIS->custom_data[IS_STILL_POS] = false;
 	THIS->custom_data[MOVE_POS] = 0;
 	THIS->custom_data[TIMER_POS] = 0;
-    THIS->custom_data[3] = 0;
 }
 
 
@@ -55,11 +67,17 @@ void Update_SpriteAcorn(void)
 		}
 	}
 
+    UINT8 meta = THIS->custom_data[3];
+    bool hasMeta = (meta & ACORN_META_ASSIGNED) != 0;
+    bool isGolden = hasMeta && ((meta & ACORN_META_GOLDEN) != 0);
+    if (isGolden && (level_playing < MAX_LEVEL_TRACKING) && levelGoldenCollected[level_playing]) {
+        SpriteManagerRemoveSprite(THIS);
+        return;
+    }
+
 	if (CheckCollision(THIS, spr_nutmeg)) {
-        UINT8 meta = THIS->custom_data[3];
         bool hasMeta = (meta & ACORN_META_ASSIGNED) != 0;
         bool fromLevel1c = (meta & ACORN_META_LEVEL1C) != 0;
-        bool isGolden = (meta & ACORN_META_GOLDEN) != 0;
         UINT8 slot = (UINT8)(meta & ACORN_META_INDEX_MASK);
 
         if (hasMeta) {

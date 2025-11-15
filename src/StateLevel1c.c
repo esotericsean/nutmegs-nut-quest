@@ -24,6 +24,11 @@ static const UINT8 collision_tiles_down_level1c[] = {29,30,31,32,0};
 extern Sprite * spr_nutmeg;
 extern UINT8 level1b_entry_from;
 
+#ifdef CGB
+static const UWORD pal_golden_acorn[] = { RGB(31, 31, 31), RGB(28, 27, 9), RGB(22, 21, 5), RGB(0, 0, 0) };
+static bool golden_palette_loaded = false;
+#endif
+
 static const LevelT levelInfo = {
     .isWaterLevel = false,
     .isSpikeLevel = false,
@@ -99,7 +104,11 @@ static void Level1c_SpawnPending(void) {
         if (slot->flags & SPAWN_FLAG_GOLDEN) {
             meta |= ACORN_META_GOLDEN;
 #ifdef CGB
-            SPRITE_SET_CGB_PALETTE(spawned, 0);
+            if (!golden_palette_loaded) {
+                SetPalette(SPRITES_PALETTE, 4, 1, pal_golden_acorn, BANK(StateLevel1c));
+                golden_palette_loaded = true;
+            }
+            SPRITE_SET_CGB_PALETTE(spawned, 4);
 #endif
         }
         spawned->custom_data[3] = meta;
@@ -117,6 +126,9 @@ void Start_StateLevel1c(void)
     levelEndCounter = 0;
 
     SPRITES_8x16;
+#ifdef CGB
+    golden_palette_loaded = false;
+#endif
 
     Level1c_ResetActiveSpawns();
 

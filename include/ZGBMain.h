@@ -72,6 +72,7 @@ _SPRITE_COLOR(SpritePowerLeaf, powerleaf)\
 _SPRITE_COLOR(SpriteMushroom, mushroom)\
 _SPRITE_COLOR(SpriteNutmegBow, nutmegbow)\
 _SPRITE_COLOR(SpriteBowPickup, nutmegbow)\
+_SPRITE_COLOR(SpriteSmallGoldenAcorn, smallgoldenacorn)\
 _SPRITE_COLOR(EnemyRockith, rockith)\
 _SPRITE_COLOR(EnemyTopSpike, topspike)\
 _SPRITE_COLOR(SpriteNutmeg, nutmegSpr)\

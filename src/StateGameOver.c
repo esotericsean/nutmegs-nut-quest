@@ -8,6 +8,7 @@
 #include "Sound.h"
 #include "Keys.h"
 #include "SpriteManager.h"
+#include "SpriteNutmeg.h"
 
 #include "Palette.h"
 
@@ -39,11 +40,27 @@ void Start_StateGameOver(void)
 {
 	SPRITES_8x16;
 
+	stop_music_on_new_state = 1;
+	isPaused = false;
+
+	nutmeg.isDying = false;
+	nutmeg.pendingDeath = false;
+	nutmeg.deathState = 0;
+	nutmeg.deathFrames = 0;
+	nutmeg.deathtimer = 0;
+	nutmeg.speedX = 0;
+	nutmeg.speedY = 0;
+	nutmeg.offsetX = 0;
+	nutmeg.offsetY = 0;
+	nutmeg_allow_next_quickdeath();
+
 	PlayMusic(gameover, 1);
 
 	spr_nutmeg = SpriteManagerAdd(SpriteNutmeg, 16, 49);
 	
 	SpriteManagerAdd(SpriteAcorn, 136, 72);
+
+	GameOver = true;
 
 	InitScrollTiles(0, &gameovertiles);
 	InitScroll(BANK(gameovermap), &gameovermap, collision_tiles_gameover, 0);
@@ -60,7 +77,7 @@ void Update_StateGameOver(void)
 
 	SetPalette(SPRITES_PALETTE, 0, 1, pal_nutmegdark, _current_bank);
 
-	if (KEY_PRESSED(J_START)) {
-		SetState(StateIncube8);
+	if (KEY_TICKED(J_START)) {
+		SetState(StateInitGame);
 	}
 }

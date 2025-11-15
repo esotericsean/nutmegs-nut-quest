@@ -21,7 +21,7 @@ IMPORT_MAP (level1map);
 bool pitdeathactive;
 
 static const UINT8 collision_tiles_level1[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18, 0};
-static const UINT8 collision_tiles_down_level1[] = {29,30,31,32,0};
+static const UINT8 collision_tiles_down_level1[] = {29,30,31,32,79,80,81,0};
 
 DECLARE_MUSIC (quickstart);
 DECLARE_MUSIC (mushrooms);
