@@ -795,24 +795,24 @@ static void moveTowardsNextLevel(void)
 }
 
 static const STATE levels [] = {
-	StateLevelTree, // level 0
-	StateLevel1, // StateLevel1, // level 1-1
-	StateLevel2, // StateLevel2,
-	StateLevel3,
-	StateLevel4,
-	StateLevel5,
-	StateLevel6,
-	StateLevel7,
-	StateLevel8,
-	StateW1Boss,
-	StateWaterLevel1,
-	StateIceLevel1,
-	StateLevel2_1,
-	StateLevel2_2,
-	StateLevel2_platform,
-	StateLevel1_platform,
-	StateLevel2_glidefall,
-	StateLevel2_multi
+	StateLevelTree,        //  0: World 1 Tree (home)
+	StateLevel1,           //  1: World 1-1
+	StateLevel2,           //  2: World 1-2
+	StateLevel3,           //  3: World 1-3
+	StateLevel4,           //  4: World 1-4
+	StateLevel5,           //  5: World 1-5
+	StateLevel6,           //  6: World 1-6
+	StateLevel7,           //  7: World 1-7
+	StateLevel8,           //  8: World 1-8
+	StateW1Boss,           //  9: World 1 Boss
+	StateWaterLevel1,      // 10: World 2-1
+	StateIceLevel1,        // 11: World 2-2
+	StateLevel2_1,         // 12: World 2-3
+	StateLevel2_2,         // 13: World 2-4
+	StateLevel2_platform,  // 14: World 2-5 (platform prototype)
+	StateLevel1_platform,  // 15: World 2-6 (current build)
+	StateLevel2_glidefall, // 16: World 2-6 (glide prototype)
+	StateLevel2_multi      // 17: World 2-7 (multi prototype)
 };
 
 void Update_StateOverworld (void) {
@@ -831,7 +831,7 @@ void Update_StateOverworld (void) {
 		}
 		
 		if (KEY_PRESSED(J_A) || KEY_PRESSED(J_START)) {
-			if (level_current < 16)
+			if (level_current < (sizeof(levels) / sizeof(levels[0])))
 			{
 				level_playing = level_current;
 				SetState(levels[level_current]);

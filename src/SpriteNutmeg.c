@@ -373,6 +373,34 @@ void ResetState(void) {
     pause_input_lock_frames = 8; // small grace to ignore stale START during transitions
 }
 
+static void grant_bow_powerup(void) {
+    if (nutmeg.hasbow) {
+        return;
+    }
+    nutmeg.hasbow = true;
+    nutmeg.lostbow = false;
+    nutmeg.bow_counter = 0;
+    nutmeg.health = full;
+    nutmeg.pickupPauseFrames = 24;
+    nutmeg.isInvincible = true;
+    nutmeg.hurtFlashCounter = 24;
+    if (spr_nutmegbow) {
+        spr_nutmegbow->custom_data[0] = 0;
+        spr_nutmegbow->x = spr_nutmeg->x;
+        spr_nutmegbow->y = spr_nutmeg->y;
+    } else {
+        spr_nutmegbow = SpriteManagerAdd(SpriteNutmegBow, spr_nutmeg->x, spr_nutmeg->y);
+    }
+#ifdef USE_CBT_FX
+    Sfx_BowPickup();
+#else
+    SfxChain_Start(4, 2);
+#endif
+    if (gameStats.totalPowerups < 0xFFFFu) {
+        gameStats.totalPowerups++;
+    }
+}
+
 
 void Start_SpriteNutmeg(void) {
     spr_nutmeg = THIS;
@@ -1308,6 +1336,10 @@ void update_aliveInControl (void)
 
 void Update_SpriteNutmeg(void) 
 {
+    if (KEY_TICKED(J_SELECT)) {
+        grant_bow_powerup();
+    }
+
     // extra life from every 100 acorns collected
     while (nutmeg.acorns >= 100) {
         nutmeg.acorns -= 100;
