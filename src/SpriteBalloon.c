@@ -8,23 +8,25 @@
 
 extern Sprite * spr_nutmeg;
 
+#define BALLOON_FLAGS         0
+#define BALLOON_JUMP          1
+#define BALLOON_SPRING        2
+#define BALLOON_POPCOUNT      3
+#define BALLOON_ALLOW_BOUNCE  4
+#define BALLOON_COUNTER       5
+
+#define BALLOON_FLAG_DRIFT_RIGHT (1u)
+#define BALLOON_FLAG_SLOW_RISE   (2u)
 
 static const UINT8 anim_balloon_empty[]  = {1, 0};
 static const UINT8 anim_balloon_static[] = {1, 1};
 static const UINT8 anim_balloon_jumped[] = {1, 2};
 static const UINT8 anim_balloon_popped[] = {9, 2, 2, 3, 4, 0, 0, 0, 0, 0};
 
-static UINT8 balloonjump;
-static bool balloonpop;
-static UINT8 ballooncounter;
-static UINT8 balloonspring;
-static UINT8 balloonpopcount;
-static bool balloonAllowBounce;
-
 void Start_SpriteBalloon(void) 
 {
 	if (level.orientation == horizontal) {
-		THIS->lim_x = 160; //350
+		THIS->lim_x = 500;
 		THIS->lim_y = 144;
 	}
 	else if (level.orientation == vertical) {
@@ -34,76 +36,100 @@ void Start_SpriteBalloon(void)
 
 	SetSpriteAnim(THIS, anim_balloon_static, 1);
 
-	ballooncounter = 0;
-    THIS->custom_data[0] = 0;
-	balloonjump = 0;
-	balloonpop = false;
-	balloonspring = 0;
-	balloonpopcount = 0;
-    balloonAllowBounce = true;
+	THIS->custom_data[BALLOON_FLAGS] = 0;
+	THIS->custom_data[BALLOON_JUMP] = 0;
+	THIS->custom_data[BALLOON_SPRING] = 0;
+	THIS->custom_data[BALLOON_POPCOUNT] = 0;
+	THIS->custom_data[BALLOON_ALLOW_BOUNCE] = 1;
+	THIS->custom_data[BALLOON_COUNTER] = 0;
 }
 
 void Update_SpriteBalloon(void) 
 {
-	// if balloon hasn't been popped, move it upward (with optional horizontal drift)
-	if (balloonpop == false) {
-		ballooncounter++;
-        if ((THIS->custom_data[0] & 2) != 0) {
-            if ((ballooncounter & 3) == 0) {
-                TranslateSprite(THIS, 0, -1);
-            }
-        } else {
-            if ((ballooncounter & 1) == 0) {
-                TranslateSprite(THIS, 0, -1);
-            }
-        }
-        if ((THIS->custom_data[0] & 1) && (ballooncounter & 3) == 0) {
-            TranslateSprite(THIS, 1, 0);
-        }
+	UINT8 jump = THIS->custom_data[BALLOON_JUMP];
+
+	// Rise until popped (each balloon tracks its own counter)
+	if (jump < 2) {
+		UINT8 flags = THIS->custom_data[BALLOON_FLAGS];
+		UINT8 counter = THIS->custom_data[BALLOON_COUNTER] + 1;
+		if (counter > 14) {
+			counter = 0;
+		}
+		THIS->custom_data[BALLOON_COUNTER] = counter;
+
+		if ((flags & BALLOON_FLAG_SLOW_RISE) != 0) {
+			if ((counter & 3) == 0) {
+				TranslateSprite(THIS, 0, -1);
+			}
+			if ((flags & BALLOON_FLAG_DRIFT_RIGHT) != 0 && (counter & 3) == 0) {
+				TranslateSprite(THIS, 1, 0);
+			}
+		} else {
+			// Default 1-6 drift: mostly up, occasional up-right (classic cycle)
+			switch (counter) {
+				case 7:
+					TranslateSprite(THIS, 0, -1);
+					break;
+				case 14:
+					TranslateSprite(THIS, 1, -1);
+					break;
+				default:
+					break;
+			}
+		}
 	}
 
-	// haven't jumped on it yet
-	if (balloonjump == 0) {
+	if (jump == 0) {
 		SetSpriteAnim(THIS, anim_balloon_static, 1);
 	}
+	else if (jump == 1) {
+		if (THIS->custom_data[BALLOON_SPRING] == 0) {
+			SetSpriteAnim(THIS, anim_balloon_jumped, 1);
+		} else if (THIS->custom_data[BALLOON_SPRING] >= 20) {
+			SetSpriteAnim(THIS, anim_balloon_static, 1);
+		}
 
-	// jumped once
-	else if (balloonjump == 1) {
-		if (balloonspring == 0) SetSpriteAnim(THIS, anim_balloon_jumped, 1);
-		else if (balloonspring >= 20) SetSpriteAnim(THIS, anim_balloon_static, 1);
+		if (THIS->custom_data[BALLOON_SPRING] < 21) {
+			THIS->custom_data[BALLOON_SPRING]++;
+		}
+	}
+	else if (jump == 2) {
+		SetSpriteAnim(THIS, anim_balloon_popped, 20);
 
-		if (balloonspring < 21) balloonspring++;
+		if (THIS->custom_data[BALLOON_POPCOUNT] == 0) {
+			Sfx_BalloonPop();
+		}
+		if (THIS->custom_data[BALLOON_POPCOUNT] < 25) {
+			THIS->custom_data[BALLOON_POPCOUNT]++;
+		}
+
+		if (THIS->custom_data[BALLOON_POPCOUNT] >= 20) {
+			SetSpriteAnim(THIS, anim_balloon_empty, 1);
+			SpriteManagerRemoveSprite(THIS);
+			return;
+		}
 	}
 
-	// jumped twice
-    else if (balloonjump == 2) {
-        SetSpriteAnim(THIS, anim_balloon_popped, 20);
+	if (CheckCollision(THIS, spr_nutmeg)) {
+		if (THIS->custom_data[BALLOON_ALLOW_BOUNCE]) {
+			THIS->custom_data[BALLOON_ALLOW_BOUNCE] = 0;
+			if (jump < 2) {
+				Sfx_Stomp();
+			}
+			nutmeg.jumpPeak = 0;
+			nutmeg.movestate = inair;
 
-        if (balloonpopcount == 0) { Sfx_BalloonPop(); }
-        if (balloonpopcount < 25) balloonpopcount++;
-
-        if (balloonpopcount >= 20) {
-            SetSpriteAnim(THIS, anim_balloon_empty, 1);
-            SpriteManagerRemoveSprite (THIS);
-        }
-    }
-
-    if (CheckCollision(THIS, spr_nutmeg)) {
-        if (balloonAllowBounce) {
-            balloonAllowBounce = false;
-            if (balloonjump < 2) { Sfx_Stomp(); }
-            nutmeg.jumpPeak = 0;
-            nutmeg.movestate = inair;
-
-            if (balloonjump == 0) { nutmeg.speedY = -(nutmeg.enemyBounceY>>1); balloonjump = 1; }
-            else if (balloonjump == 1) { nutmeg.speedY = -nutmeg.enemyBounceY; balloonjump = 2; }
-        }
-	} else {
-        // re-arm bounce once Nutmeg has cleared the balloon and is falling back down
-        if (nutmeg.speedY >= 0) {
-            balloonAllowBounce = true;
-        }
-    }
+			if (jump == 0) {
+				nutmeg.speedY = -(nutmeg.enemyBounceY >> 1);
+				THIS->custom_data[BALLOON_JUMP] = 1;
+			} else if (jump == 1) {
+				nutmeg.speedY = -nutmeg.enemyBounceY;
+				THIS->custom_data[BALLOON_JUMP] = 2;
+			}
+		}
+	} else if (nutmeg.speedY >= 0) {
+		THIS->custom_data[BALLOON_ALLOW_BOUNCE] = 1;
+	}
 }
 
 void Destroy_SpriteBalloon(void) 

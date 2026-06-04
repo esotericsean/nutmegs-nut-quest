@@ -387,7 +387,7 @@ void Update_StateW1Boss (void)
 #ifdef CGB
                     SPRITE_SET_CGB_PALETTE(balloonLeft, 5);
 #endif
-                    balloonLeft->custom_data[0] = 0; // slow drift
+                    balloonLeft->custom_data[0] = 0;
                     spawnedAny = true;
                 }
                 Sprite* balloonRight = SpriteManagerAdd(SpriteBalloon, nutmeg_victory_x + 16u, clamp_sub_u16(balloonY, 4));
@@ -395,7 +395,7 @@ void Update_StateW1Boss (void)
                 if (balloonRight) { SPRITE_SET_CGB_PALETTE(balloonRight, 6); }
 #endif
                 if (balloonRight) {
-                    balloonRight->custom_data[0] = 2; // slower drift
+                    balloonRight->custom_data[0] = 2; // BALLOON_FLAG_SLOW_RISE
                     spawnedAny = true;
                 }
                 if (spawnedAny) {
