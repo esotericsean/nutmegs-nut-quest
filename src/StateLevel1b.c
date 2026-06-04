@@ -151,6 +151,72 @@ static void Level1b_SpawnPending(void) {
 
 
 static UINT8 win_warmup;
+static UINT8 flagpole_tile_x = 0xFF;
+static UINT8 flagpole_tile_y = 0;
+
+#define FLAGPOLE_TILE_BODY (0x21)
+#define FLAGPOLE_TILE_CAP  (0x22)
+
+static void Level1b_InitFlagpoleSite(void) {
+    UINT8 tiles_w = 0;
+    UINT8 tiles_h = 0;
+    UINT16 fx = 0;
+    UINT16 fy = 0;
+    UINT8 search_w = 40;
+    UINT8 start_x;
+    UINT8 found;
+
+    GetMapSize(BANK(level1bmap), &level1bmap, &tiles_w, &tiles_h);
+    if (tiles_w == 0 || tiles_h == 0) {
+        flagpole_tile_x = 0xFF;
+        return;
+    }
+
+    start_x = (tiles_w > search_w) ? (UINT8)(tiles_w - search_w) : 0;
+    found = ScrollFindTile(BANK(level1bmap), &level1bmap, FLAGPOLE_TILE_BODY,
+        start_x, 0, search_w, tiles_h, &fx, &fy);
+    if (!found) {
+        found = ScrollFindTile(BANK(level1bmap), &level1bmap, FLAGPOLE_TILE_CAP,
+            start_x, 0, search_w, tiles_h, &fx, &fy);
+    }
+    if (!found) {
+        flagpole_tile_x = 0xFF;
+        return;
+    }
+
+    flagpole_tile_x = (UINT8)fx;
+    flagpole_tile_y = (UINT8)fy;
+    while ((UINT8)(flagpole_tile_y + 1) < tiles_h) {
+        UINT8 below = GetScrollTile(flagpole_tile_x, (UINT8)(flagpole_tile_y + 1));
+        if (below == FLAGPOLE_TILE_BODY || below == FLAGPOLE_TILE_CAP) {
+            flagpole_tile_y++;
+        } else {
+            break;
+        }
+    }
+}
+
+static void Level1b_TryActivateFlagpole(void) {
+    UINT16 px;
+    UINT16 pole_px;
+
+    if (flagpole_tile_x == 0xFF) {
+        return;
+    }
+
+    px = spr_nutmeg->x;
+    pole_px = ((UINT16)flagpole_tile_x) << 3;
+    // Activate when Nutmeg reaches the pole column, including when jumping over it.
+    if (px + 12 < pole_px || px > pole_px + 16) {
+        return;
+    }
+
+    FlagPole_Activate(flagpole_tile_x, flagpole_tile_y);
+    levelbeat = true;
+    levelEndCounter = 0;
+    cutscenemode = enabled;
+    cutscenewalkright = true;
+}
 
 void Start_StateLevel1b(void)
 {
@@ -182,6 +248,7 @@ void Start_StateLevel1b(void)
     InitScrollTiles(0, &level1tiles);
     // Load the intended 1-1b map
     InitScroll(BANK(level1bmap), &level1bmap, collision_tiles_level1b, collision_tiles_down_level1b);
+    Level1b_InitFlagpoleSite();
     Hud_Init();
     FlagPole_Init();
     // No LevelStart banner in sub-room
@@ -255,33 +322,8 @@ void Update_StateLevel1b(void)
         if (levelEndCounter < 250) levelEndCounter++;
     }
 
-    // Trigger flagpole when Nutmeg overlaps the pole column after intro walk
     if (!nutmeg.isDying && (levelbeat == false) && (cutscenemode == disabled)) {
-        UINT16 px = spr_nutmeg->x;
-        UINT16 py = spr_nutmeg->y;
-        UINT8 tx = (UINT8)(px >> 3);
-        UINT8 ty = (UINT8)(py >> 3);
-        if (ty == 0) ty = 1; // guard underflow for sampling above
-
-        const UINT8 POLE1 = 0x21; // pole body
-        const UINT8 POLE2 = 0x22; // pole cap
-
-        UINT8 t  = GetScrollTile(tx,     ty);
-        UINT8 tr = GetScrollTile((UINT8)(tx + 1), ty);
-        if (t == POLE1 || t == POLE2 || tr == POLE1 || tr == POLE2) {
-            UINT8 poleX = (t == POLE1 || t == POLE2) ? tx : (UINT8)(tx + 1);
-            UINT8 poleY = ty;
-            while ((UINT8)(poleY + 1) < 32) {
-                UINT8 below = GetScrollTile(poleX, (UINT8)(poleY + 1));
-                if (below == POLE1 || below == POLE2) poleY++;
-                else break;
-            }
-            FlagPole_Activate(poleX, poleY);
-            levelbeat = true;
-            levelEndCounter = 0;
-            cutscenemode = enabled;
-            cutscenewalkright = true;
-        }
+        Level1b_TryActivateFlagpole();
     }
 }
 
