@@ -218,18 +218,15 @@ void main(void) {
 	LCDC_REG |= LCDCF_OBJDEFAULT | LCDCF_OBJON | LCDCF_BGON;
 	WY_REG = 145;
 
-	// FOR TEST - Skip past the start stuff
-	
-	// 6 = force scroll
-	// w1 = 10 - stage 8
-	W1LevelSelection = 0;
-	next_state = StateInitGame;
-	levelbeat = true;
-	level_max = 1;
-	level_current = 0;
-	level_next = 1;
-	nutmeg.lives = 99;
-	add_LCD (LCD_NoSpritesOnHUD_isr);
+	// FOR TEST - Skip past the start stuff (keep commented for normal boot)
+	// W1LevelSelection = 0;
+	// next_state = StateInitGame;
+	// levelbeat = true;
+	// level_max = 1;
+	// level_current = 0;
+	// level_next = 1;
+	// nutmeg.lives = 99;
+	// add_LCD (LCD_NoSpritesOnHUD_isr);
 	// END FOR TEST
 	
 
