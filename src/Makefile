@@ -26,3 +26,7 @@ endif
 DEFAULT_SPRITES_SIZE = SPRITES_8x16
 
 include $(ZGB_PATH)/src/MakefileCommon
+
+# SfxSeq.c used #pragma bank 0 and overflows home ROM; keep disabled (see SfxSeq.c.disabled)
+CLASSES := $(filter-out SfxSeq.c,$(CLASSES))
+OBJS := $(filter-out $(OBJDIR)/SfxSeq.o,$(OBJS))

@@ -13,13 +13,6 @@
 #include "Hud.h"
 #include "LevelStart.h"
 #include "SpriteNutmeg.h"
-bool windEnabled = true;
-INT8 windGroundIdle = -1;   // one px every N frames
-INT8 windGroundRight = -1;
-INT8 windGroundLeft = -1;
-INT8 windAirNone = -1;
-INT8 windAirRight = -1;
-INT8 windAirLeft = -2;
 
 IMPORT_MAP (level5map);
 
@@ -178,8 +171,15 @@ void Start_StateLevel5 (void)
     PlayMusic(raindrops, 1);
 
     scroll_target = nutmeg_Add(3*8, 11*8);
-    // Enable wind after player spawn (ResetState disables it by default)
+    // Wind tuning for 1-5 (ResetState clears windEnabled / windGroundMaxForward)
     windEnabled = true;
+    windGroundIdle = -12;
+    windGroundRight = -10;
+    windGroundLeft = -14;
+    windAirNone = -12;
+    windAirRight = -12;
+    windAirLeft = -60;
+    windGroundMaxForward = 132;
 
 	InitScrollTiles(0, &level5tiles);
 	InitScroll(BANK(level5map), &level5map, collision_tiles_level5, collision_tiles_down_level5);

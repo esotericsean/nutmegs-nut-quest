@@ -345,6 +345,13 @@ void ResetState(void) {
     }
     // Disable wind by default; levels enable explicitly (e.g., 1-5)
     windEnabled = false;
+    windGroundIdle = 0;
+    windGroundRight = 0;
+    windGroundLeft = 0;
+    windAirNone = 0;
+    windAirRight = 0;
+    windAirLeft = 0;
+    windGroundMaxForward = 0;
     nutmeg.hurtFlashCounter = 0;
     nutmeg.isInvincible = false;
 
@@ -1089,24 +1096,26 @@ void update_aliveInControl (void)
 
     }
 
-    // Wind handling (from windy levels such as 1-5), applied as acceleration so normal physics still work
+    // Wind handling (from windy levels such as 1-5); tuned per-level via GlobalVars wind* fields
     if (windEnabled) {
         if (nutmeg.movestate == inair) {
             if (KEY_PRESSED(J_RIGHT)) {
-                nutmeg.speedX += -12;  // still allows forward gain but stronger wind
+                nutmeg.speedX += windAirRight;
             } else if (KEY_PRESSED(J_LEFT)) {
-                nutmeg.speedX += -60;  // stronger push left
+                nutmeg.speedX += windAirLeft;
             } else {
-                nutmeg.speedX += -28;  // default air push left stronger
+                nutmeg.speedX += windAirNone;
             }
-        } else { // grounded
+        } else {
             if (KEY_PRESSED(J_RIGHT)) {
-                nutmeg.speedX += -8; // still possible to move forward
+                nutmeg.speedX += windGroundRight;
+                if (windGroundMaxForward > 0 && nutmeg.speedX > (INT16)windGroundMaxForward) {
+                    nutmeg.speedX = (INT16)windGroundMaxForward;
+                }
             } else if (KEY_PRESSED(J_LEFT)) {
-                nutmeg.speedX += -14;
+                nutmeg.speedX += windGroundLeft;
             } else {
-                // stronger idle drift; use fractional via offset
-                nutmeg.offsetX += -12; // ~0.12 px/frame
+                nutmeg.offsetX += windGroundIdle;
             }
         }
     }

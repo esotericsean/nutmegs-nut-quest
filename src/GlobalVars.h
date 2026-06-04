@@ -290,6 +290,7 @@ extern INT8 windGroundLeft;
 extern INT8 windAirNone;
 extern INT8 windAirRight;
 extern INT8 windAirLeft;
+extern UINT8 windGroundMaxForward; // 0 = no cap; else max speedX when walking into wind on ground
 
 typedef struct {
 	UINT8 x;
