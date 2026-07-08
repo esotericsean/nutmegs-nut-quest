@@ -16,6 +16,7 @@
 IMPORT_MAP (overworld1map);
 IMPORT_MAP (overworld2map);
 IMPORT_MAP (overworld3map);
+IMPORT_MAP (overworld4map);
 
 // OVerworld map scene
 
@@ -49,6 +50,8 @@ static UINT8 overworldNum = 0;
 #define ENTERING_WORLD_1 (0xfd)
 #define ENTERING_WORLD_3_FROM_2 (0xfc)
 #define ENTERING_WORLD_2_FROM_3 (0xfb)
+#define ENTERING_WORLD_4_FROM_3 (0xfa)
+#define ENTERING_WORLD_3_FROM_4 (0xf9)
 
 const unsigned char overworld1_tree[] = {
 	0x36,0x00,0x5b,0x00,0xff,0x00,0xbb,0x00,
@@ -132,7 +135,14 @@ static const mapLevelDirectionT levelDirections[] = {
 	{J_RIGHT, J_LEFT},
 	{J_LEFT, J_RIGHT},
 	{J_UP, J_DOWN},
-	{J_UP, 0xff}, // 3-Boss
+	{J_UP, J_DOWN},     // 3-Boss (down = walk off to world 4)
+	{J_UP, J_LEFT},     // 4-1
+	{J_RIGHT, J_LEFT},  // 4-2
+	{J_RIGHT, J_DOWN},  // 4-3
+	{J_RIGHT, J_LEFT},  // 4-4
+	{J_RIGHT, J_DOWN},  // 4-5
+	{J_LEFT, J_DOWN},   // 4-6
+	{J_RIGHT, 0xff},    // 4-Boss
 };
 
 typedef struct mapStepT {
@@ -308,6 +318,44 @@ static const mapStepT steps_ow3 [] = {
 	{0xff, 0xff, 0xff} // end of array
 };
 
+static const mapStepT steps_ow4 [] = {
+	{16, 254, 25}, // 254 = special value to force off the top of the map
+	{16, 3, 25},
+	{16, 4, 25},
+	{16, 5, 26}, // 4-1
+	{15, 5, 26},
+	{15, 6, 26},
+	{15, 7, 26},
+	{14, 7, 27}, // 4-2
+	{13, 7, 27},
+	{12, 7, 27},
+	{11, 7, 27},
+	{10, 7, 28}, // 4-3
+	{10, 8, 28},
+	{10, 9, 28},
+	{9, 9, 28},
+	{8, 9, 29}, // 4-4
+	{7, 9, 29},
+	{6, 9, 29},
+	{5, 9, 29},
+	{5, 10, 29},
+	{5, 11, 29},
+	{4, 11, 29},
+	{3, 11, 30}, // 4-5
+	{3, 12, 30},
+	{3, 13, 30},
+	{4, 13, 30},
+	{5, 13, 30},
+	{6, 13, 31}, // 4-6
+	{6, 14, 31},
+	{6, 15, 31},
+	{5, 15, 31},
+	{4, 15, 32}, // 4-Boss
+	{4, 16, 32},
+	{4, 17, 33}, // into the cave
+	{0xff, 0xff, 0xff} // end of array
+};
+
 #define PAL_LIGHT_PATH (6)
 
 static const mapStepT *mapStepForLevel (UINT8 l)
@@ -326,6 +374,11 @@ static void LightenPath (void)
 	const mapStepT *p = currentMapSteps;
 	uint8_t lastStage = p->level;
 	bool done = false;
+	if (overworldNum == 4)
+	{
+		// overworld4.gbr doesn't have the lit path/dot tiles (36/37/39) yet
+		return;
+	}
 	if (overworldNum == 1)
 	{
 		// skip highlighting the tree
@@ -334,6 +387,13 @@ static void LightenPath (void)
 
 	while ((done == false) && (p->level != 0xff))
 	{
+		if ((p->x >= 240) || (p->y >= 240))
+		{
+			// skip offscreen special steps (254 = walk in from off the map)
+			lastStage = p->level;
+			p++;
+			continue;
+		}
 		if (p->level == lastStage)
 		{	
 			set_tile_xy ( p->x, p->y, 37);
@@ -429,6 +489,14 @@ void Setup_HUD(void)
 			level = 1;
 		}
 	}
+	else if (overworldNum == 4)
+	{
+		level = level_next - 25;
+		if (level_next < 27)
+		{
+			level = 1;
+		}
+	}
 	level += TILE_0;
 
 	if (level_next == 0)
@@ -436,7 +504,7 @@ void Setup_HUD(void)
 		// show the tree icon?
 		level = 0x1e;
 	}
-	else if ((level_next == 9) || (level_next == 19) || (level_next == 25))
+	else if ((level_next == 9) || (level_next == 19) || (level_next == 25) || (level_next == 32))
 	{
 		// show the boss icon?
 		level = 0x27;
@@ -505,6 +573,11 @@ static void SetTinyNutmegAtCurrentLevel(void)
 		// move nutmeg off the left side of the screen
 		spr_tinyNutmeg->x = 65527;
 	}
+	if (overworldNum == 4 && level == 25)
+	{
+		// move nutmeg off the top of the screen
+		spr_tinyNutmeg->y = 65527;
+	}
 }
 
 static void startAutoMoveTowards (UINT8 towards)
@@ -556,7 +629,10 @@ void Start_StateOverworld (void) {
 		level.isOverworld = true;
 		unlockedPalette = 7;
 		bossLevel = 19;
-	} else
+	}
+	else if (((level_current >= 20) && (level_current < 26))
+		|| (level_current == ENTERING_WORLD_3_FROM_2)
+		|| (level_current == ENTERING_WORLD_3_FROM_4))
 	{
 		overworldNum = 3;
 		currentMapSteps = steps_ow3;
@@ -564,6 +640,14 @@ void Start_StateOverworld (void) {
 		level.isOverworld = true;
 		unlockedPalette = 3;
 		bossLevel = 25;
+	} else
+	{
+		overworldNum = 4;
+		currentMapSteps = steps_ow4;
+		InitScroll(BANK(overworld4map), &overworld4map, collision_tiles_overworld1, 0);
+		level.isOverworld = true;
+		unlockedPalette = 4;
+		bossLevel = 32;
 	}
 
 	// on world transistions do some fiddling to make nutmeg walk to the correct level
@@ -586,6 +670,16 @@ void Start_StateOverworld (void) {
 	{
 		level_current = 19;
 		level_next = 20;
+		startAutoMoveTowards(level_next);
+	} else if (level_current == ENTERING_WORLD_3_FROM_4)
+	{
+		level_current = 26;
+		level_next = 25;
+		startAutoMoveTowards(level_next);
+	} else if (level_current == ENTERING_WORLD_4_FROM_3)
+	{
+		level_current = 25;
+		level_next = 26;
 		startAutoMoveTowards(level_next);
 	}
 
@@ -693,7 +787,15 @@ static void moveTowardsNextLevel(void)
 			tx <<= 3;
 		}
 		UINT16 ty = movingToStep->y;
-		ty <<= 3;
+		if (ty == 254)
+		{
+			// max - 8 (off the top of the map)
+			ty = 65527;
+		}
+		else
+		{
+			ty <<= 3;
+		}
 
 		// check if we are there
 		if ((x == tx) && (y == ty))
@@ -716,6 +818,11 @@ static void moveTowardsNextLevel(void)
 					level_current = ENTERING_WORLD_3_FROM_2;
 					SetState (StateOverworldChange);
 				}
+				else if ((overworldNum == 3) && (level_next == 26))
+				{
+					level_current = ENTERING_WORLD_4_FROM_3;
+					SetState (StateOverworldChange);
+				}
 				else
 				{
 					Setup_HUD();
@@ -731,9 +838,14 @@ static void moveTowardsNextLevel(void)
 					level_current = ENTERING_WORLD_1;
 					SetState (StateOverworldChange);
 				}
-				if ((overworldNum == 3) && (level_next == 19))
+				else if ((overworldNum == 3) && (level_next == 19))
 				{
 					level_current = ENTERING_WORLD_2_FROM_3;
+					SetState (StateOverworldChange);
+				}
+				else if ((overworldNum == 4) && (level_next == 25))
+				{
+					level_current = ENTERING_WORLD_3_FROM_4;
 					SetState (StateOverworldChange);
 				}
 				else
@@ -764,7 +876,15 @@ static void moveTowardsNextLevel(void)
 					tx <<= 3;
 				}
 				ty = movingToStep->y;
-				ty <<= 3;
+				if (ty == 254)
+				{
+					// max - 8 (off the top of the map)
+					ty = 65527;
+				}
+				else
+				{
+					ty <<= 3;
+				}
 			}
 		}
 
@@ -783,7 +903,12 @@ static void moveTowardsNextLevel(void)
 			TranslateSprite (spr_tinyNutmeg, -1, 0);
 			spr_tinyNutmeg->mirror = V_MIRROR;
 		}
-		else if (y < ty) { TranslateSprite (spr_tinyNutmeg, 0, 1);}
+		else if (ty == 65527)
+		{
+			// this is the special case to move nutmeg off the top of the map
+			TranslateSprite (spr_tinyNutmeg, 0, -1);
+		}
+		else if ((y > 60000) || (y < ty)) { TranslateSprite (spr_tinyNutmeg, 0, 1);}
 		else if (y > ty) { TranslateSprite (spr_tinyNutmeg, 0, -1);}
 	}
 
@@ -825,7 +950,7 @@ void Update_StateOverworld (void) {
 		{
 			startAutoMoveTowards (level_current-1);
 		}
-		else if ((levelDirections[level_current].next == j) && (level_current < 25))
+		else if ((levelDirections[level_current].next == j) && (level_current < 32))
 		{
 			startAutoMoveTowards (level_current+1);
 		}
