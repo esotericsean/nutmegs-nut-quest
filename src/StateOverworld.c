@@ -433,6 +433,16 @@ static UINT8 getTens (UINT8 full)
     return t;
 }
 
+// overworld4's HUD bar is painted with palette 4 (near-black color 0), but the
+// shared digit tiles expect a white color 0 - repaint digit cells with palette 5
+static void hudDigitAttr (UINT8 x, UINT8 y)
+{
+	if (overworldNum == 4)
+	{
+		set_attribute_xy (x, y, 5);
+	}
+}
+
 static void twoDigitsAt (UINT8 x, UINT8 y, UINT8 val)
 {
 	UINT8 tile = 0;
@@ -442,14 +452,17 @@ static void twoDigitsAt (UINT8 x, UINT8 y, UINT8 val)
 	{
 		tile = ones + TILE_0;
 		set_tile_xy (x, y, tile);
+		hudDigitAttr (x, y);
 	}
 	else
 	{
 		tile = tens + TILE_0;
 		set_tile_xy (x, y, tile);
+		hudDigitAttr (x, y);
 		tile = ones + TILE_0;
 		x++;
 		set_tile_xy (x, y, tile);
+		hudDigitAttr (x, y);
 	}
 }
 
@@ -512,6 +525,7 @@ void Setup_HUD(void)
 
 	//level display
 	set_tile_xy (11, 1, level);	
+	hudDigitAttr (11, 1);
 
 	if (!hud_golden_cached) {
 		hud_golden_cached = true;
