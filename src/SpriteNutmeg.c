@@ -147,8 +147,6 @@ UINT8 collisionY;
 //if nutmeg loses her bow, add some kickback
 UINT8 kickbackcounter;
 
-static UINT8 acorn_throw_cooldown = 0;
-
 // After jumping, allow momentum to carry in air for a short time (reduced air braking)
 static UINT8 ice_air_brake_counter = 0; // frames remaining of reduced air friction
 
@@ -409,41 +407,6 @@ static void grant_bow_powerup(void) {
         gameStats.totalPowerups++;
     }
 }
-
-static void try_throw_acorn(void) {
-    if (acorn_throw_cooldown > 0) {
-        return;
-    }
-    if (nutmeg.acorns == 0) {
-        return;
-    }
-    if (nutmeg.isDying || nutmeg.pickupPauseFrames > 0) {
-        return;
-    }
-    INT16 shotX = spr_nutmeg->x + ((nutmeg.direction == right) ? 12 : -12);
-    INT16 shotY = spr_nutmeg->y - 8;
-    Sprite* shot = SpriteManagerAdd(SpriteAcorn, shotX, shotY);
-    if (!shot) {
-        return;
-    }
-    nutmeg.acorns--;
-    acorn_throw_cooldown = 12;
-    INT8 init_vx = (nutmeg.direction == right) ? 6 : -6;
-    INT8 init_vy = -8;
-    shot->lim_x = 9999;
-    shot->lim_y = 9999;
-    shot->custom_data[4] = 1; // projectile mode
-    shot->custom_data[0] = (UINT8)init_vx;
-    shot->custom_data[1] = (UINT8)init_vy;
-    shot->custom_data[2] = 0;
-    shot->mirror = (nutmeg.direction == right) ? NO_MIRROR : H_MIRROR;
-#ifdef USE_CBT_FX
-    Sfx_UIClick();
-#else
-    PlayFx(CHANNEL_4, 4, 0x20, 0x91, 0x40, 0x80);
-#endif
-}
-
 
 void Start_SpriteNutmeg(void) {
     spr_nutmeg = THIS;
@@ -1383,14 +1346,6 @@ void Update_SpriteNutmeg(void)
 {
     if (KEY_TICKED(J_SELECT)) {
         grant_bow_powerup();
-    }
-
-    if (KEY_TICKED(J_B)) {
-        try_throw_acorn();
-    }
-
-    if (acorn_throw_cooldown > 0) {
-        acorn_throw_cooldown--;
     }
 
     if (nutmeg.acorns > 99u) {

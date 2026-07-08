@@ -16,33 +16,9 @@ static const INT8 acornMoveYAtTime [] = {0,0,0,1,1,0,0,0,-1,-1};
 #define IS_STILL_POS (0)
 #define MOVE_POS (1)
 #define TIMER_POS (2)
-#define PROJECTILE_POS (4)
 
 // acorn moves once per this many frames
 #define MOVE_SPEED (10)
-
-static UINT8 is_enemy_sprite(UINT8 type) {
-    switch(type) {
-        case EnemyButterfly:
-        case EnemyBunny:
-        case EnemyBeetle:
-        case EnemyFish:
-        case EnemyRockith:
-        case EnemyTopSpike:
-        case EnemyBatty:
-        case EnemyLightning:
-        case EnemyLightningSpot:
-        case EnemyEarthy:
-        case EnemyBirdy:
-        case EnemyHand:
-        case EnemySpatula:
-        case EnemyPopsicle:
-        case EnemyCola:
-            return 1;
-        default:
-            return 0;
-    }
-}
 
 void Start_SpriteAcorn(void) {
     UINT8 meta = THIS->custom_data[3];
@@ -75,36 +51,6 @@ void Start_SpriteAcorn(void) {
 
 void Update_SpriteAcorn(void) 
 {
-    if (THIS->custom_data[PROJECTILE_POS] == 1) {
-        INT8 vx = (INT8)THIS->custom_data[0];
-        INT8 vy = (INT8)THIS->custom_data[1];
-        INT16 px = (INT16)THIS->x + vx;
-        INT16 py = (INT16)THIS->y + vy;
-        THIS->x = (UINT16)px;
-        THIS->y = (UINT16)py;
-        if (vy < 10) {
-            vy += 1;
-            THIS->custom_data[1] = (UINT8)vy;
-        }
-        THIS->custom_data[2]++;
-        if (THIS->custom_data[2] >= 75 || py > 256 || px < -16 || px > 336) {
-            SpriteManagerRemoveSprite(THIS);
-            return;
-        }
-        UINT8 i;
-        Sprite* spr;
-        SPRITEMANAGER_ITERATE(i, spr) {
-            if (spr == THIS || spr->marked_for_removal) continue;
-            if (!is_enemy_sprite(spr->type)) continue;
-            if (CheckCollision(THIS, spr)) {
-                SpriteManagerRemoveSprite(spr);
-                SpriteManagerRemoveSprite(THIS);
-                return;
-            }
-        }
-        return;
-    }
-
 	if (THIS->custom_data[IS_STILL_POS] == false)
 	{
 		THIS->custom_data[TIMER_POS] ++;
