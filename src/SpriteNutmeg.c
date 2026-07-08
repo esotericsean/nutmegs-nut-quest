@@ -1348,10 +1348,6 @@ void Update_SpriteNutmeg(void)
         grant_bow_powerup();
     }
 
-    if (nutmeg.acorns > 99u) {
-        nutmeg.acorns = 99u;
-    }
-
     // if we run out of time
 	if ((level.hasTimer == true) && (level.timer == 0) && (nutmeg.isDying == false))
     {

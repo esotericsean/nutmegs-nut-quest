@@ -90,6 +90,16 @@ void Update_SpriteAcorn(void)
             THIS->custom_data[3] = 0;
         }
 
+        // 100 acorns = 1-up and the count rolls back to 0
+        nutmeg.acorns++;
+        bool oneUp = (nutmeg.acorns >= 100u);
+        if (oneUp) {
+            nutmeg.acorns = 0;
+            if (nutmeg.lives < 99) {
+                nutmeg.lives++;
+            }
+        }
+
         if (isGolden) {
             levelGoldenAcornFound = true;
             if (nutmeg.goldenAcorns < 255u) {
@@ -99,12 +109,10 @@ void Update_SpriteAcorn(void)
                 gameStats.totalGoldenAcorns++;
             }
             Sfx_OneUp();
+        } else if (oneUp) {
+            Sfx_OneUp();
         } else {
             Sfx_Pickup();
-        }
-
-        if (nutmeg.acorns < 99u) {
-            nutmeg.acorns++;
         }
         gameStats.totalAcorns++;
 		SpriteManagerRemoveSprite (THIS);
