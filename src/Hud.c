@@ -23,6 +23,12 @@ extern INT8 scroll_h_border;
 // saved last drawn values, to work out what to update on hud
 static UINT8 lastLives;
 static UINT8 lastAcorn;
+static UINT8 lastGolden;
+
+// HUD tileset indices for the golden acorn indicator cell
+#define HUD_GOLDEN_X          (13)
+#define HUD_TILE_ACORN        (4)
+#define HUD_TILE_BLANK_LINE   (1)
 
 static UINT16 hudWorking;
 static UINT8 tens;
@@ -96,6 +102,7 @@ void Hud_Init(void) BANKED
     // prime the last values so they all get updated
     lastLives = nutmeg.lives + 1;
     lastAcorn = nutmeg.acorns + 1;
+    lastGolden = 0xFF;
 
     if (level.hasTimer)
     {
@@ -180,6 +187,18 @@ void Hud_Update(void) BANKED
     {
         // all done if we aren't tracking time
         return;
+    }
+
+    // show a small acorn when this level's golden acorn has been collected
+    // (either just now, or on a previous run)
+    {
+        UINT8 golden = (levelGoldenAcornFound
+            || ((level_playing < MAX_LEVEL_TRACKING) && levelGoldenCollected[level_playing])) ? 1 : 0;
+        if (golden != lastGolden)
+        {
+            lastGolden = golden;
+            UPDATE_HUD_TILE (HUD_GOLDEN_X, 0, golden ? HUD_TILE_ACORN : HUD_TILE_BLANK_LINE);
+        }
     }
 
 	if (cutscenemode == disabled) 

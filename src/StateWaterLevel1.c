@@ -176,7 +176,7 @@ void Update_StateWaterLevel1 (void)
 		cutscenewalkright = true;
 		cutscenewalkleft = false;
 	
-		if (levelEndCounter >= 100) {
+		if (levelEndCounter >= LEVEL_END_DELAY) {
 			SetState(StateOverworld);
 		}
 

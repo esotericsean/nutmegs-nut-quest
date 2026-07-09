@@ -186,7 +186,7 @@ void Update_StateLevel2_glidefall(void)
 		cutscenewalkright = true;
 		cutscenewalkleft = false;
 	
-		if (levelEndCounter >= 100) {
+		if (levelEndCounter >= LEVEL_END_DELAY) {
 			SetState(StateOverworld);
 		}
 

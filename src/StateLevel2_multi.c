@@ -233,7 +233,7 @@ void Update_StateLevel2_multi (void) {
 	if (cutscenemode == enabled) {
 		
 		if (levelbeat == true) {
-			if (levelEndCounter >= 100) {
+			if (levelEndCounter >= LEVEL_END_DELAY) {
 				NextRoom();
 				return;
 			}
@@ -285,7 +285,7 @@ void Update_StateLevel2_multi (void) {
 	{
 		if (nutmeg_isInsideXY(exitTopX,exitTopY,exitBottomX,exitBottomY) && levelbeat == false)
 		{
-			levelEndCounter = 100;
+			levelEndCounter = LEVEL_END_DELAY;
 			if (roomNumber == MAX_ROOM_NUMBER)
 			{
 				FlagPole_Activate(14,38);

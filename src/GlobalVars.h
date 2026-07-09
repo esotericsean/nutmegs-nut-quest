@@ -267,6 +267,10 @@ extern UINT8 W1LevelSelection;
 extern UINT16 levelStartCounter;
 extern UINT8 levelEndCounter;
 
+// frames to wait at the flagpole (victory music playing) before returning to
+// the overworld - must stay below the 250 cap used when incrementing
+#define LEVEL_END_DELAY (200)
+
 //EnemyHand
 extern UINT8 handpos;
 extern UINT8 handphase;

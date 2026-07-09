@@ -131,7 +131,7 @@ void Update_StateLevel2_2(void)
 		cutscenewalkleft = false;
 
 	
-		if (levelEndCounter >= 100) {
+		if (levelEndCounter >= LEVEL_END_DELAY) {
 			SetState(StateOverworld);
 		}
 

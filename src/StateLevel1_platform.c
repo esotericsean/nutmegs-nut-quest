@@ -180,7 +180,7 @@ void Update_StateLevel1_platform (void) {
 		cutscenewalkright = true;
 		cutscenewalkleft = false;
 	
-		if (levelEndCounter >= 100) {
+		if (levelEndCounter >= LEVEL_END_DELAY) {
 			SetState(StateOverworld);
 		}
 
