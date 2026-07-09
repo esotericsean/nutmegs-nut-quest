@@ -21,7 +21,7 @@ static const UINT8 collision_tiles[] = {2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,
 static const UINT8 collision_tiles_down[] = {29,30,31,32,0};
 
 DECLARE_MUSIC (quickstart);
-DECLARE_MUSIC (mushrooms);
+DECLARE_MUSIC (green1);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -166,7 +166,7 @@ void Update_StateLevel2_platform (void) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
-				PlayMusic(mushrooms, 1);
+				PlayMusic(green1, 1);
 			}
 		}
 

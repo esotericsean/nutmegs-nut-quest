@@ -22,7 +22,7 @@ IMPORT_MAP (level2_multi_3_map);
 static const UINT8 collision_tiles_level[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18, 0};
 
 DECLARE_MUSIC (quickstart);
-DECLARE_MUSIC (mushrooms);
+DECLARE_MUSIC (green2);
 
 extern Sprite * spr_nutmeg;
 
@@ -253,7 +253,7 @@ void Update_StateLevel2_multi (void) {
 			else if (levelStartCounter == 100) {
 				cutscenemode = disabled;
 				if ((levelbeat == false) && (roomNumber == 1)) {
-					__critical { PlayMusic(mushrooms, 1); }
+					__critical { PlayMusic(green2, 1); }
 				}
 			}
 

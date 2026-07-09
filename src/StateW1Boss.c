@@ -25,7 +25,7 @@ extern UINT8 collisionY;
 static const UINT8 collision_tiles_levelw1b[] = {44,45,46,47,58,51,75, 0};
 static const UINT8 collision_tiles_down_levelw1b[] = {0};
 
-DECLARE_MUSIC(thehands2);
+DECLARE_MUSIC(boss);
 DECLARE_MUSIC(boss1win);
 
 // You can reference it from other files by including this
@@ -91,7 +91,7 @@ void Start_StateW1Boss (void)
     cutscenemode = disabled;
     handVictoryStage = 0;
 
-	PlayMusic(thehands2, 1);
+	PlayMusic(boss, 1);
 
 	nutmeg_Add(5*8, 1*8);
 	spr_hand = SpriteManagerAdd(EnemyHand, 17*8+32, 11*8+6); //start on right side

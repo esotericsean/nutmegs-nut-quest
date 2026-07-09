@@ -20,7 +20,7 @@ IMPORT_MAP (level2_1map);
 static const UINT8 collision_tiles_level[] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18, 0};
 
 DECLARE_MUSIC (quickstart);
-DECLARE_MUSIC (mushrooms);
+DECLARE_MUSIC (green1);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -92,7 +92,7 @@ void Update_StateLevel2_1 (void) {
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
-				__critical { PlayMusic(mushrooms, 1); }
+				__critical { PlayMusic(green1, 1); }
 			}
 		}
 

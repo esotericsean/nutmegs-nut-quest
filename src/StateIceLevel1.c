@@ -38,7 +38,7 @@ static const UINT8 collision_tiles[] = {2,3,4,5,6,7,16,17,0};
 static const UINT8 collision_tiles_down[] = {0};
 
 DECLARE_MUSIC (quickstart);
-DECLARE_MUSIC (mushrooms);
+DECLARE_MUSIC (green2);
 
 // You can reference it from other files by including this
 // (or by adding it to a .h include file and including that)
@@ -151,7 +151,7 @@ void Update_StateIceLevel1 (void)
 			cutscenemode = disabled;
 
 			if (levelbeat == false) {
-				PlayMusic(mushrooms, 1);
+				PlayMusic(green2, 1);
 			}
 		}
 

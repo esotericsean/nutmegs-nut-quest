@@ -8,7 +8,7 @@
 #include "GlobalVars.h"
 #include "Palette.h"
 
-DECLARE_MUSIC (flagpole);
+DECLARE_MUSIC (victorydance);
 
 // pink color palette
 static const UWORD pal_pink[] = { RGB(31, 31, 31), RGB(19, 26, 30), RGB(28, 19, 30), RGB(0,  0,  0) };
@@ -247,7 +247,7 @@ void FlagPole_Activate(int tilex, int tiley) BANKED
         }
         else SetPalette(BG_PALETTE, flagpole_pal_idx, 1, pal_pink, _current_bank);
 	}
-    __critical { PlayMusic(flagpole, 1); }
+    __critical { PlayMusic(victorydance, 1); }
 }
 
 void FlagPole_Animate (void) BANKED
