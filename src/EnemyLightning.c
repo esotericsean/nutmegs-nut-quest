@@ -12,6 +12,7 @@
 /* do not disable PlayFx while diagnosing */
 #include "../src/GlobalVars.h"
 #include "SpriteNutmeg.h"
+#include "Sfx.h"
 
 extern Sprite * spr_nutmeg;
 

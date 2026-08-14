@@ -10,25 +10,27 @@
 #endif
 
 // SFX API (implemented in Sfx.c)
+// BANKED: Sfx.c lives in an auto-assigned bank to keep bank 0 free
 static inline void Sfx_Init(void) {}
-void Sfx_Pickup(void);
-void Sfx_OneUp(void);
-void Sfx_BowPickup(void);
-void Sfx_Stomp(void);
-void Sfx_MegaStomp(void);
-void Sfx_Hurt(void);
-void Sfx_Jump(void);
-void Sfx_UIClick(void);
-void Sfx_WaterEnter(void);
-void Sfx_WaterExit(void);
-void Sfx_WaterStroke(void);
-void Sfx_BalloonPop(void);
-void Sfx_MushroomBounce(void);
-void Sfx_GemBounce(void);
-void Sfx_Lightning(void);
-void Sfx_DoorEnter(void);
-void Sfx_PauseOpen(void);
-void Sfx_PauseClose(void);
+void Sfx_Pickup(void) BANKED;
+void Sfx_OneUp(void) BANKED;
+void Sfx_BowPickup(void) BANKED;
+void Sfx_Stomp(void) BANKED;
+void Sfx_MegaStomp(void) BANKED;
+void Sfx_Hurt(void) BANKED;
+void Sfx_Jump(void) BANKED;
+void Sfx_Land(void) BANKED;
+void Sfx_UIClick(void) BANKED;
+void Sfx_WaterEnter(void) BANKED;
+void Sfx_WaterExit(void) BANKED;
+void Sfx_WaterStroke(void) BANKED;
+void Sfx_BalloonPop(void) BANKED;
+void Sfx_MushroomBounce(void) BANKED;
+void Sfx_GemBounce(void) BANKED;
+void Sfx_Lightning(void) BANKED;
+void Sfx_DoorEnter(void) BANKED;
+void Sfx_PauseOpen(void) BANKED;
+void Sfx_PauseClose(void) BANKED;
 #endif
 
 

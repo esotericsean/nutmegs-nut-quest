@@ -150,6 +150,19 @@ UINT8 kickbackcounter;
 // After jumping, allow momentum to carry in air for a short time (reduced air braking)
 static UINT8 ice_air_brake_counter = 0; // frames remaining of reduced air friction
 
+// --- Game feel counters (tuning in JuiceConfig.h) ---
+static UINT8 ground_coyote = 0; // frames since leaving ground where a jump still fires
+static UINT8 jump_buffer = 0;   // frames a jump press is remembered before landing
+static UINT8 squash_timer = 0;  // frames left holding the landing squash pose
+static UINT8 stretch_timer = 0; // frames left holding the jump stretch pose
+
+#if JUICE_STRETCH_FRAMES > 0
+static const UINT8 anim_nutmeg_stretch[] = {1, JUICE_STRETCH_FRAME_IDX};
+#endif
+#if JUICE_SQUASH_FRAMES > 0
+static const UINT8 anim_nutmeg_squash[] = {1, JUICE_SQUASH_FRAME_IDX};
+#endif
+
 // --- Dynamic swim detection on solid water tiles (e.g., tile id 25) ---
 // Solid water fill tile ID (VRAM index) used below animated surface
 // BGB shows tile numbers in hex; '19' hex = 0x19 = 25 decimal
@@ -184,6 +197,7 @@ static void nutmeg_begin_death(void) {
     nutmeg.pendingDeath = false;
     nutmeg.pendingDeathTimer = 0;
     nutmeg.isDying = true;
+    ScreenShake(JUICE_SHAKE_DEATH_FRAMES);
     // initialize counters; let FSM state 1 handle music start and timing
     nutmeg.deathFrames = 0;
     nutmeg.deathtimer = 0;
@@ -323,6 +337,11 @@ void ResetState(void) {
     collisionY = 0;
     nutmeg.jumpPeak = 0;
     nutmeg.movestate = grounded;
+
+    ground_coyote = 0;
+    jump_buffer = 0;
+    squash_timer = 0;
+    stretch_timer = 0;
 
     nutmeg.direction = right;
 
@@ -754,6 +773,42 @@ static void try_quit_to_overworld(void)
     }
 }
 
+// Perform a regular ground jump (also used for coyote-time and buffered jumps)
+static void do_ground_jump(void)
+{
+    nutmeg.speedY = -nutmeg.speeds->initJumpY;
+    nutmeg.jumpPeak = 0;
+    nutmeg.movestate = inair;
+    // Always carry momentum a bit longer in air after any jump (feels better)
+    ice_air_brake_counter = 12; // ~12 frames of reduced air braking
+
+    // consume jump forgiveness so one press can't trigger two jumps
+    jump_buffer = 0;
+    ground_coyote = 0;
+
+#if JUICE_STRETCH_FRAMES > 0
+    stretch_timer = JUICE_STRETCH_FRAMES;
+    SetSpriteAnim(spr_nutmeg, anim_nutmeg_stretch, 1);
+#endif
+
+    // SFX: Use underwater stroke sound in water levels, else regular jump
+    if (level.isWaterLevel || nutmeg.isSwimming) {
+        Sfx_WaterStroke();
+    } else {
+        Sfx_Jump();
+    }
+
+    //display a puff when jumping
+    if (nutmeg.direction == right) {
+        SpriteManagerAdd(SpritePuff, spr_nutmeg->x-2, spr_nutmeg->y-2);
+    }
+    else {
+        Sprite *r = SpriteManagerAdd(SpritePuff, spr_nutmeg->x+10, spr_nutmeg->y-2);
+        r->mirror = V_MIRROR;
+        r->custom_data[1] = 1;
+    }
+}
+
 void update_aliveInControl (void)
 { 
     // Freeze controls/motion during pickup pause
@@ -885,30 +940,22 @@ void update_aliveInControl (void)
     // In both cases, we set peak to true and start falling
     // Note that we can't start running when jumping,
     // but we can keep the running speed if we start the jump from run
-    if (nutmeg.movestate == grounded) {
-        if (KEY_TICKED(J_A)) {
-            nutmeg.speedY = -nutmeg.speeds->initJumpY;
-            nutmeg.jumpPeak = 0;
-            nutmeg.movestate = inair;
-            // Always carry momentum a bit longer in air after any jump (feels better)
-            ice_air_brake_counter = 12; // ~12 frames of reduced air braking
-            
-            // SFX: Use underwater stroke sound in water levels, else regular jump
-            if (level.isWaterLevel || nutmeg.isSwimming) {
-                Sfx_WaterStroke();
-            } else {
-                Sfx_Jump();
-            }
 
-            //display a puff when jumping
-            if (nutmeg.direction == right) {
-                SpriteManagerAdd(SpritePuff, THIS->x-2, THIS->y-2);
-            }
-            else {
-                Sprite *r = SpriteManagerAdd(SpritePuff, THIS->x+10, THIS->y-2);
-                r->mirror = V_MIRROR;
-                r->custom_data[1] = 1;
-            }
+    // game feel: jump buffering (remember a press) + ground coyote (grace after ledges)
+    if (KEY_TICKED(J_A)) {
+        jump_buffer = JUICE_JUMP_BUFFER_FRAMES;
+    } else if (jump_buffer) {
+        jump_buffer--;
+    }
+    if (nutmeg.movestate == grounded) {
+        ground_coyote = JUICE_COYOTE_FRAMES;
+    } else if (ground_coyote) {
+        ground_coyote--;
+    }
+
+    if (nutmeg.movestate == grounded) {
+        if (KEY_TICKED(J_A) || jump_buffer) {
+            do_ground_jump();
         }
     }
     else if (nutmeg.movestate == inair) {
@@ -958,6 +1005,11 @@ void update_aliveInControl (void)
             }
             swim_exit_boost_window = 0;
         }
+        // Ground coyote time: allow a normal jump shortly after walking off a ledge
+        else if (!(level.isWaterLevel || nutmeg.isSwimming) && KEY_TICKED(J_A)
+                 && ground_coyote && !nutmeg.isWallSliding) {
+            do_ground_jump();
+        }
         // Wall jump: while sliding or within coyote frames, J_A triggers a jump away from the last wall side
         else if (!(level.isWaterLevel || nutmeg.isSwimming) && KEY_TICKED(J_A) && (nutmeg.isWallSliding || nutmeg.wallCoyoteFrames > 0)) {
             // set velocities; allow held-away input to increase horizontal push
@@ -979,6 +1031,9 @@ void update_aliveInControl (void)
             nutmeg.wallCoyoteFrames = 0;
             nutmeg.wallRegrabCooldown = kWallRegrabCooldown;
             nutmeg.wallJumpGlideLock = kWallJumpGlideLock;
+            // consume jump forgiveness so this press can't fire a second jump
+            jump_buffer = 0;
+            ground_coyote = 0;
             // allow held A to extend jump height like a normal jump
             nutmeg.jumpPeak = 0;
             // FX
@@ -1244,11 +1299,23 @@ void update_aliveInControl (void)
         }
         else {
             if (nutmeg.movestate == inair) {
-                //PlayFx(CHANNEL_4, 4, 0x32, 0x71, 0x73, 0x80);
                 nutmeg.movestate = grounded;
                 // On landing, clear wall slide state
                 nutmeg.isWallSliding = false;
                 nutmeg.wallCoyoteFrames = 0;
+
+                // game feel: landing dust + soft thud (speedY still holds fall speed here)
+                if (!(level.isWaterLevel || nutmeg.isSwimming)) {
+                    if (nutmeg.speedY >= JUICE_LAND_FX_MIN_SPEEDY) {
+                        AddPuffPair(THIS->x, THIS->y - 2);
+                        Sfx_Land();
+                    }
+#if JUICE_SQUASH_FRAMES > 0
+                    // hold the squash pose briefly (sprite only, hitbox unchanged)
+                    squash_timer = JUICE_SQUASH_FRAMES;
+                    SetSpriteAnim(THIS, anim_nutmeg_squash, 1);
+#endif
+                }
             }
 
             nutmeg.speedY =  nutmeg.speeds->fallInitY;
@@ -1601,6 +1668,7 @@ void nutmeg_hit(void) BANKED
         #ifdef USE_CBT_FX
         Sfx_Hurt();
         #endif
+        HitStop(JUICE_HITSTOP_HURT_FRAMES);
         nutmeg.hasbow = false;
         nutmeg.lostbow = true;
         nutmeg.bow_counter = 0;
@@ -1653,6 +1721,7 @@ void nutmeg_hit(void) BANKED
 #ifdef USE_CBT_FX
         Sfx_Hurt();
 #endif
+        HitStop(JUICE_HITSTOP_HURT_FRAMES);
         if (spr_nutmeg) {
             static const UINT8 anim_hurt_single[] = {1, 11};
             SetSpriteAnim(spr_nutmeg, anim_hurt_single, 1);
@@ -1691,6 +1760,16 @@ bool nutmeg_isInsideXY(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) BANKE
 void nutmeg_Animate(void) BANKED
 {
     if (nutmeg.isDying == true) {
+        return;
+    }
+
+    // game feel: hold squash/stretch poses briefly (set on landing/jump)
+    if (squash_timer) {
+        squash_timer--;
+        return;
+    }
+    if (stretch_timer) {
+        stretch_timer--;
         return;
     }
    

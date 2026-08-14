@@ -115,6 +115,24 @@ void Update_SpriteAcorn(void)
             Sfx_Pickup();
         }
         gameStats.totalAcorns++;
+
+        // game feel: twinkle burst at the pickup point (golden gets a pair).
+        // Spawn above the acorn so Nutmeg doesn't hide it while it rises.
+        {
+            Sprite *spark = SpriteManagerAdd(SpriteSparkle, THIS->x, THIS->y - 10);
+            if (isGolden) {
+                Sprite *spark2;
+#ifdef CGB
+                SPRITE_SET_CGB_PALETTE(spark, SPRITE_GET_CGB_PALETTE(THIS));
+#endif
+                spark->x -= 4;
+                spark2 = SpriteManagerAdd(SpriteSparkle, THIS->x + 4, THIS->y - 16);
+#ifdef CGB
+                SPRITE_SET_CGB_PALETTE(spark2, SPRITE_GET_CGB_PALETTE(THIS));
+#endif
+            }
+        }
+
 		SpriteManagerRemoveSprite (THIS);
 	}
 }

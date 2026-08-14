@@ -22,6 +22,14 @@ typedef enum { vertical, horizontal } orientationE;
 
 #define MAX_LEVEL_TRACKING (32)
 
+// --- Game feel (juice) ---
+// All tunables live in JuiceConfig.h; counters live in main_backup.c (bank 0)
+#include "JuiceConfig.h"
+extern UINT8 shake_frames;   // screen shake frames remaining (+/-1px in vblank)
+extern UINT8 hitstop_frames; // global gameplay freeze frames remaining
+#define ScreenShake(n) do { if ((n) > shake_frames) shake_frames = (n); } while (0)
+#define HitStop(n)     do { if ((n) > hitstop_frames) hitstop_frames = (n); } while (0)
+
 typedef struct NutmegSpeed {
 	// left right friction when 
 	INT16 frictionX;

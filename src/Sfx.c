@@ -1,8 +1,12 @@
+#include "Banks/SetAutoBank.h"
 #include <gbdk/platform.h>
 #include "Sound.h"
 #include "Sfx.h"
+#include "JuiceConfig.h"
 
 #ifdef USE_CBT_FX
+// Set before playing to randomize pitch for that one SFX (see SfxCBTFX.c)
+extern UINT8 cbtfx_pitch_var;
 #include "third_party/cbtfx/cbtfx.h"
 extern const unsigned char CBTFX_SFX_Jump[];
 extern const UINT16 CBTFX_SFX_Jump_Len;
@@ -37,23 +41,35 @@ static void sfx_play_cbtfx_default(void) {
 #endif
 }
 
-void Sfx_Jump(void) {
+void Sfx_Jump(void) BANKED {
 #ifdef USE_CBT_FX
+    cbtfx_pitch_var = JUICE_PITCH_VAR_RANGE; // randomize pitch a little each jump
     Sfx_Cbtfx_PlayFromBanked(SFX_0E, SFX_0E_Len, BANK(SFX_0E));
 #else
 	PlayFx(CHANNEL_1, 10, 0x17, 0x9F, 0xF3, 0xC9, 0xC4);
 #endif
 }
 
-void Sfx_Pickup(void) {
+void Sfx_Pickup(void) BANKED {
 #ifdef USE_CBT_FX
+    cbtfx_pitch_var = JUICE_PITCH_VAR_RANGE; // randomize pitch a little each pickup
     Sfx_Cbtfx_PlayFromBanked(SFX_0B, SFX_0B_Len, BANK(SFX_0B));
 #else
 	PlayFx(CHANNEL_1, 10, 0x17, 0x9F, 0xF2, 0xCD, 0x20);
 #endif
 }
 
-void Sfx_Stomp(void) {
+void Sfx_Land(void) BANKED {
+#ifdef USE_CBT_FX
+    // soft thud on landing; reuses the alternate stomp asset for now
+    cbtfx_pitch_var = JUICE_PITCH_VAR_RANGE;
+    Sfx_Cbtfx_PlayFromBanked(SFX_06, SFX_06_Len, BANK(SFX_06));
+#else
+	PlayFx(CHANNEL_4, 4, 0x32, 0x71, 0x73, 0x80);
+#endif
+}
+
+void Sfx_Stomp(void) BANKED {
 #ifdef USE_CBT_FX
     static UINT8 alt;
     if (alt ^= 1) {
@@ -66,13 +82,13 @@ void Sfx_Stomp(void) {
 #endif
 }
 
-void Sfx_MegaStomp(void) {
+void Sfx_MegaStomp(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_05, SFX_05_Len, BANK(SFX_05));
 #endif
 }
 
-void Sfx_Hurt(void) {
+void Sfx_Hurt(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_08, SFX_08_Len, BANK(SFX_08));
 #else
@@ -80,7 +96,7 @@ void Sfx_Hurt(void) {
 #endif
 }
 
-void Sfx_UIClick(void) {
+void Sfx_UIClick(void) BANKED {
 #ifdef USE_CBT_FX
 	sfx_play_cbtfx_default();
 #else
@@ -88,7 +104,7 @@ void Sfx_UIClick(void) {
 #endif
 }
 
-void Sfx_WaterEnter(void) {
+void Sfx_WaterEnter(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_0C, SFX_0C_Len, BANK(SFX_0C));
 #else
@@ -96,7 +112,7 @@ void Sfx_WaterEnter(void) {
 #endif
 }
 
-void Sfx_WaterExit(void) {
+void Sfx_WaterExit(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_0D, SFX_0D_Len, BANK(SFX_0D));
 #else
@@ -104,7 +120,7 @@ void Sfx_WaterExit(void) {
 #endif
 }
 
-void Sfx_WaterStroke(void) {
+void Sfx_WaterStroke(void) BANKED {
 #ifdef USE_CBT_FX
 	extern UINT16 sys_time;
 	static UINT16 last_t = 0;
@@ -118,7 +134,7 @@ void Sfx_WaterStroke(void) {
 #endif
 }
 
-void Sfx_BalloonPop(void) {
+void Sfx_BalloonPop(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_12, SFX_12_Len, BANK(SFX_12));
 #else
@@ -126,7 +142,7 @@ void Sfx_BalloonPop(void) {
 #endif
 }
 
-void Sfx_PauseOpen(void) {
+void Sfx_PauseOpen(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_03, SFX_03_Len, BANK(SFX_03));
 #else
@@ -134,7 +150,7 @@ void Sfx_PauseOpen(void) {
 #endif
 }
 
-void Sfx_PauseClose(void) {
+void Sfx_PauseClose(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_03, SFX_03_Len, BANK(SFX_03));
 #else
@@ -142,7 +158,7 @@ void Sfx_PauseClose(void) {
 #endif
 }
 
-void Sfx_OneUp(void) {
+void Sfx_OneUp(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_02, SFX_02_Len, BANK(SFX_02));
 #else
@@ -150,7 +166,7 @@ void Sfx_OneUp(void) {
 #endif
 }
 
-void Sfx_BowPickup(void) {
+void Sfx_BowPickup(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_13, SFX_13_Len, BANK(SFX_13));
 #else
@@ -158,25 +174,25 @@ void Sfx_BowPickup(void) {
 #endif
 }
 
-void Sfx_MushroomBounce(void) {
+void Sfx_MushroomBounce(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_0F, SFX_0F_Len, BANK(SFX_0F));
 #endif
 }
 
-void Sfx_GemBounce(void) {
+void Sfx_GemBounce(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_10, SFX_10_Len, BANK(SFX_10));
 #endif
 }
 
-void Sfx_Lightning(void) {
+void Sfx_Lightning(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_11, SFX_11_Len, BANK(SFX_11));
 #endif
 }
 
-void Sfx_DoorEnter(void) {
+void Sfx_DoorEnter(void) BANKED {
 #ifdef USE_CBT_FX
     Sfx_Cbtfx_PlayFromBanked(SFX_14, SFX_14_Len, BANK(SFX_14));
 #endif

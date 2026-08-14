@@ -88,6 +88,7 @@ void Update_EnemyButterfly(void) {
 		if (nutmeg.movestate == inair && nutmeg.speedY > 0)
         {
             Sfx_Stomp();
+            HitStop(JUICE_HITSTOP_STOMP_FRAMES);
 			nutmeg.speedY = -nutmeg.enemyBounceY;
 			nutmeg.jumpPeak = 0;
 

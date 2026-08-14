@@ -72,6 +72,7 @@ void Update_EnemyFish (void)
 #ifdef USE_CBT_FX
             Sfx_Stomp();
 #endif
+            HitStop(JUICE_HITSTOP_STOMP_FRAMES);
 			nutmeg.speedY = -nutmeg.enemyBounceY;
 			nutmeg.jumpPeak = 0;
 

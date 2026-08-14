@@ -10,6 +10,7 @@
 #include "SpriteManager.h"
 
 #include "../src/GlobalVars.h"
+#include "Sfx.h"
 
 extern Sprite * spr_nutmeg;
 

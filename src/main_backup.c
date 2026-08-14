@@ -95,11 +95,23 @@ void SetState(UINT8 state) {
 UINT8 vbl_count = 0;
 UINT8 music_mute_frames = 0;
 
+// game feel: screen shake / hit-stop counters (see JuiceConfig.h for tuning)
+UINT8 shake_frames = 0;
+UINT8 hitstop_frames = 0;
+
 void vbl_update(void) {
 	vbl_count ++;
 	
 	SCX_REG = scroll_x_vblank + (scroll_offset_x << 3);
 	SCY_REG = scroll_y_vblank + (scroll_offset_y << 3);
+
+	// tiny screen shake: +/-1px vertical jitter while active
+	// (SCY is rewritten from scroll each vblank, so no drift when it ends)
+	if (shake_frames) {
+		shake_frames --;
+		if (shake_frames & 1) SCY_REG += 1;
+		else SCY_REG -= 1;
+	}
 
     if(music_mute_frames != 0) {
 		music_mute_frames --;
@@ -247,6 +259,9 @@ void main(void) {
 		SpriteManagerReset();
 		state_running = 1;
 		current_state = next_state;
+		// don't carry juice effects across state changes
+		shake_frames = 0;
+		hitstop_frames = 0;
 		scroll_target = 0;
 		last_bg_pal_loaded = 0;
 		last_tile_loaded = 0;
@@ -317,6 +332,11 @@ void main(void) {
 #endif
 					rWY = 144-8;
 				}
+			}
+			else if (hitstop_frames)
+			{
+				// game feel: brief global freeze (music keeps running from the timer ISR)
+				hitstop_frames --;
 			}
 			else
 			{

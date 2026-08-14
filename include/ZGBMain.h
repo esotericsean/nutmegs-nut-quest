@@ -90,6 +90,7 @@ _SPRITE_COLOR(SpriteShockline1, shockline1)\
 _SPRITE_COLOR(SpriteShockline2, shockline2)\
 _SPRITE_COLOR(SpriteShockline3, shockline3)\
 _SPRITE_COLOR(SpritePlatform, platform)\
+_SPRITE_COLOR(SpriteSparkle, sparkle)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

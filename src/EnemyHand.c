@@ -131,6 +131,10 @@ void UPDATE(void)
                 PlayFx(2, 8, 64, 8, 0, 0);
             }
 #endif
+            if (didDamage) {
+                ScreenShake(JUICE_SHAKE_BOSSHIT_FRAMES);
+                HitStop(JUICE_HITSTOP_STOMP_FRAMES);
+            }
             if (nutmeg.speedY < 0) nutmeg.speedY = 0; // ensure we bounce downward only after contact
 			nutmeg.speedY = -400;
 			nutmeg.jumpPeak = 0;
